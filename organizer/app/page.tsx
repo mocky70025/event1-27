@@ -1,63 +1,57 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { liff } from '@line/liff'
 import { supabase } from '@/lib/supabase'
+import { type LineProfile } from '@/lib/auth'
 import WelcomeScreen from '@/components/WelcomeScreen'
 import RegistrationForm from '@/components/RegistrationForm'
 import EventManagement from '@/components/EventManagement'
 import LoadingSpinner from '@/components/LoadingSpinner'
 
 export default function Home() {
-  const [isLiffReady, setIsLiffReady] = useState(false)
+  const [userProfile, setUserProfile] = useState<LineProfile | null>(null)
   const [isRegistered, setIsRegistered] = useState(false)
-  const [userProfile, setUserProfile] = useState<any>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const initializeLiff = async () => {
+    const initializeAuth = async () => {
       try {
-        await liff.init({ liffId: process.env.NEXT_PUBLIC_LIFF_ID! })
-        setIsLiffReady(true)
-
-        if (liff.isLoggedIn()) {
-          const profile = await liff.getProfile()
-          setUserProfile(profile)
-          
-          // 既存ユーザーかチェック
-          const { data: existingUser } = await supabase
-            .from('organizers')
-            .select('*')
-            .eq('line_user_id', profile.userId)
-            .single()
-
-          setIsRegistered(!!existingUser)
+        // セッションストレージからプロフィール情報を取得（LINE Loginコールバック後）
+        const savedProfile = sessionStorage.getItem('line_profile')
+        const savedIsRegistered = sessionStorage.getItem('is_registered')
+        
+        console.log('[Home] Saved profile from sessionStorage:', savedProfile)
+        console.log('[Home] Is registered from sessionStorage:', savedIsRegistered)
+        
+        if (savedProfile) {
+          try {
+            const profile = JSON.parse(savedProfile) as LineProfile
+            console.log('[LINE Login] User ID from session:', profile.userId)
+            console.log('[LINE Login] Display Name:', profile.displayName)
+            setUserProfile(profile)
+            setIsRegistered(savedIsRegistered === 'true')
+            console.log('[Home] User profile set:', { userId: profile.userId, isRegistered: savedIsRegistered === 'true' })
+          } catch (error) {
+            console.error('[Home] Failed to parse profile from sessionStorage:', error)
+          }
+        } else {
+          console.log('[Home] No profile found in sessionStorage')
         }
       } catch (error) {
-        console.error('LIFF initialization failed:', error)
+        console.error('[Auth] Initialization error:', error)
       } finally {
         setLoading(false)
       }
     }
 
-    initializeLiff()
+    initializeAuth()
   }, [])
 
   if (loading) {
     return <LoadingSpinner />
   }
 
-  if (!isLiffReady) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-xl font-bold text-gray-800">LINEアプリで開いてください</h1>
-        </div>
-      </div>
-    )
-  }
-
-  if (!liff.isLoggedIn()) {
+  if (!userProfile) {
     return <WelcomeScreen />
   }
 
