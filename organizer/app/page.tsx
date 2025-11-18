@@ -26,11 +26,13 @@ export default function Home() {
         if (savedProfile) {
           try {
             const profile = JSON.parse(savedProfile) as LineProfile
-            console.log('[LINE Login] User ID from session:', profile.userId)
-            console.log('[LINE Login] Display Name:', profile.displayName)
+            console.log('[Home] User ID from session:', profile.userId)
+            console.log('[Home] Display Name:', profile.displayName)
+            console.log('[Home] Is registered from sessionStorage:', savedIsRegistered)
             setUserProfile(profile)
             setIsRegistered(savedIsRegistered === 'true')
             console.log('[Home] User profile set:', { userId: profile.userId, isRegistered: savedIsRegistered === 'true' })
+            console.log('[Home] App type: organizer - will show organizer RegistrationForm')
           } catch (error) {
             console.error('[Home] Failed to parse profile from sessionStorage:', error)
           }
