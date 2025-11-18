@@ -324,7 +324,12 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
+    console.log('[RegistrationForm] Submit started')
+    console.log('[RegistrationForm] Form data:', formData)
+    console.log('[RegistrationForm] Terms accepted:', termsAccepted)
+    
     if (!validateForm()) {
+      console.log('[RegistrationForm] Validation failed, errors:', errors)
       const firstErrorKey = Object.keys(errors).find(key => errors[key])
       if (firstErrorKey) {
         const errorElement = document.querySelector(`[data-error-field="${firstErrorKey}"]`)
@@ -339,58 +344,91 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
       return
     }
 
+    if (!termsAccepted) {
+      console.log('[RegistrationForm] Terms not accepted')
+      alert('利用規約に同意してください。')
+      return
+    }
+
     setLoading(true)
 
     try {
       if (!userProfile?.userId) {
+        console.error('[RegistrationForm] No user profile or userId')
         alert('ログインが必要です。')
         return
       }
 
+      console.log('[RegistrationForm] User ID:', userProfile.userId)
+
       // 重複登録チェック（line_user_idを使用）
-      const { data: existingUser } = await supabase
+      console.log('[RegistrationForm] Checking for existing organizer...')
+      const { data: existingUser, error: checkError } = await supabase
         .from('organizers')
         .select('id')
         .eq('line_user_id', userProfile.userId)
         .single()
 
+      if (checkError && checkError.code !== 'PGRST116') {
+        console.error('[RegistrationForm] Error checking existing user:', checkError)
+      }
+
       if (existingUser) {
+        console.log('[RegistrationForm] User already exists:', existingUser.id)
         alert('既に登録済みです。')
         return
       }
 
       // 電話番号を半角に変換（ハイフン削除）
       const normalizedPhone = convertToHalfWidth(formData.phone_number.replace(/-/g, ''))
+      console.log('[RegistrationForm] Normalized phone:', normalizedPhone)
 
-      const { error } = await supabase
+      const insertData = {
+        ...formData,
+        phone_number: normalizedPhone,
+        line_user_id: userProfile.userId,
+        is_approved: false,
+      }
+      console.log('[RegistrationForm] Insert data:', insertData)
+
+      console.log('[RegistrationForm] Inserting into organizers table...')
+      const { data: insertData_result, error } = await supabase
         .from('organizers')
-        .insert({
-          ...formData,
-          phone_number: normalizedPhone,
-          line_user_id: userProfile.userId,
-          is_approved: false,
-        })
+        .insert(insertData)
+        .select()
+
+      console.log('[RegistrationForm] Insert result:', { data: insertData_result, error })
 
       if (error) {
-        console.error('Supabase error:', error)
+        console.error('[RegistrationForm] Supabase error:', error)
+        console.error('[RegistrationForm] Error code:', error.code)
+        console.error('[RegistrationForm] Error message:', error.message)
+        console.error('[RegistrationForm] Error details:', error.details)
+        console.error('[RegistrationForm] Error hint:', error.hint)
         throw error
       }
+
+      console.log('[RegistrationForm] Insert successful:', insertData_result)
 
       try {
         await removeDraft()
         lastPayloadRef.current = ''
         setDraftLoaded(false)
+        console.log('[RegistrationForm] Draft removed successfully')
       } catch (draftError) {
-        console.error('Failed to clear organizer registration draft after submit:', draftError)
+        console.error('[RegistrationForm] Failed to clear organizer registration draft after submit:', draftError)
       }
 
       alert('登録が完了しました。運営側の承認をお待ちください。')
       onRegistrationComplete()
     } catch (error) {
-      console.error('Registration failed:', error)
-      console.error('Error details:', JSON.stringify(error, null, 2))
+      console.error('[RegistrationForm] Registration failed:', error)
+      console.error('[RegistrationForm] Error details:', JSON.stringify(error, null, 2))
       const errorMessage = error instanceof Error ? error.message : '不明なエラー'
-      alert(`登録に失敗しました。エラー: ${errorMessage}`)
+      const errorCode = (error as any)?.code || 'UNKNOWN'
+      const errorDetails = (error as any)?.details || ''
+      const errorHint = (error as any)?.hint || ''
+      alert(`登録に失敗しました。\nエラー: ${errorMessage}\nコード: ${errorCode}\n詳細: ${errorDetails}\nヒント: ${errorHint}`)
     } finally {
       setLoading(false)
     }
