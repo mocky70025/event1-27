@@ -425,17 +425,6 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
         throw fetchError
       }
 
-      if (error) {
-        console.error('[RegistrationForm] Supabase error:', error)
-        console.error('[RegistrationForm] Error code:', error.code)
-        console.error('[RegistrationForm] Error message:', error.message)
-        console.error('[RegistrationForm] Error details:', error.details)
-        console.error('[RegistrationForm] Error hint:', error.hint)
-        throw error
-      }
-
-      console.log('[RegistrationForm] Insert successful:', insertData_result)
-
       try {
         await removeDraft()
         lastPayloadRef.current = ''
