@@ -804,7 +804,12 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
               userId={userProfile.userId}
               currentImageUrl={documentUrls.business_license}
               onUploadComplete={(url) => {
-                setDocumentUrls(prev => ({ ...prev, business_license: url }))
+                console.log('[RegistrationForm] business_license upload complete, URL:', url)
+                setDocumentUrls(prev => {
+                  const updated = { ...prev, business_license: url }
+                  console.log('[RegistrationForm] Updated documentUrls:', updated)
+                  return updated
+                })
                 if (errors.business_license) setErrors({ ...errors, business_license: false })
               }}
               onUploadError={(error) => alert(error)}

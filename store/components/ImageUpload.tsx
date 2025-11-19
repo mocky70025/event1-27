@@ -30,8 +30,15 @@ export default function ImageUpload({
 
   // currentImageUrlが変更されたときにpreviewUrlを更新
   useEffect(() => {
-    setPreviewUrl(currentImageUrl || null)
-  }, [currentImageUrl])
+    console.log('[ImageUpload] currentImageUrl changed:', currentImageUrl, 'label:', label, 'current previewUrl:', previewUrl)
+    if (currentImageUrl) {
+      setPreviewUrl(currentImageUrl)
+      console.log('[ImageUpload] Updated previewUrl to:', currentImageUrl)
+    } else if (!previewUrl) {
+      // currentImageUrlが空で、previewUrlも空の場合は何もしない（アップロード中の画像を保持）
+      console.log('[ImageUpload] Both currentImageUrl and previewUrl are empty, keeping current previewUrl')
+    }
+  }, [currentImageUrl, label])
 
   // 許可する画像形式
   const allowedTypes = [
@@ -73,12 +80,21 @@ export default function ImageUpload({
       const result = await uploadExhibitorDocument(file, documentType, userId)
       
       if (result.error) {
+        console.error('[ImageUpload] Upload error:', result.error)
         onUploadError(`アップロードに失敗しました: ${result.error.message}`)
         setPreviewUrl(null)
       } else if (result.data) {
+        console.log('[ImageUpload] Upload successful, path:', result.data.path)
         const publicUrl = getPublicUrl('exhibitor-documents', result.data.path)
+        console.log('[ImageUpload] Public URL:', publicUrl)
+        console.log('[ImageUpload] Setting previewUrl and calling onUploadComplete')
         setPreviewUrl(publicUrl)
         onUploadComplete(publicUrl)
+        console.log('[ImageUpload] Preview URL set to:', publicUrl)
+      } else {
+        console.error('[ImageUpload] Upload result has no data and no error')
+        onUploadError('アップロードに失敗しました: データが取得できませんでした')
+        setPreviewUrl(null)
       }
     } catch (error) {
       onUploadError('アップロード中にエラーが発生しました。')
@@ -133,6 +149,12 @@ export default function ImageUpload({
             <img
               src={previewUrl}
               alt={label}
+              onLoad={() => console.log('[ImageUpload] Image loaded successfully:', previewUrl, 'label:', label)}
+              onError={(e) => {
+                console.error('[ImageUpload] Failed to load image:', previewUrl, 'label:', label)
+                console.error('[ImageUpload] Error event:', e)
+                e.currentTarget.style.display = 'none'
+              }}
               style={{
                 width: 'calc(100% - 4px)',
                 height: '196px',
