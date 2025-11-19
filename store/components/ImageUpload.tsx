@@ -30,13 +30,14 @@ export default function ImageUpload({
 
   // currentImageUrlが変更されたときにpreviewUrlを更新
   useEffect(() => {
-    console.log('[ImageUpload] currentImageUrl changed:', currentImageUrl, 'label:', label, 'current previewUrl:', previewUrl)
+    console.log('[ImageUpload] currentImageUrl changed:', currentImageUrl, 'label:', label)
     if (currentImageUrl) {
+      console.log('[ImageUpload] Updating previewUrl from currentImageUrl:', currentImageUrl)
       setPreviewUrl(currentImageUrl)
-      console.log('[ImageUpload] Updated previewUrl to:', currentImageUrl)
-    } else if (!previewUrl) {
-      // currentImageUrlが空で、previewUrlも空の場合は何もしない（アップロード中の画像を保持）
-      console.log('[ImageUpload] Both currentImageUrl and previewUrl are empty, keeping current previewUrl')
+    } else {
+      // currentImageUrlが空の場合は、previewUrlもクリア（ただし、アップロード直後は保持）
+      console.log('[ImageUpload] currentImageUrl is empty, clearing previewUrl')
+      setPreviewUrl(null)
     }
   }, [currentImageUrl, label])
 
