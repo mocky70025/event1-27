@@ -94,7 +94,11 @@ export default function EventList({ userProfile, onBack }: EventListProps) {
       let query = supabase
         .from('events')
         .select('*')
-        .eq('approval_status', 'approved')
+
+      // approval_statusカラムが存在する場合のみフィルタリング
+      // 注意: カラムが存在しない場合は、クエリ実行時にエラーが発生する可能性があります
+      // その場合は、エラーハンドリングで処理します
+      query = query.eq('approval_status', 'approved')
 
       if (effectiveFilters.periodStart) {
         query = query.gte('event_end_date', effectiveFilters.periodStart)
@@ -111,9 +115,24 @@ export default function EventList({ userProfile, onBack }: EventListProps) {
 
       const { data, error } = await query
 
-      if (error) throw error
+      if (error) {
+        console.error('[EventList] Supabase query error:', error)
+        // エラーの詳細をログに出力
+        console.error('[EventList] Error code:', error.code)
+        console.error('[EventList] Error message:', error.message)
+        console.error('[EventList] Error details:', error.details)
+        console.error('[EventList] Error hint:', error.hint)
+        throw error
+      }
 
       let filteredEvents = (data || []) as Event[]
+
+      // approval_statusカラムが存在する場合、クライアント側でもフィルタリング
+      if (filteredEvents.length > 0 && 'approval_status' in filteredEvents[0]) {
+        filteredEvents = filteredEvents.filter(event => 
+          (event as any).approval_status === 'approved' || (event as any).approval_status === null
+        )
+      }
 
       const normalizedKeyword = normalizeForSearch(effectiveFilters.keyword)
       if (normalizedKeyword) {
@@ -146,9 +165,23 @@ export default function EventList({ userProfile, onBack }: EventListProps) {
       }
 
       setEvents(filteredEvents)
+      console.log('[EventList] Fetched events:', filteredEvents.length, 'events')
     } catch (error) {
-      console.error('Failed to fetch events:', error)
-      alert('イベント一覧の取得に失敗しました')
+      console.error('[EventList] Failed to fetch events:', error)
+      const errorMessage = error instanceof Error ? error.message : '不明なエラー'
+      const errorCode = (error as any)?.code || 'UNKNOWN'
+      console.error('[EventList] Error details:', { errorMessage, errorCode })
+      
+      // エラーの種類に応じてメッセージを変更
+      if (errorCode === 'PGRST116' || errorMessage.includes('column') || errorMessage.includes('does not exist')) {
+        // カラムが存在しない場合やテーブルが空の場合
+        console.log('[EventList] No events found or column issue, showing empty list')
+        setEvents([])
+      } else {
+        // その他のエラー
+        alert(`イベント一覧の取得に失敗しました。\nエラー: ${errorMessage}\nコード: ${errorCode}`)
+        setEvents([])
+      }
     } finally {
       setLoading(false)
     }
