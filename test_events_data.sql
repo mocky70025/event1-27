@@ -1,7 +1,25 @@
 -- テスト用イベントデータ作成スクリプト
 -- SupabaseのSQL Editorで実行してください
--- 注意: このSQLを実行する前に、approval_statusカラムが存在することを確認してください
--- （supabase_events_approval.sqlを実行していない場合は、先に実行してください）
+
+-- 0. approval_statusカラムが存在しない場合は追加
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.columns 
+    WHERE table_name = 'events' AND column_name = 'approval_status'
+  ) THEN
+    ALTER TABLE events 
+    ADD COLUMN approval_status VARCHAR(20) DEFAULT 'pending' 
+    CHECK (approval_status IN ('pending','approved','rejected'));
+    
+    -- 既存レコードのNULLをpendingに設定
+    UPDATE events SET approval_status = 'pending' WHERE approval_status IS NULL;
+    
+    RAISE NOTICE 'approval_statusカラムを追加しました';
+  ELSE
+    RAISE NOTICE 'approval_statusカラムは既に存在します';
+  END IF;
+END $$;
 
 -- 1. 既存の主催者を取得（承認済みの主催者が存在する場合）
 -- 存在しない場合は、テスト用主催者を作成
