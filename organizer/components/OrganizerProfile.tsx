@@ -2,9 +2,11 @@
 
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
+import { type LineProfile } from '@/lib/auth'
 import OrganizerEditForm from './OrganizerEditForm'
 
 interface OrganizerProfileProps {
+  userProfile: LineProfile
 }
 
 interface OrganizerData {
@@ -15,37 +17,53 @@ interface OrganizerData {
   age: number
   phone_number: string
   email: string
-  user_id: string
+  line_user_id: string
   is_approved: boolean
   created_at: string
   updated_at: string
 }
 
-export default function OrganizerProfile() {
+export default function OrganizerProfile({ userProfile }: OrganizerProfileProps) {
   const [organizerData, setOrganizerData] = useState<OrganizerData | null>(null)
   const [loading, setLoading] = useState(true)
   const [isEditing, setIsEditing] = useState(false)
 
   useEffect(() => {
-    fetchOrganizerData()
-  }, [])
+    if (userProfile?.userId) {
+      fetchOrganizerData()
+    }
+  }, [userProfile])
 
   const fetchOrganizerData = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user?.id) return
+      if (!userProfile?.userId) {
+        console.error('[OrganizerProfile] No userProfile.userId')
+        setLoading(false)
+        return
+      }
+
+      console.log('[OrganizerProfile] Fetching organizer data for userId:', userProfile.userId)
 
       const { data, error } = await supabase
         .from('organizers')
         .select('*')
-        .eq('user_id', user.id)
+        .eq('line_user_id', userProfile.userId)
         .single()
 
-      if (error) throw error
-      
-      setOrganizerData(data)
+      console.log('[OrganizerProfile] Fetch result:', { data, error })
+
+      if (error) {
+        if (error.code === 'PGRST116') {
+          console.log('[OrganizerProfile] No organizer found')
+          setOrganizerData(null)
+        } else {
+          throw error
+        }
+      } else {
+        setOrganizerData(data)
+      }
     } catch (error) {
-      console.error('Failed to fetch organizer data:', error)
+      console.error('[OrganizerProfile] Failed to fetch organizer data:', error)
       alert('プロフィール情報の取得に失敗しました')
     } finally {
       setLoading(false)
@@ -85,6 +103,7 @@ export default function OrganizerProfile() {
     return (
       <OrganizerEditForm
         organizerData={organizerData}
+        userProfile={userProfile}
         onUpdateComplete={handleUpdateComplete}
         onCancel={() => setIsEditing(false)}
       />
@@ -123,7 +142,23 @@ export default function OrganizerProfile() {
           </button>
         </div>
 
-        {organizerData && (
+        {!organizerData ? (
+          <div style={{
+            background: '#FFFFFF',
+            boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
+            borderRadius: '12px',
+            padding: '24px',
+            marginBottom: '24px',
+            textAlign: 'center'
+          }}>
+            <p style={{
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '16px',
+              lineHeight: '150%',
+              color: '#666666'
+            }}>登録情報が見つかりませんでした</p>
+          </div>
+        ) : (
           <div style={{
             background: '#FFFFFF',
             boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',

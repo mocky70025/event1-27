@@ -255,7 +255,7 @@ export default function EventManagement({ userProfile }: EventManagementProps) {
       case 'profile':
         return (
           <div style={{ paddingBottom: '24px' }}>
-            <OrganizerProfile />
+            <OrganizerProfile userProfile={userProfile} />
           </div>
         )
       default:

@@ -2,15 +2,18 @@
 
 import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
+import { type LineProfile } from '@/lib/auth'
 
 interface OrganizerEditFormProps {
   organizerData: any
+  userProfile: LineProfile
   onUpdateComplete: (updatedData: any) => void
   onCancel: () => void
 }
 
 export default function OrganizerEditForm({
   organizerData,
+  userProfile,
   onUpdateComplete,
   onCancel
 }: OrganizerEditFormProps) {
@@ -143,16 +146,17 @@ export default function OrganizerEditForm({
       }
 
       // Supabaseで更新
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user?.id) {
+      if (!userProfile?.userId) {
         alert('ログインが必要です。')
         return
       }
 
+      console.log('[OrganizerEditForm] Updating organizer with line_user_id:', userProfile.userId)
+
       const { data, error } = await supabase
         .from('organizers')
         .update(updateData)
-        .eq('user_id', user.id)
+        .eq('line_user_id', userProfile.userId)
         .select()
         .single()
 

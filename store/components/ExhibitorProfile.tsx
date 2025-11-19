@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
+import { getPublicUrl } from '@/lib/storage'
 import ExhibitorEditForm from './ExhibitorEditForm'
 
 interface ExhibitorProfileProps {
@@ -47,6 +48,15 @@ export default function ExhibitorProfile({ userProfile, onBack }: ExhibitorProfi
 
       if (error) throw error
       
+      console.log('[ExhibitorProfile] Fetched exhibitor data:', data)
+      console.log('[ExhibitorProfile] Image URLs:', {
+        business_license: data.business_license_image_url,
+        vehicle_inspection: data.vehicle_inspection_image_url,
+        automobile_inspection: data.automobile_inspection_image_url,
+        pl_insurance: data.pl_insurance_image_url,
+        fire_equipment: data.fire_equipment_layout_image_url
+      })
+      
       setExhibitorData(data)
     } catch (error) {
       console.error('Failed to fetch exhibitor data:', error)
@@ -54,6 +64,28 @@ export default function ExhibitorProfile({ userProfile, onBack }: ExhibitorProfi
     } finally {
       setLoading(false)
     }
+  }
+
+  // 画像URLを取得（完全なURLの場合はそのまま、相対パスの場合は公開URLを取得）
+  const getImageUrl = (url: string | null | undefined): string | null => {
+    if (!url) return null
+    
+    // 既に完全なURLの場合はそのまま返す
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      return url
+    }
+    
+    // 相対パスの場合は公開URLを取得
+    // URLの形式: bucket/path または path
+    const parts = url.split('/')
+    if (parts.length >= 2) {
+      const bucket = parts[0]
+      const path = parts.slice(1).join('/')
+      return getPublicUrl(bucket, path)
+    }
+    
+    // パスがbucket名を含まない場合は、exhibitor-documentsバケットを想定
+    return getPublicUrl('exhibitor-documents', url)
   }
 
   const handleUpdateComplete = (updatedData: ExhibitorData) => {
@@ -282,7 +314,7 @@ export default function ExhibitorProfile({ userProfile, onBack }: ExhibitorProfi
                   display: 'block'
                 }}>登録書類</label>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                  {exhibitorData.business_license_image_url && (
+                  {getImageUrl(exhibitorData.business_license_image_url) && (
                     <div>
                       <p style={{
                         fontFamily: 'Inter, sans-serif',
@@ -292,8 +324,12 @@ export default function ExhibitorProfile({ userProfile, onBack }: ExhibitorProfi
                         marginBottom: '8px'
                       }}>営業許可証</p>
                       <img
-                        src={exhibitorData.business_license_image_url}
+                        src={getImageUrl(exhibitorData.business_license_image_url)!}
                         alt="営業許可証"
+                        onError={(e) => {
+                          console.error('[ExhibitorProfile] Failed to load business_license image:', getImageUrl(exhibitorData.business_license_image_url))
+                          e.currentTarget.style.display = 'none'
+                        }}
                         style={{
                           width: '100%',
                           height: '200px',
@@ -305,7 +341,7 @@ export default function ExhibitorProfile({ userProfile, onBack }: ExhibitorProfi
                       />
                     </div>
                   )}
-                  {exhibitorData.vehicle_inspection_image_url && (
+                  {getImageUrl(exhibitorData.vehicle_inspection_image_url) && (
                     <div>
                       <p style={{
                         fontFamily: 'Inter, sans-serif',
@@ -315,8 +351,12 @@ export default function ExhibitorProfile({ userProfile, onBack }: ExhibitorProfi
                         marginBottom: '8px'
                       }}>車検証</p>
                       <img
-                        src={exhibitorData.vehicle_inspection_image_url}
+                        src={getImageUrl(exhibitorData.vehicle_inspection_image_url)!}
                         alt="車検証"
+                        onError={(e) => {
+                          console.error('[ExhibitorProfile] Failed to load vehicle_inspection image:', getImageUrl(exhibitorData.vehicle_inspection_image_url))
+                          e.currentTarget.style.display = 'none'
+                        }}
                         style={{
                           width: '100%',
                           height: '200px',
@@ -328,7 +368,7 @@ export default function ExhibitorProfile({ userProfile, onBack }: ExhibitorProfi
                       />
                     </div>
                   )}
-                  {exhibitorData.automobile_inspection_image_url && (
+                  {getImageUrl(exhibitorData.automobile_inspection_image_url) && (
                     <div>
                       <p style={{
                         fontFamily: 'Inter, sans-serif',
@@ -338,8 +378,12 @@ export default function ExhibitorProfile({ userProfile, onBack }: ExhibitorProfi
                         marginBottom: '8px'
                       }}>自動車検査証</p>
                       <img
-                        src={exhibitorData.automobile_inspection_image_url}
+                        src={getImageUrl(exhibitorData.automobile_inspection_image_url)!}
                         alt="自動車検査証"
+                        onError={(e) => {
+                          console.error('[ExhibitorProfile] Failed to load automobile_inspection image:', getImageUrl(exhibitorData.automobile_inspection_image_url))
+                          e.currentTarget.style.display = 'none'
+                        }}
                         style={{
                           width: '100%',
                           height: '200px',
@@ -351,7 +395,7 @@ export default function ExhibitorProfile({ userProfile, onBack }: ExhibitorProfi
                       />
                     </div>
                   )}
-                  {exhibitorData.pl_insurance_image_url && (
+                  {getImageUrl(exhibitorData.pl_insurance_image_url) && (
                     <div>
                       <p style={{
                         fontFamily: 'Inter, sans-serif',
@@ -361,8 +405,12 @@ export default function ExhibitorProfile({ userProfile, onBack }: ExhibitorProfi
                         marginBottom: '8px'
                       }}>PL保険</p>
                       <img
-                        src={exhibitorData.pl_insurance_image_url}
+                        src={getImageUrl(exhibitorData.pl_insurance_image_url)!}
                         alt="PL保険"
+                        onError={(e) => {
+                          console.error('[ExhibitorProfile] Failed to load pl_insurance image:', getImageUrl(exhibitorData.pl_insurance_image_url))
+                          e.currentTarget.style.display = 'none'
+                        }}
                         style={{
                           width: '100%',
                           height: '200px',
@@ -374,7 +422,7 @@ export default function ExhibitorProfile({ userProfile, onBack }: ExhibitorProfi
                       />
                     </div>
                   )}
-                  {exhibitorData.fire_equipment_layout_image_url && (
+                  {getImageUrl(exhibitorData.fire_equipment_layout_image_url) && (
                     <div>
                       <p style={{
                         fontFamily: 'Inter, sans-serif',
@@ -384,8 +432,12 @@ export default function ExhibitorProfile({ userProfile, onBack }: ExhibitorProfi
                         marginBottom: '8px'
                       }}>火器類配置図</p>
                       <img
-                        src={exhibitorData.fire_equipment_layout_image_url}
+                        src={getImageUrl(exhibitorData.fire_equipment_layout_image_url)!}
                         alt="火器類配置図"
+                        onError={(e) => {
+                          console.error('[ExhibitorProfile] Failed to load fire_equipment_layout image:', getImageUrl(exhibitorData.fire_equipment_layout_image_url))
+                          e.currentTarget.style.display = 'none'
+                        }}
                         style={{
                           width: '100%',
                           height: '200px',
