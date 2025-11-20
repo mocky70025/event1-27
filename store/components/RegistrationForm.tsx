@@ -474,7 +474,21 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
 
       if (error) {
         console.error('Supabase error:', error)
-        throw error
+        console.error('Error details:', JSON.stringify(error, null, 2))
+        console.error('Insert data:', JSON.stringify(insertData, null, 2))
+        console.error('User profile:', userProfile)
+        
+        // より詳細なエラーメッセージを表示
+        let errorMessage = '不明なエラー'
+        if (error.message) {
+          errorMessage = error.message
+        } else if (error.details) {
+          errorMessage = error.details
+        } else if (error.hint) {
+          errorMessage = error.hint
+        }
+        
+        throw new Error(errorMessage)
       }
 
       try {

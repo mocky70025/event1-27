@@ -19,10 +19,14 @@ export default function Home() {
         // Supabase Authのセッションを確認
         const { data: { session }, error: sessionError } = await supabase.auth.getSession()
         
+        // セッションストレージから認証情報を確認
+        const authType = sessionStorage.getItem('auth_type')
+        const storedUserId = sessionStorage.getItem('user_id')
+        const storedEmail = sessionStorage.getItem('user_email')
+        
         if (session && session.user) {
           // メールアドレス・パスワード認証の場合
           console.log('[Home] Email auth session found:', session.user.id)
-          const authType = sessionStorage.getItem('auth_type')
           
           if (authType === 'email') {
             // メール確認済みかチェック
@@ -54,6 +58,33 @@ export default function Home() {
               emailConfirmed: isEmailConfirmed
             })
           }
+        } else if (authType === 'email' && storedUserId) {
+          // セッションが存在しないが、セッションストレージにuser_idがある場合
+          // メール確認待ちの状態で登録フォームにアクセスできるようにする
+          console.log('[Home] Email auth - session not found, but user_id in storage:', storedUserId)
+          
+          const emailConfirmed = sessionStorage.getItem('email_confirmed') === 'true'
+          
+          setUserProfile({
+            userId: storedUserId,
+            email: storedEmail || '',
+            authType: 'email',
+            emailConfirmed: emailConfirmed
+          } as any)
+          
+          // 登録済みかチェック
+          const { data: organizer } = await supabase
+            .from('organizers')
+            .select('id')
+            .eq('user_id', storedUserId)
+            .single()
+          
+          setIsRegistered(!!organizer)
+          console.log('[Home] Email auth user profile set from storage:', { 
+            userId: storedUserId, 
+            isRegistered: !!organizer,
+            emailConfirmed: emailConfirmed
+          })
         } else {
           // LINE Loginの場合
           const savedProfile = sessionStorage.getItem('line_profile')

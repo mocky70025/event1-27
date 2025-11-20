@@ -91,23 +91,20 @@ export default function WelcomeScreen() {
       if (error) throw error
 
       if (data.user) {
+        // メール確認が必要な場合でも、user_idを保存して登録フォームに進める
+        sessionStorage.setItem('auth_type', 'email')
+        sessionStorage.setItem('user_id', data.user.id)
+        sessionStorage.setItem('user_email', data.user.email || '')
+        sessionStorage.setItem('email_confirmed', data.session ? 'true' : 'false')
+        
         // メール確認が必要な場合
         if (!data.session) {
           // メール確認待ちの状態を表示
           setError('')
-          alert('確認メールを送信しました。メール内のリンクをクリックしてメールアドレスを確認してください。')
-          setAuthMode('initial')
-          setRegisterMethod(null)
-          setRegisterEmail('')
-          setRegisterPassword('')
-          setRegisterPasswordConfirm('')
-          return
+          alert('確認メールを送信しました。メール内のリンクをクリックしてメールアドレスを確認してください。\n\nメール確認が完了していなくても、登録フォームに入力できます。')
         }
-
-        // メール確認が不要な場合（開発環境など）
-        sessionStorage.setItem('auth_type', 'email')
-        sessionStorage.setItem('user_id', data.user.id)
-        sessionStorage.setItem('user_email', data.user.email || '')
+        
+        // ページをリロードして認証状態を反映
         window.location.reload()
       }
     } catch (err: any) {
