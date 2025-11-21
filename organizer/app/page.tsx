@@ -90,27 +90,8 @@ export default function Home() {
             emailConfirmed: emailConfirmed
           })
         } else {
-          // LINE Loginの場合
-          const savedProfile = sessionStorage.getItem('line_profile')
-          const savedIsRegistered = sessionStorage.getItem('is_registered')
-          
-          console.log('[Home] Saved profile from sessionStorage:', savedProfile)
-          console.log('[Home] Is registered from sessionStorage:', savedIsRegistered)
-          
-          if (savedProfile) {
-            try {
-              const profile = JSON.parse(savedProfile) as LineProfile
-              console.log('[Home] User ID from session:', profile.userId)
-              console.log('[Home] Display Name:', profile.displayName)
-              setUserProfile(profile)
-              setIsRegistered(savedIsRegistered === 'true')
-              console.log('[Home] LINE Login user profile set:', { userId: profile.userId, isRegistered: savedIsRegistered === 'true' })
-            } catch (error) {
-              console.error('[Home] Failed to parse profile from sessionStorage:', error)
-            }
-          } else {
-            console.log('[Home] No profile found in sessionStorage')
-          }
+          // organizerアプリはメール認証のみ
+          console.log('[Home] No email auth found - user not logged in')
         }
       } catch (error) {
         console.error('[Auth] Initialization error:', error)

@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { getLineLoginUrl, isLiffEnvironment } from '@/lib/auth'
 import { supabase } from '@/lib/supabase'
 
 type AuthMode = 'initial' | 'login' | 'register'
@@ -20,20 +19,7 @@ export default function WelcomeScreen() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   
-  // LIFF環境かどうかを判定
-  const isLiff = isLiffEnvironment()
-
-  const handleLineLogin = () => {
-    try {
-      console.log('[WelcomeScreen] Login button clicked')
-      const loginUrl = getLineLoginUrl()
-      console.log('[WelcomeScreen] Login URL generated, redirecting...')
-      window.location.href = loginUrl
-    } catch (error) {
-      console.error('[WelcomeScreen] Error in handleLogin:', error)
-      alert('ログインエラーが発生しました。コンソールを確認してください。')
-    }
-  }
+  // organizerアプリはWeb環境のみ、メール認証のみ
 
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -254,7 +240,7 @@ export default function WelcomeScreen() {
           </>
         )}
 
-        {/* ログイン方法選択 */}
+        {/* ログイン方法選択 - メール認証のみ */}
         {authMode === 'login' && !loginMethod && (
           <div style={{
             background: '#FFFFFF',
@@ -271,7 +257,7 @@ export default function WelcomeScreen() {
                 lineHeight: '120%',
                 color: '#000000'
               }}>
-                ログイン方法を選択
+                ログイン
               </h2>
               <button
                 onClick={() => {
@@ -291,7 +277,7 @@ export default function WelcomeScreen() {
               </button>
             </div>
             <button
-              onClick={handleLineLogin}
+              onClick={() => setLoginMethod('email')}
               style={{
                 display: 'flex',
                 flexDirection: 'row',
@@ -309,43 +295,16 @@ export default function WelcomeScreen() {
                 fontWeight: 700,
                 lineHeight: '19px',
                 color: '#FFFFFF',
-                cursor: 'pointer',
-                marginBottom: '12px'
+                cursor: 'pointer'
               }}
             >
-              LINEでログイン
+              メールアドレスでログイン
             </button>
-            {!isLiff && (
-              <button
-                onClick={() => setLoginMethod('email')}
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  padding: '16px 24px',
-                  gap: '10px',
-                  width: '100%',
-                  height: '48px',
-                  background: '#FFFFFF',
-                  borderRadius: '8px',
-                  border: '1px solid #E5E5E5',
-                  fontFamily: 'Inter, sans-serif',
-                  fontSize: '16px',
-                  fontWeight: 700,
-                  lineHeight: '19px',
-                  color: '#000000',
-                  cursor: 'pointer'
-                }}
-              >
-                メールアドレスでログイン
-              </button>
-            )}
           </div>
         )}
 
         {/* メールアドレスでログイン */}
-        {!isLiff && authMode === 'login' && loginMethod === 'email' && (
+        {authMode === 'login' && loginMethod === 'email' && (
           <div style={{
             background: '#FFFFFF',
             boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
@@ -570,7 +529,7 @@ export default function WelcomeScreen() {
         )}
 
         {/* メールアドレスで新規登録 */}
-        {!isLiff && authMode === 'register' && registerMethod === 'email' && (
+        {authMode === 'register' && registerMethod === 'email' && (
           <div style={{
             background: '#FFFFFF',
             boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',

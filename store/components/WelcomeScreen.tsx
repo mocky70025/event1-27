@@ -25,7 +25,7 @@ export default function WelcomeScreen() {
 
   const handleLineLogin = () => {
     try {
-      console.log('[WelcomeScreen] LINE Login button clicked, authMode:', authMode, 'registerMethod:', registerMethod, 'loginMethod:', loginMethod)
+      console.log('[WelcomeScreen] LINE Login button clicked')
       const loginUrl = getLineLoginUrl()
       console.log('[WelcomeScreen] LINE Login URL generated, redirecting to:', loginUrl.replace(/state=[^&]+/, 'state=***'))
       window.location.href = loginUrl
@@ -367,7 +367,7 @@ export default function WelcomeScreen() {
                 lineHeight: '120%',
                 color: '#000000'
               }}>
-                ログイン方法を選択
+                ログイン
               </h2>
               <button
                 onClick={() => {
@@ -386,32 +386,34 @@ export default function WelcomeScreen() {
                 ×
               </button>
             </div>
-            <button
-              onClick={handleLineLogin}
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-                padding: '16px 24px',
-                gap: '10px',
-                width: '100%',
-                height: '48px',
-                background: '#06C755',
-                borderRadius: '8px',
-                border: 'none',
-                fontFamily: 'Inter, sans-serif',
-                fontSize: '16px',
-                fontWeight: 700,
-                lineHeight: '19px',
-                color: '#FFFFFF',
-                cursor: 'pointer',
-                marginBottom: '12px'
-              }}
-            >
-              LINEでログイン
-            </button>
-            {!isLiff && (
+            {isLiff ? (
+              // LIFF環境: LINE認証のみ
+              <button
+                onClick={handleLineLogin}
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  padding: '16px 24px',
+                  gap: '10px',
+                  width: '100%',
+                  height: '48px',
+                  background: '#06C755',
+                  borderRadius: '8px',
+                  border: 'none',
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '16px',
+                  fontWeight: 700,
+                  lineHeight: '19px',
+                  color: '#FFFFFF',
+                  cursor: 'pointer'
+                }}
+              >
+                LINEでログイン
+              </button>
+            ) : (
+              // Web環境: メール認証のみ
               <button
                 onClick={() => setLoginMethod('email')}
                 style={{
@@ -423,14 +425,14 @@ export default function WelcomeScreen() {
                   gap: '10px',
                   width: '100%',
                   height: '48px',
-                  background: '#FFFFFF',
+                  background: '#06C755',
                   borderRadius: '8px',
-                  border: '1px solid #E5E5E5',
+                  border: 'none',
                   fontFamily: 'Inter, sans-serif',
                   fontSize: '16px',
                   fontWeight: 700,
                   lineHeight: '19px',
-                  color: '#000000',
+                  color: '#FFFFFF',
                   cursor: 'pointer'
                 }}
               >
@@ -592,7 +594,7 @@ export default function WelcomeScreen() {
                 lineHeight: '120%',
                 color: '#000000'
               }}>
-                新規登録方法を選択
+                新規登録
               </h2>
               <button
                 onClick={() => {
@@ -611,32 +613,34 @@ export default function WelcomeScreen() {
                 ×
               </button>
             </div>
-            <button
-              onClick={handleLineLogin}
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-                padding: '16px 24px',
-                gap: '10px',
-                width: '100%',
-                height: '48px',
-                background: '#06C755',
-                borderRadius: '8px',
-                border: 'none',
-                fontFamily: 'Inter, sans-serif',
-                fontSize: '16px',
-                fontWeight: 700,
-                lineHeight: '19px',
-                color: '#FFFFFF',
-                cursor: 'pointer',
-                marginBottom: '12px'
-              }}
-            >
-              LINEで新規登録
-            </button>
-            {!isLiff && (
+            {isLiff ? (
+              // LIFF環境: LINE認証のみ
+              <button
+                onClick={handleLineLogin}
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  padding: '16px 24px',
+                  gap: '10px',
+                  width: '100%',
+                  height: '48px',
+                  background: '#06C755',
+                  borderRadius: '8px',
+                  border: 'none',
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '16px',
+                  fontWeight: 700,
+                  lineHeight: '19px',
+                  color: '#FFFFFF',
+                  cursor: 'pointer'
+                }}
+              >
+                LINEで新規登録
+              </button>
+            ) : (
+              // Web環境: メール認証のみ
               <button
                 onClick={() => setRegisterMethod('email')}
                 style={{
@@ -648,14 +652,14 @@ export default function WelcomeScreen() {
                   gap: '10px',
                   width: '100%',
                   height: '48px',
-                  background: '#FFFFFF',
+                  background: '#06C755',
                   borderRadius: '8px',
-                  border: '1px solid #E5E5E5',
+                  border: 'none',
                   fontFamily: 'Inter, sans-serif',
                   fontSize: '16px',
                   fontWeight: 700,
                   lineHeight: '19px',
-                  color: '#000000',
+                  color: '#FFFFFF',
                   cursor: 'pointer'
                 }}
               >
