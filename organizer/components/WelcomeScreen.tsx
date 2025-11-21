@@ -19,6 +19,9 @@ export default function WelcomeScreen() {
   const [registerPasswordConfirm, setRegisterPasswordConfirm] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  
+  // LIFF環境かどうかを判定
+  const isLiff = isLiffEnvironment()
 
   const handleLineLogin = () => {
     try {
@@ -312,35 +315,37 @@ export default function WelcomeScreen() {
             >
               LINEでログイン
             </button>
-            <button
-              onClick={() => setLoginMethod('email')}
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-                padding: '16px 24px',
-                gap: '10px',
-                width: '100%',
-                height: '48px',
-                background: '#FFFFFF',
-                borderRadius: '8px',
-                border: '1px solid #E5E5E5',
-                fontFamily: 'Inter, sans-serif',
-                fontSize: '16px',
-                fontWeight: 700,
-                lineHeight: '19px',
-                color: '#000000',
-                cursor: 'pointer'
-              }}
-            >
-              メールアドレスでログイン
-            </button>
+            {!isLiff && (
+              <button
+                onClick={() => setLoginMethod('email')}
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  padding: '16px 24px',
+                  gap: '10px',
+                  width: '100%',
+                  height: '48px',
+                  background: '#FFFFFF',
+                  borderRadius: '8px',
+                  border: '1px solid #E5E5E5',
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '16px',
+                  fontWeight: 700,
+                  lineHeight: '19px',
+                  color: '#000000',
+                  cursor: 'pointer'
+                }}
+              >
+                メールアドレスでログイン
+              </button>
+            )}
           </div>
         )}
 
         {/* メールアドレスでログイン */}
-        {authMode === 'login' && loginMethod === 'email' && (
+        {!isLiff && authMode === 'login' && loginMethod === 'email' && (
           <div style={{
             background: '#FFFFFF',
             boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
@@ -535,35 +540,37 @@ export default function WelcomeScreen() {
             >
               LINEで新規登録
             </button>
-            <button
-              onClick={() => setRegisterMethod('email')}
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-                padding: '16px 24px',
-                gap: '10px',
-                width: '100%',
-                height: '48px',
-                background: '#FFFFFF',
-                borderRadius: '8px',
-                border: '1px solid #E5E5E5',
-                fontFamily: 'Inter, sans-serif',
-                fontSize: '16px',
-                fontWeight: 700,
-                lineHeight: '19px',
-                color: '#000000',
-                cursor: 'pointer'
-              }}
-            >
-              メールアドレスで新規登録
-            </button>
+            {!isLiff && (
+              <button
+                onClick={() => setRegisterMethod('email')}
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  padding: '16px 24px',
+                  gap: '10px',
+                  width: '100%',
+                  height: '48px',
+                  background: '#FFFFFF',
+                  borderRadius: '8px',
+                  border: '1px solid #E5E5E5',
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '16px',
+                  fontWeight: 700,
+                  lineHeight: '19px',
+                  color: '#000000',
+                  cursor: 'pointer'
+                }}
+              >
+                メールアドレスで新規登録
+              </button>
+            )}
           </div>
         )}
 
         {/* メールアドレスで新規登録 */}
-        {authMode === 'register' && registerMethod === 'email' && (
+        {!isLiff && authMode === 'register' && registerMethod === 'email' && (
           <div style={{
             background: '#FFFFFF',
             boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
