@@ -98,6 +98,7 @@ export default function WelcomeScreen() {
         hasUser: !!data.user,
         userId: data.user?.id,
         email: data.user?.email,
+        emailConfirmed: !!data.user?.email_confirmed_at,
         hasSession: !!data.session,
         error: error ? {
           message: error.message,
@@ -105,6 +106,16 @@ export default function WelcomeScreen() {
           name: error.name
         } : null
       })
+      
+      // メール送信の状態を確認
+      if (data.user && !data.session) {
+        console.log('[WelcomeScreen] ⚠️ Email confirmation required but no session - email should be sent')
+        console.log('[WelcomeScreen] Check Supabase Dashboard > Authentication > Users to verify user creation')
+        console.log('[WelcomeScreen] Check Supabase Dashboard > Authentication > Settings > Enable email confirmations')
+      } else if (data.user && data.session) {
+        console.log('[WelcomeScreen] ⚠️ Session exists - email confirmation may be disabled')
+        console.log('[WelcomeScreen] Check Supabase Dashboard > Authentication > Settings > Enable email confirmations')
+      }
 
       if (error) {
         console.error('[WelcomeScreen] SignUp error details:', {
