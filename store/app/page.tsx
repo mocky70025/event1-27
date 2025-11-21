@@ -99,19 +99,26 @@ export default function Home() {
           // LINE Loginの場合
           const savedProfile = sessionStorage.getItem('line_profile')
           const savedIsRegistered = sessionStorage.getItem('is_registered')
-          const savedAuthType = sessionStorage.getItem('auth_type')
           
+          console.log('[Home] Checking LINE Login profile from sessionStorage')
           console.log('[Home] Saved profile from sessionStorage:', savedProfile)
           console.log('[Home] Is registered from sessionStorage:', savedIsRegistered)
-          console.log('[Home] Auth type from sessionStorage:', savedAuthType)
           
           if (savedProfile) {
             try {
               const profile = JSON.parse(savedProfile) as LineProfile
-              console.log('[Home] User ID from session:', profile.userId)
-              console.log('[Home] Display Name:', profile.displayName)
+              console.log('[LINE Login] User ID from session:', profile.userId)
+              console.log('[LINE Login] Display Name:', profile.displayName)
               
-              const isRegistered = savedIsRegistered === 'true'
+              // 登録済みかどうかを再確認（セッションストレージの値が古い可能性があるため）
+              const { data: exhibitor } = await supabase
+                .from('exhibitors')
+                .select('id')
+                .eq('line_user_id', profile.userId)
+                .single()
+              
+              const isRegistered = !!exhibitor
+              console.log('[Home] Re-checked registration status:', isRegistered)
               
               setUserProfile({
                 userId: profile.userId,
@@ -122,17 +129,18 @@ export default function Home() {
               })
               setIsRegistered(isRegistered)
               
+              // セッションストレージの値も更新
+              sessionStorage.setItem('is_registered', isRegistered ? 'true' : 'false')
+              
               console.log('[Home] LINE Login user profile set:', { 
                 userId: profile.userId, 
-                isRegistered: isRegistered,
-                authType: 'line'
+                isRegistered: isRegistered 
               })
             } catch (error) {
               console.error('[Home] Failed to parse profile from sessionStorage:', error)
             }
           } else {
             console.log('[Home] No profile found in sessionStorage')
-            console.log('[Home] This might be a fresh page load - user needs to login')
           }
         }
       } catch (error) {

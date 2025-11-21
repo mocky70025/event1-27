@@ -58,35 +58,27 @@ export default function AuthCallback() {
         
         // store側の処理
         // 既存ユーザーかチェック
-        console.log('[Callback] Checking for existing exhibitor with userId:', profile.userId)
-        const { data: existingUser, error: exhibitorError } = await supabase
+        const { data: existingUser } = await supabase
           .from('exhibitors')
           .select('*')
           .eq('line_user_id', profile.userId)
           .single()
         
-        if (exhibitorError && exhibitorError.code !== 'PGRST116') {
-          console.error('[Callback] Error checking exhibitor:', exhibitorError)
-        }
-        
-        const isRegistered = !!existingUser
-        console.log('[Callback] Existing exhibitor found:', isRegistered ? 'yes' : 'no')
-        
         // セッションストレージにプロフィール情報を保存
         sessionStorage.setItem('line_profile', JSON.stringify(profile))
-        sessionStorage.setItem('is_registered', isRegistered ? 'true' : 'false')
-        sessionStorage.setItem('auth_type', 'line')
+        sessionStorage.setItem('is_registered', existingUser ? 'true' : 'false')
         
         console.log('[Callback] Profile saved to sessionStorage:', profile)
-        console.log('[Callback] Is registered:', isRegistered)
-        console.log('[Callback] Auth type set to: line')
+        console.log('[Callback] Is registered:', existingUser ? 'true' : 'false')
+        console.log('[Callback] Existing user data:', existingUser)
         
         setStatus('success')
         
-        // メインページにリダイレクト
+        // メインページにリダイレクト（ページをリロードして確実に状態を反映）
         setTimeout(() => {
           console.log('[Callback] Redirecting to home page...')
-          router.push('/')
+          // router.pushではなく、window.location.hrefを使用してページを完全にリロード
+          window.location.href = '/'
         }, 1000)
       } catch (error) {
         console.error('Auth callback error:', error)
