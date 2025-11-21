@@ -26,19 +26,42 @@ export default function Home() {
       try {
         setIsLiffReady(true)
         
-        // Supabase Authのセッションを確認
-        const { data: { session }, error: sessionError } = await supabase.auth.getSession()
-        
-        // セッションストレージから認証情報を確認
+        // セッションストレージから認証情報を確認（LINE Loginを優先）
+        const savedProfile = sessionStorage.getItem('line_profile')
+        const savedIsRegistered = sessionStorage.getItem('is_registered')
         const authType = sessionStorage.getItem('auth_type')
         const storedUserId = sessionStorage.getItem('user_id')
         const storedEmail = sessionStorage.getItem('user_email')
         
-        if (session && session.user) {
-          // メールアドレス・パスワード認証の場合
-          console.log('[Home] Email auth session found:', session.user.id)
+        // LINE Loginのプロフィールが存在する場合は、それを優先
+        if (savedProfile) {
+          console.log('[Home] LINE Login profile found in sessionStorage')
+          try {
+            const profile = JSON.parse(savedProfile) as LineProfile
+            console.log('[LINE Login] User ID from session:', profile.userId)
+            console.log('[LINE Login] Display Name:', profile.displayName)
+            const isRegisteredValue = savedIsRegistered === 'true'
+            console.log('[Home] is_registered from sessionStorage:', savedIsRegistered, 'parsed as:', isRegisteredValue)
+            setUserProfile({
+              userId: profile.userId,
+              displayName: profile.displayName,
+              pictureUrl: profile.pictureUrl,
+              statusMessage: profile.statusMessage,
+              authType: 'line'
+            })
+            setIsRegistered(isRegisteredValue)
+            console.log('[Home] LINE Login user profile set:', { userId: profile.userId, isRegistered: isRegisteredValue })
+          } catch (error) {
+            console.error('[Home] Failed to parse profile from sessionStorage:', error)
+          }
+        } else {
+          // LINE Loginのプロフィールが存在しない場合、メール認証をチェック
+          const { data: { session }, error: sessionError } = await supabase.auth.getSession()
           
-          if (authType === 'email') {
+          if (session && session.user && authType === 'email') {
+            // メールアドレス・パスワード認証の場合
+            console.log('[Home] Email auth session found:', session.user.id)
+            
             // メール確認済みかチェック
             const isEmailConfirmed = !!session.user.email_confirmed_at
             
@@ -59,7 +82,7 @@ export default function Home() {
               .from('exhibitors')
               .select('id')
               .eq('user_id', session.user.id)
-              .single()
+              .maybeSingle()
             
             setIsRegistered(!!exhibitor)
             console.log('[Home] Email auth user profile set:', { 
@@ -67,63 +90,35 @@ export default function Home() {
               isRegistered: !!exhibitor,
               emailConfirmed: isEmailConfirmed
             })
-          }
-        } else if (authType === 'email' && storedUserId) {
-          // セッションが存在しないが、セッションストレージにuser_idがある場合
-          // メール確認待ちの状態で登録フォームにアクセスできるようにする
-          console.log('[Home] Email auth - session not found, but user_id in storage:', storedUserId)
-          
-          const emailConfirmed = sessionStorage.getItem('email_confirmed') === 'true'
-          
-          setUserProfile({
-            userId: storedUserId,
-            email: storedEmail || '',
-            authType: 'email',
-            emailConfirmed: emailConfirmed
-          })
-          
-          // 登録済みかチェック
-          const { data: exhibitor } = await supabase
-            .from('exhibitors')
-            .select('id')
-            .eq('user_id', storedUserId)
-            .single()
-          
-          setIsRegistered(!!exhibitor)
-          console.log('[Home] Email auth user profile set from storage:', { 
-            userId: storedUserId, 
-            isRegistered: !!exhibitor,
-            emailConfirmed: emailConfirmed
-          })
-        } else {
-          // LINE Loginの場合
-          const savedProfile = sessionStorage.getItem('line_profile')
-          const savedIsRegistered = sessionStorage.getItem('is_registered')
-          
-          console.log('[Home] Saved profile from sessionStorage:', savedProfile)
-          console.log('[Home] Is registered from sessionStorage:', savedIsRegistered)
-          
-          if (savedProfile) {
-            try {
-              const profile = JSON.parse(savedProfile) as LineProfile
-              console.log('[LINE Login] User ID from session:', profile.userId)
-              console.log('[LINE Login] Display Name:', profile.displayName)
-              const isRegisteredValue = savedIsRegistered === 'true'
-              console.log('[Home] is_registered from sessionStorage:', savedIsRegistered, 'parsed as:', isRegisteredValue)
-              setUserProfile({
-                userId: profile.userId,
-                displayName: profile.displayName,
-                pictureUrl: profile.pictureUrl,
-                statusMessage: profile.statusMessage,
-                authType: 'line'
-              })
-              setIsRegistered(isRegisteredValue)
-              console.log('[Home] LINE Login user profile set:', { userId: profile.userId, isRegistered: isRegisteredValue })
-            } catch (error) {
-              console.error('[Home] Failed to parse profile from sessionStorage:', error)
-            }
+          } else if (authType === 'email' && storedUserId) {
+            // セッションが存在しないが、セッションストレージにuser_idがある場合
+            // メール確認待ちの状態で登録フォームにアクセスできるようにする
+            console.log('[Home] Email auth - session not found, but user_id in storage:', storedUserId)
+            
+            const emailConfirmed = sessionStorage.getItem('email_confirmed') === 'true'
+            
+            setUserProfile({
+              userId: storedUserId,
+              email: storedEmail || '',
+              authType: 'email',
+              emailConfirmed: emailConfirmed
+            })
+            
+            // 登録済みかチェック
+            const { data: exhibitor } = await supabase
+              .from('exhibitors')
+              .select('id')
+              .eq('user_id', storedUserId)
+              .maybeSingle()
+            
+            setIsRegistered(!!exhibitor)
+            console.log('[Home] Email auth user profile set from storage:', { 
+              userId: storedUserId, 
+              isRegistered: !!exhibitor,
+              emailConfirmed: emailConfirmed
+            })
           } else {
-            console.log('[Home] No profile found in sessionStorage')
+            console.log('[Home] No authentication found - user not logged in')
           }
         }
       } catch (error) {
