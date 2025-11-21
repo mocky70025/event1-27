@@ -24,8 +24,15 @@ export default function WelcomeScreen() {
   const isLiff = isLiffEnvironment()
 
   const handleLineLogin = () => {
-    const loginUrl = getLineLoginUrl()
-    window.location.href = loginUrl
+    try {
+      console.log('[WelcomeScreen] LINE Login button clicked, authMode:', authMode, 'registerMethod:', registerMethod, 'loginMethod:', loginMethod)
+      const loginUrl = getLineLoginUrl()
+      console.log('[WelcomeScreen] LINE Login URL generated, redirecting to:', loginUrl.replace(/state=[^&]+/, 'state=***'))
+      window.location.href = loginUrl
+    } catch (error) {
+      console.error('[WelcomeScreen] Error in handleLineLogin:', error)
+      setError('LINEログインのURL生成に失敗しました。もう一度お試しください。')
+    }
   }
 
   const handleEmailLogin = async (e: React.FormEvent) => {

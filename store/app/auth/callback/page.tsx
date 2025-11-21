@@ -74,10 +74,10 @@ export default function AuthCallback() {
         
         setStatus('success')
         
-        // メインページにリダイレクト（ページをリロードして確実に状態を反映）
+        // メインページにリダイレクト
         setTimeout(() => {
           console.log('[Callback] Redirecting to home page...')
-          // router.pushではなく、window.location.hrefを使用してページを完全にリロード
+          // window.location.hrefを使用して確実にリダイレクト
           window.location.href = '/'
         }, 1000)
       } catch (error) {

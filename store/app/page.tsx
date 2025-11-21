@@ -100,7 +100,6 @@ export default function Home() {
           const savedProfile = sessionStorage.getItem('line_profile')
           const savedIsRegistered = sessionStorage.getItem('is_registered')
           
-          console.log('[Home] Checking LINE Login profile from sessionStorage')
           console.log('[Home] Saved profile from sessionStorage:', savedProfile)
           console.log('[Home] Is registered from sessionStorage:', savedIsRegistered)
           
@@ -109,17 +108,6 @@ export default function Home() {
               const profile = JSON.parse(savedProfile) as LineProfile
               console.log('[LINE Login] User ID from session:', profile.userId)
               console.log('[LINE Login] Display Name:', profile.displayName)
-              
-              // 登録済みかどうかを再確認（セッションストレージの値が古い可能性があるため）
-              const { data: exhibitor } = await supabase
-                .from('exhibitors')
-                .select('id')
-                .eq('line_user_id', profile.userId)
-                .single()
-              
-              const isRegistered = !!exhibitor
-              console.log('[Home] Re-checked registration status:', isRegistered)
-              
               setUserProfile({
                 userId: profile.userId,
                 displayName: profile.displayName,
@@ -127,15 +115,8 @@ export default function Home() {
                 statusMessage: profile.statusMessage,
                 authType: 'line'
               })
-              setIsRegistered(isRegistered)
-              
-              // セッションストレージの値も更新
-              sessionStorage.setItem('is_registered', isRegistered ? 'true' : 'false')
-              
-              console.log('[Home] LINE Login user profile set:', { 
-                userId: profile.userId, 
-                isRegistered: isRegistered 
-              })
+              setIsRegistered(savedIsRegistered === 'true')
+              console.log('[Home] LINE Login user profile set:', { userId: profile.userId, isRegistered: savedIsRegistered === 'true' })
             } catch (error) {
               console.error('[Home] Failed to parse profile from sessionStorage:', error)
             }
