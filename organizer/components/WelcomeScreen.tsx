@@ -101,10 +101,12 @@ export default function WelcomeScreen() {
         if (!data.session) {
           // メール確認待ちの状態を表示
           setError('')
-          alert('確認メールを送信しました。メール内のリンクをクリックしてメールアドレスを確認してください。\n\nメール確認が完了していなくても、登録フォームに入力できます。')
+          // ページをリロードして、メール確認待ち画面を表示
+          window.location.reload()
+          return
         }
         
-        // ページをリロードして認証状態を反映
+        // メール確認が不要な場合（開発環境など）は、ページをリロード
         window.location.reload()
       }
     } catch (err: any) {

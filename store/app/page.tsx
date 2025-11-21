@@ -10,6 +10,7 @@ import ExhibitorProfile from '@/components/ExhibitorProfile'
 import ApplicationManagement from '@/components/ApplicationManagement'
 import LoadingSpinner from '@/components/LoadingSpinner'
 import EmailConfirmationBanner from '@/components/EmailConfirmationBanner'
+import EmailConfirmationPending from '@/components/EmailConfirmationPending'
 
 export default function Home() {
   const [isLiffReady, setIsLiffReady] = useState(false)
@@ -161,6 +162,36 @@ export default function Home() {
   // ログイン状態のチェック（常にLINE Loginを使用）
   if (!userProfile) {
     return <WelcomeScreen />
+  }
+
+  // メール確認待ちの状態で、まだ登録していない場合は、メール確認待ち画面を表示
+  const isEmailPending = userProfile?.authType === 'email' && !userProfile?.emailConfirmed && !isRegistered
+  
+  if (isEmailPending) {
+    return (
+      <EmailConfirmationPending
+        email={userProfile.email || ''}
+        onEmailConfirmed={async () => {
+          // メール確認が完了したら、セッションを再取得してuserProfileを更新
+          const { data: { session } } = await supabase.auth.getSession()
+          if (session && session.user) {
+            setUserProfile({
+              userId: session.user.id,
+              email: session.user.email,
+              authType: 'email',
+              emailConfirmed: true
+            })
+            // 登録済みかチェック
+            const { data: exhibitor } = await supabase
+              .from('exhibitors')
+              .select('id')
+              .eq('user_id', session.user.id)
+              .single()
+            setIsRegistered(!!exhibitor)
+          }
+        }}
+      />
+    )
   }
 
   if (!isRegistered) {

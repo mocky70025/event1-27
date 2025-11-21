@@ -8,6 +8,7 @@ import RegistrationForm from '@/components/RegistrationForm'
 import EventManagement from '@/components/EventManagement'
 import LoadingSpinner from '@/components/LoadingSpinner'
 import EmailConfirmationBanner from '@/components/EmailConfirmationBanner'
+import EmailConfirmationPending from '@/components/EmailConfirmationPending'
 
 export default function Home() {
   const [userProfile, setUserProfile] = useState<LineProfile | null>(null)
@@ -127,6 +128,37 @@ export default function Home() {
 
   if (!userProfile) {
     return <WelcomeScreen />
+  }
+
+  // メール確認待ちの状態で、まだ登録していない場合は、メール確認待ち画面を表示
+  const isEmailPending = userProfile?.authType === 'email' && !userProfile?.emailConfirmed && !isRegistered
+  
+  if (isEmailPending) {
+    return (
+      <EmailConfirmationPending
+        email={userProfile.email || ''}
+        onEmailConfirmed={async () => {
+          // メール確認が完了したら、セッションを再取得してuserProfileを更新
+          const { data: { session } } = await supabase.auth.getSession()
+          if (session && session.user) {
+            setUserProfile({
+              userId: session.user.id,
+              displayName: session.user.email || '',
+              email: session.user.email,
+              authType: 'email' as const,
+              emailConfirmed: true
+            })
+            // 登録済みかチェック
+            const { data: organizer } = await supabase
+              .from('organizers')
+              .select('id')
+              .eq('user_id', session.user.id)
+              .single()
+            setIsRegistered(!!organizer)
+          }
+        }}
+      />
+    )
   }
 
   if (!isRegistered) {
