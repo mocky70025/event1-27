@@ -629,30 +629,32 @@ export default function WelcomeScreen() {
             >
               LINEで新規登録
             </button>
-            <button
-              onClick={() => setRegisterMethod('email')}
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-                padding: '16px 24px',
-                gap: '10px',
-                width: '100%',
-                height: '48px',
-                background: '#FFFFFF',
-                borderRadius: '8px',
-                border: '1px solid #E5E5E5',
-                fontFamily: 'Inter, sans-serif',
-                fontSize: '16px',
-                fontWeight: 700,
-                lineHeight: '19px',
-                color: '#000000',
-                cursor: 'pointer'
-              }}
-            >
-              メールアドレスで新規登録
-            </button>
+            {!isLiff && (
+              <button
+                onClick={() => setRegisterMethod('email')}
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  padding: '16px 24px',
+                  gap: '10px',
+                  width: '100%',
+                  height: '48px',
+                  background: '#FFFFFF',
+                  borderRadius: '8px',
+                  border: '1px solid #E5E5E5',
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '16px',
+                  fontWeight: 700,
+                  lineHeight: '19px',
+                  color: '#000000',
+                  cursor: 'pointer'
+                }}
+              >
+                メールアドレスで新規登録
+              </button>
+            )}
           </div>
         )}
 
