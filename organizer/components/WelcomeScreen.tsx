@@ -276,28 +276,28 @@ export default function WelcomeScreen() {
                 ×
               </button>
             </div>
-            <button
+        <button
               onClick={() => setLoginMethod('email')}
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-                padding: '16px 24px',
-                gap: '10px',
-                width: '100%',
-                height: '48px',
-                background: '#06C755',
-                borderRadius: '8px',
-                border: 'none',
-                fontFamily: 'Inter, sans-serif',
-                fontSize: '16px',
-                fontWeight: 700,
-                lineHeight: '19px',
-                color: '#FFFFFF',
-                cursor: 'pointer'
-              }}
-            >
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: '16px 24px',
+            gap: '10px',
+            width: '100%',
+            height: '48px',
+            background: '#06C755',
+            borderRadius: '8px',
+            border: 'none',
+            fontFamily: 'Inter, sans-serif',
+            fontSize: '16px',
+            fontWeight: 700,
+            lineHeight: '19px',
+            color: '#FFFFFF',
+            cursor: 'pointer'
+          }}
+        >
               メールアドレスでログイン
             </button>
           </div>
@@ -455,7 +455,7 @@ export default function WelcomeScreen() {
                 lineHeight: '120%',
                 color: '#000000'
               }}>
-                新規登録方法を選択
+                新規登録
               </h2>
               <button
                 onClick={() => {
@@ -475,7 +475,7 @@ export default function WelcomeScreen() {
               </button>
             </div>
             <button
-              onClick={handleLineLogin}
+              onClick={() => setRegisterMethod('email')}
               style={{
                 display: 'flex',
                 flexDirection: 'row',
@@ -493,38 +493,11 @@ export default function WelcomeScreen() {
                 fontWeight: 700,
                 lineHeight: '19px',
                 color: '#FFFFFF',
-                cursor: 'pointer',
-                marginBottom: '12px'
+                cursor: 'pointer'
               }}
             >
-              LINEで新規登録
+              メールアドレスで新規登録
             </button>
-            {!isLiff && (
-              <button
-                onClick={() => setRegisterMethod('email')}
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  padding: '16px 24px',
-                  gap: '10px',
-                  width: '100%',
-                  height: '48px',
-                  background: '#FFFFFF',
-                  borderRadius: '8px',
-                  border: '1px solid #E5E5E5',
-                  fontFamily: 'Inter, sans-serif',
-                  fontSize: '16px',
-                  fontWeight: 700,
-                  lineHeight: '19px',
-                  color: '#000000',
-                  cursor: 'pointer'
-                }}
-              >
-                メールアドレスで新規登録
-              </button>
-            )}
           </div>
         )}
 
@@ -690,7 +663,7 @@ export default function WelcomeScreen() {
                 }}
               >
                 {loading ? '登録中...' : '登録する'}
-              </button>
+        </button>
             </form>
           </div>
         )}
