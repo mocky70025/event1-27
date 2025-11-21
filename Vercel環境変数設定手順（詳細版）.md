@@ -2,7 +2,7 @@
 
 ## 概要
 
-4つのVercelプロジェクトを順番に作成し、環境変数を正確に設定します。
+4つのプロジェクトそれぞれの環境変数を正確に設定する手順です。
 
 ---
 
@@ -10,62 +10,62 @@
 
 ### ステップ1: プロジェクト作成
 
-1. Vercel Dashboard（https://vercel.com/dashboard）にアクセス
+1. Vercel Dashboardにアクセス: https://vercel.com/dashboard
 2. 「Add New...」→「Project」をクリック
-3. GitHubリポジトリ `tomorrow-event-platform` を選択（または検索）
-4. プロジェクト設定画面で以下を設定：
+3. GitHubリポジトリ `tomorrow-event-platform` を選択
+4. プロジェクト設定：
    - **Project Name**: `tomorrow-store-web`
-   - **Root Directory**: `store` を選択（ドロップダウンから選択）
-   - **Framework Preset**: `Next.js`（自動検出されるはず）
+   - **Root Directory**: `store`（重要：手動で入力）
+   - **Framework Preset**: Next.js（自動検出）
    - **Build Command**: `npm run build`（自動検出）
    - **Output Directory**: `.next`（自動検出）
    - **Install Command**: `npm install`（自動検出）
 
-5. 「Deploy」をクリック（この時点では環境変数は設定しません）
+### ステップ2: 初回デプロイ（環境変数なしで実行）
 
-### ステップ2: 初回デプロイ完了を待つ
+1. 「Deploy」をクリック
+2. デプロイ完了を待つ（約2-3分）
+3. 生成されたURLを確認（例: `https://tomorrow-store-web-xxxxx.vercel.app`）
+4. このURLをメモしておく
 
-1. デプロイが完了するまで待機（1-2分）
-2. デプロイ完了後、生成されたURLを確認
-   - 例: `https://tomorrow-store-web-xxxxx.vercel.app`
-   - または: `https://tomorrow-store-web.vercel.app`（カスタムドメインの場合）
-
-### ステップ3: 環境変数を設定
+### ステップ3: 環境変数設定
 
 1. プロジェクトの「Settings」タブをクリック
 2. 左メニューから「Environment Variables」を選択
-3. 以下の環境変数を1つずつ追加：
+3. 以下の環境変数を**1つずつ**追加：
 
 #### 環境変数1: NEXT_PUBLIC_SUPABASE_URL
 - **Key**: `NEXT_PUBLIC_SUPABASE_URL`
 - **Value**: `https://xszkbfwqtwpsfnwdfjak.supabase.co`
-- **Environment**: すべての環境（Production, Preview, Development）にチェック
+- **Environment**: `Production`, `Preview`, `Development` すべてにチェック
 - 「Add」をクリック
 
 #### 環境変数2: NEXT_PUBLIC_SUPABASE_ANON_KEY
 - **Key**: `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - **Value**: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzemtiZndxdHdwc2Zud2RmamFrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMzODQ4MTUsImV4cCI6MjA3ODk2MDgxNX0.cwNetSFLWu4A8VY7-B6MjriD-8KI9L4NXIE1rxvf95Q`
-- **Environment**: すべての環境（Production, Preview, Development）にチェック
+- **Environment**: `Production`, `Preview`, `Development` すべてにチェック
 - 「Add」をクリック
 
 #### 環境変数3: NEXT_PUBLIC_APP_URL
 - **Key**: `NEXT_PUBLIC_APP_URL`
-- **Value**: ステップ2で確認した実際のURL（例: `https://tomorrow-store-web.vercel.app`）
-- **Environment**: すべての環境（Production, Preview, Development）にチェック
+- **Value**: ステップ2でメモしたURL（例: `https://tomorrow-store-web-xxxxx.vercel.app`）
+- **Environment**: `Production`, `Preview`, `Development` すべてにチェック
 - 「Add」をクリック
 
 ### ステップ4: 再デプロイ
 
-1. 「Deployments」タブに戻る
-2. 最新のデプロイメントの右側にある「...」メニューをクリック
+1. 「Deployments」タブをクリック
+2. 最新のデプロイメントの右側の「...」メニューをクリック
 3. 「Redeploy」を選択
-4. 「Redeploy」をクリックして再デプロイを実行
+4. 「Use existing Build Cache」のチェックを**外す**
+5. 「Redeploy」をクリック
+6. デプロイ完了を待つ（約2-3分）
 
-### ステップ5: 動作確認
+### 確認
 
-1. デプロイ完了後、URLにアクセス
-2. メール認証のログイン/新規登録が表示されることを確認
-3. LINE認証のボタンが表示されないことを確認
+- [ ] 環境変数が3つすべて設定されている
+- [ ] 再デプロイが完了している
+- [ ] アプリが正常に動作する（メール認証のログイン/新規登録が表示される）
 
 ---
 
@@ -76,96 +76,100 @@
 1. Vercel Dashboardにアクセス
 2. 「Add New...」→「Project」をクリック
 3. GitHubリポジトリ `tomorrow-event-platform` を選択
-4. プロジェクト設定画面で以下を設定：
+4. プロジェクト設定：
    - **Project Name**: `tomorrow-store-liff`
-   - **Root Directory**: `store` を選択
-   - **Framework Preset**: `Next.js`（自動検出）
+   - **Root Directory**: `store`（重要：手動で入力）
+   - **Framework Preset**: Next.js（自動検出）
    - **Build Command**: `npm run build`（自動検出）
    - **Output Directory**: `.next`（自動検出）
    - **Install Command**: `npm install`（自動検出）
 
-5. 「Deploy」をクリック
+### ステップ2: 初回デプロイ（環境変数なしで実行）
 
-### ステップ2: 初回デプロイ完了を待つ
+1. 「Deploy」をクリック
+2. デプロイ完了を待つ（約2-3分）
+3. 生成されたURLを確認（例: `https://tomorrow-store-liff-xxxxx.vercel.app`）
+4. このURLをメモしておく
 
-1. デプロイが完了するまで待機
-2. 生成されたURLを確認
-   - 例: `https://tomorrow-store-liff-xxxxx.vercel.app`
-
-### ステップ3: 環境変数を設定
+### ステップ3: 環境変数設定
 
 1. プロジェクトの「Settings」タブをクリック
-2. 「Environment Variables」を選択
-3. 以下の環境変数を追加：
+2. 左メニューから「Environment Variables」を選択
+3. 以下の環境変数を**1つずつ**追加：
 
 #### 環境変数1: NEXT_PUBLIC_SUPABASE_URL
 - **Key**: `NEXT_PUBLIC_SUPABASE_URL`
 - **Value**: `https://xszkbfwqtwpsfnwdfjak.supabase.co`
-- **Environment**: すべての環境にチェック
+- **Environment**: `Production`, `Preview`, `Development` すべてにチェック
 - 「Add」をクリック
 
 #### 環境変数2: NEXT_PUBLIC_SUPABASE_ANON_KEY
 - **Key**: `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - **Value**: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzemtiZndxdHdwc2Zud2RmamFrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMzODQ4MTUsImV4cCI6MjA3ODk2MDgxNX0.cwNetSFLWu4A8VY7-B6MjriD-8KI9L4NXIE1rxvf95Q`
-- **Environment**: すべての環境にチェック
+- **Environment**: `Production`, `Preview`, `Development` すべてにチェック
 - 「Add」をクリック
 
 #### 環境変数3: NEXT_PUBLIC_LINE_LOGIN_CHANNEL_ID
 - **Key**: `NEXT_PUBLIC_LINE_LOGIN_CHANNEL_ID`
 - **Value**: `2008516155`（出店者用のLINE LoginチャネルID）
-- **Environment**: すべての環境にチェック
+- **Environment**: `Production`, `Preview`, `Development` すべてにチェック
 - 「Add」をクリック
 
 #### 環境変数4: LINE_LOGIN_CHANNEL_SECRET
 - **Key**: `LINE_LOGIN_CHANNEL_SECRET`
 - **Value**: `4b6ca4be9c0ae7e856bb4db72c777876`（出店者用のLINE Loginチャネルシークレット）
-- **Environment**: すべての環境にチェック
-- **注意**: この変数は `NEXT_PUBLIC_` プレフィックスがないため、サーバーサイドでのみ使用されます
+- **Environment**: `Production`, `Preview`, `Development` すべてにチェック
+- **重要**: この環境変数は `NEXT_PUBLIC_` プレフィックスが**ない**ので、サーバーサイドでのみ使用されます
 - 「Add」をクリック
 
 #### 環境変数5: NEXT_PUBLIC_LINE_LOGIN_REDIRECT_URI
 - **Key**: `NEXT_PUBLIC_LINE_LOGIN_REDIRECT_URI`
-- **Value**: ステップ2で確認したURL + `/auth/callback`（例: `https://tomorrow-store-liff.vercel.app/auth/callback`）
-- **Environment**: すべての環境にチェック
+- **Value**: ステップ2でメモしたURL + `/auth/callback`（例: `https://tomorrow-store-liff-xxxxx.vercel.app/auth/callback`）
+- **Environment**: `Production`, `Preview`, `Development` すべてにチェック
 - 「Add」をクリック
 
 #### 環境変数6: NEXT_PUBLIC_APP_URL
 - **Key**: `NEXT_PUBLIC_APP_URL`
-- **Value**: ステップ2で確認した実際のURL（例: `https://tomorrow-store-liff.vercel.app`）
-- **Environment**: すべての環境にチェック
+- **Value**: ステップ2でメモしたURL（例: `https://tomorrow-store-liff-xxxxx.vercel.app`）
+- **Environment**: `Production`, `Preview`, `Development` すべてにチェック
 - 「Add」をクリック
 
-### ステップ4: LINE Developers Console設定
+### ステップ4: 再デプロイ
 
-1. LINE Developers Console（https://developers.line.biz/console/）にアクセス
+1. 「Deployments」タブをクリック
+2. 最新のデプロイメントの右側の「...」メニューをクリック
+3. 「Redeploy」を選択
+4. 「Use existing Build Cache」のチェックを**外す**
+5. 「Redeploy」をクリック
+6. デプロイ完了を待つ（約2-3分）
+
+### ステップ5: LINE Developers Console設定
+
+1. LINE Developers Consoleにアクセス: https://developers.line.biz/console/
 2. 出店者用のLINE Loginチャネル（チャネルID: `2008516155`）を選択
 3. 「LINE Login」タブをクリック
 4. 「Callback URL」セクションで以下を追加：
    ```
-   https://tomorrow-store-liff.vercel.app/auth/callback
+   https://tomorrow-store-liff-xxxxx.vercel.app/auth/callback
    ```
-   （実際のURLに置き換えてください）
+   （`xxxxx`の部分は実際のURLに置き換える）
 5. 「Update」をクリック
 6. 「LIFF」タブをクリック
-7. 既存のLIFFアプリを編集するか、新規作成：
+7. LIFFアプリを作成（または既存のLIFFアプリを編集）：
    - **LIFF app name**: `出店者アプリ`
    - **Size**: `Full`
-   - **Endpoint URL**: `https://tomorrow-store-liff.vercel.app`（実際のURL）
+   - **Endpoint URL**: `https://tomorrow-store-liff-xxxxx.vercel.app`
    - **Scope**: `profile openid email` にチェック
-8. 「Save」をクリック
+8. 「Add」または「Update」をクリック
+9. LIFF URLをメモしておく（後でテストに使用）
 
-### ステップ5: 再デプロイ
+### 確認
 
-1. Vercel Dashboardに戻る
-2. 「Deployments」タブを選択
-3. 最新のデプロイメントを「Redeploy」
-
-### ステップ6: 動作確認
-
-1. LINE Developers ConsoleでLIFFアプリのURLをコピー
-2. LINEアプリでURLを開く
-3. LINE認証のログイン/新規登録が表示されることを確認
-4. メール認証のボタンが表示されないことを確認
+- [ ] 環境変数が6つすべて設定されている
+- [ ] 再デプロイが完了している
+- [ ] LINE Developers ConsoleのCallback URLが設定されている
+- [ ] LIFFアプリのEndpoint URLが設定されている
+- [ ] アプリが正常に動作する（LINE認証のログイン/新規登録が表示される）
 
 ---
 
@@ -176,56 +180,59 @@
 1. Vercel Dashboardにアクセス
 2. 「Add New...」→「Project」をクリック
 3. GitHubリポジトリ `tomorrow-event-platform` を選択
-4. プロジェクト設定画面で以下を設定：
+4. プロジェクト設定：
    - **Project Name**: `tomorrow-organizer-web`
-   - **Root Directory**: `organizer` を選択
-   - **Framework Preset**: `Next.js`（自動検出）
+   - **Root Directory**: `organizer`（重要：手動で入力）
+   - **Framework Preset**: Next.js（自動検出）
    - **Build Command**: `npm run build`（自動検出）
    - **Output Directory**: `.next`（自動検出）
    - **Install Command**: `npm install`（自動検出）
 
-5. 「Deploy」をクリック
+### ステップ2: 初回デプロイ（環境変数なしで実行）
 
-### ステップ2: 初回デプロイ完了を待つ
+1. 「Deploy」をクリック
+2. デプロイ完了を待つ（約2-3分）
+3. 生成されたURLを確認（例: `https://tomorrow-organizer-web-xxxxx.vercel.app`）
+4. このURLをメモしておく
 
-1. デプロイが完了するまで待機
-2. 生成されたURLを確認
-   - 例: `https://tomorrow-organizer-web-xxxxx.vercel.app`
-
-### ステップ3: 環境変数を設定
+### ステップ3: 環境変数設定
 
 1. プロジェクトの「Settings」タブをクリック
-2. 「Environment Variables」を選択
-3. 以下の環境変数を追加：
+2. 左メニューから「Environment Variables」を選択
+3. 以下の環境変数を**1つずつ**追加：
 
 #### 環境変数1: NEXT_PUBLIC_SUPABASE_URL
 - **Key**: `NEXT_PUBLIC_SUPABASE_URL`
 - **Value**: `https://xszkbfwqtwpsfnwdfjak.supabase.co`
-- **Environment**: すべての環境にチェック
+- **Environment**: `Production`, `Preview`, `Development` すべてにチェック
 - 「Add」をクリック
 
 #### 環境変数2: NEXT_PUBLIC_SUPABASE_ANON_KEY
 - **Key**: `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - **Value**: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzemtiZndxdHdwc2Zud2RmamFrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMzODQ4MTUsImV4cCI6MjA3ODk2MDgxNX0.cwNetSFLWu4A8VY7-B6MjriD-8KI9L4NXIE1rxvf95Q`
-- **Environment**: すべての環境にチェック
+- **Environment**: `Production`, `Preview`, `Development` すべてにチェック
 - 「Add」をクリック
 
 #### 環境変数3: NEXT_PUBLIC_APP_URL
 - **Key**: `NEXT_PUBLIC_APP_URL`
-- **Value**: ステップ2で確認した実際のURL（例: `https://tomorrow-organizer-web.vercel.app`）
-- **Environment**: すべての環境にチェック
+- **Value**: ステップ2でメモしたURL（例: `https://tomorrow-organizer-web-xxxxx.vercel.app`）
+- **Environment**: `Production`, `Preview`, `Development` すべてにチェック
 - 「Add」をクリック
 
 ### ステップ4: 再デプロイ
 
-1. 「Deployments」タブに戻る
-2. 最新のデプロイメントを「Redeploy」
+1. 「Deployments」タブをクリック
+2. 最新のデプロイメントの右側の「...」メニューをクリック
+3. 「Redeploy」を選択
+4. 「Use existing Build Cache」のチェックを**外す**
+5. 「Redeploy」をクリック
+6. デプロイ完了を待つ（約2-3分）
 
-### ステップ5: 動作確認
+### 確認
 
-1. デプロイ完了後、URLにアクセス
-2. メール認証のログイン/新規登録が表示されることを確認
-3. LINE認証のボタンが表示されないことを確認
+- [ ] 環境変数が3つすべて設定されている
+- [ ] 再デプロイが完了している
+- [ ] アプリが正常に動作する（メール認証のログイン/新規登録が表示される）
 
 ---
 
@@ -236,105 +243,150 @@
 1. Vercel Dashboardにアクセス
 2. 「Add New...」→「Project」をクリック
 3. GitHubリポジトリ `tomorrow-event-platform` を選択
-4. プロジェクト設定画面で以下を設定：
+4. プロジェクト設定：
    - **Project Name**: `tomorrow-admin`
-   - **Root Directory**: `admin` を選択
-   - **Framework Preset**: `Next.js`（自動検出）
+   - **Root Directory**: `admin`（重要：手動で入力）
+   - **Framework Preset**: Next.js（自動検出）
    - **Build Command**: `npm run build`（自動検出）
    - **Output Directory**: `.next`（自動検出）
    - **Install Command**: `npm install`（自動検出）
 
-5. 「Deploy」をクリック
+### ステップ2: 初回デプロイ（環境変数なしで実行）
 
-### ステップ2: 初回デプロイ完了を待つ
+1. 「Deploy」をクリック
+2. デプロイ完了を待つ（約2-3分）
+3. 生成されたURLを確認（例: `https://tomorrow-admin-xxxxx.vercel.app`）
+4. このURLをメモしておく
 
-1. デプロイが完了するまで待機
-2. 生成されたURLを確認
-   - 例: `https://tomorrow-admin-xxxxx.vercel.app`
-
-### ステップ3: 環境変数を設定
+### ステップ3: 環境変数設定
 
 1. プロジェクトの「Settings」タブをクリック
-2. 「Environment Variables」を選択
-3. 以下の環境変数を追加：
+2. 左メニューから「Environment Variables」を選択
+3. 以下の環境変数を**1つずつ**追加：
 
 #### 環境変数1: NEXT_PUBLIC_SUPABASE_URL
 - **Key**: `NEXT_PUBLIC_SUPABASE_URL`
 - **Value**: `https://xszkbfwqtwpsfnwdfjak.supabase.co`
-- **Environment**: すべての環境にチェック
+- **Environment**: `Production`, `Preview`, `Development` すべてにチェック
 - 「Add」をクリック
 
 #### 環境変数2: NEXT_PUBLIC_SUPABASE_ANON_KEY
 - **Key**: `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - **Value**: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzemtiZndxdHdwc2Zud2RmamFrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMzODQ4MTUsImV4cCI6MjA3ODk2MDgxNX0.cwNetSFLWu4A8VY7-B6MjriD-8KI9L4NXIE1rxvf95Q`
-- **Environment**: すべての環境にチェック
+- **Environment**: `Production`, `Preview`, `Development` すべてにチェック
 - 「Add」をクリック
 
 #### 環境変数3: NEXT_PUBLIC_APP_URL
 - **Key**: `NEXT_PUBLIC_APP_URL`
-- **Value**: ステップ2で確認した実際のURL（例: `https://tomorrow-admin.vercel.app`）
-- **Environment**: すべての環境にチェック
+- **Value**: ステップ2でメモしたURL（例: `https://tomorrow-admin-xxxxx.vercel.app`）
+- **Environment**: `Production`, `Preview`, `Development` すべてにチェック
 - 「Add」をクリック
 
 ### ステップ4: 再デプロイ
 
-1. 「Deployments」タブに戻る
-2. 最新のデプロイメントを「Redeploy」
+1. 「Deployments」タブをクリック
+2. 最新のデプロイメントの右側の「...」メニューをクリック
+3. 「Redeploy」を選択
+4. 「Use existing Build Cache」のチェックを**外す**
+5. 「Redeploy」をクリック
+6. デプロイ完了を待つ（約2-3分）
 
-### ステップ5: 動作確認
+### 確認
 
-1. デプロイ完了後、URLにアクセス
-2. 運営管理ダッシュボードが表示されることを確認
-3. 主催者とイベントの一覧が表示されることを確認
+- [ ] 環境変数が3つすべて設定されている
+- [ ] 再デプロイが完了している
+- [ ] アプリが正常に動作する（運営管理ダッシュボードが表示される）
 
 ---
 
-## 環境変数の確認方法
+## 環境変数一覧表
 
-### Vercel Dashboardで確認
+### store-web（3つの環境変数）
 
-1. 各プロジェクトの「Settings」→「Environment Variables」を開く
-2. 設定した環境変数がすべて表示されていることを確認
+| Key | Value | 説明 |
+|-----|-------|------|
+| `NEXT_PUBLIC_SUPABASE_URL` | `https://xszkbfwqtwpsfnwdfjak.supabase.co` | SupabaseプロジェクトURL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...` | Supabase匿名キー |
+| `NEXT_PUBLIC_APP_URL` | `https://tomorrow-store-web-xxxxx.vercel.app` | アプリのURL（デプロイ後に設定） |
 
-### ビルドログで確認
+### store-liff（6つの環境変数）
 
-1. 「Deployments」タブを開く
-2. 最新のデプロイメントをクリック
-3. 「Build Logs」を確認
-4. 環境変数が正しく読み込まれているか確認（エラーがないことを確認）
+| Key | Value | 説明 |
+|-----|-------|------|
+| `NEXT_PUBLIC_SUPABASE_URL` | `https://xszkbfwqtwpsfnwdfjak.supabase.co` | SupabaseプロジェクトURL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...` | Supabase匿名キー |
+| `NEXT_PUBLIC_LINE_LOGIN_CHANNEL_ID` | `2008516155` | 出店者用LINE LoginチャネルID |
+| `LINE_LOGIN_CHANNEL_SECRET` | `4b6ca4be9c0ae7e856bb4db72c777876` | 出店者用LINE Loginチャネルシークレット |
+| `NEXT_PUBLIC_LINE_LOGIN_REDIRECT_URI` | `https://tomorrow-store-liff-xxxxx.vercel.app/auth/callback` | LINE LoginコールバックURL |
+| `NEXT_PUBLIC_APP_URL` | `https://tomorrow-store-liff-xxxxx.vercel.app` | アプリのURL（デプロイ後に設定） |
+
+### organizer-web（3つの環境変数）
+
+| Key | Value | 説明 |
+|-----|-------|------|
+| `NEXT_PUBLIC_SUPABASE_URL` | `https://xszkbfwqtwpsfnwdfjak.supabase.co` | SupabaseプロジェクトURL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...` | Supabase匿名キー |
+| `NEXT_PUBLIC_APP_URL` | `https://tomorrow-organizer-web-xxxxx.vercel.app` | アプリのURL（デプロイ後に設定） |
+
+### admin（3つの環境変数）
+
+| Key | Value | 説明 |
+|-----|-------|------|
+| `NEXT_PUBLIC_SUPABASE_URL` | `https://xszkbfwqtwpsfnwdfjak.supabase.co` | SupabaseプロジェクトURL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...` | Supabase匿名キー |
+| `NEXT_PUBLIC_APP_URL` | `https://tomorrow-admin-xxxxx.vercel.app` | アプリのURL（デプロイ後に設定） |
+
+---
+
+## 重要な注意事項
+
+### 1. Root Directoryの設定
+
+各プロジェクトで**Root Directory**を正しく設定することが重要です：
+- `store-web`: `store`
+- `store-liff`: `store`
+- `organizer-web`: `organizer`
+- `admin`: `admin`
+
+### 2. 環境変数の設定タイミング
+
+1. 初回デプロイを環境変数なしで実行
+2. デプロイ完了後、生成されたURLを確認
+3. 環境変数を設定（`NEXT_PUBLIC_APP_URL`には実際のURLを設定）
+4. 再デプロイを実行（Build Cacheを無効化）
+
+### 3. LINE_LOGIN_CHANNEL_SECRETについて
+
+`store-liff`プロジェクトの`LINE_LOGIN_CHANNEL_SECRET`は、`NEXT_PUBLIC_`プレフィックスが**ない**環境変数です。これはサーバーサイド（API Routes）でのみ使用され、クライアント側には公開されません。
+
+### 4. 環境変数のEnvironment設定
+
+すべての環境変数は、`Production`、`Preview`、`Development`の**すべて**にチェックを入れてください。これにより、どの環境でも同じ環境変数が使用されます。
+
+### 5. 再デプロイ時の注意
+
+環境変数を追加・変更した後は、必ず再デプロイを実行してください。また、「Use existing Build Cache」のチェックを**外す**ことで、環境変数の変更が確実に反映されます。
 
 ---
 
 ## トラブルシューティング
 
-### 環境変数が反映されない場合
+### 環境変数が反映されない
 
-1. **再デプロイを実行**: 環境変数を追加/変更した後は必ず再デプロイが必要
-2. **環境の確認**: 環境変数の「Environment」で「Production」「Preview」「Development」すべてにチェックが入っているか確認
-3. **スペルミスの確認**: 環境変数のキー名が正確か確認（大文字小文字も含む）
+1. 環境変数の設定を確認（KeyとValueが正しいか）
+2. Environment設定を確認（すべての環境にチェックが入っているか）
+3. 再デプロイを実行（Build Cacheを無効化）
+4. ビルドログを確認（環境変数が正しく読み込まれているか）
 
-### URLが正しく設定されていない場合
+### ビルドエラーが発生する
 
-1. **実際のURLを確認**: Vercel Dashboardの「Settings」→「Domains」で実際のURLを確認
-2. **環境変数を更新**: `NEXT_PUBLIC_APP_URL` と `NEXT_PUBLIC_LINE_LOGIN_REDIRECT_URI` を実際のURLに更新
-3. **再デプロイ**: 更新後、必ず再デプロイを実行
+1. Root Directoryが正しく設定されているか確認
+2. `package.json`が存在するか確認
+3. ビルドログを確認してエラーメッセージを確認
 
-### LINE Loginが動作しない場合（store-liff）
+### LINE Loginが動作しない（store-liff）
 
-1. **Callback URLの確認**: LINE Developers ConsoleのCallback URLが正しく設定されているか確認
-2. **環境変数の確認**: `NEXT_PUBLIC_LINE_LOGIN_REDIRECT_URI` がCallback URLと一致しているか確認
-3. **チャネルID/シークレットの確認**: 環境変数の `NEXT_PUBLIC_LINE_LOGIN_CHANNEL_ID` と `LINE_LOGIN_CHANNEL_SECRET` が正しいか確認
-
----
-
-## まとめ
-
-4つのプロジェクトの環境変数設定を完了しました：
-
-1. **store-web**: Supabase設定 + `NEXT_PUBLIC_APP_URL`
-2. **store-liff**: Supabase設定 + LINE Login設定 + `NEXT_PUBLIC_APP_URL`
-3. **organizer-web**: Supabase設定 + `NEXT_PUBLIC_APP_URL`
-4. **admin**: Supabase設定 + `NEXT_PUBLIC_APP_URL`
-
-各プロジェクトの環境変数を設定後、必ず再デプロイを実行してください。
-
+1. `NEXT_PUBLIC_LINE_LOGIN_CHANNEL_ID`が正しいか確認
+2. `LINE_LOGIN_CHANNEL_SECRET`が正しいか確認
+3. `NEXT_PUBLIC_LINE_LOGIN_REDIRECT_URI`が正しいか確認（末尾に`/auth/callback`が含まれているか）
+4. LINE Developers ConsoleのCallback URLが正しく設定されているか確認
