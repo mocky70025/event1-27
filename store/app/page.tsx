@@ -108,6 +108,8 @@ export default function Home() {
               const profile = JSON.parse(savedProfile) as LineProfile
               console.log('[LINE Login] User ID from session:', profile.userId)
               console.log('[LINE Login] Display Name:', profile.displayName)
+              const isRegisteredValue = savedIsRegistered === 'true'
+              console.log('[Home] is_registered from sessionStorage:', savedIsRegistered, 'parsed as:', isRegisteredValue)
               setUserProfile({
                 userId: profile.userId,
                 displayName: profile.displayName,
@@ -115,8 +117,8 @@ export default function Home() {
                 statusMessage: profile.statusMessage,
                 authType: 'line'
               })
-              setIsRegistered(savedIsRegistered === 'true')
-              console.log('[Home] LINE Login user profile set:', { userId: profile.userId, isRegistered: savedIsRegistered === 'true' })
+              setIsRegistered(isRegisteredValue)
+              console.log('[Home] LINE Login user profile set:', { userId: profile.userId, isRegistered: isRegisteredValue })
             } catch (error) {
               console.error('[Home] Failed to parse profile from sessionStorage:', error)
             }
@@ -161,13 +163,22 @@ export default function Home() {
 
   // ログイン状態のチェック（常にLINE Loginを使用）
   if (!userProfile) {
+    console.log('[Home] No userProfile, showing WelcomeScreen')
     return <WelcomeScreen />
   }
+
+  console.log('[Home] Rendering with userProfile:', { 
+    userId: userProfile.userId, 
+    authType: userProfile.authType, 
+    isRegistered, 
+    loading 
+  })
 
   // メール確認待ちの状態で、まだ登録していない場合は、メール確認待ち画面を表示
   const isEmailPending = userProfile?.authType === 'email' && !userProfile?.emailConfirmed && !isRegistered
   
   if (isEmailPending) {
+    console.log('[Home] Email confirmation pending, showing EmailConfirmationPending')
     return (
       <EmailConfirmationPending
         email={userProfile.email || ''}
@@ -195,8 +206,14 @@ export default function Home() {
   }
 
   if (!isRegistered) {
-    return <RegistrationForm userProfile={userProfile} onRegistrationComplete={() => setIsRegistered(true)} />
+    console.log('[Home] User not registered, showing RegistrationForm')
+    return <RegistrationForm userProfile={userProfile} onRegistrationComplete={() => {
+      console.log('[Home] Registration completed, setting isRegistered to true')
+      setIsRegistered(true)
+    }} />
   }
+
+  console.log('[Home] User is registered, showing home screen')
 
   const renderCurrentView = () => {
     switch (currentView) {
