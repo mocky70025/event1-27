@@ -63,23 +63,29 @@ export default function AuthCallback() {
           .from('exhibitors')
           .select('*')
           .eq('line_user_id', profile.userId)
-          .single()
+          .maybeSingle()
         
-        if (exhibitorError && exhibitorError.code !== 'PGRST116') {
+        if (exhibitorError) {
           console.error('[Callback] Error checking exhibitor:', exhibitorError)
         }
         
-        console.log('[Callback] Existing exhibitor found:', existingUser ? 'yes' : 'no')
+        const isRegistered = !!existingUser
+        console.log('[Callback] Existing exhibitor found:', isRegistered ? 'yes' : 'no')
         if (existingUser) {
           console.log('[Callback] Existing exhibitor data:', existingUser)
         }
         
         // セッションストレージにプロフィール情報を保存
-        sessionStorage.setItem('line_profile', JSON.stringify(profile))
-        sessionStorage.setItem('is_registered', existingUser ? 'true' : 'false')
+        const profileJson = JSON.stringify(profile)
+        sessionStorage.setItem('line_profile', profileJson)
+        sessionStorage.setItem('is_registered', isRegistered ? 'true' : 'false')
         
         console.log('[Callback] Profile saved to sessionStorage:', profile)
-        console.log('[Callback] Is registered:', existingUser ? 'true' : 'false')
+        console.log('[Callback] is_registered saved to sessionStorage:', isRegistered ? 'true' : 'false')
+        console.log('[Callback] Verifying sessionStorage values:', {
+          line_profile: sessionStorage.getItem('line_profile') ? 'exists' : 'missing',
+          is_registered: sessionStorage.getItem('is_registered')
+        })
         
         setStatus('success')
         

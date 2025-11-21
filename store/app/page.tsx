@@ -129,6 +129,7 @@ export default function Home() {
       } catch (error) {
         console.error('[Auth] Initialization error:', error)
       } finally {
+        console.log('[Home] Auth initialization complete, setting loading to false')
         setLoading(false)
       }
     }
