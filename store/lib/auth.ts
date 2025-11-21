@@ -33,8 +33,9 @@ export const detectAuthMode = (): AuthMode => {
 
 /**
  * LINE Login（OAuth）の認証URLを生成
+ * @param mode - 'login' または 'register'（新規登録かログインかを区別）
  */
-export const getLineLoginUrl = (): string => {
+export const getLineLoginUrl = (mode: 'login' | 'register' = 'login'): string => {
   const channelId = process.env.NEXT_PUBLIC_LINE_LOGIN_CHANNEL_ID
   if (!channelId) {
     console.error('[LINE Login] NEXT_PUBLIC_LINE_LOGIN_CHANNEL_ID is not set')
@@ -45,12 +46,13 @@ export const getLineLoginUrl = (): string => {
   const redirectUri = process.env.NEXT_PUBLIC_LINE_LOGIN_REDIRECT_URI || 
     (typeof window !== 'undefined' ? `${window.location.origin}/auth/callback` : '')
   
-  // stateパラメータ（セキュリティ用）
+  // stateパラメータ（セキュリティ用 + モード情報を含める）
   const randomState = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
-  const state = randomState
+  const state = `${mode}_${randomState}`
   
   if (typeof window !== 'undefined') {
     sessionStorage.setItem('line_login_state', state)
+    sessionStorage.setItem('line_login_mode', mode)
   }
   
   const params = new URLSearchParams({
@@ -64,6 +66,7 @@ export const getLineLoginUrl = (): string => {
   
   const loginUrl = `https://access.line.me/oauth2/v2.1/authorize?${params.toString()}`
   console.log('[LINE Login] Generated login URL:', loginUrl.replace(/state=[^&]+/, 'state=***'))
+  console.log('[LINE Login] Mode:', mode)
   
   return loginUrl
 }

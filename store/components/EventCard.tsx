@@ -29,10 +29,10 @@ export default function EventCard({ event, userProfile }: EventCardProps) {
         exhibitor = data
       } else {
         const { data } = await supabase
-          .from('exhibitors')
-          .select('id')
-          .eq('line_user_id', userProfile.userId)
-          .single()
+        .from('exhibitors')
+        .select('id')
+        .eq('line_user_id', userProfile.userId)
+        .single()
         exhibitor = data
       }
 
