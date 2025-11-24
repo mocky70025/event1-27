@@ -157,24 +157,20 @@ export default function WelcomeScreen() {
           return
         }
         
-        // メール確認が必要な場合でも、user_idを保存して登録フォームに進める
+        // メール確認が必要な場合（data.sessionが存在しない）
+        console.log('[WelcomeScreen] Email confirmation required - no session, showing email confirmation pending screen')
+        
+        // セッションをクリア（メール確認が必要な場合）
+        await supabase.auth.signOut()
+        
+        // user_idを保存（メール確認後に使用するため）
         sessionStorage.setItem('auth_type', 'email')
         sessionStorage.setItem('user_id', data.user.id)
         sessionStorage.setItem('user_email', data.user.email || '')
-        sessionStorage.setItem('email_confirmed', data.session ? 'true' : 'false')
+        sessionStorage.setItem('email_confirmed', 'false') // メール確認が必要なのでfalse
         
-        // メール確認が必要な場合
-        if (!data.session) {
-          console.log('[WelcomeScreen] Email confirmation required - no session')
-          // メール確認待ちの状態を表示
-          setError('')
-          // ページをリロードして、メール確認待ち画面を表示
-          window.location.reload()
-          return
-        }
-        
-        console.log('[WelcomeScreen] Email confirmation not required - session exists')
-        // メール確認が不要な場合（開発環境など）は、ページをリロード
+        // メール確認待ち画面を表示するため、ページをリロード
+        setError('')
         window.location.reload()
       } else {
         console.error('[WelcomeScreen] SignUp succeeded but no user data returned')
