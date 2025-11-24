@@ -40,12 +40,20 @@ export default function VerifyEmailPage() {
           sessionStorage.setItem('user_id', session.user.id)
           sessionStorage.setItem('user_email', session.user.email || '')
           
+          // 登録済みかチェック
+          const { data: organizer } = await supabase
+            .from('organizers')
+            .select('id')
+            .eq('user_id', session.user.id)
+            .maybeSingle()
+          
           setStatus('success')
           
-          // 3秒後にホームページにリダイレクト
+          // 登録済みの場合はホームページに、未登録の場合は登録フォーム表示のためホームページにリダイレクト
+          // ホームページで自動的に登録フォームが表示される
           setTimeout(() => {
             router.push('/')
-          }, 3000)
+          }, 2000)
         } else {
           // セッションが存在しない場合、URLパラメータから確認を試みる
           const token = searchParams.get('token')
@@ -74,10 +82,18 @@ export default function VerifyEmailPage() {
               sessionStorage.setItem('user_id', newSession.user.id)
               sessionStorage.setItem('user_email', newSession.user.email || '')
               
+              // 登録済みかチェック
+              const { data: organizer } = await supabase
+                .from('organizers')
+                .select('id')
+                .eq('user_id', newSession.user.id)
+                .maybeSingle()
+              
               setStatus('success')
+              // 登録済みの場合はホームページに、未登録の場合は登録フォーム表示のためホームページにリダイレクト
               setTimeout(() => {
                 router.push('/')
-              }, 3000)
+              }, 2000)
             } else {
               setStatus('error')
               setErrorMessage('セッションの取得に失敗しました')
@@ -174,7 +190,7 @@ export default function VerifyEmailPage() {
               color: '#666666',
               marginBottom: '24px'
             }}>
-              ホームページにリダイレクトします...
+              登録フォームにリダイレクトします...
             </p>
           </>
         )}
