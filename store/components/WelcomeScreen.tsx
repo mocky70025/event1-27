@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { getLineLoginUrl, isLiffEnvironment } from '@/lib/auth'
+import { getLineLoginUrl } from '@/lib/auth'
 import { supabase } from '@/lib/supabase'
 
 type AuthMode = 'initial' | 'login' | 'register'
@@ -20,11 +20,6 @@ export default function WelcomeScreen() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   
-  // LIFF環境かどうかを判定
-  const isLiff = isLiffEnvironment()
-  console.log('[WelcomeScreen] isLiff:', isLiff)
-  console.log('[WelcomeScreen] url:', typeof window !== 'undefined' ? window.location.href : 'N/A')
-  console.log('[WelcomeScreen] hasLiff:', typeof window !== 'undefined' ? !!(window as any).liff : false)
 
   const handleLineLogin = () => {
     try {
@@ -87,7 +82,6 @@ export default function WelcomeScreen() {
 
     try {
       // メール確認用のリダイレクトURLを設定
-      // LIFF環境では、環境変数から取得したURLを使用するか、固定URLを使用
       const appUrl = process.env.NEXT_PUBLIC_APP_URL || window.location.origin
       const redirectUrl = `${appUrl}/auth/verify-email`
       console.log('[WelcomeScreen] Email registration - redirectUrl:', redirectUrl)
@@ -428,8 +422,8 @@ export default function WelcomeScreen() {
                 LINEでログイン
               </button>
               
-              {/* メールアドレスでログイン（LIFF環境では非表示） */}
-              {!isLiff && (
+              {/* メールアドレスでログイン */}
+              {(
                 <button
                   onClick={() => setLoginMethod('email')}
                   style={{
@@ -460,7 +454,7 @@ export default function WelcomeScreen() {
         )}
 
         {/* メールアドレスでログイン */}
-        {!isLiff && authMode === 'login' && loginMethod === 'email' && (
+        {authMode === 'login' && loginMethod === 'email' && (
           <div style={{
             background: '#FFFFFF',
             boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
@@ -657,8 +651,8 @@ export default function WelcomeScreen() {
                 LINEで新規登録
               </button>
               
-              {/* メールアドレスで新規登録（LIFF環境では非表示） */}
-              {!isLiff && (
+              {/* メールアドレスで新規登録 */}
+              {(
                 <button
                   onClick={() => setRegisterMethod('email')}
                   style={{
@@ -689,7 +683,7 @@ export default function WelcomeScreen() {
         )}
 
         {/* メールアドレスで新規登録 */}
-        {!isLiff && authMode === 'register' && registerMethod === 'email' && (
+        {authMode === 'register' && registerMethod === 'email' && (
           <div style={{
             background: '#FFFFFF',
             boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
