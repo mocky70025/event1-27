@@ -90,7 +90,7 @@ export default function Home() {
             console.log('[Home] Email auth user profile set:', { 
               userId: session.user.id, 
               isRegistered: !!exhibitor,
-              emailConfirmed: effectiveEmailConfirmed
+              emailConfirmed: isEmailConfirmed || true
             })
           } else if (authType === 'email' && storedUserId) {
             console.log('[Home] Web environment - Email auth from storage:', storedUserId)
