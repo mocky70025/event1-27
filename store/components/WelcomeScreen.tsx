@@ -22,6 +22,7 @@ export default function WelcomeScreen() {
   
   // LIFF環境かどうかを判定
   const isLiff = isLiffEnvironment()
+  console.log('[WelcomeScreen] isLiffEnvironment:', isLiff, 'URL:', typeof window !== 'undefined' ? window.location.href : 'N/A')
 
   const handleLineLogin = () => {
     try {
