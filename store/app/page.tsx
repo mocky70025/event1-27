@@ -100,10 +100,14 @@ export default function Home() {
             
             // セッションが存在する場合、メール確認済みとして扱う
             // セッションが存在しない場合、メール確認待ちとして扱う
+            // 重要: メール確認が必要な場合（email_confirmed='false'）、セッションが存在しない場合のみメール確認待ち
             const effectiveEmailConfirmed = emailConfirmedFromStorage || !!storageSession
             
             if (storageSession) {
               setHasActiveSession(true)
+            } else {
+              // セッションが存在しない場合、メール確認待ちの可能性がある
+              setHasActiveSession(false)
             }
             
             setUserProfile({
@@ -124,7 +128,8 @@ export default function Home() {
               userId: storedUserId, 
               isRegistered: !!exhibitor,
               emailConfirmed: effectiveEmailConfirmed,
-              hasSession: !!storageSession
+              hasSession: !!storageSession,
+              emailConfirmedFromStorage: emailConfirmedFromStorage
             })
           } else {
             console.log('[Home] Web environment - No email auth found')
@@ -181,8 +186,16 @@ export default function Home() {
 
   // メール確認待ちの状態で、まだ登録していない場合は、メール確認待ち画面を表示
   // ただし、セッションが存在する場合（メール確認が無効）は登録フォームに進める
-  // 開発中はメール確認を無効にしているため、セッションがあれば登録フォームに進める
+  // メール確認が必要な場合（email_confirmed='false'）で、セッションが存在しない場合のみメール確認待ち画面を表示
   const isEmailPending = userProfile?.authType === 'email' && !userProfile?.emailConfirmed && !isRegistered && !hasActiveSession
+  
+  console.log('[Home] Email pending check:', {
+    authType: userProfile?.authType,
+    emailConfirmed: userProfile?.emailConfirmed,
+    isRegistered,
+    hasActiveSession,
+    isEmailPending
+  })
   
   if (isEmailPending) {
     console.log('[Home] Email confirmation pending, showing EmailConfirmationPending')
