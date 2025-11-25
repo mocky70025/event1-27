@@ -3,6 +3,23 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 
+interface ExhibitorDetail {
+  id: string
+  name: string
+  gender: string
+  age: number
+  phone_number: string
+  email: string
+  genre_category?: string
+  genre_free_text?: string
+  business_license_image_url?: string
+  vehicle_inspection_image_url?: string
+  automobile_inspection_image_url?: string
+  pl_insurance_image_url?: string
+  fire_equipment_layout_image_url?: string
+  created_at: string
+}
+
 interface Application {
   id: string
   application_status: 'pending' | 'approved' | 'rejected'
@@ -28,6 +45,8 @@ export default function EventApplications({ eventId, eventName, organizerId, org
   const [loading, setLoading] = useState(true)
   const [isApplicationClosed, setIsApplicationClosed] = useState(false)
   const [closingApplication, setClosingApplication] = useState(false)
+  const [selectedExhibitor, setSelectedExhibitor] = useState<ExhibitorDetail | null>(null)
+  const [loadingExhibitorDetail, setLoadingExhibitorDetail] = useState(false)
 
   useEffect(() => {
     fetchApplications()
@@ -181,6 +200,32 @@ export default function EventApplications({ eventId, eventName, organizerId, org
     }
   }
 
+  const handleViewExhibitorDetail = async (exhibitorId: string) => {
+    setLoadingExhibitorDetail(true)
+    try {
+      const response = await fetch(`/api/events/applicants?eventId=${eventId}&organizerId=${organizerId}`)
+      
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to fetch exhibitor detail')
+      }
+
+      const data = await response.json()
+      const exhibitor = data.applicants.find((app: any) => app.exhibitor.id === exhibitorId)?.exhibitor
+
+      if (!exhibitor) {
+        throw new Error('Exhibitor not found')
+      }
+
+      setSelectedExhibitor(exhibitor)
+    } catch (error: any) {
+      console.error('Failed to fetch exhibitor detail:', error)
+      alert(`出店者情報の取得に失敗しました: ${error.message}`)
+    } finally {
+      setLoadingExhibitorDetail(false)
+    }
+  }
+
   if (loading) {
     return (
       <div style={{ background: '#F7F7F7', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -200,6 +245,314 @@ export default function EventApplications({ eventId, eventName, organizerId, org
             lineHeight: '150%',
             color: '#666666'
           }}>申し込み一覧を読み込み中...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (selectedExhibitor) {
+    return (
+      <div style={{ background: '#F7F7F7', minHeight: '100vh' }}>
+        <div className="container mx-auto" style={{ padding: '9px 16px', maxWidth: '394px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', paddingTop: '24px' }}>
+            <button
+              onClick={() => setSelectedExhibitor(null)}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '16px',
+                lineHeight: '150%',
+                color: '#06C755',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px'
+              }}
+            >
+              ← 戻る
+            </button>
+            <h1 style={{
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '20px',
+              fontWeight: 700,
+              lineHeight: '120%',
+              color: '#000000'
+            }}>出店者情報</h1>
+            <div style={{ width: '60px' }}></div>
+          </div>
+
+          <div style={{
+            background: '#FFFFFF',
+            boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
+            borderRadius: '12px',
+            padding: '24px',
+            marginBottom: '16px'
+          }}>
+            <h2 style={{
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '18px',
+              fontWeight: 700,
+              lineHeight: '120%',
+              color: '#000000',
+              marginBottom: '16px'
+            }}>基本情報</h2>
+            
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <div>
+                <p style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '14px',
+                  lineHeight: '120%',
+                  color: '#666666',
+                  marginBottom: '4px'
+                }}>名前</p>
+                <p style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '16px',
+                  lineHeight: '120%',
+                  color: '#000000'
+                }}>{selectedExhibitor.name}</p>
+              </div>
+              
+              <div>
+                <p style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '14px',
+                  lineHeight: '120%',
+                  color: '#666666',
+                  marginBottom: '4px'
+                }}>性別</p>
+                <p style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '16px',
+                  lineHeight: '120%',
+                  color: '#000000'
+                }}>{selectedExhibitor.gender}</p>
+              </div>
+              
+              <div>
+                <p style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '14px',
+                  lineHeight: '120%',
+                  color: '#666666',
+                  marginBottom: '4px'
+                }}>年齢</p>
+                <p style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '16px',
+                  lineHeight: '120%',
+                  color: '#000000'
+                }}>{selectedExhibitor.age}歳</p>
+              </div>
+              
+              <div>
+                <p style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '14px',
+                  lineHeight: '120%',
+                  color: '#666666',
+                  marginBottom: '4px'
+                }}>電話番号</p>
+                <p style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '16px',
+                  lineHeight: '120%',
+                  color: '#000000'
+                }}>{selectedExhibitor.phone_number}</p>
+              </div>
+              
+              <div>
+                <p style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '14px',
+                  lineHeight: '120%',
+                  color: '#666666',
+                  marginBottom: '4px'
+                }}>メールアドレス</p>
+                <p style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '16px',
+                  lineHeight: '120%',
+                  color: '#000000'
+                }}>{selectedExhibitor.email}</p>
+              </div>
+              
+              {selectedExhibitor.genre_category && (
+                <div>
+                  <p style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontSize: '14px',
+                    lineHeight: '120%',
+                    color: '#666666',
+                    marginBottom: '4px'
+                  }}>ジャンルカテゴリ</p>
+                  <p style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontSize: '16px',
+                    lineHeight: '120%',
+                    color: '#000000'
+                  }}>{selectedExhibitor.genre_category}</p>
+                </div>
+              )}
+              
+              {selectedExhibitor.genre_free_text && (
+                <div>
+                  <p style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontSize: '14px',
+                    lineHeight: '120%',
+                    color: '#666666',
+                    marginBottom: '4px'
+                  }}>ジャンル自由回答</p>
+                  <p style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontSize: '16px',
+                    lineHeight: '120%',
+                    color: '#000000'
+                  }}>{selectedExhibitor.genre_free_text}</p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div style={{
+            background: '#FFFFFF',
+            boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
+            borderRadius: '12px',
+            padding: '24px',
+            marginBottom: '16px'
+          }}>
+            <h2 style={{
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '18px',
+              fontWeight: 700,
+              lineHeight: '120%',
+              color: '#000000',
+              marginBottom: '16px'
+            }}>書類</h2>
+            
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {selectedExhibitor.business_license_image_url && (
+                <div>
+                  <p style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontSize: '14px',
+                    lineHeight: '120%',
+                    color: '#666666',
+                    marginBottom: '8px'
+                  }}>営業許可証</p>
+                  <img
+                    src={selectedExhibitor.business_license_image_url}
+                    alt="営業許可証"
+                    style={{
+                      width: '100%',
+                      borderRadius: '8px',
+                      border: '1px solid #E5E5E5'
+                    }}
+                  />
+                </div>
+              )}
+              
+              {selectedExhibitor.vehicle_inspection_image_url && (
+                <div>
+                  <p style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontSize: '14px',
+                    lineHeight: '120%',
+                    color: '#666666',
+                    marginBottom: '8px'
+                  }}>車検証</p>
+                  <img
+                    src={selectedExhibitor.vehicle_inspection_image_url}
+                    alt="車検証"
+                    style={{
+                      width: '100%',
+                      borderRadius: '8px',
+                      border: '1px solid #E5E5E5'
+                    }}
+                  />
+                </div>
+              )}
+              
+              {selectedExhibitor.automobile_inspection_image_url && (
+                <div>
+                  <p style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontSize: '14px',
+                    lineHeight: '120%',
+                    color: '#666666',
+                    marginBottom: '8px'
+                  }}>自動車検査証</p>
+                  <img
+                    src={selectedExhibitor.automobile_inspection_image_url}
+                    alt="自動車検査証"
+                    style={{
+                      width: '100%',
+                      borderRadius: '8px',
+                      border: '1px solid #E5E5E5'
+                    }}
+                  />
+                </div>
+              )}
+              
+              {selectedExhibitor.pl_insurance_image_url && (
+                <div>
+                  <p style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontSize: '14px',
+                    lineHeight: '120%',
+                    color: '#666666',
+                    marginBottom: '8px'
+                  }}>PL保険</p>
+                  <img
+                    src={selectedExhibitor.pl_insurance_image_url}
+                    alt="PL保険"
+                    style={{
+                      width: '100%',
+                      borderRadius: '8px',
+                      border: '1px solid #E5E5E5'
+                    }}
+                  />
+                </div>
+              )}
+              
+              {selectedExhibitor.fire_equipment_layout_image_url && (
+                <div>
+                  <p style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontSize: '14px',
+                    lineHeight: '120%',
+                    color: '#666666',
+                    marginBottom: '8px'
+                  }}>火器類配置図</p>
+                  <img
+                    src={selectedExhibitor.fire_equipment_layout_image_url}
+                    alt="火器類配置図"
+                    style={{
+                      width: '100%',
+                      borderRadius: '8px',
+                      border: '1px solid #E5E5E5'
+                    }}
+                  />
+                </div>
+              )}
+              
+              {!selectedExhibitor.business_license_image_url && 
+               !selectedExhibitor.vehicle_inspection_image_url && 
+               !selectedExhibitor.automobile_inspection_image_url && 
+               !selectedExhibitor.pl_insurance_image_url && 
+               !selectedExhibitor.fire_equipment_layout_image_url && (
+                <p style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '14px',
+                  lineHeight: '120%',
+                  color: '#666666'
+                }}>登録されている書類はありません</p>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     )
@@ -362,46 +715,68 @@ export default function EventApplications({ eventId, eventName, organizerId, org
                     <p>申し込み日: {formatDate(application.applied_at)}</p>
                   </div>
 
-                  {application.application_status === 'pending' && (
-                    <div style={{ display: 'flex', gap: '8px' }}>
-                      <button
-                        onClick={() => handleApplicationApproval(application.id, 'approved')}
-                        style={{
-                          flex: 1,
-                          padding: '12px 16px',
-                          background: '#06C755',
-                          color: '#FFFFFF',
-                          borderRadius: '8px',
-                          border: 'none',
-                          fontFamily: 'Inter, sans-serif',
-                          fontSize: '16px',
-                          fontWeight: 700,
-                          lineHeight: '19px',
-                          cursor: 'pointer'
-                        }}
-                      >
-                        承認
-                      </button>
-                      <button
-                        onClick={() => handleApplicationApproval(application.id, 'rejected')}
-                        style={{
-                          flex: 1,
-                          padding: '12px 16px',
-                          background: '#FF3B30',
-                          color: '#FFFFFF',
-                          borderRadius: '8px',
-                          border: 'none',
-                          fontFamily: 'Inter, sans-serif',
-                          fontSize: '16px',
-                          fontWeight: 700,
-                          lineHeight: '19px',
-                          cursor: 'pointer'
-                        }}
-                      >
-                        却下
-                      </button>
-                    </div>
-                  )}
+                  <div style={{ display: 'flex', gap: '8px', flexDirection: 'column' }}>
+                    <button
+                      onClick={() => handleViewExhibitorDetail(application.exhibitor.id)}
+                      disabled={loadingExhibitorDetail}
+                      style={{
+                        width: '100%',
+                        padding: '12px 16px',
+                        background: '#F7F7F7',
+                        color: '#000000',
+                        borderRadius: '8px',
+                        border: '1px solid #E5E5E5',
+                        fontFamily: 'Inter, sans-serif',
+                        fontSize: '16px',
+                        fontWeight: 500,
+                        lineHeight: '19px',
+                        cursor: loadingExhibitorDetail ? 'not-allowed' : 'pointer'
+                      }}
+                    >
+                      {loadingExhibitorDetail ? '読み込み中...' : '詳細情報を見る'}
+                    </button>
+
+                    {application.application_status === 'pending' && (
+                      <div style={{ display: 'flex', gap: '8px' }}>
+                        <button
+                          onClick={() => handleApplicationApproval(application.id, 'approved')}
+                          style={{
+                            flex: 1,
+                            padding: '12px 16px',
+                            background: '#06C755',
+                            color: '#FFFFFF',
+                            borderRadius: '8px',
+                            border: 'none',
+                            fontFamily: 'Inter, sans-serif',
+                            fontSize: '16px',
+                            fontWeight: 700,
+                            lineHeight: '19px',
+                            cursor: 'pointer'
+                          }}
+                        >
+                          承認
+                        </button>
+                        <button
+                          onClick={() => handleApplicationApproval(application.id, 'rejected')}
+                          style={{
+                            flex: 1,
+                            padding: '12px 16px',
+                            background: '#FF3B30',
+                            color: '#FFFFFF',
+                            borderRadius: '8px',
+                            border: 'none',
+                            fontFamily: 'Inter, sans-serif',
+                            fontSize: '16px',
+                            fontWeight: 700,
+                            lineHeight: '19px',
+                            cursor: 'pointer'
+                          }}
+                        >
+                          却下
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
               )
             })}

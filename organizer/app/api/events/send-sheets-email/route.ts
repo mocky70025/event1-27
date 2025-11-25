@@ -1,14 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
+import { Resend } from 'resend'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
+const resendApiKey = process.env.RESEND_API_KEY
+const resendFromEmail = process.env.RESEND_FROM_EMAIL || 'noreply@tomorrow-event-platform.com'
 
-if (!supabaseUrl || !supabaseServiceKey) {
-  throw new Error('Missing Supabase environment variables')
+// Resendが設定されていない場合でも動作するように、オプショナルにする
+let resend: Resend | null = null
+if (resendApiKey) {
+  resend = new Resend(resendApiKey)
 }
-
-const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey)
 
 export async function POST(request: NextRequest) {
   try {
@@ -21,59 +21,70 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // メール送信（Supabase Functionsまたは外部サービスを使用）
-    // ここでは、Supabaseのメール送信機能を使用するか、外部サービス（SendGrid、Resend等）を使用します
-    // 今回は、実装例としてSupabase Functionsを使用する前提でコメントを残します
-
     // メール本文を作成
     const emailSubject = `【${eventName}】出店者情報がスプレッドシートにエクスポートされました`
-    const emailBody = `
-${eventName}の申し込みが締め切られ、出店者情報をGoogleスプレッドシートにエクスポートしました。
+    const emailBodyHtml = `
+      <div style="font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif; line-height: 1.6; color: #333;">
+        <h2 style="color: #06C755; margin-bottom: 16px;">${eventName}の申し込みが締め切られました</h2>
+        <p>出店者情報をGoogleスプレッドシートにエクスポートしました。</p>
+        <p style="margin-top: 24px; margin-bottom: 8px;"><strong>スプレッドシートのリンク：</strong></p>
+        <p style="margin-bottom: 24px;"><a href="${spreadsheetUrl}" style="color: #06C755; text-decoration: underline;">${spreadsheetUrl}</a></p>
+        <hr style="border: none; border-top: 1px solid #E5E5E5; margin: 24px 0;">
+        <p style="font-size: 12px; color: #666666;">このメールは自動送信されています。</p>
+      </div>
+    `
 
-以下のリンクからスプレッドシートを確認できます：
-${spreadsheetUrl}
+    // Resendが設定されている場合、メールを送信
+    if (resend) {
+      try {
+        const { data, error } = await resend.emails.send({
+          from: resendFromEmail,
+          to: organizerEmail,
+          subject: emailSubject,
+          html: emailBodyHtml
+        })
 
----
-このメールは自動送信されています。
-`
+        if (error) {
+          console.error('Resend error:', error)
+          return NextResponse.json(
+            { error: 'Failed to send email via Resend', details: error },
+            { status: 500 }
+          )
+        }
 
-    // メール送信の実装
-    // オプション1: Supabase Functionsを使用
-    // const { data, error } = await supabaseAdmin.functions.invoke('send-email', {
-    //   body: {
-    //     to: organizerEmail,
-    //     subject: emailSubject,
-    //     body: emailBody
-    //   }
-    // })
+        return NextResponse.json({
+          success: true,
+          message: 'Email sent successfully via Resend',
+          email: organizerEmail,
+          spreadsheetUrl,
+          emailId: data?.id
+        })
+      } catch (resendError: any) {
+        console.error('Resend exception:', resendError)
+        return NextResponse.json(
+          { error: 'Failed to send email via Resend', details: resendError.message },
+          { status: 500 }
+        )
+      }
+    } else {
+      // Resendが設定されていない場合、ログ出力のみ
+      console.log('Resend API key not configured. Email would be sent to:', organizerEmail)
+      console.log('Subject:', emailSubject)
+      console.log('Body:', emailBodyHtml)
+      console.log('Spreadsheet URL:', spreadsheetUrl)
 
-    // オプション2: 外部サービス（Resend、SendGrid等）を使用
-    // ここでは、実装例としてResendを使用する前提でコメントを残します
-    // import { Resend } from 'resend'
-    // const resend = new Resend(process.env.RESEND_API_KEY)
-    // const { data, error } = await resend.emails.send({
-    //   from: 'noreply@yourdomain.com',
-    //   to: organizerEmail,
-    //   subject: emailSubject,
-    //   html: emailBody.replace(/\n/g, '<br>')
-    // })
-
-    // 一時的な実装: メール送信機能は後で実装するため、成功レスポンスを返す
-    console.log('Email would be sent to:', organizerEmail)
-    console.log('Subject:', emailSubject)
-    console.log('Body:', emailBody)
-    console.log('Spreadsheet URL:', spreadsheetUrl)
-
-    return NextResponse.json({
-      success: true,
-      message: 'Email sent successfully (simulated)',
-      email: organizerEmail,
-      spreadsheetUrl
-    })
+      return NextResponse.json({
+        success: true,
+        message: 'Email sending simulated (RESEND_API_KEY not configured)',
+        email: organizerEmail,
+        spreadsheetUrl,
+        note: 'Please configure RESEND_API_KEY and RESEND_FROM_EMAIL environment variables to enable email sending'
+      })
+    }
   } catch (error: any) {
     console.error('Error sending email:', error)
     return NextResponse.json(
-      { error: 'Failed to send email', details: error.message },
+      { error: 'Internal server error', details: error.message },
       { status: 500 }
     )
   }
