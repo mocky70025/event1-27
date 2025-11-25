@@ -18,16 +18,37 @@ interface Application {
 interface EventApplicationsProps {
   eventId: string
   eventName: string
+  organizerId: string
+  organizerEmail: string
   onBack: () => void
 }
 
-export default function EventApplications({ eventId, eventName, onBack }: EventApplicationsProps) {
+export default function EventApplications({ eventId, eventName, organizerId, organizerEmail, onBack }: EventApplicationsProps) {
   const [applications, setApplications] = useState<Application[]>([])
   const [loading, setLoading] = useState(true)
+  const [isApplicationClosed, setIsApplicationClosed] = useState(false)
+  const [closingApplication, setClosingApplication] = useState(false)
 
   useEffect(() => {
     fetchApplications()
+    fetchEventStatus()
   }, [eventId])
+
+  const fetchEventStatus = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('events')
+        .select('is_application_closed')
+        .eq('id', eventId)
+        .single()
+
+      if (error) throw error
+
+      setIsApplicationClosed(data?.is_application_closed || false)
+    } catch (error) {
+      console.error('Failed to fetch event status:', error)
+    }
+  }
 
   const fetchApplications = async () => {
     try {
@@ -121,6 +142,45 @@ export default function EventApplications({ eventId, eventName, onBack }: EventA
     }
   }
 
+  const handleCloseApplication = async () => {
+    if (!confirm('申し込みを締め切りますか？\n\n締め切ると、出店者情報がGoogleスプレッドシートにエクスポートされ、メールが送信されます。')) {
+      return
+    }
+
+    setClosingApplication(true)
+    try {
+      const response = await fetch('/api/events/close-and-export', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          eventId,
+          organizerId,
+          eventName,
+          organizerEmail
+        })
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to close application')
+      }
+
+      const data = await response.json()
+      
+      alert(`申し込みを締め切りました。\n\n出店者数: ${data.applicationCount}名\nスプレッドシートURL: ${data.spreadsheetUrl}`)
+      
+      setIsApplicationClosed(true)
+      await fetchApplications()
+    } catch (error: any) {
+      console.error('Failed to close application:', error)
+      alert(`申し込みの締め切りに失敗しました: ${error.message}`)
+    } finally {
+      setClosingApplication(false)
+    }
+  }
+
   if (loading) {
     return (
       <div style={{ background: '#F7F7F7', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -182,9 +242,46 @@ export default function EventApplications({ eventId, eventName, onBack }: EventA
             fontSize: '18px',
             fontWeight: 700,
             lineHeight: '120%',
-            color: '#000000'
+            color: '#000000',
+            marginBottom: '8px'
           }}>{eventName}</h2>
+          {isApplicationClosed && (
+            <p style={{
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '14px',
+              lineHeight: '120%',
+              color: '#666666',
+              padding: '8px 12px',
+              background: '#FFF9E6',
+              borderRadius: '8px',
+              display: 'inline-block'
+            }}>申し込みは締め切られています</p>
+          )}
         </div>
+
+        {!isApplicationClosed && applications.length > 0 && (
+          <div style={{ marginBottom: '16px' }}>
+            <button
+              onClick={handleCloseApplication}
+              disabled={closingApplication}
+              style={{
+                width: '100%',
+                padding: '12px 16px',
+                background: closingApplication ? '#CCCCCC' : '#FF3B30',
+                color: '#FFFFFF',
+                borderRadius: '8px',
+                border: 'none',
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '16px',
+                fontWeight: 700,
+                lineHeight: '19px',
+                cursor: closingApplication ? 'not-allowed' : 'pointer'
+              }}
+            >
+              {closingApplication ? '処理中...' : '申し込みを締め切る'}
+            </button>
+          </div>
+        )}
 
         {applications.length === 0 ? (
           <div style={{

@@ -213,11 +213,13 @@ export default function EventManagement({ userProfile }: EventManagementProps) {
     )
   }
 
-  if (eventForApplications) {
+  if (eventForApplications && organizer) {
     return (
       <EventApplications
         eventId={eventForApplications.id}
         eventName={eventForApplications.event_name}
+        organizerId={organizer.id}
+        organizerEmail={organizer.email}
         onBack={() => setEventForApplications(null)}
       />
     )
