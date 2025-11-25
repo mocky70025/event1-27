@@ -71,9 +71,6 @@ export default function WelcomeScreen() {
       const appUrl = (process.env.NEXT_PUBLIC_APP_URL || window.location.origin).replace(/\/$/, '') // 末尾のスラッシュを削除
       const redirectUrl = `${appUrl}/auth/verify-email`
       
-      // デバッグ用：値を確認
-      alert(`デバッグ情報:\n\nNEXT_PUBLIC_APP_URL: ${process.env.NEXT_PUBLIC_APP_URL || '(未設定)'}\nwindow.location.origin: ${window.location.origin}\nappUrl: ${appUrl}\nredirectUrl: ${redirectUrl}`)
-      
       console.log('[WelcomeScreen] Email registration - redirectUrl:', redirectUrl)
       console.log('[WelcomeScreen] Email registration - window.location.origin:', window.location.origin)
       console.log('[WelcomeScreen] Email registration - NEXT_PUBLIC_APP_URL:', process.env.NEXT_PUBLIC_APP_URL)
@@ -117,6 +114,14 @@ export default function WelcomeScreen() {
           name: error.name,
           stack: error.stack
         })
+        
+        // 既存のメールアドレスの場合のエラーハンドリング
+        if (error.message?.includes('already registered') || error.message?.includes('already exists') || error.status === 422) {
+          setError('このメールアドレスは既に登録されています。ログイン画面からログインしてください。')
+          setLoading(false)
+          return
+        }
+        
         throw error
       }
 
@@ -158,7 +163,13 @@ export default function WelcomeScreen() {
         name: err.name,
         stack: err.stack
       })
-      setError(err.message || '登録に失敗しました')
+      
+      // 既存のメールアドレスの場合のエラーハンドリング
+      if (err.message?.includes('already registered') || err.message?.includes('already exists') || err.status === 422) {
+        setError('このメールアドレスは既に登録されています。ログイン画面からログインしてください。')
+      } else {
+        setError(err.message || '登録に失敗しました')
+      }
     } finally {
       setLoading(false)
     }

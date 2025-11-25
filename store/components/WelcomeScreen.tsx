@@ -127,6 +127,14 @@ export default function WelcomeScreen() {
           name: error.name,
           stack: error.stack
         })
+        
+        // 既存のメールアドレスの場合のエラーハンドリング
+        if (error.message?.includes('already registered') || error.message?.includes('already exists') || error.status === 422) {
+          setError('このメールアドレスは既に登録されています。ログイン画面からログインしてください。')
+          setLoading(false)
+          return
+        }
+        
         throw error
       }
 
@@ -180,7 +188,13 @@ export default function WelcomeScreen() {
         name: err.name,
         stack: err.stack
       })
-      setError(err.message || '登録に失敗しました')
+      
+      // 既存のメールアドレスの場合のエラーハンドリング
+      if (err.message?.includes('already registered') || err.message?.includes('already exists') || err.status === 422) {
+        setError('このメールアドレスは既に登録されています。ログイン画面からログインしてください。')
+      } else {
+        setError(err.message || '登録に失敗しました')
+      }
     } finally {
       setLoading(false)
     }
