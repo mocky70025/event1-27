@@ -511,6 +511,55 @@ export default function ExhibitorProfile({ userProfile, onBack }: ExhibitorProfi
             </div>
           </div>
         )}
+
+        {/* ログアウトボタン */}
+        <div style={{
+          background: '#FFFFFF',
+          boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
+          borderRadius: '12px',
+          padding: '24px',
+          marginBottom: '24px'
+        }}>
+          <button
+            onClick={async () => {
+              if (!confirm('ログアウトしますか？')) return
+              
+              try {
+                // Supabase Authのセッションを確認
+                const { data: { session } } = await supabase.auth.getSession()
+                
+                // メール認証の場合はSupabaseからログアウト
+                if (session) {
+                  await supabase.auth.signOut()
+                }
+                
+                // セッションストレージをクリア
+                sessionStorage.clear()
+                
+                // ページをリロードしてログイン画面に戻る
+                window.location.href = '/'
+              } catch (error) {
+                console.error('Logout error:', error)
+                alert('ログアウトに失敗しました')
+              }
+            }}
+            style={{
+              width: '100%',
+              padding: '12px 24px',
+              background: '#FF4444',
+              color: '#FFFFFF',
+              borderRadius: '8px',
+              border: 'none',
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '16px',
+              fontWeight: 600,
+              lineHeight: '120%',
+              cursor: 'pointer'
+            }}
+          >
+            ログアウト
+          </button>
+        </div>
       </div>
     </div>
   )

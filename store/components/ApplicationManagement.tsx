@@ -263,7 +263,7 @@ export default function ApplicationManagement({ userProfile, onBack }: Applicati
                     </div>
                   )}
 
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: application.application_status === 'pending' ? '16px' : '0' }}>
                     <span style={{
                       fontFamily: 'Inter, sans-serif',
                       fontSize: '14px',
@@ -298,6 +298,46 @@ export default function ApplicationManagement({ userProfile, onBack }: Applicati
                       }}>⏳ 審査中</span>
                     )}
                   </div>
+
+                  {/* 取り消しボタン（審査中の場合のみ表示） */}
+                  {application.application_status === 'pending' && (
+                    <button
+                      onClick={async () => {
+                        if (!confirm('この申し込みを取り消しますか？')) return
+
+                        try {
+                          const { error } = await supabase
+                            .from('event_applications')
+                            .delete()
+                            .eq('id', application.id)
+
+                          if (error) throw error
+
+                          // 一覧を再取得
+                          await fetchApplications()
+                          alert('申し込みを取り消しました')
+                        } catch (error) {
+                          console.error('Failed to cancel application:', error)
+                          alert('申し込みの取り消しに失敗しました')
+                        }
+                      }}
+                      style={{
+                        width: '100%',
+                        padding: '12px 24px',
+                        background: '#FF4444',
+                        color: '#FFFFFF',
+                        borderRadius: '8px',
+                        border: 'none',
+                        fontFamily: 'Inter, sans-serif',
+                        fontSize: '16px',
+                        fontWeight: 600,
+                        lineHeight: '120%',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      申し込みを取り消す
+                    </button>
+                  )}
                 </div>
               )
             })}
