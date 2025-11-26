@@ -96,29 +96,6 @@ export default function NotificationBox({ userProfile, onBack, onUnreadCountChan
     }
   }
 
-  const markAllAsRead = async () => {
-    try {
-      const userId = userProfile.userId
-      const userType = 'organizer'
-
-      const { error } = await supabase
-        .from('notifications')
-        .update({ is_read: true })
-        .eq('user_id', userId)
-        .eq('user_type', userType)
-        .eq('is_read', false)
-
-      if (error) throw error
-
-      // ローカル状態を更新
-      setNotifications(prev => prev.map(n => ({ ...n, is_read: true })))
-      setUnreadCount(0)
-      onUnreadCountChange?.(0)
-    } catch (error) {
-      console.error('Failed to mark all notifications as read:', error)
-      alert('すべて既読にするのに失敗しました')
-    }
-  }
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
@@ -164,60 +141,41 @@ export default function NotificationBox({ userProfile, onBack, onUnreadCountChan
   return (
     <div style={{ background: '#F7F7F7', minHeight: '100vh' }}>
       <div className="container mx-auto" style={{ padding: '9px 16px', maxWidth: '394px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', paddingTop: '24px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <button
-              onClick={onBack}
-              style={{
-                background: 'transparent',
-                border: 'none',
-                fontFamily: 'Inter, sans-serif',
-                fontSize: '16px',
-                color: '#06C755',
-                cursor: 'pointer'
-              }}
-            >
-              ←
-            </button>
-            <h1 style={{
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px', paddingTop: '24px' }}>
+          <button
+            onClick={onBack}
+            style={{
+              background: 'transparent',
+              border: 'none',
               fontFamily: 'Inter, sans-serif',
-              fontSize: '20px',
-              fontWeight: 700,
-              lineHeight: '120%',
-              color: '#000000'
-            }}>
-              通知
-            </h1>
-            {unreadCount > 0 && (
-              <span style={{
-                padding: '2px 8px',
-                borderRadius: '12px',
-                background: '#FF3B30',
-                color: '#FFFFFF',
-                fontFamily: 'Inter, sans-serif',
-                fontSize: '12px',
-                fontWeight: 600
-              }}>
-                {unreadCount}
-              </span>
-            )}
-          </div>
+              fontSize: '16px',
+              color: '#06C755',
+              cursor: 'pointer'
+            }}
+          >
+            ←
+          </button>
+          <h1 style={{
+            fontFamily: 'Inter, sans-serif',
+            fontSize: '20px',
+            fontWeight: 700,
+            lineHeight: '120%',
+            color: '#000000'
+          }}>
+            通知
+          </h1>
           {unreadCount > 0 && (
-            <button
-              onClick={markAllAsRead}
-              style={{
-                padding: '8px 16px',
-                background: 'transparent',
-                border: '1px solid #E5E5E5',
-                borderRadius: '8px',
-                fontFamily: 'Inter, sans-serif',
-                fontSize: '14px',
-                color: '#666666',
-                cursor: 'pointer'
-              }}
-            >
-              すべて既読
-            </button>
+            <span style={{
+              padding: '2px 8px',
+              borderRadius: '12px',
+              background: '#FF3B30',
+              color: '#FFFFFF',
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '12px',
+              fontWeight: 600
+            }}>
+              {unreadCount}
+            </span>
           )}
         </div>
 
