@@ -218,19 +218,29 @@ export default function AdminDashboard() {
                         onClick={async () => {
                           try {
                             console.log('[Admin] Approving event:', event.id)
-                            const { data, error } = await supabase
+                            const { error: updateError } = await supabase
                               .from('events')
                               .update({ approval_status: 'approved' })
                               .eq('id', event.id)
-                              .select()
 
-                            console.log('[Admin] Approval result:', { data, error })
+                            console.log('[Admin] Update error:', updateError)
 
-                            if (error) {
-                              console.error('[Admin] Approval error:', error)
-                              throw error
+                            if (updateError) {
+                              console.error('[Admin] Approval error:', updateError)
+                              throw updateError
                             }
 
+                            // 更新後のデータを確認
+                            const { data: updatedData, error: selectError } = await supabase
+                              .from('events')
+                              .select('id, approval_status')
+                              .eq('id', event.id)
+                              .single()
+
+                            console.log('[Admin] Updated event data:', updatedData)
+                            console.log('[Admin] Select error:', selectError)
+
+                            // データを再取得
                             await fetchData()
                             alert('イベントを承認しました')
                           } catch (error: any) {
@@ -246,19 +256,29 @@ export default function AdminDashboard() {
                         onClick={async () => {
                           try {
                             console.log('[Admin] Rejecting event:', event.id)
-                            const { data, error } = await supabase
+                            const { error: updateError } = await supabase
                               .from('events')
                               .update({ approval_status: 'rejected' })
                               .eq('id', event.id)
-                              .select()
 
-                            console.log('[Admin] Rejection result:', { data, error })
+                            console.log('[Admin] Update error:', updateError)
 
-                            if (error) {
-                              console.error('[Admin] Rejection error:', error)
-                              throw error
+                            if (updateError) {
+                              console.error('[Admin] Rejection error:', updateError)
+                              throw updateError
                             }
 
+                            // 更新後のデータを確認
+                            const { data: updatedData, error: selectError } = await supabase
+                              .from('events')
+                              .select('id, approval_status')
+                              .eq('id', event.id)
+                              .single()
+
+                            console.log('[Admin] Updated event data:', updatedData)
+                            console.log('[Admin] Select error:', selectError)
+
+                            // データを再取得
                             await fetchData()
                             alert('イベントを却下しました')
                           } catch (error: any) {
