@@ -210,8 +210,27 @@ export default function AdminDashboard() {
                     <div className="flex space-x-2 mt-4">
                       <button
                         onClick={async () => {
-                          await supabase.from('events').update({ approval_status: 'approved' }).eq('id', event.id)
-                          await fetchData()
+                          try {
+                            console.log('[Admin] Approving event:', event.id)
+                            const { data, error } = await supabase
+                              .from('events')
+                              .update({ approval_status: 'approved' })
+                              .eq('id', event.id)
+                              .select()
+
+                            console.log('[Admin] Approval result:', { data, error })
+
+                            if (error) {
+                              console.error('[Admin] Approval error:', error)
+                              throw error
+                            }
+
+                            await fetchData()
+                            alert('イベントを承認しました')
+                          } catch (error: any) {
+                            console.error('[Admin] Failed to approve event:', error)
+                            alert(`承認に失敗しました: ${error.message || '不明なエラー'}`)
+                          }
                         }}
                         className="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg transition-colors"
                       >
@@ -219,8 +238,27 @@ export default function AdminDashboard() {
                       </button>
                       <button
                         onClick={async () => {
-                          await supabase.from('events').update({ approval_status: 'rejected' }).eq('id', event.id)
-                          await fetchData()
+                          try {
+                            console.log('[Admin] Rejecting event:', event.id)
+                            const { data, error } = await supabase
+                              .from('events')
+                              .update({ approval_status: 'rejected' })
+                              .eq('id', event.id)
+                              .select()
+
+                            console.log('[Admin] Rejection result:', { data, error })
+
+                            if (error) {
+                              console.error('[Admin] Rejection error:', error)
+                              throw error
+                            }
+
+                            await fetchData()
+                            alert('イベントを却下しました')
+                          } catch (error: any) {
+                            console.error('[Admin] Failed to reject event:', error)
+                            alert(`却下に失敗しました: ${error.message || '不明なエラー'}`)
+                          }
                         }}
                         className="flex-1 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg transition-colors"
                       >
