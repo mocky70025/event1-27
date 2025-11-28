@@ -205,22 +205,22 @@ export const getInputStyle = (hasError = false) => ({
 })
 
 export const getBadgeStyle = (variant: 'success' | 'warning' | 'error' | 'info') => {
-  const variantColors = {
+  const variantColors: Record<'success' | 'warning' | 'error' | 'info', { bg: string; text: string }> = {
     success: { bg: colors.status.successLight, text: colors.status.success },
     warning: { bg: colors.status.warningLight, text: colors.status.warning },
     error: { bg: colors.status.errorLight, text: colors.status.error },
     info: { bg: colors.status.infoLight, text: colors.status.info },
   }
 
-  const colors = variantColors[variant]
+  const variantColor = variantColors[variant]
 
   return {
     padding: `2px ${spacing.sm}`,
     borderRadius: '12px',
     fontSize: typography.fontSize.caption,
     fontWeight: typography.fontWeight.semiBold,
-    background: colors.bg,
-    color: colors.text,
+    background: variantColor.bg,
+    color: variantColor.text,
   }
 }
 

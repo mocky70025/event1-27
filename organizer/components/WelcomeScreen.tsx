@@ -358,24 +358,25 @@ export default function WelcomeScreen() {
                   display: 'flex',
                   flexDirection: 'row',
                   justifyContent: 'center',
-            alignItems: 'center',
-            padding: '16px 24px',
-            gap: '10px',
-            width: '100%',
-            height: '48px',
-            background: '#06C755',
-            borderRadius: '8px',
-            border: 'none',
-            fontFamily: 'Inter, sans-serif',
-            fontSize: '16px',
-            fontWeight: 700,
-            lineHeight: '19px',
-            color: '#FFFFFF',
-            cursor: 'pointer'
-          }}
-        >
-              メールアドレスでログイン
-            </button>
+                  alignItems: 'center',
+                  padding: '16px 24px',
+                  gap: '10px',
+                  width: '100%',
+                  height: '48px',
+                  background: '#FFFFFF',
+                  borderRadius: '8px',
+                  border: '1px solid #E5E5E5',
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '16px',
+                  fontWeight: 700,
+                  lineHeight: '19px',
+                  color: '#000000',
+                  cursor: 'pointer'
+                }}
+              >
+                メールアドレスでログイン
+              </button>
+            </div>
           </div>
         )}
 
