@@ -19,7 +19,11 @@ export default function AuthCallback() {
         const code = searchParams.get('code')
         const state = searchParams.get('state')
         const error = searchParams.get('error')
-        const provider = searchParams.get('provider') || 'line' // デフォルトはLINE
+        
+        // URLフラグメント（#以降）を確認（Google認証の場合）
+        const hashParams = new URLSearchParams(window.location.hash.substring(1))
+        const accessToken = hashParams.get('access_token')
+        const provider = hashParams.get('provider') || searchParams.get('provider')
         
         if (error) {
           setErrorMessage(`認証エラー: ${error}`)
@@ -27,8 +31,13 @@ export default function AuthCallback() {
           return
         }
         
-        // Google認証の場合
-        if (provider === 'google' || code) {
+        // Google認証の場合（URLフラグメントにaccess_tokenがある、またはproviderがgoogle）
+        if (provider === 'google' || accessToken) {
+          console.log('[Callback] Google authentication detected')
+          
+          // Supabaseが自動的にセッションを確立するまで少し待つ
+          await new Promise(resolve => setTimeout(resolve, 500))
+          
           // Supabaseのセッションを確認
           const { data: { session }, error: sessionError } = await supabase.auth.getSession()
           
@@ -48,7 +57,7 @@ export default function AuthCallback() {
             sessionStorage.setItem('user_id', session.user.id)
             sessionStorage.setItem('user_email', session.user.email || '')
             
-            // 既存ユーザーかチェック（emailで検索）
+            // 既存ユーザーかチェック（user_idで検索）
             const { data: existingUser, error: exhibitorError } = await supabase
               .from('exhibitors')
               .select('*')
@@ -64,6 +73,11 @@ export default function AuthCallback() {
             
             setStatus('success')
             window.location.href = '/'
+            return
+          } else {
+            console.error('[Callback] No session found after Google authentication')
+            setErrorMessage('認証に失敗しました。もう一度お試しください。')
+            setStatus('error')
             return
           }
         }
