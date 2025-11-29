@@ -383,7 +383,7 @@ export default function WelcomeScreen() {
             width: '256px',
             height: '0px',
             left: '69px',
-            top: '655.5px',
+            top: '747.5px',
             border: '1px solid #06C755'
           }} />
           <div style={{
@@ -391,7 +391,7 @@ export default function WelcomeScreen() {
             width: '64px',
             height: '16px',
             left: '165px',
-            top: '648px',
+            top: '740px',
             background: '#FFFFFF'
           }} />
           <div style={{
@@ -399,7 +399,7 @@ export default function WelcomeScreen() {
             width: '64px',
             height: '24px',
             left: '165px',
-            top: '644px',
+            top: '736px',
             fontFamily: '"Noto Sans JP", sans-serif',
             fontStyle: 'normal',
             fontWeight: 700,
@@ -425,7 +425,7 @@ export default function WelcomeScreen() {
               width: '288px',
               height: '48px',
               left: '53px',
-              top: '725px',
+              top: '779.5px',
               background: '#FFFFFF',
               border: '1px solid #E5E5E5',
               borderRadius: '8px',
