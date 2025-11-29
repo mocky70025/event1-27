@@ -639,7 +639,7 @@ export default function WelcomeScreen() {
 
       {/* メールアドレスでログイン */}
       {authMode === 'login' && loginMethod === 'email' && (
-          <div style={{
+        <div style={{
             background: '#FFFFFF',
             boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
             borderRadius: '12px',
@@ -787,7 +787,7 @@ export default function WelcomeScreen() {
 
       {/* 新規登録方法選択 */}
       {authMode === 'register' && !registerMethod && (
-          <div style={{
+        <div style={{
             background: '#FFFFFF',
             boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
             borderRadius: '12px',
@@ -914,7 +914,7 @@ export default function WelcomeScreen() {
 
       {/* メールアドレスで新規登録 */}
       {authMode === 'register' && registerMethod === 'email' && (
-          <div style={{
+        <div style={{
             background: '#FFFFFF',
             boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
             borderRadius: '12px',
@@ -1078,7 +1078,6 @@ export default function WelcomeScreen() {
             </form>
           </div>
         )}
-      </div>
     </div>
   )
 }
