@@ -433,7 +433,7 @@ export default function WelcomeScreen() {
               width: '287px',
               height: '47px',
               left: '53.5px',
-              top: '684.5px',
+              top: '584px',
               background: '#FFFFFF',
               borderRadius: '7.5px',
               border: '1px solid #E5E5E5',
