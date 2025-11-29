@@ -300,7 +300,7 @@ export default function WelcomeScreen() {
         width: '256px',
         height: '256px',
         left: '69px',
-        top: '160px',
+        top: '144px',
         background: '#D9D9D9',
         display: 'flex',
         alignItems: 'center',
@@ -328,15 +328,15 @@ export default function WelcomeScreen() {
             width: '256px',
             height: '0px',
             left: '69px',
-            top: '469px',
-            border: '1px solid #000000'
+            top: '427.5px',
+            border: '1px solid #06C755'
           }} />
           <div style={{
             position: 'absolute',
             width: '72px',
             height: '16px',
             left: '161px',
-            top: '461px',
+            top: '420px',
             background: '#FFFFFF'
           }} />
           <div style={{
@@ -344,7 +344,7 @@ export default function WelcomeScreen() {
             width: '72px',
             height: '24px',
             left: '161px',
-            top: '457px',
+            top: '416px',
             fontFamily: '"Noto Sans JP", sans-serif',
             fontStyle: 'normal',
             fontWeight: 700,
@@ -369,7 +369,7 @@ export default function WelcomeScreen() {
               width: '288px',
               height: '48px',
               left: '53px',
-              top: '497px',
+              top: '456px',
               background: '#06C755',
               borderRadius: '8px',
               border: 'none',
@@ -398,12 +398,12 @@ export default function WelcomeScreen() {
               alignItems: 'center',
               padding: '16px 24px',
               position: 'absolute',
-              width: '288px',
-              height: '48px',
-              left: '53px',
-              top: '561px',
+              width: '287px',
+              height: '47px',
+              left: '53.5px',
+              top: '520.5px',
               background: '#FFFFFF',
-              borderRadius: '8px',
+              borderRadius: '7.5px',
               border: '1px solid #E5E5E5',
               fontFamily: '"Noto Sans JP", sans-serif',
               fontSize: '16px',
@@ -430,12 +430,12 @@ export default function WelcomeScreen() {
               alignItems: 'center',
               padding: '16px 24px',
               position: 'absolute',
-              width: '288px',
-              height: '48px',
-              left: '53px',
-              top: '625px',
+              width: '287px',
+              height: '47px',
+              left: '53.5px',
+              top: '684.5px',
               background: '#FFFFFF',
-              borderRadius: '8px',
+              borderRadius: '7.5px',
               border: '1px solid #E5E5E5',
               fontFamily: '"Noto Sans JP", sans-serif',
               fontSize: '16px',
@@ -458,15 +458,15 @@ export default function WelcomeScreen() {
             width: '256px',
             height: '0px',
             left: '69px',
-            top: '697px',
-            border: '1px solid #000000'
+            top: '655.5px',
+            border: '1px solid #06C755'
           }} />
           <div style={{
             position: 'absolute',
             width: '64px',
             height: '16px',
             left: '165px',
-            top: '689px',
+            top: '648px',
             background: '#FFFFFF'
           }} />
           <div style={{
@@ -474,7 +474,7 @@ export default function WelcomeScreen() {
             width: '64px',
             height: '24px',
             left: '165px',
-            top: '685px',
+            top: '644px',
             fontFamily: '"Noto Sans JP", sans-serif',
             fontStyle: 'normal',
             fontWeight: 700,
