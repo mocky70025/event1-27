@@ -272,7 +272,7 @@ export default function WelcomeScreen() {
         height: '96px',
         left: '30px',
         top: '32px',
-        fontFamily: "'Noto Sans JP', sans-serif",
+        fontFamily: '"Noto Sans JP", sans-serif',
         fontStyle: 'normal',
         fontWeight: 700,
         fontSize: '24px',
@@ -296,7 +296,7 @@ export default function WelcomeScreen() {
         justifyContent: 'center'
       }}>
         <div style={{
-          fontFamily: "'Noto Sans JP', sans-serif",
+          fontFamily: '"Noto Sans JP", sans-serif',
           fontStyle: 'normal',
           fontWeight: 700,
           fontSize: '32px',
@@ -334,7 +334,7 @@ export default function WelcomeScreen() {
             height: '24px',
             left: '161px',
             top: '457px',
-            fontFamily: "'Noto Sans JP', sans-serif",
+            fontFamily: '"Noto Sans JP", sans-serif',
             fontStyle: 'normal',
             fontWeight: 700,
             fontSize: '16px',
@@ -364,7 +364,7 @@ export default function WelcomeScreen() {
               background: '#06C755',
               borderRadius: '8px',
               border: 'none',
-              fontFamily: "'Noto Sans JP', sans-serif",
+              fontFamily: '"Noto Sans JP", sans-serif',
               fontSize: '16px',
               fontWeight: 700,
               lineHeight: '24px',
@@ -397,7 +397,7 @@ export default function WelcomeScreen() {
               background: '#06C755',
               borderRadius: '8px',
               border: 'none',
-              fontFamily: "'Noto Sans JP', sans-serif",
+              fontFamily: '"Noto Sans JP", sans-serif',
               fontSize: '16px',
               fontWeight: 700,
               lineHeight: '24px',
@@ -430,7 +430,7 @@ export default function WelcomeScreen() {
               background: '#06C755',
               borderRadius: '8px',
               border: 'none',
-              fontFamily: "'Noto Sans JP', sans-serif",
+              fontFamily: '"Noto Sans JP", sans-serif',
               fontSize: '16px',
               fontWeight: 700,
               lineHeight: '24px',
@@ -467,7 +467,7 @@ export default function WelcomeScreen() {
             height: '24px',
             left: '165px',
             top: '685px',
-            fontFamily: "'Noto Sans JP', sans-serif",
+            fontFamily: '"Noto Sans JP", sans-serif',
             fontStyle: 'normal',
             fontWeight: 700,
             fontSize: '16px',
@@ -496,7 +496,7 @@ export default function WelcomeScreen() {
               background: '#FFFFFF',
               border: '1px solid #E5E5E5',
               borderRadius: '8px',
-              fontFamily: "'Noto Sans JP', sans-serif",
+              fontFamily: '"Noto Sans JP", sans-serif',
               fontSize: '16px',
               fontWeight: 700,
               lineHeight: '24px',
@@ -510,8 +510,8 @@ export default function WelcomeScreen() {
         </>
       )}
 
-        {/* ログイン方法選択 */}
-        {authMode === 'login' && !loginMethod && (
+      {/* ログイン方法選択 */}
+      {authMode === 'login' && !loginMethod && (
           <div style={{
             background: '#FFFFFF',
             boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
@@ -563,7 +563,7 @@ export default function WelcomeScreen() {
                   background: '#06C755',
                   borderRadius: '8px',
                   border: 'none',
-                  fontFamily: "'Noto Sans JP', sans-serif",
+                  fontFamily: '"Noto Sans JP", sans-serif',
                   fontSize: '16px',
                   fontWeight: 700,
                   lineHeight: '24px',
@@ -592,7 +592,7 @@ export default function WelcomeScreen() {
                   background: '#06C755',
                   borderRadius: '8px',
                   border: 'none',
-                  fontFamily: "'Noto Sans JP', sans-serif",
+                  fontFamily: '"Noto Sans JP", sans-serif',
                   fontSize: '16px',
                   fontWeight: 700,
                   lineHeight: '24px',
@@ -621,7 +621,7 @@ export default function WelcomeScreen() {
                     background: '#FFFFFF',
                     borderRadius: '8px',
                     border: '1px solid #E5E5E5',
-                    fontFamily: "'Noto Sans JP', sans-serif",
+                    fontFamily: '"Noto Sans JP", sans-serif',
                     fontSize: '16px',
                     fontWeight: 700,
                     lineHeight: '24px',
@@ -637,8 +637,8 @@ export default function WelcomeScreen() {
           </div>
         )}
 
-        {/* メールアドレスでログイン */}
-        {authMode === 'login' && loginMethod === 'email' && (
+      {/* メールアドレスでログイン */}
+      {authMode === 'login' && loginMethod === 'email' && (
           <div style={{
             background: '#FFFFFF',
             boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
@@ -785,8 +785,8 @@ export default function WelcomeScreen() {
           </div>
         )}
 
-        {/* 新規登録方法選択 */}
-        {authMode === 'register' && !registerMethod && (
+      {/* 新規登録方法選択 */}
+      {authMode === 'register' && !registerMethod && (
           <div style={{
             background: '#FFFFFF',
             boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
@@ -838,7 +838,7 @@ export default function WelcomeScreen() {
                   background: '#06C755',
                   borderRadius: '8px',
                   border: 'none',
-                  fontFamily: "'Noto Sans JP', sans-serif",
+                  fontFamily: '"Noto Sans JP", sans-serif',
                   fontSize: '16px',
                   fontWeight: 700,
                   lineHeight: '24px',
@@ -867,7 +867,7 @@ export default function WelcomeScreen() {
                   background: '#06C755',
                   borderRadius: '8px',
                   border: 'none',
-                  fontFamily: "'Noto Sans JP', sans-serif",
+                  fontFamily: '"Noto Sans JP", sans-serif',
                   fontSize: '16px',
                   fontWeight: 700,
                   lineHeight: '24px',
@@ -896,7 +896,7 @@ export default function WelcomeScreen() {
                     background: '#FFFFFF',
                     borderRadius: '8px',
                     border: '1px solid #E5E5E5',
-                    fontFamily: "'Noto Sans JP', sans-serif",
+                    fontFamily: '"Noto Sans JP", sans-serif',
                     fontSize: '16px',
                     fontWeight: 700,
                     lineHeight: '24px',
@@ -912,8 +912,8 @@ export default function WelcomeScreen() {
           </div>
         )}
 
-        {/* メールアドレスで新規登録 */}
-        {authMode === 'register' && registerMethod === 'email' && (
+      {/* メールアドレスで新規登録 */}
+      {authMode === 'register' && registerMethod === 'email' && (
           <div style={{
             background: '#FFFFFF',
             boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
