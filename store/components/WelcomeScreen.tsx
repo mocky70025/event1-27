@@ -382,7 +382,7 @@ export default function WelcomeScreen() {
               opacity: loading ? 0.6 : 1
             }}
           >
-            <div style={{ position: 'absolute', left: '24px' }}>
+            <div style={{ position: 'absolute', left: '16px' }}>
               <LineIcon />
             </div>
             <span style={{ width: '100%', textAlign: 'center' }}>LINE</span>
@@ -414,7 +414,7 @@ export default function WelcomeScreen() {
               opacity: loading ? 0.6 : 1
             }}
           >
-            <div style={{ position: 'absolute', left: '24px' }}>
+            <div style={{ position: 'absolute', left: '16px' }}>
               <GoogleIcon />
             </div>
             <span style={{ width: '100%', textAlign: 'center' }}>Google</span>
@@ -446,7 +446,7 @@ export default function WelcomeScreen() {
               opacity: loading ? 0.6 : 1
             }}
           >
-            <div style={{ position: 'absolute', left: '24px' }}>
+            <div style={{ position: 'absolute', left: '16px' }}>
               <MailIcon color="#000000" />
             </div>
             <span style={{ width: '100%', textAlign: 'center' }}>メールアドレス</span>
