@@ -283,8 +283,9 @@ export default function WelcomeScreen() {
           {/* メールアドレスログインボタン */}
           <button
             onClick={() => {
-              console.log('[WelcomeScreen] Email LOGIN button clicked (login method selection)')
+              console.log('[WelcomeScreen] Email LOGIN button clicked (initial screen)')
               console.log('[WelcomeScreen] Current state - authMode:', authMode, 'loginMethod:', loginMethod)
+              setAuthMode('login')
               setLoginMethod('email')
             }}
             disabled={loading}
