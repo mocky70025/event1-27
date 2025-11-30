@@ -420,7 +420,11 @@ export default function WelcomeScreen() {
 
           {/* メールアドレスログインボタン */}
           <button
-            onClick={() => setLoginMethod('email')}
+            onClick={() => {
+              console.log('[WelcomeScreen] Email LOGIN button clicked (login method selection)')
+              console.log('[WelcomeScreen] Current state - authMode:', authMode, 'loginMethod:', loginMethod)
+              setLoginMethod('email')
+            }}
             disabled={loading}
             style={{
               display: 'flex',
@@ -441,7 +445,9 @@ export default function WelcomeScreen() {
               lineHeight: '24px',
               color: '#000000',
               cursor: loading ? 'not-allowed' : 'pointer',
-              opacity: loading ? 0.6 : 1
+              opacity: loading ? 0.6 : 1,
+              zIndex: 50,
+              pointerEvents: loading ? 'none' : 'auto'
             }}
           >
             <div style={{ position: 'absolute', left: '16px' }}>
@@ -976,11 +982,11 @@ export default function WelcomeScreen() {
             <span style={{ width: '100%', textAlign: 'center' }}>Google</span>
           </button>
 
-          {/* メールアドレスログインボタン */}
+          {/* メールアドレス新規登録ボタン */}
           <button
             type="button"
             onClick={() => {
-              console.log('[WelcomeScreen] Email registration button clicked')
+              console.log('[WelcomeScreen] Email REGISTRATION button clicked (register method selection)')
               console.log('[WelcomeScreen] Current state - authMode:', authMode, 'registerMethod:', registerMethod)
               setRegisterMethod('email')
               console.log('[WelcomeScreen] After setRegisterMethod - registerMethod should be email')
@@ -1006,7 +1012,7 @@ export default function WelcomeScreen() {
               color: '#000000',
               cursor: loading ? 'not-allowed' : 'pointer',
               opacity: loading ? 0.6 : 1,
-              zIndex: 100,
+              zIndex: 150,
               pointerEvents: loading ? 'none' : 'auto'
             }}
           >
