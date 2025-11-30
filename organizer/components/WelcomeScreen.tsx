@@ -652,6 +652,7 @@ export default function WelcomeScreen() {
           <button
             type="button"
             onClick={() => {
+              setAuthMode('login')
               setLoginMethod(null)
               setError('')
               setEmail('')
