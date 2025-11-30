@@ -273,9 +273,9 @@ export default function WelcomeScreen() {
       {/* タイトル */}
       <div style={{
         position: 'absolute',
-        width: '333px',
+        width: '343px',
         height: '96px',
-        left: '30px',
+        left: '25px',
         top: '32px',
         fontFamily: '"Noto Sans JP", sans-serif',
         fontStyle: 'normal',
@@ -1088,9 +1088,9 @@ export default function WelcomeScreen() {
           {/* タイトル */}
           <div style={{
             position: 'absolute',
-            width: '333px',
+            width: '343px',
             height: '96px',
-            left: '30px',
+            left: '25px',
             top: '32px',
             fontFamily: '"Noto Sans JP", sans-serif',
             fontStyle: 'normal',
