@@ -79,28 +79,34 @@ export default function WelcomeScreen() {
 
   const handleNavigateToEmailLogin = () => {
     if (isAnimating) return // アニメーション中は無効化
-    setIsAnimating(true)
     setSlideDirection('right') // メールアドレス入力画面が右から来る
     // アニメーション開始時にすぐにloginMethodを設定（アニメーション中に両方の画面を表示するため）
     setLoginMethod('email')
-    // アニメーション完了後に状態をリセット
-    setTimeout(() => {
-      setIsAnimating(false)
-      setSlideDirection(null)
-    }, 300) // アニメーション時間に合わせる
+    // 次のフレームでアニメーションを開始（初期位置を右側に設定するため）
+    requestAnimationFrame(() => {
+      setIsAnimating(true)
+      // アニメーション完了後に状態をリセット
+      setTimeout(() => {
+        setIsAnimating(false)
+        setSlideDirection(null)
+      }, 300) // アニメーション時間に合わせる
+    })
   }
 
   const handleNavigateToEmailRegister = () => {
     if (isAnimating) return // アニメーション中は無効化
-    setIsAnimating(true)
     setSlideDirection('right') // メールアドレス入力画面が右から来る
     // アニメーション開始時にすぐにregisterMethodを設定（アニメーション中に両方の画面を表示するため）
     setRegisterMethod('email')
-    // アニメーション完了後に状態をリセット
-    setTimeout(() => {
-      setIsAnimating(false)
-      setSlideDirection(null)
-    }, 300) // アニメーション時間に合わせる
+    // 次のフレームでアニメーションを開始（初期位置を右側に設定するため）
+    requestAnimationFrame(() => {
+      setIsAnimating(true)
+      // アニメーション完了後に状態をリセット
+      setTimeout(() => {
+        setIsAnimating(false)
+        setSlideDirection(null)
+      }, 300) // アニメーション時間に合わせる
+    })
   }
 
   const handleBackFromEmail = () => {
@@ -667,7 +673,7 @@ export default function WelcomeScreen() {
           left: 0,
           width: '100%',
           height: '100%',
-          transform: (slideDirection === 'right' && isAnimating) ? 'translateX(0)' : (slideDirection === 'left' && isAnimating) ? 'translateX(100%)' : (loginMethod === 'email' && !isAnimating) ? 'translateX(0)' : 'translateX(100%)',
+          transform: (loginMethod === 'email' && !isAnimating) ? 'translateX(0)' : (slideDirection === 'right' && isAnimating && loginMethod === 'email') ? 'translateX(0)' : (slideDirection === 'left' && isAnimating) ? 'translateX(100%)' : 'translateX(100%)',
           transition: 'transform 0.3s ease-in-out',
           zIndex: (loginMethod === 'email') ? 30 : isAnimating ? 25 : 1,
           pointerEvents: (isAnimating && slideDirection === 'left') ? 'none' : 'auto'
@@ -1090,7 +1096,7 @@ export default function WelcomeScreen() {
           left: 0,
           width: '100%',
           height: '100%',
-          transform: (slideDirection === 'right' && isAnimating) ? 'translateX(0)' : (slideDirection === 'left' && isAnimating) ? 'translateX(100%)' : (registerMethod === 'email' && !isAnimating) ? 'translateX(0)' : 'translateX(100%)',
+          transform: (registerMethod === 'email' && !isAnimating) ? 'translateX(0)' : (slideDirection === 'right' && isAnimating && registerMethod === 'email') ? 'translateX(0)' : (slideDirection === 'left' && isAnimating) ? 'translateX(100%)' : 'translateX(100%)',
           transition: 'transform 0.3s ease-in-out',
           zIndex: (registerMethod === 'email') ? 30 : isAnimating ? 25 : 1,
           pointerEvents: (isAnimating && slideDirection === 'left') ? 'none' : 'auto'
