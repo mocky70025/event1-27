@@ -81,9 +81,10 @@ export default function WelcomeScreen() {
     if (isAnimating) return // アニメーション中は無効化
     setIsAnimating(true)
     setSlideDirection('right') // メールアドレス入力画面が右から来る
-    // アニメーション完了後に状態を変更
+    // アニメーション開始時にすぐにloginMethodを設定（アニメーション中に両方の画面を表示するため）
+    setLoginMethod('email')
+    // アニメーション完了後に状態をリセット
     setTimeout(() => {
-      setLoginMethod('email')
       setIsAnimating(false)
       setSlideDirection(null)
     }, 300) // アニメーション時間に合わせる
@@ -93,9 +94,10 @@ export default function WelcomeScreen() {
     if (isAnimating) return // アニメーション中は無効化
     setIsAnimating(true)
     setSlideDirection('right') // メールアドレス入力画面が右から来る
-    // アニメーション完了後に状態を変更
+    // アニメーション開始時にすぐにregisterMethodを設定（アニメーション中に両方の画面を表示するため）
+    setRegisterMethod('email')
+    // アニメーション完了後に状態をリセット
     setTimeout(() => {
-      setRegisterMethod('email')
       setIsAnimating(false)
       setSlideDirection(null)
     }, 300) // アニメーション時間に合わせる
@@ -469,14 +471,14 @@ export default function WelcomeScreen() {
       )}
 
       {/* ログイン方法選択 */}
-      {((authMode === 'login' && !loginMethod) || (isAnimating && slideDirection === 'right' && (loginMethod as string) !== 'email')) && (
+      {((authMode === 'login' && !loginMethod) || (isAnimating && slideDirection === 'right' && loginMethod === 'email')) && (
         <div style={{
           position: 'absolute',
           top: 0,
           left: 0,
           width: '100%',
           height: '100%',
-          transform: (slideDirection === 'right' && isAnimating && (loginMethod as string) === 'email') ? 'translateX(-100%)' : (authMode === 'login' && !loginMethod) ? 'translateX(0)' : 'translateX(-100%)',
+          transform: (slideDirection === 'right' && isAnimating && loginMethod === 'email') ? 'translateX(-100%)' : (authMode === 'login' && !loginMethod) ? 'translateX(0)' : 'translateX(-100%)',
           transition: 'transform 0.3s ease-in-out',
           zIndex: (authMode === 'login' && !loginMethod) ? 20 : isAnimating ? 5 : 1,
           pointerEvents: (isAnimating && slideDirection === 'right') ? 'none' : 'auto'
@@ -665,7 +667,7 @@ export default function WelcomeScreen() {
           left: 0,
           width: '100%',
           height: '100%',
-          transform: (slideDirection === 'right' && isAnimating) ? 'translateX(0)' : (slideDirection === 'left' && isAnimating && loginMethod !== 'email') ? 'translateX(100%)' : (loginMethod === 'email') ? 'translateX(0)' : 'translateX(100%)',
+          transform: (slideDirection === 'right' && isAnimating) ? 'translateX(0)' : (slideDirection === 'left' && isAnimating) ? 'translateX(100%)' : (loginMethod === 'email' && !isAnimating) ? 'translateX(0)' : 'translateX(100%)',
           transition: 'transform 0.3s ease-in-out',
           zIndex: (loginMethod === 'email') ? 30 : isAnimating ? 25 : 1,
           pointerEvents: (isAnimating && slideDirection === 'left') ? 'none' : 'auto'
@@ -892,16 +894,16 @@ export default function WelcomeScreen() {
       )}
 
       {/* 新規登録方法選択 */}
-      {((authMode === 'register' && !registerMethod && !loginMethod) || (isAnimating && slideDirection === 'right' && (registerMethod as string) !== 'email')) && (
+      {((authMode === 'register' && !registerMethod && !loginMethod) || (isAnimating && slideDirection === 'right' && registerMethod === 'email')) && (
         <div style={{
           position: 'absolute',
           top: 0,
           left: 0,
           width: '100%',
           height: '100%',
-          transform: (slideDirection === 'right' && isAnimating && (registerMethod as string) === 'email') ? 'translateX(-100%)' : (slideDirection === 'left' && isAnimating) ? 'translateX(100%)' : (slideDirection === 'right' && isAnimating && authMode !== 'register') ? 'translateX(100%)' : (slideDirection === 'right' && isAnimating && authMode === 'register') ? 'translateX(0)' : (authMode === 'register' && !registerMethod) ? 'translateX(0)' : 'translateX(100%)',
+          transform: (slideDirection === 'right' && isAnimating && registerMethod === 'email') ? 'translateX(-100%)' : (slideDirection === 'left' && isAnimating) ? 'translateX(100%)' : (slideDirection === 'right' && isAnimating && authMode !== 'register') ? 'translateX(100%)' : (slideDirection === 'right' && isAnimating && authMode === 'register') ? 'translateX(0)' : (authMode === 'register' && !registerMethod) ? 'translateX(0)' : 'translateX(100%)',
           transition: 'transform 0.3s ease-in-out',
-          pointerEvents: (isAnimating && slideDirection === 'right' && (registerMethod as string) === 'email') ? 'none' : (isAnimating && slideDirection === 'left') ? 'none' : 'auto',
+          pointerEvents: (isAnimating && slideDirection === 'right' && registerMethod === 'email') ? 'none' : (isAnimating && slideDirection === 'left') ? 'none' : 'auto',
           zIndex: (authMode === 'register' && !registerMethod) ? 10 : isAnimating ? 5 : 1
         }}>
           {/* 新規登録セクション */}
@@ -1088,7 +1090,7 @@ export default function WelcomeScreen() {
           left: 0,
           width: '100%',
           height: '100%',
-          transform: (slideDirection === 'right' && isAnimating) ? 'translateX(0)' : (slideDirection === 'left' && isAnimating && registerMethod !== 'email') ? 'translateX(100%)' : (registerMethod === 'email') ? 'translateX(0)' : 'translateX(100%)',
+          transform: (slideDirection === 'right' && isAnimating) ? 'translateX(0)' : (slideDirection === 'left' && isAnimating) ? 'translateX(100%)' : (registerMethod === 'email' && !isAnimating) ? 'translateX(0)' : 'translateX(100%)',
           transition: 'transform 0.3s ease-in-out',
           zIndex: (registerMethod === 'email') ? 30 : isAnimating ? 25 : 1,
           pointerEvents: (isAnimating && slideDirection === 'left') ? 'none' : 'auto'
