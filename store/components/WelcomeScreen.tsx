@@ -63,33 +63,38 @@ export default function WelcomeScreen() {
     console.log('[WelcomeScreen] State changed - authMode:', authMode, 'registerMethod:', registerMethod, 'loginMethod:', loginMethod)
   }, [authMode, registerMethod, loginMethod])
 
-  // アニメーション完了後に状態をリセット
-  useEffect(() => {
-    if (isAnimating) {
-      const timer = setTimeout(() => {
-        setIsAnimating(false)
-        setSlideDirection(null)
-      }, 300) // アニメーション時間に合わせる
-      return () => clearTimeout(timer)
-    }
-  }, [isAnimating])
+  // アニメーション状態の管理はhandleNavigateToRegister/Login内で行う
 
   const handleNavigateToRegister = () => {
+    if (isAnimating) return // アニメーション中は無効化
     setIsAnimating(true)
     setSlideDirection('right')
+    // 状態をクリア
+    setLoginMethod(null)
+    setRegisterMethod(null)
+    setError('')
+    // アニメーション完了後に状態を変更
     setTimeout(() => {
       setAuthMode('register')
-    }, 10)
+      setIsAnimating(false)
+      setSlideDirection(null)
+    }, 300) // アニメーション時間に合わせる
   }
 
   const handleNavigateToLogin = () => {
+    if (isAnimating) return // アニメーション中は無効化
     setIsAnimating(true)
     setSlideDirection('left')
+    // 状態をクリア
+    setLoginMethod(null)
+    setRegisterMethod(null)
+    setError('')
+    // アニメーション完了後に状態を変更
     setTimeout(() => {
       setAuthMode('initial')
-      setLoginMethod(null)
-      setRegisterMethod(null)
-    }, 10)
+      setIsAnimating(false)
+      setSlideDirection(null)
+    }, 300) // アニメーション時間に合わせる
   }
 
   const handleLineLogin = () => {
@@ -349,14 +354,17 @@ export default function WelcomeScreen() {
       </div>
 
       {/* 初期画面：ログイン or 新規登録を選択 */}
-      {authMode === 'initial' && (
+      {(authMode === 'initial' || (isAnimating && slideDirection === 'left')) && !loginMethod && !registerMethod && (
         <div style={{
-          position: 'relative',
+          position: 'absolute',
+          top: 0,
+          left: 0,
           width: '100%',
           height: '100%',
-          transform: slideDirection === 'right' && isAnimating ? 'translateX(-100%)' : slideDirection === 'left' && isAnimating ? 'translateX(100%)' : 'translateX(0)',
+          transform: slideDirection === 'right' && isAnimating ? 'translateX(-100%)' : slideDirection === 'left' && isAnimating && authMode !== 'initial' ? 'translateX(-100%)' : slideDirection === 'left' && isAnimating && authMode === 'initial' ? 'translateX(0)' : authMode === 'initial' ? 'translateX(0)' : 'translateX(-100%)',
           transition: 'transform 0.3s ease-in-out',
-          opacity: isAnimating && slideDirection === 'right' ? 0 : 1
+          pointerEvents: isAnimating && slideDirection === 'right' ? 'none' : 'auto',
+          zIndex: authMode === 'initial' ? 10 : isAnimating ? 5 : 1
         }}>
           {/* ログインセクション */}
           <div style={{
@@ -562,8 +570,14 @@ export default function WelcomeScreen() {
       )}
 
       {/* ログイン方法選択 */}
-      {authMode === 'login' && !loginMethod && (
-        <>
+      {authMode === 'login' && !loginMethod && !registerMethod && (
+        <div style={{
+          position: 'relative',
+          width: '100%',
+          height: '100%',
+          zIndex: 20,
+          pointerEvents: isAnimating ? 'none' : 'auto'
+        }}>
           {/* ログインセクション */}
           <div style={{
             position: 'absolute',
@@ -743,7 +757,7 @@ export default function WelcomeScreen() {
           {/* 新規登録ボタン */}
           <button
             type="button"
-            onClick={() => setAuthMode('initial')}
+            onClick={handleNavigateToLogin}
             style={{
               display: 'flex',
               flexDirection: 'row',
@@ -772,12 +786,18 @@ export default function WelcomeScreen() {
           >
             新規登録
           </button>
-        </>
+        </div>
       )}
 
       {/* メールアドレスでログイン */}
-      {authMode === 'login' && loginMethod === 'email' && (
-        <form onSubmit={handleEmailLogin}>
+      {authMode === 'login' && loginMethod === 'email' && !registerMethod && (
+        <form onSubmit={handleEmailLogin} style={{
+          position: 'relative',
+          width: '100%',
+          height: '100%',
+          zIndex: 30,
+          pointerEvents: isAnimating ? 'none' : 'auto'
+        }}>
           {/* ログインセクション */}
           <div style={{
             position: 'absolute',
@@ -1003,14 +1023,17 @@ export default function WelcomeScreen() {
       )}
 
       {/* 新規登録方法選択 */}
-      {authMode === 'register' && !registerMethod && (
+      {(authMode === 'register' || (isAnimating && slideDirection === 'right')) && !registerMethod && !loginMethod && (
         <div style={{
-          position: 'relative',
+          position: 'absolute',
+          top: 0,
+          left: 0,
           width: '100%',
           height: '100%',
-          transform: slideDirection === 'left' && isAnimating ? 'translateX(-100%)' : slideDirection === 'right' && isAnimating ? 'translateX(100%)' : 'translateX(0)',
+          transform: slideDirection === 'left' && isAnimating ? 'translateX(-100%)' : slideDirection === 'right' && isAnimating && authMode !== 'register' ? 'translateX(100%)' : slideDirection === 'right' && isAnimating && authMode === 'register' ? 'translateX(0)' : authMode === 'register' ? 'translateX(0)' : 'translateX(100%)',
           transition: 'transform 0.3s ease-in-out',
-          opacity: isAnimating && slideDirection === 'left' ? 0 : 1
+          pointerEvents: isAnimating && slideDirection === 'left' ? 'none' : 'auto',
+          zIndex: authMode === 'register' ? 10 : isAnimating ? 5 : 1
         }}>
           {/* 新規登録セクション */}
           <div style={{
@@ -1229,8 +1252,14 @@ export default function WelcomeScreen() {
       )}
 
       {/* メールアドレスで新規登録 */}
-      {authMode === 'register' && registerMethod === 'email' && (
-        <>
+      {authMode === 'register' && registerMethod === 'email' && !loginMethod && (
+        <div style={{
+          position: 'relative',
+          width: '100%',
+          height: '100%',
+          zIndex: 30,
+          pointerEvents: isAnimating ? 'none' : 'auto'
+        }}>
           {/* タイトル */}
           <div style={{
             position: 'absolute',
@@ -1498,7 +1527,7 @@ export default function WelcomeScreen() {
           >
             別の方法で新規登録
           </button>
-        </>
+        </div>
       )}
     </div>
   )
