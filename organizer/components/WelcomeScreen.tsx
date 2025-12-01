@@ -43,16 +43,7 @@ export default function WelcomeScreen() {
     console.log('[WelcomeScreen] State changed - authMode:', authMode, 'registerMethod:', registerMethod, 'loginMethod:', loginMethod)
   }, [authMode, registerMethod, loginMethod])
 
-  // アニメーション完了後に状態をリセット
-  useEffect(() => {
-    if (isAnimating) {
-      const timer = setTimeout(() => {
-        setIsAnimating(false)
-        setSlideDirection(null)
-      }, 300) // アニメーション時間に合わせる
-      return () => clearTimeout(timer)
-    }
-  }, [isAnimating])
+  // アニメーション状態の管理はhandleNavigateToRegister/Login内で行う
 
   const handleNavigateToRegister = () => {
     if (isAnimating) return // アニメーション中は無効化
