@@ -60,6 +60,17 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
   const [hasViewedTerms, setHasViewedTerms] = useState(false)
   const [currentStep] = useState<1 | 2 | 3>(1) // 主催者は常にステップ1
   const [draftLoaded, setDraftLoaded] = useState(false)
+  const [isDesktop, setIsDesktop] = useState(false)
+
+  // 画面サイズを検出
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsDesktop(window.innerWidth >= 1024)
+    }
+    checkScreenSize()
+    window.addEventListener('resize', checkScreenSize)
+    return () => window.removeEventListener('resize', checkScreenSize)
+  }, [])
 
   const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const lastPayloadRef = useRef<string>('')
@@ -602,12 +613,12 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
       <div style={{ 
         position: 'relative',
         width: '100%',
-        maxWidth: '393px',
+        maxWidth: isDesktop ? '600px' : '393px',
         minHeight: '852px',
         margin: '0 auto',
         background: '#FFFFFF'
       }}>
-        <div className="container mx-auto" style={{ padding: '9px 16px', maxWidth: '393px' }}>
+        <div className="container mx-auto" style={{ padding: isDesktop ? '20px 32px' : '9px 16px', maxWidth: isDesktop ? '600px' : '393px' }}>
           <h2 style={{ 
             fontFamily: '"Noto Sans JP", sans-serif',
             fontSize: '20px',
@@ -678,7 +689,7 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
       margin: '0 auto',
       background: '#FFFFFF'
     }}>
-      <div className="container mx-auto" style={{ padding: '9px 16px', maxWidth: '393px' }}>
+      <div className="container mx-auto" style={{ padding: isDesktop ? '20px 32px' : '9px 16px', maxWidth: isDesktop ? '600px' : '393px' }}>
         <ProgressIndicator />
         
         <h2 style={{ 

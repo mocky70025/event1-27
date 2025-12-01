@@ -54,6 +54,17 @@ export default function EventList({ userProfile, onBack }: EventListProps) {
   const [formPrefecture, setFormPrefecture] = useState('')
   const [formCity, setFormCity] = useState('')
   const [hasSearched, setHasSearched] = useState(false)
+  const [isDesktop, setIsDesktop] = useState(false)
+
+  // 画面サイズを検出
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsDesktop(window.innerWidth >= 1024)
+    }
+    checkScreenSize()
+    window.addEventListener('resize', checkScreenSize)
+    return () => window.removeEventListener('resize', checkScreenSize)
+  }, [])
 
   const prefectures = [
     '北海道', '青森県', '岩手県', '宮城県', '秋田県', '山形県', '福島県',
@@ -600,7 +611,7 @@ export default function EventList({ userProfile, onBack }: EventListProps) {
       <div style={{ 
         position: 'relative',
         width: '100%',
-        maxWidth: '393px',
+        maxWidth: isDesktop ? '800px' : '393px',
         minHeight: '852px',
         margin: '0 auto',
         background: '#FFFFFF',
@@ -634,12 +645,12 @@ export default function EventList({ userProfile, onBack }: EventListProps) {
       <div style={{ 
         position: 'relative',
         width: '100%',
-        maxWidth: '393px',
+        maxWidth: isDesktop ? '800px' : '393px',
         minHeight: '852px',
         margin: '0 auto',
         background: '#FFFFFF'
       }}>
-        <div className="container mx-auto" style={{ padding: '9px 16px', maxWidth: '393px' }}>
+        <div className="container mx-auto" style={{ padding: isDesktop ? '20px 32px' : '9px 16px', maxWidth: isDesktop ? '800px' : '393px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', paddingTop: '24px' }}>
             <button
               onClick={() => setSelectedEvent(null)}
@@ -919,12 +930,12 @@ export default function EventList({ userProfile, onBack }: EventListProps) {
       <div style={{ 
         position: 'relative',
         width: '100%',
-        maxWidth: '393px',
+        maxWidth: isDesktop ? '800px' : '393px',
         minHeight: '852px',
         margin: '0 auto',
         background: '#FFFFFF'
       }}>
-        <div className="container mx-auto" style={{ padding: '9px 16px', maxWidth: '393px' }}>
+        <div className="container mx-auto" style={{ padding: isDesktop ? '20px 32px' : '9px 16px', maxWidth: isDesktop ? '800px' : '393px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', paddingTop: '24px' }}>
             <button
               type="button"
@@ -1043,12 +1054,12 @@ export default function EventList({ userProfile, onBack }: EventListProps) {
       <div style={{ 
         position: 'relative',
         width: '100%',
-        maxWidth: '393px',
+        maxWidth: isDesktop ? '800px' : '393px',
         minHeight: '852px',
         margin: '0 auto',
         background: '#FFFFFF'
       }}>
-        <div className="container mx-auto" style={{ padding: '9px 16px', maxWidth: '393px' }}>
+        <div className="container mx-auto" style={{ padding: isDesktop ? '20px 32px' : '9px 16px', maxWidth: isDesktop ? '800px' : '393px' }}>
         <div style={searchEntryWrapperStyle}>
           <button
             type="button"

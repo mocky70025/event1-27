@@ -88,6 +88,17 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
   const [showTermsPage, setShowTermsPage] = useState(false)
   const [hasViewedTerms, setHasViewedTerms] = useState(false)
   const [draftLoaded, setDraftLoaded] = useState(false)
+  const [isDesktop, setIsDesktop] = useState(false)
+
+  // 画面サイズを検出
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsDesktop(window.innerWidth >= 1024)
+    }
+    checkScreenSize()
+    window.addEventListener('resize', checkScreenSize)
+    return () => window.removeEventListener('resize', checkScreenSize)
+  }, [])
 
   const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const lastPayloadRef = useRef<string>('')
@@ -639,12 +650,17 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
     <div style={{ 
       position: 'relative',
       width: '100%',
-      maxWidth: '393px',
-      minHeight: '852px',
+      maxWidth: isDesktop ? '600px' : '393px',
+      minHeight: isDesktop ? '800px' : '852px',
       margin: '0 auto',
-      background: '#FFFFFF'
+      background: '#FFFFFF',
+      ...(isDesktop && {
+        padding: '40px 0',
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+        borderRadius: '12px'
+      })
     }}>
-      <div className="container mx-auto" style={{ padding: '9px 16px', maxWidth: '393px' }}>
+      <div className="container mx-auto" style={{ padding: isDesktop ? '20px 32px' : '9px 16px', maxWidth: isDesktop ? '600px' : '393px' }}>
         <ProgressIndicator />
         
         <h2 style={{ 
@@ -1077,12 +1093,17 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
     <div style={{ 
       position: 'relative',
       width: '100%',
-      maxWidth: '393px',
-      minHeight: '852px',
+      maxWidth: isDesktop ? '600px' : '393px',
+      minHeight: isDesktop ? '800px' : '852px',
       margin: '0 auto',
-      background: '#FFFFFF'
+      background: '#FFFFFF',
+      ...(isDesktop && {
+        padding: '40px 0',
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+        borderRadius: '12px'
+      })
     }}>
-      <div className="container mx-auto" style={{ padding: '9px 16px', maxWidth: '393px' }}>
+      <div className="container mx-auto" style={{ padding: isDesktop ? '20px 32px' : '9px 16px', maxWidth: isDesktop ? '600px' : '393px' }}>
         <ProgressIndicator />
         
         <h2 style={{ 
@@ -1371,12 +1392,17 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
     <div style={{ 
       position: 'relative',
       width: '100%',
-      maxWidth: '393px',
-      minHeight: '852px',
+      maxWidth: isDesktop ? '600px' : '393px',
+      minHeight: isDesktop ? '800px' : '852px',
       margin: '0 auto',
-      background: '#FFFFFF'
+      background: '#FFFFFF',
+      ...(isDesktop && {
+        padding: '40px 0',
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+        borderRadius: '12px'
+      })
     }}>
-      <div className="container mx-auto" style={{ padding: '9px 16px', maxWidth: '393px' }}>
+      <div className="container mx-auto" style={{ padding: isDesktop ? '20px 32px' : '9px 16px', maxWidth: isDesktop ? '600px' : '393px' }}>
         <ProgressIndicator />
         
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '48px 0' }}>
@@ -1441,12 +1467,12 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
       <div style={{ 
         position: 'relative',
         width: '100%',
-        maxWidth: '393px',
+        maxWidth: isDesktop ? '600px' : '393px',
         minHeight: '852px',
         margin: '0 auto',
         background: '#FFFFFF'
       }}>
-        <div className="container mx-auto" style={{ padding: '9px 16px', maxWidth: '393px' }}>
+        <div className="container mx-auto" style={{ padding: isDesktop ? '20px 32px' : '9px 16px', maxWidth: isDesktop ? '600px' : '393px' }}>
           <h2 style={{ 
             fontFamily: '"Noto Sans JP", sans-serif',
             fontSize: '20px',

@@ -25,6 +25,17 @@ interface ApplicationManagementProps {
 export default function ApplicationManagement({ userProfile, onBack }: ApplicationManagementProps) {
   const [applications, setApplications] = useState<Application[]>([])
   const [loading, setLoading] = useState(true)
+  const [isDesktop, setIsDesktop] = useState(false)
+
+  // 画面サイズを検出
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsDesktop(window.innerWidth >= 1024)
+    }
+    checkScreenSize()
+    window.addEventListener('resize', checkScreenSize)
+    return () => window.removeEventListener('resize', checkScreenSize)
+  }, [])
 
   useEffect(() => {
     fetchApplications()
@@ -135,7 +146,7 @@ export default function ApplicationManagement({ userProfile, onBack }: Applicati
       <div style={{ 
         position: 'relative',
         width: '100%',
-        maxWidth: '393px',
+        maxWidth: isDesktop ? '800px' : '393px',
         minHeight: '852px',
         margin: '0 auto',
         background: '#FFFFFF',
@@ -173,7 +184,7 @@ export default function ApplicationManagement({ userProfile, onBack }: Applicati
       margin: '0 auto',
       background: '#FFFFFF'
     }}>
-      <div className="container mx-auto" style={{ padding: '9px 16px', maxWidth: '393px' }}>
+      <div className="container mx-auto" style={{ padding: isDesktop ? '20px 32px' : '9px 16px', maxWidth: isDesktop ? '800px' : '393px' }}>
         <div style={{ marginBottom: '24px', paddingTop: '24px' }}>
           <h1 style={{
             fontFamily: '"Noto Sans JP", sans-serif',

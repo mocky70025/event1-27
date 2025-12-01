@@ -27,6 +27,17 @@ export default function OrganizerProfile({ userProfile }: OrganizerProfileProps)
   const [organizerData, setOrganizerData] = useState<OrganizerData | null>(null)
   const [loading, setLoading] = useState(true)
   const [isEditing, setIsEditing] = useState(false)
+  const [isDesktop, setIsDesktop] = useState(false)
+
+  // 画面サイズを検出
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsDesktop(window.innerWidth >= 1024)
+    }
+    checkScreenSize()
+    window.addEventListener('resize', checkScreenSize)
+    return () => window.removeEventListener('resize', checkScreenSize)
+  }, [])
 
   useEffect(() => {
     if (userProfile?.userId) {
@@ -95,7 +106,7 @@ export default function OrganizerProfile({ userProfile }: OrganizerProfileProps)
       <div style={{ 
         position: 'relative',
         width: '100%',
-        maxWidth: '393px',
+        maxWidth: isDesktop ? '600px' : '393px',
         minHeight: '852px',
         margin: '0 auto',
         background: '#FFFFFF',
@@ -144,7 +155,7 @@ export default function OrganizerProfile({ userProfile }: OrganizerProfileProps)
       margin: '0 auto',
       background: '#FFFFFF'
     }}>
-      <div className="container mx-auto" style={{ padding: '9px 16px', maxWidth: '393px' }}>
+      <div className="container mx-auto" style={{ padding: isDesktop ? '20px 32px' : '9px 16px', maxWidth: isDesktop ? '600px' : '393px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', paddingTop: '24px' }}>
           <div style={{ width: '60px' }}></div>
           <h1 style={{

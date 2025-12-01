@@ -35,6 +35,17 @@ export default function WelcomeScreen() {
   const [registerPasswordConfirm, setRegisterPasswordConfirm] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [isDesktop, setIsDesktop] = useState(false)
+
+  // 画面サイズを検出
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsDesktop(window.innerWidth >= 1024)
+    }
+    checkScreenSize()
+    window.addEventListener('resize', checkScreenSize)
+    return () => window.removeEventListener('resize', checkScreenSize)
+  }, [])
   const [slideDirection, setSlideDirection] = useState<'left' | 'right' | null>(null)
   const [isAnimating, setIsAnimating] = useState(false)
   
@@ -215,15 +226,22 @@ export default function WelcomeScreen() {
     }
   }
 
+  const containerStyle: React.CSSProperties = {
+    position: 'relative',
+    width: '100%',
+    maxWidth: isDesktop ? '500px' : '393px',
+    minHeight: isDesktop ? '800px' : '852px',
+    margin: '0 auto',
+    background: '#FFFFFF',
+    ...(isDesktop && {
+      padding: '40px 0',
+      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+      borderRadius: '12px'
+    })
+  }
+
   return (
-    <div style={{ 
-      position: 'relative',
-      width: '100%',
-      maxWidth: '393px',
-      minHeight: '852px',
-      margin: '0 auto',
-      background: '#FFFFFF'
-    }}>
+    <div style={containerStyle}>
       {/* タイトル */}
       <div style={{
         position: 'absolute',

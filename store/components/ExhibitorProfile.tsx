@@ -33,6 +33,17 @@ export default function ExhibitorProfile({ userProfile, onBack }: ExhibitorProfi
   const [exhibitorData, setExhibitorData] = useState<ExhibitorData | null>(null)
   const [loading, setLoading] = useState(true)
   const [isEditing, setIsEditing] = useState(false)
+  const [isDesktop, setIsDesktop] = useState(false)
+
+  // 画面サイズを検出
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsDesktop(window.innerWidth >= 1024)
+    }
+    checkScreenSize()
+    window.addEventListener('resize', checkScreenSize)
+    return () => window.removeEventListener('resize', checkScreenSize)
+  }, [])
 
   useEffect(() => {
     fetchExhibitorData()
@@ -115,13 +126,18 @@ export default function ExhibitorProfile({ userProfile, onBack }: ExhibitorProfi
       <div style={{ 
         position: 'relative',
         width: '100%',
-        maxWidth: '393px',
-        minHeight: '852px',
+        maxWidth: isDesktop ? '600px' : '393px',
+        minHeight: isDesktop ? '800px' : '852px',
         margin: '0 auto',
         background: '#FFFFFF',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        ...(isDesktop && {
+          padding: '40px 0',
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+          borderRadius: '12px'
+        })
       }}>
         <div style={{ textAlign: 'center' }}>
           <div style={{
@@ -159,12 +175,17 @@ export default function ExhibitorProfile({ userProfile, onBack }: ExhibitorProfi
     <div style={{ 
       position: 'relative',
       width: '100%',
-      maxWidth: '393px',
-      minHeight: '852px',
+      maxWidth: isDesktop ? '600px' : '393px',
+      minHeight: isDesktop ? '800px' : '852px',
       margin: '0 auto',
-      background: '#FFFFFF'
+      background: '#FFFFFF',
+      ...(isDesktop && {
+        padding: '40px 0',
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+        borderRadius: '12px'
+      })
     }}>
-      <div className="container mx-auto" style={{ padding: '9px 16px', maxWidth: '393px' }}>
+      <div className="container mx-auto" style={{ padding: isDesktop ? '20px 32px' : '9px 16px', maxWidth: isDesktop ? '600px' : '393px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', paddingTop: '24px' }}>
           <div style={{ width: '60px' }}></div>
           <h1 style={{

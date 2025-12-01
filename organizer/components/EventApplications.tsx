@@ -46,6 +46,17 @@ export default function EventApplications({ eventId, eventName, organizerId, org
   const [isApplicationClosed, setIsApplicationClosed] = useState(false)
   const [closingApplication, setClosingApplication] = useState(false)
   const [selectedExhibitor, setSelectedExhibitor] = useState<ExhibitorDetail | null>(null)
+  const [isDesktop, setIsDesktop] = useState(false)
+
+  // 画面サイズを検出
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsDesktop(window.innerWidth >= 1024)
+    }
+    checkScreenSize()
+    window.addEventListener('resize', checkScreenSize)
+    return () => window.removeEventListener('resize', checkScreenSize)
+  }, [])
   const [loadingExhibitorDetail, setLoadingExhibitorDetail] = useState(false)
 
   useEffect(() => {
@@ -315,7 +326,7 @@ export default function EventApplications({ eventId, eventName, organizerId, org
       <div style={{ 
         position: 'relative',
         width: '100%',
-        maxWidth: '393px',
+        maxWidth: isDesktop ? '1000px' : '393px',
         minHeight: '852px',
         margin: '0 auto',
         background: '#FFFFFF',
@@ -349,12 +360,12 @@ export default function EventApplications({ eventId, eventName, organizerId, org
       <div style={{ 
         position: 'relative',
         width: '100%',
-        maxWidth: '393px',
+        maxWidth: isDesktop ? '1000px' : '393px',
         minHeight: '852px',
         margin: '0 auto',
         background: '#FFFFFF'
       }}>
-        <div className="container mx-auto" style={{ padding: '9px 16px', maxWidth: '393px' }}>
+        <div className="container mx-auto" style={{ padding: isDesktop ? '20px 32px' : '9px 16px', maxWidth: isDesktop ? '1000px' : '393px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', paddingTop: '24px' }}>
             <button
               onClick={() => setSelectedExhibitor(null)}
@@ -668,7 +679,7 @@ export default function EventApplications({ eventId, eventName, organizerId, org
       margin: '0 auto',
       background: '#FFFFFF'
     }}>
-      <div className="container mx-auto" style={{ padding: '9px 16px', maxWidth: '393px' }}>
+      <div className="container mx-auto" style={{ padding: isDesktop ? '20px 32px' : '9px 16px', maxWidth: isDesktop ? '1000px' : '393px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', paddingTop: '24px' }}>
           <button
             onClick={onBack}

@@ -15,6 +15,17 @@ interface EventManagementProps {
 }
 
 export default function EventManagement({ userProfile }: EventManagementProps) {
+  const [isDesktop, setIsDesktop] = useState(false)
+
+  // 画面サイズを検出
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsDesktop(window.innerWidth >= 1024)
+    }
+    checkScreenSize()
+    window.addEventListener('resize', checkScreenSize)
+    return () => window.removeEventListener('resize', checkScreenSize)
+  }, [])
   const [organizer, setOrganizer] = useState<Organizer | null>(null)
   const [events, setEvents] = useState<Event[]>([])
   const [showEventForm, setShowEventForm] = useState(false)
@@ -155,7 +166,7 @@ export default function EventManagement({ userProfile }: EventManagementProps) {
       <div style={{ 
         position: 'relative',
         width: '100%',
-        maxWidth: '393px',
+        maxWidth: isDesktop ? '1000px' : '393px',
         minHeight: '852px',
         margin: '0 auto',
         background: '#FFFFFF',
@@ -189,7 +200,7 @@ export default function EventManagement({ userProfile }: EventManagementProps) {
       <div style={{ 
         position: 'relative',
         width: '100%',
-        maxWidth: '393px',
+        maxWidth: isDesktop ? '1000px' : '393px',
         minHeight: '852px',
         margin: '0 auto',
         background: '#FFFFFF',
@@ -214,12 +225,12 @@ export default function EventManagement({ userProfile }: EventManagementProps) {
       <div style={{ 
         position: 'relative',
         width: '100%',
-        maxWidth: '393px',
+        maxWidth: isDesktop ? '1000px' : '393px',
         minHeight: '852px',
         margin: '0 auto',
         background: '#FFFFFF'
       }}>
-        <div className="container mx-auto" style={{ padding: '9px 16px', maxWidth: '393px' }}>
+        <div className="container mx-auto" style={{ padding: isDesktop ? '20px 32px' : '9px 16px', maxWidth: isDesktop ? '1000px' : '393px' }}>
           <div style={{
             background: '#FFF9E6',
             border: '1px solid #F5D76E',
@@ -286,7 +297,7 @@ export default function EventManagement({ userProfile }: EventManagementProps) {
           <div style={{ 
             position: 'relative',
             width: '100%',
-            maxWidth: '393px',
+            maxWidth: isDesktop ? '1000px' : '393px',
             minHeight: '852px',
             margin: '0 auto',
             background: '#FFFFFF'
@@ -385,7 +396,7 @@ export default function EventManagement({ userProfile }: EventManagementProps) {
     <div style={{ 
       position: 'relative',
       width: '100%',
-      maxWidth: '393px',
+            maxWidth: isDesktop ? '1000px' : '393px',
       minHeight: '852px',
       margin: '0 auto',
       background: '#FFFFFF',
