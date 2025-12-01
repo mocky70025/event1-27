@@ -71,7 +71,7 @@ export default function WelcomeScreen() {
     setError('')
     // アニメーション完了後に状態を変更
     setTimeout(() => {
-      setAuthMode('initial')
+      setAuthMode('login')
       setIsAnimating(false)
       setSlideDirection(null)
     }, 300) // アニメーション時間に合わせる
