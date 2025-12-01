@@ -746,68 +746,57 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
               )}
             </div>
 
-            {/* 性別 */}
-            <div style={{ width: '100%', maxWidth: '330px', height: '73px', position: 'relative' }} data-error-field="gender">
-              <label style={labelStyle}>性別</label>
-              <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '8px' }}>
-                {(['男性', '女性', 'その他'] as const).map((option) => {
-                  const value = option === '男性' ? '男' : option === '女性' ? '女' : 'それ以外'
-                  return (
-                    <label key={option} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '8px' }}>
-                      <input
-                        type="radio"
-                        name="gender"
-                        value={value}
-                        checked={formData.gender === value}
-                        onChange={(e) => {
-                          setFormData({ ...formData, gender: e.target.value as any })
-                          if (errors.gender) setErrors({ ...errors, gender: false })
-                        }}
-                        style={{
-                          width: '20px',
-                          height: '20px',
-                          border: '1px solid #E5E5E5',
-                          accentColor: formData.gender === value ? '#06C755' : undefined
-                        }}
-                      />
-                      <span style={{
-                        fontFamily: '"Noto Sans JP", sans-serif',
-                        fontSize: '16px',
-                        lineHeight: '150%',
-                        color: '#000000'
-                      }}>{option}</span>
-                    </label>
-                  )
-                })}
-              </div>
-              {errors.gender && (
-                <p style={{ fontSize: '12px', color: '#FF3B30', marginTop: '4px' }}>入力してください</p>
-              )}
-            </div>
-
-            {/* 年齢 */}
-            <div style={{ width: '100%', maxWidth: '330px', height: '73px', position: 'relative' }} data-error-field="age">
-              <label style={labelStyle}>年齢</label>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '10px' }}>
-                <div style={{ ...formFieldStyle(errors.age), width: '100%' }}>
-                  <input
-                    type="number"
-                    min="0"
-                    max="100"
-                    value={formData.age || ''}
-                    onChange={(e) => {
-                      const ageValue = parseInt(e.target.value) || 0
-                      setFormData({ ...formData, age: ageValue })
-                      if (errors.age) setErrors({ ...errors, age: false })
-                    }}
-                    placeholder="25"
-                    style={inputStyle(formData.age > 0)}
-                  />
+            {/* 性別と年齢（同じ行） */}
+            <div style={{ width: '100%', maxWidth: '330px', display: 'flex', flexDirection: 'row', gap: '16px' }}>
+              {/* 性別 */}
+              <div style={{ flex: 1, height: '73px', position: 'relative' }} data-error-field="gender">
+                <label style={labelStyle}>性別</label>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '10px' }}>
+                  <div style={{ ...formFieldStyle(errors.gender), width: '100%' }}>
+                    <select
+                      value={formData.gender || ''}
+                      onChange={(e) => {
+                        setFormData({ ...formData, gender: e.target.value as any })
+                        if (errors.gender) setErrors({ ...errors, gender: false })
+                      }}
+                      style={inputStyle(!!formData.gender)}
+                    >
+                      <option value="">選択してください</option>
+                      <option value="男">男性</option>
+                      <option value="女">女性</option>
+                      <option value="それ以外">その他</option>
+                    </select>
+                  </div>
                 </div>
+                {errors.gender && (
+                  <p style={{ fontSize: '12px', color: '#FF3B30', marginTop: '4px' }}>入力してください</p>
+                )}
               </div>
-              {errors.age && (
-                <p style={{ fontSize: '12px', color: '#FF3B30', marginTop: '4px' }}>入力してください</p>
-              )}
+
+              {/* 年齢 */}
+              <div style={{ flex: 1, height: '73px', position: 'relative' }} data-error-field="age">
+                <label style={labelStyle}>年齢</label>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '10px' }}>
+                  <div style={{ ...formFieldStyle(errors.age), width: '100%' }}>
+                    <input
+                      type="number"
+                      min="0"
+                      max="100"
+                      value={formData.age || ''}
+                      onChange={(e) => {
+                        const ageValue = parseInt(e.target.value) || 0
+                        setFormData({ ...formData, age: ageValue })
+                        if (errors.age) setErrors({ ...errors, age: false })
+                      }}
+                      placeholder="25"
+                      style={inputStyle(formData.age > 0)}
+                    />
+                  </div>
+                </div>
+                {errors.age && (
+                  <p style={{ fontSize: '12px', color: '#FF3B30', marginTop: '4px' }}>入力してください</p>
+                )}
+              </div>
             </div>
 
             {/* 電話番号 */}
