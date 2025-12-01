@@ -77,6 +77,43 @@ export default function WelcomeScreen() {
     }, 300) // アニメーション時間に合わせる
   }
 
+  const handleNavigateToEmailLogin = () => {
+    if (isAnimating) return // アニメーション中は無効化
+    setIsAnimating(true)
+    setSlideDirection('right') // メールアドレス入力画面が右から来る
+    // アニメーション完了後に状態を変更
+    setTimeout(() => {
+      setLoginMethod('email')
+      setIsAnimating(false)
+      setSlideDirection(null)
+    }, 300) // アニメーション時間に合わせる
+  }
+
+  const handleNavigateToEmailRegister = () => {
+    if (isAnimating) return // アニメーション中は無効化
+    setIsAnimating(true)
+    setSlideDirection('right') // メールアドレス入力画面が右から来る
+    // アニメーション完了後に状態を変更
+    setTimeout(() => {
+      setRegisterMethod('email')
+      setIsAnimating(false)
+      setSlideDirection(null)
+    }, 300) // アニメーション時間に合わせる
+  }
+
+  const handleBackFromEmail = () => {
+    if (isAnimating) return // アニメーション中は無効化
+    setIsAnimating(true)
+    setSlideDirection('left') // 既存の画面が左に戻る
+    // アニメーション完了後に状態を変更
+    setTimeout(() => {
+      setLoginMethod(null)
+      setRegisterMethod(null)
+      setIsAnimating(false)
+      setSlideDirection(null)
+    }, 300) // アニメーション時間に合わせる
+  }
+
   const handleGoogleLogin = async () => {
     try {
       console.log('[WelcomeScreen] Google Login button clicked')
@@ -332,7 +369,7 @@ export default function WelcomeScreen() {
               console.log('[WelcomeScreen] Email LOGIN button clicked (initial screen)')
               console.log('[WelcomeScreen] Current state - authMode:', authMode, 'loginMethod:', loginMethod)
               setAuthMode('login')
-              setLoginMethod('email')
+              handleNavigateToEmailLogin()
             }}
             disabled={loading}
             style={{
@@ -432,8 +469,18 @@ export default function WelcomeScreen() {
       )}
 
       {/* ログイン方法選択 */}
-      {authMode === 'login' && !loginMethod && (
-        <>
+      {((authMode === 'login' && !loginMethod) || (isAnimating && slideDirection === 'right' && (loginMethod as string) !== 'email')) && (
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          transform: (slideDirection === 'right' && isAnimating && (loginMethod as string) === 'email') ? 'translateX(-100%)' : (authMode === 'login' && !loginMethod) ? 'translateX(0)' : 'translateX(-100%)',
+          transition: 'transform 0.3s ease-in-out',
+          zIndex: (authMode === 'login' && !loginMethod) ? 20 : isAnimating ? 5 : 1,
+          pointerEvents: (isAnimating && slideDirection === 'right') ? 'none' : 'auto'
+        }}>
           {/* ログインセクション */}
           <div style={{
             position: 'absolute',
@@ -506,7 +553,7 @@ export default function WelcomeScreen() {
           {/* メールアドレスログインボタン */}
           <button
             type="button"
-            onClick={() => setLoginMethod('email')}
+            onClick={handleNavigateToEmailLogin}
             disabled={loading}
             style={{
               display: 'flex',
@@ -607,12 +654,22 @@ export default function WelcomeScreen() {
           >
             新規登録
           </button>
-        </>
+        </div>
       )}
 
       {/* メールアドレスでログイン */}
-      {authMode === 'login' && loginMethod === 'email' && (
-        <form onSubmit={handleEmailLogin}>
+      {((authMode === 'login' && loginMethod === 'email') || (isAnimating && slideDirection === 'right' && loginMethod === 'email')) && (
+        <form onSubmit={handleEmailLogin} style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          transform: (slideDirection === 'right' && isAnimating) ? 'translateX(0)' : (slideDirection === 'left' && isAnimating && loginMethod !== 'email') ? 'translateX(100%)' : (loginMethod === 'email') ? 'translateX(0)' : 'translateX(100%)',
+          transition: 'transform 0.3s ease-in-out',
+          zIndex: (loginMethod === 'email') ? 30 : isAnimating ? 25 : 1,
+          pointerEvents: (isAnimating && slideDirection === 'left') ? 'none' : 'auto'
+        }}>
           {/* ログインセクション */}
           <div style={{
             position: 'absolute',
@@ -780,10 +837,7 @@ export default function WelcomeScreen() {
             type="button"
             onClick={() => {
               setAuthMode('login')
-              setLoginMethod(null)
-              setError('')
-              setEmail('')
-              setPassword('')
+              handleBackFromEmail()
             }}
             style={{
               boxSizing: 'border-box',
@@ -838,17 +892,17 @@ export default function WelcomeScreen() {
       )}
 
       {/* 新規登録方法選択 */}
-      {(authMode === 'register' || (isAnimating && slideDirection === 'right')) && !registerMethod && !loginMethod && (
+      {((authMode === 'register' && !registerMethod && !loginMethod) || (isAnimating && slideDirection === 'right' && (registerMethod as string) !== 'email')) && (
         <div style={{
           position: 'absolute',
           top: 0,
           left: 0,
           width: '100%',
           height: '100%',
-          transform: slideDirection === 'left' && isAnimating ? 'translateX(100%)' : slideDirection === 'right' && isAnimating && authMode !== 'register' ? 'translateX(100%)' : slideDirection === 'right' && isAnimating && authMode === 'register' ? 'translateX(0)' : authMode === 'register' ? 'translateX(0)' : 'translateX(100%)',
+          transform: (slideDirection === 'right' && isAnimating && (registerMethod as string) === 'email') ? 'translateX(-100%)' : (slideDirection === 'left' && isAnimating) ? 'translateX(100%)' : (slideDirection === 'right' && isAnimating && authMode !== 'register') ? 'translateX(100%)' : (slideDirection === 'right' && isAnimating && authMode === 'register') ? 'translateX(0)' : (authMode === 'register' && !registerMethod) ? 'translateX(0)' : 'translateX(100%)',
           transition: 'transform 0.3s ease-in-out',
-          pointerEvents: isAnimating && slideDirection === 'left' ? 'none' : 'auto',
-          zIndex: authMode === 'register' ? 10 : isAnimating ? 5 : 1
+          pointerEvents: (isAnimating && slideDirection === 'right' && (registerMethod as string) === 'email') ? 'none' : (isAnimating && slideDirection === 'left') ? 'none' : 'auto',
+          zIndex: (authMode === 'register' && !registerMethod) ? 10 : isAnimating ? 5 : 1
         }}>
           {/* 新規登録セクション */}
           <div style={{
@@ -922,12 +976,7 @@ export default function WelcomeScreen() {
           {/* メールアドレス新規登録ボタン */}
           <button
             type="button"
-            onClick={() => {
-              console.log('[WelcomeScreen] Email REGISTRATION button clicked (register method selection)')
-              console.log('[WelcomeScreen] Current state - authMode:', authMode, 'registerMethod:', registerMethod)
-              setRegisterMethod('email')
-              console.log('[WelcomeScreen] After setRegisterMethod - registerMethod should be email')
-            }}
+            onClick={handleNavigateToEmailRegister}
             disabled={loading}
             style={{
               display: 'flex',
@@ -1032,8 +1081,18 @@ export default function WelcomeScreen() {
       )}
 
       {/* メールアドレスで新規登録 */}
-      {authMode === 'register' && registerMethod === 'email' && (
-        <>
+      {((authMode === 'register' && registerMethod === 'email') || (isAnimating && slideDirection === 'right' && registerMethod === 'email')) && (
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          transform: (slideDirection === 'right' && isAnimating) ? 'translateX(0)' : (slideDirection === 'left' && isAnimating && registerMethod !== 'email') ? 'translateX(100%)' : (registerMethod === 'email') ? 'translateX(0)' : 'translateX(100%)',
+          transition: 'transform 0.3s ease-in-out',
+          zIndex: (registerMethod === 'email') ? 30 : isAnimating ? 25 : 1,
+          pointerEvents: (isAnimating && slideDirection === 'left') ? 'none' : 'auto'
+        }}>
           {/* タイトル */}
           <div style={{
             position: 'absolute',
@@ -1272,6 +1331,7 @@ export default function WelcomeScreen() {
               setRegisterEmail('')
               setRegisterPassword('')
               setRegisterPasswordConfirm('')
+              handleBackFromEmail()
             }}
             style={{
               boxSizing: 'border-box',
@@ -1301,7 +1361,7 @@ export default function WelcomeScreen() {
           >
             別の方法で新規登録
           </button>
-        </>
+        </div>
       )}
     </div>
   )
