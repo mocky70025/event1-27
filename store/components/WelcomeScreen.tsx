@@ -839,17 +839,14 @@ export default function WelcomeScreen() {
       )}
 
       {/* メールアドレスでログイン */}
-      {((authMode === 'login' && loginMethod === 'email' && !registerMethod) || (isAnimating && slideDirection === 'right' && loginMethod === 'email')) && (
+      {authMode === 'login' && loginMethod === 'email' && !registerMethod && (
         <form onSubmit={handleEmailLogin} style={{
           position: 'absolute',
           top: 0,
           left: 0,
           width: '100%',
           height: '100%',
-          transform: (loginMethod === 'email' && !isAnimating) ? 'translateX(0)' : (slideDirection === 'right' && isAnimating && loginMethod === 'email') ? 'translateX(0)' : (slideDirection === 'left' && isAnimating) ? 'translateX(100%)' : 'translateX(100%)',
-          transition: 'transform 0.3s ease-in-out',
-          zIndex: (loginMethod === 'email') ? 30 : isAnimating ? 25 : 1,
-          pointerEvents: (isAnimating && slideDirection === 'left') ? 'none' : 'auto'
+          zIndex: 30
         }}>
           {/* ログインセクション */}
           <div style={{
@@ -1297,17 +1294,14 @@ export default function WelcomeScreen() {
       )}
 
       {/* メールアドレスで新規登録 */}
-      {((authMode === 'register' && registerMethod === 'email' && !loginMethod) || (isAnimating && slideDirection === 'right' && registerMethod === 'email')) && (
+      {authMode === 'register' && registerMethod === 'email' && !loginMethod && (
         <div style={{
           position: 'absolute',
           top: 0,
           left: 0,
           width: '100%',
           height: '100%',
-          transform: (registerMethod === 'email' && !isAnimating) ? 'translateX(0)' : (slideDirection === 'right' && isAnimating && registerMethod === 'email') ? 'translateX(0)' : (slideDirection === 'left' && isAnimating) ? 'translateX(100%)' : 'translateX(100%)',
-          transition: 'transform 0.3s ease-in-out',
-          zIndex: (registerMethod === 'email') ? 30 : isAnimating ? 25 : 1,
-          pointerEvents: (isAnimating && slideDirection === 'left') ? 'none' : 'auto'
+          zIndex: 30
         }}>
           {/* タイトル */}
           <div style={{
