@@ -1,12 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 /**
- * 申し込み締め切りとGoogle Sheetsへのエクスポートを一括で実行するAPI
+ * 申し込み締め切りを実行するAPI
  * 
  * 処理の流れ:
  * 1. 申し込みを締め切る（close-application APIを呼び出す）
- * 2. Google Sheetsにエクスポート（export-to-sheets APIを呼び出す）
- * 3. 主催者にメール送信（send-sheets-email APIを呼び出す）
+ * 2. エクセル形式でダウンロード可能にする（export-to-excel APIを呼び出す）
  */
 export async function POST(request: NextRequest) {
   try {
@@ -41,58 +40,12 @@ export async function POST(request: NextRequest) {
     const closeData = await closeResponse.json()
     const applications = closeData.applications
 
-    // 2. Google Sheetsにエクスポート
-    const exportResponse = await fetch(`${baseUrl}/api/events/export-to-sheets`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        eventId,
-        eventName,
-        applications
-      })
-    })
-
-    if (!exportResponse.ok) {
-      const errorData = await exportResponse.json()
-      return NextResponse.json(
-        { error: 'Failed to export to Google Sheets', details: errorData },
-        { status: exportResponse.status }
-      )
-    }
-
-    const exportData = await exportResponse.json()
-    const spreadsheetUrl = exportData.spreadsheetUrl
-
-    // 3. 主催者にメール送信
-    const emailResponse = await fetch(`${baseUrl}/api/events/send-sheets-email`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        organizerEmail,
-        eventName,
-        spreadsheetUrl
-      })
-    })
-
-    if (!emailResponse.ok) {
-      const errorData = await emailResponse.json()
-      // メール送信が失敗しても、締め切りとエクスポートは成功しているので警告として記録
-      console.warn('Failed to send email:', errorData)
-    }
-
     return NextResponse.json({
       success: true,
       eventId,
       closedAt: closeData.closedAt,
-      spreadsheetUrl,
-      sheetId: exportData.sheetId,
-      sheetTitle: exportData.sheetTitle,
       applicationCount: applications.length,
-      emailSent: emailResponse.ok
+      applications // エクセルエクスポート用にアプリケーション情報を返す
     })
   } catch (error: any) {
     console.error('Error in close-and-export:', error)

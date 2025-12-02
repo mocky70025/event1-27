@@ -27,8 +27,18 @@ interface Application {
   exhibitor: {
     id: string
     name: string
+    gender?: string
+    age?: number
     email: string
     phone_number: string
+    genre_category?: string
+    genre_free_text?: string
+    business_license_image_url?: string
+    vehicle_inspection_image_url?: string
+    automobile_inspection_image_url?: string
+    pl_insurance_image_url?: string
+    fire_equipment_layout_image_url?: string
+    created_at?: string
   }
 }
 
@@ -91,8 +101,18 @@ export default function EventApplications({ eventId, eventName, organizerId, org
           exhibitor:exhibitors(
             id,
             name,
+            gender,
+            age,
             email,
-            phone_number
+            phone_number,
+            genre_category,
+            genre_free_text,
+            business_license_image_url,
+            vehicle_inspection_image_url,
+            automobile_inspection_image_url,
+            pl_insurance_image_url,
+            fire_equipment_layout_image_url,
+            created_at
           )
         `)
         .eq('event_id', eventId)
@@ -267,7 +287,7 @@ export default function EventApplications({ eventId, eventName, organizerId, org
   }
 
   const handleCloseApplication = async () => {
-    if (!confirm('申し込みを締め切りますか？\n\n締め切ると、出店者情報がGoogleスプレッドシートにエクスポートされ、メールが送信されます。')) {
+    if (!confirm('申し込みを締め切りますか？\n\n締め切ると、出店者情報をエクセル形式でダウンロードできるようになります。')) {
       return
     }
 
@@ -293,15 +313,54 @@ export default function EventApplications({ eventId, eventName, organizerId, org
 
       const data = await response.json()
       
-      alert(`申し込みを締め切りました。\n\n出店者数: ${data.applicationCount}名\nスプレッドシートURL: ${data.spreadsheetUrl}`)
-      
       setIsApplicationClosed(true)
       await fetchApplications()
+      
+      // エクセル形式でダウンロード
+      await handleDownloadExcel(data.applications)
+      
+      alert(`申し込みを締め切りました。\n\n出店者数: ${data.applicationCount}名\nエクセルファイルをダウンロードしました。`)
     } catch (error: any) {
       console.error('Failed to close application:', error)
       alert(`申し込みの締め切りに失敗しました: ${error.message}`)
     } finally {
       setClosingApplication(false)
+    }
+  }
+
+  const handleDownloadExcel = async (applications: any[]) => {
+    try {
+      const response = await fetch('/api/events/export-to-excel', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          eventId,
+          eventName,
+          applications
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to export to Excel')
+      }
+
+      // レスポンスからBlobを取得
+      const blob = await response.blob()
+      
+      // ダウンロードリンクを作成
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `${eventName}_${new Date().toISOString().split('T')[0]}.xlsx`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      window.URL.revokeObjectURL(url)
+    } catch (error: any) {
+      console.error('Failed to download Excel:', error)
+      alert('エクセルファイルのダウンロードに失敗しました')
     }
   }
 
@@ -741,27 +800,73 @@ export default function EventApplications({ eventId, eventName, organizerId, org
           )}
         </div>
 
-        {!isApplicationClosed && applications.length > 0 && (
+        {applications.length > 0 && (
           <div style={{ marginBottom: '16px' }}>
-            <button
-              onClick={handleCloseApplication}
-              disabled={closingApplication}
-              style={{
-                width: '100%',
-                padding: '12px 16px',
-                background: closingApplication ? '#CCCCCC' : '#FF3B30',
-                color: '#FFFFFF',
-                borderRadius: '8px',
-                border: 'none',
-                fontFamily: '"Noto Sans JP", sans-serif',
-                fontSize: '16px',
-                fontWeight: 700,
-                lineHeight: '19px',
-                cursor: closingApplication ? 'not-allowed' : 'pointer'
-              }}
-            >
-              {closingApplication ? '処理中...' : '申し込みを締め切る'}
-            </button>
+            {!isApplicationClosed ? (
+              <button
+                onClick={handleCloseApplication}
+                disabled={closingApplication}
+                style={{
+                  width: '100%',
+                  padding: '12px 16px',
+                  background: closingApplication ? '#CCCCCC' : '#FF3B30',
+                  color: '#FFFFFF',
+                  borderRadius: '8px',
+                  border: 'none',
+                  fontFamily: '"Noto Sans JP", sans-serif',
+                  fontSize: '16px',
+                  fontWeight: 700,
+                  lineHeight: '19px',
+                  cursor: closingApplication ? 'not-allowed' : 'pointer'
+                }}
+              >
+                {closingApplication ? '処理中...' : '申し込みを締め切る'}
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  const excelData = applications.map((app: Application) => ({
+                    id: app.id,
+                    exhibitor_id: app.exhibitor.id,
+                    event_id: eventId,
+                    application_status: app.application_status,
+                    applied_at: app.applied_at,
+                    exhibitor: {
+                      id: app.exhibitor.id,
+                      name: app.exhibitor.name,
+                      gender: app.exhibitor.gender || '',
+                      age: app.exhibitor.age || 0,
+                      phone_number: app.exhibitor.phone_number,
+                      email: app.exhibitor.email,
+                      genre_category: app.exhibitor.genre_category,
+                      genre_free_text: app.exhibitor.genre_free_text,
+                      business_license_image_url: app.exhibitor.business_license_image_url,
+                      vehicle_inspection_image_url: app.exhibitor.vehicle_inspection_image_url,
+                      automobile_inspection_image_url: app.exhibitor.automobile_inspection_image_url,
+                      pl_insurance_image_url: app.exhibitor.pl_insurance_image_url,
+                      fire_equipment_layout_image_url: app.exhibitor.fire_equipment_layout_image_url,
+                      created_at: app.exhibitor.created_at || new Date().toISOString()
+                    }
+                  }))
+                  handleDownloadExcel(excelData)
+                }}
+                style={{
+                  width: '100%',
+                  padding: '12px 16px',
+                  background: '#06C755',
+                  color: '#FFFFFF',
+                  borderRadius: '8px',
+                  border: 'none',
+                  fontFamily: '"Noto Sans JP", sans-serif',
+                  fontSize: '16px',
+                  fontWeight: 700,
+                  lineHeight: '19px',
+                  cursor: 'pointer'
+                }}
+              >
+                エクセル形式でダウンロード
+              </button>
+            )}
           </div>
         )}
 
