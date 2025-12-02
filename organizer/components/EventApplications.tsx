@@ -118,6 +118,16 @@ export default function EventApplications({ eventId, eventName, organizerId, org
   }
 
   const handleApplicationApproval = async (applicationId: string, status: 'approved' | 'rejected') => {
+    // 確認ダイアログを表示
+    const statusText = status === 'approved' ? '承認' : '却下'
+    const confirmMessage = status === 'approved' 
+      ? 'この申し込みを承認しますか？\n\n承認すると、出店者に通知が送信されます。'
+      : 'この申し込みを却下しますか？\n\n却下すると、出店者に通知が送信されます。'
+    
+    if (!confirm(confirmMessage)) {
+      return
+    }
+
     try {
       // 申し込み情報を取得
       const { data: applicationData } = await supabase

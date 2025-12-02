@@ -14,6 +14,11 @@ export default function EventCard({ event, userProfile }: EventCardProps) {
   const [applying, setApplying] = useState(false)
 
   const handleApply = async () => {
+    // 確認ダイアログを表示
+    if (!confirm(`「${event.event_name}」に申し込みますか？\n\n申し込み後、主催者による承認が必要です。`)) {
+      return
+    }
+
     setApplying(true)
     try {
       // 出店者情報を取得（認証タイプに応じて）
