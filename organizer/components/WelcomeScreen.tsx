@@ -70,13 +70,22 @@ export default function WelcomeScreen() {
       setLoading(true)
       setError('')
 
+      // 現在のURLからリダイレクトURIを生成（主催者アプリのURLを使用）
       const appUrl = (process.env.NEXT_PUBLIC_ORGANIZER_URL || window.location.origin).replace(/\/$/, '')
       const redirectUrl = `${appUrl}/auth/callback`
+      
+      console.log('[WelcomeScreen] Google Login - appUrl:', appUrl)
+      console.log('[WelcomeScreen] Google Login - redirectUrl:', redirectUrl)
+      console.log('[WelcomeScreen] Google Login - current origin:', window.location.origin)
 
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
           redirectTo: redirectUrl,
+          queryParams: {
+            // 主催者アプリであることを示すパラメータを追加
+            app_type: 'organizer',
+          },
         },
       })
 
@@ -228,7 +237,7 @@ export default function WelcomeScreen() {
         fontFamily: '"Noto Sans JP", sans-serif',
         fontStyle: 'normal',
         fontWeight: 700,
-        fontSize: '24px',
+            fontSize: '24px',
         lineHeight: '48px',
         textAlign: 'center',
         color: '#000000'
@@ -581,19 +590,19 @@ export default function WelcomeScreen() {
             zIndex: 2
           }}>
             または
-          </div>
+        </div>
 
           {/* 新規登録ボタン */}
-          <button
+        <button
             type="button"
             onClick={() => setAuthMode('initial')}
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              padding: '16px 24px',
-              gap: '10px',
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: '16px 24px',
+            gap: '10px',
               position: 'absolute',
               width: '287px',
               height: '47px',
@@ -815,11 +824,11 @@ export default function WelcomeScreen() {
               lineHeight: '24px',
               textAlign: 'center',
               color: '#000000',
-              cursor: 'pointer'
-            }}
-          >
+            cursor: 'pointer'
+          }}
+        >
             別の方法でログイン
-          </button>
+        </button>
 
           {/* エラーメッセージ */}
           {error && (
@@ -1097,10 +1106,10 @@ export default function WelcomeScreen() {
             top: '420px',
             background: '#FFFFFF'
           }} />
-          <div style={{
+              <div style={{
             position: 'absolute',
             width: '72px',
-            height: '24px',
+                height: '24px',
             left: '161px',
             top: '416px',
             fontFamily: '"Noto Sans JP", sans-serif',
@@ -1261,7 +1270,7 @@ export default function WelcomeScreen() {
             fontSize: '16px',
             lineHeight: '24px',
             textAlign: 'center',
-            color: '#000000'
+                color: '#000000'
           }}>
             または
           </div>

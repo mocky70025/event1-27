@@ -34,6 +34,25 @@ export default function AuthCallback() {
         // Google認証の場合（URLフラグメントにaccess_tokenがある、またはproviderがgoogle）
         if (provider === 'google' || accessToken) {
           console.log('[Callback] Google authentication detected')
+          console.log('[Callback] Current URL:', window.location.href)
+          console.log('[Callback] Current origin:', window.location.origin)
+          
+          // 主催者アプリのURLか確認
+          const currentOrigin = window.location.origin
+          const organizerUrl = process.env.NEXT_PUBLIC_ORGANIZER_URL || currentOrigin
+          const isOrganizerApp = currentOrigin.includes('organizer') || 
+                                 organizerUrl.includes(currentOrigin) ||
+                                 currentOrigin === organizerUrl.replace(/\/$/, '')
+          
+          console.log('[Callback] Is organizer app:', isOrganizerApp)
+          console.log('[Callback] Organizer URL:', organizerUrl)
+          
+          // もし出店者アプリにリダイレクトされてしまった場合、主催者アプリにリダイレクト
+          if (!isOrganizerApp && organizerUrl && organizerUrl !== currentOrigin) {
+            console.log('[Callback] Redirected to wrong app, redirecting to organizer app')
+            window.location.href = `${organizerUrl}/auth/callback${window.location.search}${window.location.hash}`
+            return
+          }
           
           // Supabaseが自動的にセッションを確立するのを待つ
           // 最大5秒間、セッションが確立されるまで待機
