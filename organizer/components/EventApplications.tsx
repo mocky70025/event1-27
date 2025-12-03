@@ -298,7 +298,7 @@ export default function EventApplications({ eventId, eventName, organizerId, org
   }
 
   const handleCloseApplication = async () => {
-    if (!confirm('申し込みを締め切りますか？\n\n締め切ると、出店者情報をエクセル形式でダウンロードできるようになります。')) {
+    if (!confirm('申し込みを締め切りますか？\n\n締め切ると、出店者情報をCSV形式でダウンロードできるようになります。')) {
       return
     }
 
@@ -327,10 +327,10 @@ export default function EventApplications({ eventId, eventName, organizerId, org
       setIsApplicationClosed(true)
       await fetchApplications()
       
-      // エクセル形式でダウンロード
+      // CSV形式でダウンロード
       await handleDownloadExcel(data.applications)
       
-      alert(`申し込みを締め切りました。\n\n出店者数: ${data.applicationCount}名\nエクセルファイルをダウンロードしました。`)
+      alert(`申し込みを締め切りました。\n\n出店者数: ${data.applicationCount}名\nCSVファイルをダウンロードしました。`)
     } catch (error: any) {
       console.error('Failed to close application:', error)
       alert(`申し込みの締め切りに失敗しました: ${error.message}`)
@@ -354,7 +354,7 @@ export default function EventApplications({ eventId, eventName, organizerId, org
       })
 
       if (!response.ok) {
-        throw new Error('Failed to export to Excel')
+        throw new Error('Failed to export to CSV')
       }
 
       // レスポンスからBlobを取得
@@ -364,14 +364,14 @@ export default function EventApplications({ eventId, eventName, organizerId, org
       const url = window.URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
-      a.download = `${eventName}_${new Date().toISOString().split('T')[0]}.xlsx`
+      a.download = `${eventName}_${new Date().toISOString().split('T')[0]}.csv`
       document.body.appendChild(a)
       a.click()
       document.body.removeChild(a)
       window.URL.revokeObjectURL(url)
     } catch (error: any) {
-      console.error('Failed to download Excel:', error)
-      alert('エクセルファイルのダウンロードに失敗しました')
+      console.error('Failed to download CSV:', error)
+      alert('CSVファイルのダウンロードに失敗しました')
     }
   }
 
@@ -991,7 +991,7 @@ export default function EventApplications({ eventId, eventName, organizerId, org
                   cursor: 'pointer'
                 }}
               >
-                エクセル形式でダウンロード
+                CSV形式でダウンロード
               </button>
             )}
           </div>

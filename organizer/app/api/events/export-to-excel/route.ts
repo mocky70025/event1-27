@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import * as XLSX from 'xlsx'
 
 interface ExhibitorData {
   id: string
@@ -27,6 +26,32 @@ interface ApplicationData {
   exhibitor: ExhibitorData
 }
 
+// CSV形式に変換する関数
+function convertToCSV(data: any[]): string {
+  if (data.length === 0) return ''
+
+  // ヘッダー行を作成
+  const headers = Object.keys(data[0])
+  const headerRow = headers.map(header => `"${header}"`).join(',')
+
+  // データ行を作成
+  const dataRows = data.map(row => {
+    return headers.map(header => {
+      const value = row[header]
+      // 値にカンマ、ダブルクォート、改行が含まれる場合はエスケープ
+      if (value === null || value === undefined) return '""'
+      const stringValue = String(value)
+      // ダブルクォートをエスケープ
+      const escapedValue = stringValue.replace(/"/g, '""')
+      return `"${escapedValue}"`
+    }).join(',')
+  })
+
+  // BOMを追加してExcelで正しく日本語が表示されるようにする
+  const BOM = '\uFEFF'
+  return BOM + [headerRow, ...dataRows].join('\n')
+}
+
 export async function POST(request: NextRequest) {
   try {
     const { eventId, eventName, applications } = await request.json()
@@ -38,8 +63,8 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // エクセル用のデータを準備
-    const excelData = applications.map((app: ApplicationData) => ({
+    // CSV用のデータを準備
+    const csvData = applications.map((app: ApplicationData) => ({
       '申し込みID': app.id,
       '出店者ID': app.exhibitor.id,
       '出店者名': app.exhibitor.name,
@@ -59,54 +84,25 @@ export async function POST(request: NextRequest) {
       '登録日時': new Date(app.exhibitor.created_at).toLocaleString('ja-JP')
     }))
 
-    // ワークブックを作成
-    const workbook = XLSX.utils.book_new()
-    
-    // ワークシートを作成
-    const worksheet = XLSX.utils.json_to_sheet(excelData)
-    
-    // 列幅を設定
-    const columnWidths = [
-      { wch: 15 }, // 申し込みID
-      { wch: 15 }, // 出店者ID
-      { wch: 20 }, // 出店者名
-      { wch: 8 },  // 性別
-      { wch: 6 },  // 年齢
-      { wch: 15 }, // 電話番号
-      { wch: 30 }, // メールアドレス
-      { wch: 15 }, // ジャンルカテゴリ
-      { wch: 30 }, // ジャンル自由回答
-      { wch: 50 }, // 営業許可証画像URL
-      { wch: 50 }, // 車検証画像URL
-      { wch: 50 }, // 自動車検査証画像URL
-      { wch: 50 }, // PL保険画像URL
-      { wch: 50 }, // 火器類配置図画像URL
-      { wch: 12 }, // 申し込みステータス
-      { wch: 20 }, // 申し込み日時
-      { wch: 20 }  // 登録日時
-    ]
-    worksheet['!cols'] = columnWidths
+    // CSV形式に変換
+    const csvContent = convertToCSV(csvData)
 
-    // ワークシートをワークブックに追加
-    const sheetName = `${eventName}_${new Date().toISOString().split('T')[0]}`
-    XLSX.utils.book_append_sheet(workbook, worksheet, sheetName)
-
-    // エクセルファイルをバッファに変換
-    const excelBuffer = XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' })
+    // ファイル名を生成
+    const fileName = `${eventName}_${new Date().toISOString().split('T')[0]}.csv`
 
     // レスポンスヘッダーを設定
     const headers = new Headers()
-    headers.set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    headers.set('Content-Disposition', `attachment; filename="${encodeURIComponent(sheetName)}.xlsx"`)
+    headers.set('Content-Type', 'text/csv; charset=utf-8')
+    headers.set('Content-Disposition', `attachment; filename="${encodeURIComponent(fileName)}"`)
 
-    return new NextResponse(excelBuffer, {
+    return new NextResponse(csvContent, {
       status: 200,
       headers
     })
   } catch (error: any) {
-    console.error('Error exporting to Excel:', error)
+    console.error('Error exporting to CSV:', error)
     return NextResponse.json(
-      { error: 'Failed to export to Excel', details: error.message },
+      { error: 'Failed to export to CSV', details: error.message },
       { status: 500 }
     )
   }
