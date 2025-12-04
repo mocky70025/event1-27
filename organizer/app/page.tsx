@@ -26,6 +26,7 @@ export default function Home() {
         const authType = sessionStorage.getItem('auth_type')
         const storedUserId = sessionStorage.getItem('user_id')
         const storedEmail = sessionStorage.getItem('user_email')
+        const storedIsRegistered = sessionStorage.getItem('is_registered') === 'true'
         
         if (session && session.user) {
           // メールアドレス・パスワード認証またはGoogle認証の場合
@@ -58,15 +59,30 @@ export default function Home() {
             
             if (organizerError) {
               console.error('[Home] Error fetching organizer:', organizerError)
+              // エラーが発生した場合でも、セッションストレージに保存されていれば登録済みとして扱う
+              if (storedIsRegistered) {
+                console.log('[Home] Error fetching organizer, but is_registered in storage is true, setting isRegistered to true')
+                setIsRegistered(true)
+                return
+              }
             }
             
-            setIsRegistered(!!organizer)
+            // データベースから取得できた場合、またはセッションストレージに保存されている場合
+            const shouldBeRegistered = !!organizer || storedIsRegistered
+            setIsRegistered(shouldBeRegistered)
+            
+            if (organizer) {
+              // データベースから取得できた場合、セッションストレージにも保存
+              sessionStorage.setItem('is_registered', 'true')
+            }
+            
             console.log('[Home] Auth user profile set:', { 
               userId: session.user.id, 
               authType: authType,
-              isRegistered: !!organizer,
+              isRegistered: shouldBeRegistered,
               is_approved: organizer?.is_approved,
-              emailConfirmed: isEmailConfirmed || true
+              emailConfirmed: isEmailConfirmed || true,
+              fromStorage: storedIsRegistered && !organizer
             })
           }
         } else if ((authType === 'email' || authType === 'google') && storedUserId) {
@@ -99,15 +115,30 @@ export default function Home() {
           
           if (organizerError) {
             console.error('[Home] Error fetching organizer from storage:', organizerError)
+            // エラーが発生した場合でも、セッションストレージに保存されていれば登録済みとして扱う
+            if (storedIsRegistered) {
+              console.log('[Home] Error fetching organizer from storage, but is_registered in storage is true, setting isRegistered to true')
+              setIsRegistered(true)
+              return
+            }
           }
           
-          setIsRegistered(!!organizer)
+          // データベースから取得できた場合、またはセッションストレージに保存されている場合
+          const shouldBeRegistered = !!organizer || storedIsRegistered
+          setIsRegistered(shouldBeRegistered)
+          
+          if (organizer) {
+            // データベースから取得できた場合、セッションストレージにも保存
+            sessionStorage.setItem('is_registered', 'true')
+          }
+          
           console.log('[Home] Email auth user profile set from storage:', { 
             userId: storedUserId, 
-            isRegistered: !!organizer,
+            isRegistered: shouldBeRegistered,
             is_approved: organizer?.is_approved,
             emailConfirmed: effectiveEmailConfirmed,
-            hasSession: !!storageSession
+            hasSession: !!storageSession,
+            fromStorage: storedIsRegistered && !organizer
           })
         } else {
           // organizerアプリはメール認証のみ
@@ -165,7 +196,39 @@ export default function Home() {
   }
 
   if (!isRegistered) {
-    return <RegistrationForm userProfile={userProfile} onRegistrationComplete={() => setIsRegistered(true)} />
+    return (
+      <RegistrationForm
+        userProfile={userProfile}
+        onRegistrationComplete={async () => {
+          // 登録完了後、データベースから再取得して状態を更新
+          if (userProfile?.userId) {
+            const { data: organizer, error } = await supabase
+              .from('organizers')
+              .select('id, is_approved')
+              .eq('user_id', userProfile.userId)
+              .maybeSingle()
+            
+            if (error) {
+              console.error('[Home] Error fetching organizer after registration:', error)
+            }
+            
+            if (organizer) {
+              console.log('[Home] Organizer found after registration:', organizer)
+              setIsRegistered(true)
+              // セッションストレージにも保存
+              sessionStorage.setItem('is_registered', 'true')
+            } else {
+              console.warn('[Home] Organizer not found after registration, but setting isRegistered to true anyway')
+              setIsRegistered(true)
+              sessionStorage.setItem('is_registered', 'true')
+            }
+          } else {
+            setIsRegistered(true)
+            sessionStorage.setItem('is_registered', 'true')
+          }
+        }}
+      />
+    )
   }
 
   // メール未確認の場合はバナーを表示
