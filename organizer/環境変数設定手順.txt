@@ -55,10 +55,7 @@ RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ============================================
 NEXT_PUBLIC_SUPABASE_URL=https://xxxxx.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-NEXT_PUBLIC_LINE_LOGIN_CHANNEL_ID=1234567890
-LINE_LOGIN_CHANNEL_SECRET=abcdefghijklmnopqrstuvwxyz
 NEXT_PUBLIC_ORGANIZER_URL=http://localhost:3000
-NEXT_PUBLIC_LINE_LOGIN_REDIRECT_URI=http://localhost:3000/auth/callback
 # OPENAI_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 # RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
