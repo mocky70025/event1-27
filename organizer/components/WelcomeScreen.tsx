@@ -210,284 +210,243 @@ export default function WelcomeScreen() {
     }
   }
 
-  const containerStyle: React.CSSProperties = {
-    position: 'relative',
-    width: '100%',
-    maxWidth: isDesktop ? '500px' : '393px',
-    minHeight: isDesktop ? '800px' : '852px',
-    margin: '0 auto',
-    background: '#FFFFFF',
-    ...(isDesktop && {
-      padding: '40px 0',
-      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-      borderRadius: '12px'
-    })
-  }
-
   return (
-    <div style={containerStyle}>
-      {/* タイトル */}
+    <div style={{
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: isDesktop ? '48px 24px' : '24px 16px',
+      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+    }}>
       <div style={{
-        position: 'absolute',
-        width: '343px',
-        height: '96px',
-        left: '25px',
-        top: '32px',
-        fontFamily: '"Noto Sans JP", sans-serif',
-        fontStyle: 'normal',
-        fontWeight: 700,
-            fontSize: '24px',
-        lineHeight: '48px',
-        textAlign: 'center',
-        color: '#000000'
+        width: '100%',
+        maxWidth: isDesktop ? '480px' : '100%',
+        background: 'rgba(255, 255, 255, 0.98)',
+        borderRadius: isDesktop ? '24px' : '20px',
+        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+        padding: isDesktop ? '48px' : '32px 24px',
+        backdropFilter: 'blur(10px)',
+        border: '1px solid rgba(255, 255, 255, 0.2)'
       }}>
-        イベントに呼びたい<br />キッチンカー・屋台を探すなら
-      </div>
-
-      {/* ロゴプレースホルダー */}
-      <div style={{
-        position: 'absolute',
-        width: '256px',
-        height: '256px',
-        left: '69px',
-        top: '144px',
-        background: '#D9D9D9',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}>
+        {/* ヘッダー */}
         <div style={{
-          fontFamily: '"Noto Sans JP", sans-serif',
-          fontStyle: 'normal',
-          fontWeight: 700,
-          fontSize: '32px',
-          lineHeight: '48px',
           textAlign: 'center',
-          color: '#000000'
+          marginBottom: '40px'
         }}>
-          将来のロゴ
-        </div>
-      </div>
-
-      {/* 初期画面：ログイン or 新規登録を選択 */}
-      {authMode === 'initial' && !loginMethod && !registerMethod && (
-        <div style={{
-          position: 'relative',
-          width: '100%',
-          height: '100%'
-        }}>
-          {/* ログインセクション */}
           <div style={{
-            position: 'absolute',
-            width: '256px',
-            height: '0px',
-            left: '69px',
-            top: '427.5px',
-            border: '1px solid #06C755'
-          }} />
-          <div style={{
-            position: 'absolute',
-            width: '72px',
-            height: '16px',
-            left: '161px',
-            top: '420px',
-            background: '#FFFFFF'
-          }} />
-          <div style={{
-            position: 'absolute',
-            width: '72px',
-            height: '24px',
-            left: '161px',
-            top: '416px',
-            fontFamily: '"Noto Sans JP", sans-serif',
-            fontStyle: 'normal',
-            fontWeight: 700,
-            fontSize: '16px',
-            lineHeight: '24px',
-            textAlign: 'center',
-            color: '#000000'
+            width: isDesktop ? '120px' : '100px',
+            height: isDesktop ? '120px' : '100px',
+            margin: '0 auto 24px',
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            borderRadius: '20px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: '0 10px 15px -3px rgba(102, 126, 234, 0.3)'
           }}>
-            ログイン
+            <div style={{
+              fontSize: isDesktop ? '48px' : '40px',
+              fontWeight: 800,
+              color: '#ffffff',
+              letterSpacing: '-0.02em'
+            }}>🎪</div>
           </div>
-
-          {/* Googleログインボタン */}
-          <button
-            onClick={handleGoogleLogin}
-            disabled={loading}
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '14px 24px',
-              position: 'absolute',
-              width: '287px',
-              height: '48px',
-              left: '53.5px',
-              top: '456px',
-              background: '#FFFFFF',
-              borderRadius: '8px',
-              border: '1px solid #e5e7eb',
-              fontFamily: '"Noto Sans JP", sans-serif',
-              fontSize: '16px',
-              fontWeight: 600,
-              lineHeight: '1.5',
-              color: '#111827',
-              cursor: loading ? 'not-allowed' : 'pointer',
-              opacity: loading ? 0.6 : 1,
-              transition: 'all 0.2s ease-in-out',
-              boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
-            }}
-            onMouseEnter={(e) => {
-              if (!loading) {
-                e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
-                e.currentTarget.style.borderColor = '#d1d5db'
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (!loading) {
-                e.currentTarget.style.boxShadow = '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
-                e.currentTarget.style.borderColor = '#e5e7eb'
-              }
-            }}
-          >
-            <div style={{ marginRight: '12px', display: 'flex', alignItems: 'center' }}>
-              <GoogleIcon />
-            </div>
-            <span>Googleでログイン</span>
-          </button>
-
-          {/* メールアドレスログインボタン */}
-          <button
-            onClick={() => {
-              console.log('[WelcomeScreen] Email LOGIN button clicked (initial screen)')
-              console.log('[WelcomeScreen] Current state - authMode:', authMode, 'loginMethod:', loginMethod)
-              setAuthMode('login')
-              setLoginMethod('email')
-            }}
-            disabled={loading}
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '14px 24px',
-              position: 'absolute',
-              width: '287px',
-              height: '48px',
-              left: '53.5px',
-              top: '520.5px',
-              background: '#FFFFFF',
-              borderRadius: '8px',
-              border: '1px solid #e5e7eb',
-              fontFamily: '"Noto Sans JP", sans-serif',
-              fontSize: '16px',
-              fontWeight: 600,
-              lineHeight: '1.5',
-              color: '#111827',
-              cursor: loading ? 'not-allowed' : 'pointer',
-              opacity: loading ? 0.6 : 1,
-              zIndex: 50,
-              pointerEvents: loading ? 'none' : 'auto',
-              transition: 'all 0.2s ease-in-out',
-              boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
-            }}
-            onMouseEnter={(e) => {
-              if (!loading) {
-                e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
-                e.currentTarget.style.borderColor = '#d1d5db'
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (!loading) {
-                e.currentTarget.style.boxShadow = '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
-                e.currentTarget.style.borderColor = '#e5e7eb'
-              }
-            }}
-          >
-            <div style={{ marginRight: '12px', display: 'flex', alignItems: 'center' }}>
-              <MailIcon color="#111827" />
-            </div>
-            <span>メールアドレスでログイン</span>
-          </button>
-
-          {/* またはセパレーター */}
-          <div style={{
-            position: 'absolute',
-            width: '256px',
-            height: '0px',
-            left: '69px',
-            top: '591.5px',
-            border: '1px solid #06C755'
-          }} />
-          <div style={{
-            position: 'absolute',
-            width: '64px',
-            height: '16px',
-            left: '165px',
-            top: '584px',
-            background: '#FFFFFF'
-          }} />
-          <div style={{
-            position: 'absolute',
-            width: '64px',
-            height: '24px',
-            left: '165px',
-            top: '580px',
-            fontFamily: '"Noto Sans JP", sans-serif',
-            fontStyle: 'normal',
-            fontWeight: 700,
-            fontSize: '16px',
-            lineHeight: '24px',
-            textAlign: 'center',
-            color: '#000000'
+          <h1 style={{
+            fontSize: isDesktop ? '28px' : '24px',
+            fontWeight: 800,
+            lineHeight: 1.3,
+            color: '#111827',
+            margin: '0 0 12px',
+            letterSpacing: '-0.02em'
           }}>
-            または
-          </div>
-
-          {/* 新規登録ボタン */}
-          <button
-            onClick={handleNavigateToRegister}
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              padding: '14px 24px',
-              gap: '10px',
-              position: 'absolute',
-              width: '287px',
-              height: '48px',
-              left: '53.5px',
-              top: '620.5px',
-              background: '#2563eb',
-              border: 'none',
-              borderRadius: '8px',
-              fontFamily: '"Noto Sans JP", sans-serif',
-              fontSize: '16px',
-              fontWeight: 600,
-              lineHeight: '1.5',
-              textAlign: 'center',
-              color: '#FFFFFF',
-              cursor: 'pointer',
-              transition: 'all 0.2s ease-in-out',
-              boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = '#1d4ed8'
-              e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
-              e.currentTarget.style.transform = 'translateY(-1px)'
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = '#2563eb'
-              e.currentTarget.style.boxShadow = '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
-              e.currentTarget.style.transform = 'translateY(0)'
-            }}
-          >
-            新規登録
-          </button>
+            イベントに呼びたい<br />キッチンカー・屋台を探すなら
+          </h1>
+          <p style={{
+            fontSize: '15px',
+            color: '#6b7280',
+            margin: 0,
+            lineHeight: 1.6
+          }}>
+            主催者向けプラットフォーム
+          </p>
         </div>
-      )}
+
+        {/* 初期画面：ログイン or 新規登録を選択 */}
+        {authMode === 'initial' && !loginMethod && !registerMethod && (
+          <div>
+            {/* ログインセクション */}
+            <div style={{
+              marginBottom: '32px'
+            }}>
+              <h2 style={{
+                fontSize: '18px',
+                fontWeight: 700,
+                color: '#111827',
+                marginBottom: '20px',
+                textAlign: 'center',
+                position: 'relative',
+                paddingBottom: '12px'
+              }}>
+                <span style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  width: '48px',
+                  height: '3px',
+                  background: 'linear-gradient(90deg, #667eea, #764ba2)',
+                  borderRadius: '2px'
+                }} />
+                ログイン
+              </h2>
+
+              {/* Googleログインボタン */}
+              <button
+                onClick={handleGoogleLogin}
+                disabled={loading}
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '12px',
+                  padding: '16px 24px',
+                  background: '#ffffff',
+                  borderRadius: '12px',
+                  border: '2px solid #e5e7eb',
+                  fontSize: '15px',
+                  fontWeight: 600,
+                  color: '#111827',
+                  cursor: loading ? 'not-allowed' : 'pointer',
+                  opacity: loading ? 0.6 : 1,
+                  transition: 'all 200ms cubic-bezier(0.4, 0, 0.2, 1)',
+                  boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+                  marginBottom: '12px'
+                }}
+                onMouseEnter={(e) => {
+                  if (!loading) {
+                    e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'
+                    e.currentTarget.style.borderColor = '#d1d5db'
+                    e.currentTarget.style.transform = 'translateY(-2px)'
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!loading) {
+                    e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)'
+                    e.currentTarget.style.borderColor = '#e5e7eb'
+                    e.currentTarget.style.transform = 'translateY(0)'
+                  }
+                }}
+              >
+                <GoogleIcon />
+                <span>Googleでログイン</span>
+              </button>
+
+              {/* メールアドレスログインボタン */}
+              <button
+                onClick={() => {
+                  console.log('[WelcomeScreen] Email LOGIN button clicked (initial screen)')
+                  console.log('[WelcomeScreen] Current state - authMode:', authMode, 'loginMethod:', loginMethod)
+                  setAuthMode('login')
+                  setLoginMethod('email')
+                }}
+                disabled={loading}
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '12px',
+                  padding: '16px 24px',
+                  background: '#ffffff',
+                  borderRadius: '12px',
+                  border: '2px solid #e5e7eb',
+                  fontSize: '15px',
+                  fontWeight: 600,
+                  color: '#111827',
+                  cursor: loading ? 'not-allowed' : 'pointer',
+                  opacity: loading ? 0.6 : 1,
+                  transition: 'all 200ms cubic-bezier(0.4, 0, 0.2, 1)',
+                  boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)'
+                }}
+                onMouseEnter={(e) => {
+                  if (!loading) {
+                    e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'
+                    e.currentTarget.style.borderColor = '#d1d5db'
+                    e.currentTarget.style.transform = 'translateY(-2px)'
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!loading) {
+                    e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)'
+                    e.currentTarget.style.borderColor = '#e5e7eb'
+                    e.currentTarget.style.transform = 'translateY(0)'
+                  }
+                }}
+              >
+                <MailIcon color="#111827" />
+                <span>メールアドレスでログイン</span>
+              </button>
+            </div>
+
+            {/* セパレーター */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              margin: '32px 0',
+              gap: '16px'
+            }}>
+              <div style={{
+                flex: 1,
+                height: '1px',
+                background: 'linear-gradient(90deg, transparent, #e5e7eb, transparent)'
+              }} />
+              <span style={{
+                fontSize: '14px',
+                color: '#9ca3af',
+                fontWeight: 500
+              }}>または</span>
+              <div style={{
+                flex: 1,
+                height: '1px',
+                background: 'linear-gradient(90deg, transparent, #e5e7eb, transparent)'
+              }} />
+            </div>
+
+            {/* 新規登録ボタン */}
+            <button
+              onClick={handleNavigateToRegister}
+              style={{
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '16px 24px',
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                border: 'none',
+                borderRadius: '12px',
+                fontSize: '15px',
+                fontWeight: 600,
+                color: '#ffffff',
+                cursor: 'pointer',
+                transition: 'all 200ms cubic-bezier(0.4, 0, 0.2, 1)',
+                boxShadow: '0 4px 6px -1px rgba(102, 126, 234, 0.3), 0 2px 4px -1px rgba(102, 126, 234, 0.2)',
+                letterSpacing: '0.01em'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(102, 126, 234, 0.4), 0 4px 6px -2px rgba(102, 126, 234, 0.3)'
+                e.currentTarget.style.transform = 'translateY(-2px)'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(102, 126, 234, 0.3), 0 2px 4px -1px rgba(102, 126, 234, 0.2)'
+                e.currentTarget.style.transform = 'translateY(0)'
+              }}
+            >
+              新規登録
+            </button>
+          </div>
+        )}
 
       {/* ログイン方法選択 */}
       {authMode === 'login' && !loginMethod && (
