@@ -54,6 +54,7 @@ export default function Home() {
         const authType = sessionStorage.getItem('auth_type')
         const storedUserId = sessionStorage.getItem('user_id')
         const storedEmail = sessionStorage.getItem('user_email')
+        const storedIsRegistered = sessionStorage.getItem('is_registered') === 'true'
         
         // LINE認証のプロフィールがない場合のみ、メール認証またはGoogle認証を確認
         if (!savedProfile) {
@@ -73,17 +74,36 @@ export default function Home() {
               console.log('[Home] Session exists but email not confirmed - may be disabled in Supabase settings')
             }
             
-            const { data: exhibitor } = await supabase
+            const { data: exhibitor, error: exhibitorError } = await supabase
               .from('exhibitors')
               .select('id')
               .eq('user_id', session.user.id)
               .maybeSingle()
             
-            setIsRegistered(!!exhibitor)
+            if (exhibitorError) {
+              console.error('[Home] Error fetching exhibitor:', exhibitorError)
+              // エラーが発生した場合でも、セッションストレージに保存されていれば登録済みとして扱う
+              if (storedIsRegistered) {
+                console.log('[Home] Error fetching exhibitor, but is_registered in storage is true, setting isRegistered to true')
+                setIsRegistered(true)
+                return
+              }
+            }
+            
+            // データベースから取得できた場合、またはセッションストレージに保存されている場合
+            const shouldBeRegistered = !!exhibitor || storedIsRegistered
+            setIsRegistered(shouldBeRegistered)
+            
+            if (exhibitor) {
+              // データベースから取得できた場合、セッションストレージにも保存
+              sessionStorage.setItem('is_registered', 'true')
+            }
+            
             console.log('[Home] Email auth user profile set:', { 
               userId: session.user.id, 
-              isRegistered: !!exhibitor,
-              emailConfirmed: isEmailConfirmed || true
+              isRegistered: shouldBeRegistered,
+              emailConfirmed: isEmailConfirmed || true,
+              fromStorage: storedIsRegistered && !exhibitor
             })
           } else if (authType === 'email' && storedUserId) {
             console.log('[Home] Email auth from storage:', storedUserId)
@@ -105,19 +125,38 @@ export default function Home() {
               emailConfirmed: effectiveEmailConfirmed
             })
             
-            const { data: exhibitor } = await supabase
+            const { data: exhibitor, error: exhibitorError } = await supabase
               .from('exhibitors')
               .select('id')
               .eq('user_id', storedUserId)
               .maybeSingle()
             
-            setIsRegistered(!!exhibitor)
+            if (exhibitorError) {
+              console.error('[Home] Error fetching exhibitor from storage:', exhibitorError)
+              // エラーが発生した場合でも、セッションストレージに保存されていれば登録済みとして扱う
+              if (storedIsRegistered) {
+                console.log('[Home] Error fetching exhibitor from storage, but is_registered in storage is true, setting isRegistered to true')
+                setIsRegistered(true)
+                return
+              }
+            }
+            
+            // データベースから取得できた場合、またはセッションストレージに保存されている場合
+            const shouldBeRegistered = !!exhibitor || storedIsRegistered
+            setIsRegistered(shouldBeRegistered)
+            
+            if (exhibitor) {
+              // データベースから取得できた場合、セッションストレージにも保存
+              sessionStorage.setItem('is_registered', 'true')
+            }
+            
             console.log('[Home] Email auth user profile set from storage:', { 
               userId: storedUserId, 
-              isRegistered: !!exhibitor,
+              isRegistered: shouldBeRegistered,
               emailConfirmed: effectiveEmailConfirmed,
               hasSession: !!storageSession,
-              emailConfirmedFromStorage: emailConfirmedFromStorage
+              emailConfirmedFromStorage: emailConfirmedFromStorage,
+              fromStorage: storedIsRegistered && !exhibitor
             })
           } else {
             console.log('[Home] No auth found')
@@ -240,10 +279,40 @@ export default function Home() {
 
   if (!isRegistered) {
     console.log('[Home] User not registered, showing RegistrationForm')
-    return <RegistrationForm userProfile={userProfile} onRegistrationComplete={() => {
-      console.log('[Home] Registration completed, setting isRegistered to true')
-      setIsRegistered(true)
-    }} />
+    return (
+      <RegistrationForm
+        userProfile={userProfile}
+        onRegistrationComplete={async () => {
+          // 登録完了後、データベースから再取得して状態を更新
+          if (userProfile?.userId) {
+            const { data: exhibitor, error } = await supabase
+              .from('exhibitors')
+              .select('id')
+              .eq('user_id', userProfile.userId)
+              .maybeSingle()
+            
+            if (error) {
+              console.error('[Home] Error fetching exhibitor after registration:', error)
+            }
+            
+            if (exhibitor) {
+              console.log('[Home] Exhibitor found after registration:', exhibitor)
+              setIsRegistered(true)
+              // セッションストレージにも保存
+              sessionStorage.setItem('is_registered', 'true')
+            } else {
+              console.warn('[Home] Exhibitor not found after registration, but setting isRegistered to true anyway')
+              setIsRegistered(true)
+              sessionStorage.setItem('is_registered', 'true')
+            }
+          } else {
+            setIsRegistered(true)
+            sessionStorage.setItem('is_registered', 'true')
+          }
+          console.log('[Home] Registration completed, setting isRegistered to true')
+        }}
+      />
+    )
   }
 
   console.log('[Home] User is registered, showing home screen')
