@@ -337,8 +337,7 @@ export default function EventManagement({ userProfile }: EventManagementProps) {
                     fontFamily: '"Noto Sans JP", sans-serif',
                     fontSize: '14px',
                     fontWeight: 500,
-                    lineHeight: '120%',
-                    cursor: 'pointer'
+                    lineHeight: '120%'
                   }}
                 >
                   新しいイベントを掲載
