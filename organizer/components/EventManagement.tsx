@@ -89,42 +89,70 @@ export default function EventManagement({ userProfile }: EventManagementProps) {
 
   const fetchOrganizerData = async () => {
     try {
-      if (!userProfile?.userId) return
+      if (!userProfile?.userId) {
+        console.log('[EventManagement] No userProfile.userId')
+        setLoading(false)
+        return
+      }
 
       // 主催者情報を取得（認証タイプに応じて）
       const authType = (userProfile as any).authType || 'line'
+      console.log('[EventManagement] Fetching organizer data, authType:', authType, 'userId:', userProfile.userId)
       let organizerData
+      let error: any = null
 
       if (authType === 'email') {
-        const { data } = await supabase
+        const result = await supabase
           .from('organizers')
           .select('*')
           .eq('user_id', userProfile.userId)
-          .single()
-        organizerData = data
+          .maybeSingle()
+        organizerData = result.data
+        error = result.error
       } else {
-        const { data } = await supabase
+        const result = await supabase
           .from('organizers')
           .select('*')
           .eq('line_user_id', userProfile.userId)
-          .single()
-        organizerData = data
+          .maybeSingle()
+        organizerData = result.data
+        error = result.error
+      }
+
+      if (error) {
+        console.error('[EventManagement] Error fetching organizer data:', error)
+        setOrganizer(null)
+        setLoading(false)
+        return
       }
 
       if (organizerData) {
+        console.log('[EventManagement] Organizer data found:', {
+          id: organizerData.id,
+          name: organizerData.name,
+          is_approved: organizerData.is_approved
+        })
         setOrganizer(organizerData)
         
         // 主催者のイベント一覧を取得
-        const { data: eventsData } = await supabase
+        const { data: eventsData, error: eventsError } = await supabase
           .from('events')
           .select('*')
           .eq('organizer_id', organizerData.id)
           .order('created_at', { ascending: false })
 
+        if (eventsError) {
+          console.error('[EventManagement] Error fetching events:', eventsError)
+        }
+
         setEvents(eventsData || [])
+      } else {
+        console.log('[EventManagement] No organizer data found')
+        setOrganizer(null)
       }
     } catch (error) {
-      console.error('Failed to fetch organizer data:', error)
+      console.error('[EventManagement] Failed to fetch organizer data:', error)
+      setOrganizer(null)
     } finally {
       setLoading(false)
     }
