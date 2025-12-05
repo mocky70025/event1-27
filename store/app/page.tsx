@@ -58,19 +58,33 @@ export default function Home() {
         
         // LINE認証のプロフィールがない場合のみ、メール認証またはGoogle認証を確認
         if (!savedProfile) {
-          if (session && session.user && (authType === 'email' || authType === 'google')) {
-            console.log('[Home] Auth session found:', session.user.id, 'authType:', authType)
+          if (session && session.user) {
+            // Supabaseのセッションが存在する場合、優先的に使用
+            console.log('[Home] Auth session found:', session.user.id, 'authType from storage:', authType)
+            
+            // セッションストレージにauth_typeがない場合、セッションから推測する
+            // Google認証の場合はapp_metadataにprovider情報がある
+            const provider = (session.user.app_metadata as any)?.provider || 'email'
+            const detectedAuthType = provider === 'google' ? 'google' : (authType || 'email')
+            
+            // セッションストレージに保存（次回のために）
+            if (!authType) {
+              sessionStorage.setItem('auth_type', detectedAuthType)
+              sessionStorage.setItem('user_id', session.user.id)
+              sessionStorage.setItem('user_email', session.user.email || '')
+            }
+            
             const isEmailConfirmed = !!session.user.email_confirmed_at
             
             setHasActiveSession(true)
             setUserProfile({
               userId: session.user.id,
               email: session.user.email,
-              authType: authType === 'google' ? 'google' : 'email',
+              authType: detectedAuthType === 'google' ? 'google' : 'email',
               emailConfirmed: isEmailConfirmed || true
             })
             
-            if (!isEmailConfirmed && authType === 'email') {
+            if (!isEmailConfirmed && detectedAuthType === 'email') {
               console.log('[Home] Session exists but email not confirmed - may be disabled in Supabase settings')
             }
             
@@ -97,10 +111,14 @@ export default function Home() {
             if (exhibitor) {
               // データベースから取得できた場合、セッションストレージにも保存
               sessionStorage.setItem('is_registered', 'true')
+            } else if (!storedIsRegistered) {
+              // 登録されていない場合、セッションストレージにも保存
+              sessionStorage.setItem('is_registered', 'false')
             }
             
             console.log('[Home] Email auth user profile set:', { 
               userId: session.user.id, 
+              authType: detectedAuthType,
               isRegistered: shouldBeRegistered,
               emailConfirmed: isEmailConfirmed || true,
               fromStorage: storedIsRegistered && !exhibitor

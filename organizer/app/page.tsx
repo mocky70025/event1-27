@@ -29,62 +29,75 @@ export default function Home() {
         const storedIsRegistered = sessionStorage.getItem('is_registered') === 'true'
         
         if (session && session.user) {
-          // メールアドレス・パスワード認証またはGoogle認証の場合
-          console.log('[Home] Auth session found:', session.user.id, 'authType:', authType)
+          // Supabaseのセッションが存在する場合、優先的に使用
+          console.log('[Home] Auth session found:', session.user.id, 'authType from storage:', authType)
           
-          if (authType === 'email' || authType === 'google') {
-            // メール確認済みかチェック
-            const isEmailConfirmed = !!session.user.email_confirmed_at
-            
-            // セッションが存在する場合、メール確認済みとして扱う
-            // （セッションが存在する = メール確認が完了している、またはメール確認が無効）
-            setUserProfile({
-              userId: session.user.id,
-              displayName: session.user.email || '',
-              email: session.user.email,
-              authType: authType === 'google' ? 'google' : 'email',
-              emailConfirmed: isEmailConfirmed || true // セッションがあれば確認済みとして扱う
-            })
-            
-            if (!isEmailConfirmed && authType === 'email') {
-              console.log('[Home] Session exists but email not confirmed - may be disabled in Supabase settings')
-            }
-            
-            // 登録済みかチェック
-            const { data: organizer, error: organizerError } = await supabase
-              .from('organizers')
-              .select('id, is_approved')
-              .eq('user_id', session.user.id)
-              .maybeSingle()
-            
-            if (organizerError) {
-              console.error('[Home] Error fetching organizer:', organizerError)
-              // エラーが発生した場合でも、セッションストレージに保存されていれば登録済みとして扱う
-              if (storedIsRegistered) {
-                console.log('[Home] Error fetching organizer, but is_registered in storage is true, setting isRegistered to true')
-                setIsRegistered(true)
-                return
-              }
-            }
-            
-            // データベースから取得できた場合、またはセッションストレージに保存されている場合
-            const shouldBeRegistered = !!organizer || storedIsRegistered
-            setIsRegistered(shouldBeRegistered)
-            
-            if (organizer) {
-              // データベースから取得できた場合、セッションストレージにも保存
-              sessionStorage.setItem('is_registered', 'true')
-            }
-            
-            console.log('[Home] Auth user profile set:', { 
-              userId: session.user.id, 
-              authType: authType,
-              isRegistered: shouldBeRegistered,
-              is_approved: organizer?.is_approved,
-              emailConfirmed: isEmailConfirmed || true,
-              fromStorage: storedIsRegistered && !organizer
-            })
+          // セッションストレージにauth_typeがない場合、セッションから推測する
+          // Google認証の場合はapp_metadataにprovider情報がある
+          const provider = (session.user.app_metadata as any)?.provider || 'email'
+          const detectedAuthType = provider === 'google' ? 'google' : (authType || 'email')
+          
+          // セッションストレージに保存（次回のために）
+          if (!authType) {
+            sessionStorage.setItem('auth_type', detectedAuthType)
+            sessionStorage.setItem('user_id', session.user.id)
+            sessionStorage.setItem('user_email', session.user.email || '')
           }
+          
+          // メール確認済みかチェック
+          const isEmailConfirmed = !!session.user.email_confirmed_at
+          
+          // セッションが存在する場合、メール確認済みとして扱う
+          // （セッションが存在する = メール確認が完了している、またはメール確認が無効）
+          setUserProfile({
+            userId: session.user.id,
+            displayName: session.user.email || '',
+            email: session.user.email,
+            authType: detectedAuthType === 'google' ? 'google' : 'email',
+            emailConfirmed: isEmailConfirmed || true // セッションがあれば確認済みとして扱う
+          })
+          
+          if (!isEmailConfirmed && detectedAuthType === 'email') {
+            console.log('[Home] Session exists but email not confirmed - may be disabled in Supabase settings')
+          }
+          
+          // 登録済みかチェック
+          const { data: organizer, error: organizerError } = await supabase
+            .from('organizers')
+            .select('id, is_approved')
+            .eq('user_id', session.user.id)
+            .maybeSingle()
+          
+          if (organizerError) {
+            console.error('[Home] Error fetching organizer:', organizerError)
+            // エラーが発生した場合でも、セッションストレージに保存されていれば登録済みとして扱う
+            if (storedIsRegistered) {
+              console.log('[Home] Error fetching organizer, but is_registered in storage is true, setting isRegistered to true')
+              setIsRegistered(true)
+              return
+            }
+          }
+          
+          // データベースから取得できた場合、またはセッションストレージに保存されている場合
+          const shouldBeRegistered = !!organizer || storedIsRegistered
+          setIsRegistered(shouldBeRegistered)
+          
+          if (organizer) {
+            // データベースから取得できた場合、セッションストレージにも保存
+            sessionStorage.setItem('is_registered', 'true')
+          } else if (!storedIsRegistered) {
+            // 登録されていない場合、セッションストレージにも保存
+            sessionStorage.setItem('is_registered', 'false')
+          }
+          
+          console.log('[Home] Auth user profile set:', { 
+            userId: session.user.id, 
+            authType: detectedAuthType,
+            isRegistered: shouldBeRegistered,
+            is_approved: organizer?.is_approved,
+            emailConfirmed: isEmailConfirmed || true,
+            fromStorage: storedIsRegistered && !organizer
+          })
         } else if ((authType === 'email' || authType === 'google') && storedUserId) {
           // セッションが存在しないが、セッションストレージにuser_idがある場合
           // メール確認待ちの状態で登録フォームにアクセスできるようにする
