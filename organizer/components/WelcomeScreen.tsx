@@ -515,32 +515,6 @@ export default function WelcomeScreen() {
                 <span>メールアドレスでログイン</span>
               </button>
             </div>
-
-            {/* セパレーター */}
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              margin: '32px 0',
-              gap: '16px'
-            }}>
-              <div style={{
-                flex: 1,
-                height: '1px',
-                background: 'linear-gradient(90deg, transparent, #e5e7eb, transparent)'
-              }} />
-              <span style={{
-                fontSize: '14px',
-                color: '#9ca3af',
-                fontWeight: 500
-              }}>または</span>
-              <div style={{
-                flex: 1,
-                height: '1px',
-                background: 'linear-gradient(90deg, transparent, #e5e7eb, transparent)'
-              }} />
-            </div>
-
-            </div>
             )}
 
             {/* 新規登録セクション */}
