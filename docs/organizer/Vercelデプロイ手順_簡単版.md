@@ -30,18 +30,33 @@
 「Environment Variables」セクションで以下を設定：
 
 ```env
-# Supabase設定
+# Supabase設定（必須）
 NEXT_PUBLIC_SUPABASE_URL=https://wosgrdgnkdaxmykclazc.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indvc2dyZGdua2RheG15a2NsYXpjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMzMjU4OTksImV4cCI6MjA3ODkwMTg5OX0.tAB-e53Xf8Lif8yzpJCoXsmnKM_oTAiVEMbETo4ivSg
-
-# Google認証用（必要に応じて）
-NEXT_PUBLIC_GOOGLE_CLIENT_ID=（Google OAuth Client ID）
+SUPABASE_SERVICE_ROLE_KEY=（Supabase Service Role Key - APIルート用）
 
 # アプリURL（初回デプロイ後に更新）
 NEXT_PUBLIC_APP_URL=https://tomorrow-organizer-web.vercel.app
 
+# Google認証用（使用する場合）
+NEXT_PUBLIC_GOOGLE_CLIENT_ID=（Google OAuth Client ID）
+
+# LINE認証用（使用する場合）
+NEXT_PUBLIC_LINE_LOGIN_CHANNEL_ID=（LINE Login Channel ID）
+LINE_LOGIN_CHANNEL_SECRET=（LINE Login Channel Secret）
+NEXT_PUBLIC_LINE_LOGIN_REDIRECT_URI=https://tomorrow-organizer-web.vercel.app/auth/callback
+
 # メール送信用（Resendを使用する場合）
 RESEND_API_KEY=（Resend API Key）
+RESEND_FROM_EMAIL=noreply@tomorrow-event-platform.com
+
+# Googleスプレッドシート機能用（使用する場合）
+GOOGLE_SERVICE_ACCOUNT_EMAIL=（Google Service Account Email）
+GOOGLE_PRIVATE_KEY=（Google Private Key）
+GOOGLE_SPREADSHEET_ID=（Google Spreadsheet ID）
+
+# OpenAI API（営業許可証検証機能用、使用する場合）
+OPENAI_API_KEY=（OpenAI API Key）
 ```
 
 **重要**: 
