@@ -1,0 +1,7 @@
+{
+  "buildCommand": "cd organizer && npm install && npm run build",
+  "outputDirectory": "organizer/.next",
+  "framework": "nextjs",
+  "installCommand": "cd organizer && npm install"
+}
+
