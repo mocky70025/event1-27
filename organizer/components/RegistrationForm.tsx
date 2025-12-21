@@ -505,8 +505,8 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
             height: '16px',
             left: '0px',
             top: '0px',
-            backgroundColor: currentStep >= 1 ? '#06C755' : 'transparent',
-            border: currentStep >= 1 ? 'none' : '1px solid #06C755',
+            backgroundColor: currentStep >= 1 ? '#FF8A5C' : 'transparent',
+            border: currentStep >= 1 ? 'none' : '1px solid #FF8A5C',
           }}
         >
           {currentStep > 1 && (
@@ -524,7 +524,7 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
             height: '4px',
             left: '15.75px',
             top: '6px',
-            backgroundColor: currentStep >= 2 ? '#06C755' : '#D9D9D9',
+            backgroundColor: currentStep >= 2 ? '#FF8A5C' : '#D9D9D9',
           }}
         />
         
@@ -536,8 +536,8 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
             height: '16px',
             left: '117px',
             top: '0px',
-            backgroundColor: currentStep >= 2 ? '#06C755' : 'transparent',
-            border: currentStep >= 2 ? 'none' : '1px solid #06C755',
+            backgroundColor: currentStep >= 2 ? '#FF8A5C' : 'transparent',
+            border: currentStep >= 2 ? 'none' : '1px solid #FF8A5C',
           }}
         >
           {currentStep > 2 && (
@@ -555,7 +555,7 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
             height: '4px',
             left: '133px',
             top: '6px',
-            backgroundColor: currentStep >= 3 ? '#06C755' : '#D9D9D9',
+            backgroundColor: currentStep >= 3 ? '#FF8A5C' : '#D9D9D9',
           }}
         />
         
@@ -567,8 +567,8 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
             height: '16px',
             left: '234.5px',
             top: '0px',
-            backgroundColor: currentStep >= 3 ? '#06C755' : 'transparent',
-            border: currentStep >= 3 ? 'none' : '1px solid #06C755',
+            backgroundColor: currentStep >= 3 ? '#FF8A5C' : 'transparent',
+            border: currentStep >= 3 ? 'none' : '1px solid #FF8A5C',
           }}
         >
           {currentStep >= 3 && (
@@ -672,7 +672,7 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
               gap: '10px',
               width: '100%',
               height: '48px',
-              background: '#06C755',
+              background: '#FF8A5C',
               borderRadius: '8px',
               border: 'none',
               fontFamily: '"Noto Sans JP", sans-serif',
@@ -1036,7 +1036,7 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
             <div style={{
               width: '24px',
               height: '24px',
-              background: termsAccepted ? '#06C755' : '#FFFFFF',
+              background: termsAccepted ? '#FF8A5C' : '#FFFFFF',
               border: termsAccepted ? 'none' : '1px solid #E5E5E5',
               borderRadius: '8px',
               position: 'relative',
@@ -1095,7 +1095,7 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
                 fontFamily: '"Noto Sans JP", sans-serif',
                 fontSize: '16px',
                 lineHeight: '150%',
-                color: '#06C755',
+                color: '#FF8A5C',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
@@ -1106,7 +1106,7 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
               <svg style={{
                 width: '14px',
                 height: '14px',
-                color: '#06C755'
+                color: '#FF8A5C'
               }} fill="none" stroke="currentColor" viewBox="0 0 20 20">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
               </svg>

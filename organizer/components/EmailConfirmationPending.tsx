@@ -180,7 +180,7 @@ export default function EmailConfirmationPending({ email, onEmailConfirmed }: Em
           style={{
             width: '100%',
             padding: '12px 24px',
-            background: resending ? '#CCCCCC' : '#06C755',
+            background: resending ? '#CCCCCC' : '#FF8A5C',
             color: '#FFFFFF',
             borderRadius: '8px',
             border: 'none',
@@ -200,7 +200,7 @@ export default function EmailConfirmationPending({ email, onEmailConfirmed }: Em
             fontFamily: 'Inter, sans-serif',
             fontSize: '14px',
             lineHeight: '150%',
-            color: '#06C755',
+            color: '#FF8A5C',
             margin: 0
           }}>
             確認メールを再送信しました

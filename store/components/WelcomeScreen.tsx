@@ -1267,7 +1267,7 @@ export default function WelcomeScreen() {
               }}
             >
               別の方法で新規登録
-            </button>
+        </button>
           </form>
         )}
       </div>

@@ -652,12 +652,12 @@ export default function EventList({ userProfile, onBack }: EventListProps) {
         padding: isDesktop ? '40px 20px' : 0
       }}>
         <div style={{
-          position: 'relative',
-          width: '100%',
+        position: 'relative',
+        width: '100%',
           maxWidth: '393px',
           minHeight: isDesktop ? 'auto' : '852px',
           background: '#fff5f0'
-        }}>
+      }}>
         {/* ヘッダー */}
         <div style={{
           background: '#F7F7F7',
@@ -666,22 +666,22 @@ export default function EventList({ userProfile, onBack }: EventListProps) {
           alignItems: 'center',
           gap: '12px'
         }}>
-          <button
-            onClick={() => setSelectedEvent(null)}
-            style={{
-              background: 'transparent',
-              border: 'none',
+            <button
+              onClick={() => setSelectedEvent(null)}
+              style={{
+                background: 'transparent',
+                border: 'none',
               color: '#666666',
               fontSize: '20px',
-              cursor: 'pointer',
+                cursor: 'pointer',
               padding: '4px',
-              display: 'flex',
-              alignItems: 'center',
+                display: 'flex',
+                alignItems: 'center',
               justifyContent: 'center'
-            }}
-          >
+              }}
+            >
             ←
-          </button>
+            </button>
           <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
             <div style={{ fontSize: '24px' }}>🎪</div>
           </div>
@@ -711,7 +711,7 @@ export default function EventList({ userProfile, onBack }: EventListProps) {
           {/* イベント詳細カード */}
           <div style={{
             background: '#FFFFFF',
-            borderRadius: '8px',
+                    borderRadius: '8px',
             padding: '16px',
             marginBottom: '24px',
             boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)'
@@ -747,8 +747,8 @@ export default function EventList({ userProfile, onBack }: EventListProps) {
                   {selectedEvent.venue_address && (
                     <div style={{ fontSize: '12px', color: '#666666', marginTop: '4px' }}>
                       {selectedEvent.venue_address}
-                    </div>
-                  )}
+              </div>
+            )}
                 </div>
               </div>
             </div>
@@ -756,30 +756,30 @@ export default function EventList({ userProfile, onBack }: EventListProps) {
 
           {/* イベント概要 */}
           <div style={{ marginBottom: '24px' }}>
-            <h2 style={{
-              fontSize: '16px',
+                <h2 style={{
+                  fontSize: '16px',
               fontWeight: 600,
-              color: '#000000',
+                    color: '#000000',
               marginBottom: '12px'
             }}>
               イベント概要
             </h2>
-            <p style={{
-              fontSize: '14px',
-              color: '#000000',
+                  <p style={{
+                    fontSize: '14px',
+                    color: '#000000',
               lineHeight: '1.6'
-            }}>
+                  }}>
               {selectedEvent.event_description || selectedEvent.lead_text}
-            </p>
-          </div>
+                  </p>
+                </div>
 
           {/* 詳細情報 */}
           {selectedEvent.application_end_date && (
             <div style={{ marginBottom: '24px' }}>
               <h2 style={{
-                fontSize: '16px',
+                    fontSize: '16px',
                 fontWeight: 600,
-                color: '#000000',
+                    color: '#000000',
                 marginBottom: '12px'
               }}>
                 詳細情報
@@ -802,16 +802,16 @@ export default function EventList({ userProfile, onBack }: EventListProps) {
                   </span>
                 </div>
               </div>
-            </div>
+              </div>
           )}
 
           {/* お問い合わせ */}
-          {selectedEvent.homepage_url && (
+              {selectedEvent.homepage_url && (
             <div style={{ marginBottom: '24px' }}>
               <h2 style={{
                 fontSize: '16px',
                 fontWeight: 600,
-                color: '#000000',
+                    color: '#000000',
                 marginBottom: '12px'
               }}>
                 お問い合わせ
@@ -822,41 +822,41 @@ export default function EventList({ userProfile, onBack }: EventListProps) {
                 padding: '16px',
                 boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)'
               }}>
-                <a
-                  href={selectedEvent.homepage_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
+                  <a
+                    href={selectedEvent.homepage_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
                     fontSize: '14px',
                     color: '#5DABA8',
-                    textDecoration: 'underline'
-                  }}
-                >
-                  {selectedEvent.homepage_url}
-                </a>
-              </div>
+                      textDecoration: 'underline'
+                    }}
+                  >
+                    {selectedEvent.homepage_url}
+                  </a>
+                </div>
             </div>
           )}
 
           {/* 申し込みボタン */}
-          <button
-            onClick={() => handleApply(selectedEvent.id)}
-            style={{
-              width: '100%',
+              <button
+                onClick={() => handleApply(selectedEvent.id)}
+                style={{
+                  width: '100%',
               padding: '16px',
               background: '#5DABA8',
               color: '#FFFFFF',
-              borderRadius: '8px',
-              border: 'none',
-              fontSize: '16px',
+                  borderRadius: '8px',
+                  border: 'none',
+                  fontSize: '16px',
               fontWeight: 600,
               cursor: 'pointer',
               marginBottom: '24px'
-            }}
-          >
+                }}
+              >
             このイベントに申し込む
-          </button>
-        </div>
+              </button>
+          </div>
         </div>
       </div>
     )
@@ -873,13 +873,13 @@ export default function EventList({ userProfile, onBack }: EventListProps) {
         alignItems: 'flex-start',
         padding: isDesktop ? '40px 20px' : 0
       }}>
-        <div style={{
-          position: 'relative',
-          width: '100%',
+      <div style={{ 
+        position: 'relative',
+        width: '100%',
           maxWidth: '393px',
           minHeight: isDesktop ? 'auto' : '852px',
           background: '#fff5f0'
-        }}>
+      }}>
         {/* ヘッダー */}
         <div style={{
           background: '#5DABA8',
@@ -888,9 +888,9 @@ export default function EventList({ userProfile, onBack }: EventListProps) {
           alignItems: 'center',
           gap: '12px'
         }}>
-          <button
-            type="button"
-            onClick={handleCloseSearchPage}
+            <button
+              type="button"
+              onClick={handleCloseSearchPage}
             style={{
               background: 'transparent',
               border: 'none',
@@ -902,10 +902,10 @@ export default function EventList({ userProfile, onBack }: EventListProps) {
               alignItems: 'center',
               justifyContent: 'center'
             }}
-          >
+            >
             ←
-          </button>
-          <h1 style={{
+            </button>
+            <h1 style={{
             fontSize: '18px',
             fontWeight: 600,
             color: '#FFFFFF',
@@ -914,7 +914,7 @@ export default function EventList({ userProfile, onBack }: EventListProps) {
           }}>
             イベント検索
           </h1>
-        </div>
+          </div>
 
         <div className="container mx-auto" style={{ padding: '16px', maxWidth: isDesktop ? '800px' : '393px' }}>
           <form onSubmit={handleSearchSubmit}>
@@ -933,10 +933,10 @@ export default function EventList({ userProfile, onBack }: EventListProps) {
                   marginBottom: '8px',
                   display: 'block'
                 }}>キーワード</label>
-                <input
+                  <input
                   type="text"
-                  value={formKeyword}
-                  onChange={(e) => setFormKeyword(e.target.value)}
+                    value={formKeyword}
+                    onChange={(e) => setFormKeyword(e.target.value)}
                   placeholder="イベント名、会場名など"
                   style={{
                     width: '100%',
@@ -1034,9 +1034,9 @@ export default function EventList({ userProfile, onBack }: EventListProps) {
                   display: 'block'
                 }}>都道府県</label>
                 <div style={{ position: 'relative' }}>
-                  <select
-                    value={formPrefecture}
-                    onChange={(e) => handlePrefectureChange(e.target.value)}
+                <select
+                  value={formPrefecture}
+                  onChange={(e) => handlePrefectureChange(e.target.value)}
                     style={{
                       width: '100%',
                       padding: '12px 40px 12px 16px',
@@ -1048,12 +1048,12 @@ export default function EventList({ userProfile, onBack }: EventListProps) {
                       boxSizing: 'border-box',
                       appearance: 'none'
                     }}
-                  >
-                    <option value="">選択してください</option>
-                    {prefectures.map((pref) => (
-                      <option key={pref} value={pref}>{pref}</option>
-                    ))}
-                  </select>
+                >
+                  <option value="">選択してください</option>
+                  {prefectures.map((pref) => (
+                    <option key={pref} value={pref}>{pref}</option>
+                  ))}
+                </select>
                   <div style={{
                     position: 'absolute',
                     right: '12px',

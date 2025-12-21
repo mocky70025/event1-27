@@ -535,8 +535,8 @@ export default function WelcomeScreen() {
                 disabled={loading}
                 style={{
                   width: '100%',
-                  display: 'flex',
-                  alignItems: 'center',
+              display: 'flex',
+              alignItems: 'center',
                   justifyContent: 'center',
                   gap: '12px',
                   padding: '16px 24px',
@@ -558,217 +558,39 @@ export default function WelcomeScreen() {
               </button>
 
               {/* メールアドレス新規登録ボタン */}
-              <button
+            <button
                 onClick={() => {
                   setAuthMode('register')
                   setRegisterMethod('email')
                 }}
                 disabled={loading}
-                style={{
-                  width: '100%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
+              style={{
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
                   gap: '12px',
-                  padding: '16px 24px',
+                padding: '16px 24px',
                   background: '#ffffff',
-                  borderRadius: '12px',
+                borderRadius: '12px',
                   border: '2px solid #e5e7eb',
-                  fontSize: '15px',
-                  fontWeight: 600,
+                fontSize: '15px',
+                fontWeight: 600,
                   color: '#111827',
                   cursor: loading ? 'not-allowed' : 'pointer',
                   opacity: loading ? 0.6 : 1,
-                  transition: 'all 200ms cubic-bezier(0.4, 0, 0.2, 1)',
+                transition: 'all 200ms cubic-bezier(0.4, 0, 0.2, 1)',
                   boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)'
-                }}
+              }}
               >
                 <MailIcon color="#111827" />
                 <span>メールアドレスで新規登録</span>
-              </button>
+            </button>
             </div>
             )}
           </div>
         )}
 
-      {/* ログイン方法選択 */}
-      {authMode === 'login' && !loginMethod && (
-        <>
-          {/* ログインセクション */}
-          <div style={{
-            position: 'absolute',
-            width: '256px',
-            height: '0px',
-            left: '69px',
-            top: '427.5px',
-            border: '1px solid #06C755'
-          }} />
-          <div style={{
-            position: 'absolute',
-            width: '72px',
-            height: '16px',
-            left: '161px',
-            top: '420px',
-            background: '#FFFFFF'
-          }} />
-          <div style={{
-            position: 'absolute',
-            width: '72px',
-            height: '24px',
-            left: '161px',
-            top: '416px',
-            fontFamily: '"Noto Sans JP", sans-serif',
-            fontStyle: 'normal',
-            fontWeight: 700,
-            fontSize: '16px',
-            lineHeight: '24px',
-            textAlign: 'center',
-            color: '#000000'
-          }}>
-            ログイン
-          </div>
-
-          {/* Googleログインボタン */}
-          <button
-            type="button"
-            onClick={handleGoogleLogin}
-            disabled={loading}
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              padding: '16px 24px',
-              position: 'absolute',
-              width: '287px',
-              height: '47px',
-              left: '53.5px',
-              top: '456px',
-              background: '#FFFFFF',
-              borderRadius: '7.5px',
-              border: '1px solid #E5E5E5',
-              fontFamily: '"Noto Sans JP", sans-serif',
-              fontSize: '16px',
-              fontWeight: 700,
-              lineHeight: '24px',
-              color: '#000000',
-              cursor: loading ? 'not-allowed' : 'pointer',
-              opacity: loading ? 0.6 : 1,
-              zIndex: 100,
-              pointerEvents: loading ? 'none' : 'auto'
-            }}
-          >
-            <div style={{ position: 'absolute', left: '16px' }}>
-              <GoogleIcon />
-            </div>
-            <span style={{ width: '100%', textAlign: 'center' }}>Google</span>
-          </button>
-
-          {/* メールアドレスログインボタン */}
-          <button
-            type="button"
-            onClick={() => setLoginMethod('email')}
-            disabled={loading}
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              padding: '16px 24px',
-              position: 'absolute',
-              width: '287px',
-              height: '47px',
-              left: '53.5px',
-              top: '520.5px',
-              background: '#FFFFFF',
-              borderRadius: '7.5px',
-              border: '1px solid #E5E5E5',
-              fontFamily: '"Noto Sans JP", sans-serif',
-              fontSize: '16px',
-              fontWeight: 700,
-              lineHeight: '24px',
-              color: '#000000',
-              cursor: loading ? 'not-allowed' : 'pointer',
-              opacity: loading ? 0.6 : 1,
-              zIndex: 100,
-              pointerEvents: loading ? 'none' : 'auto'
-            }}
-          >
-            <div style={{ position: 'absolute', left: '16px' }}>
-              <MailIcon color="#000000" />
-            </div>
-            <span style={{ width: '100%', textAlign: 'center' }}>メールアドレス</span>
-          </button>
-
-          {/* またはセパレーター */}
-          <div style={{
-            position: 'absolute',
-            width: '256px',
-            height: '0px',
-            left: '69px',
-            top: '655.5px',
-            border: '1px solid #06C755',
-            zIndex: 1
-          }} />
-          <div style={{
-            position: 'absolute',
-            width: '64px',
-            height: '16px',
-            left: '165px',
-            top: '648px',
-            background: '#FFFFFF',
-            zIndex: 2
-          }} />
-          <div style={{
-            position: 'absolute',
-            width: '64px',
-            height: '24px',
-            left: '165px',
-            top: '644px',
-            fontFamily: '"Noto Sans JP", sans-serif',
-            fontStyle: 'normal',
-            fontWeight: 700,
-            fontSize: '16px',
-            lineHeight: '24px',
-            textAlign: 'center',
-            color: '#000000',
-            zIndex: 2
-          }}>
-            または
-        </div>
-
-          {/* 新規登録ボタン */}
-        <button
-            type="button"
-            onClick={() => setAuthMode('initial')}
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-            padding: '16px 24px',
-            gap: '10px',
-              position: 'absolute',
-              width: '287px',
-              height: '47px',
-              left: '53.5px',
-              top: '684.5px',
-              background: '#FFFFFF',
-              border: '1px solid #E5E5E5',
-              borderRadius: '7.5px',
-              fontFamily: '"Noto Sans JP", sans-serif',
-              fontSize: '16px',
-              fontWeight: 700,
-              lineHeight: '24px',
-              textAlign: 'center',
-              color: '#000000',
-              cursor: 'pointer',
-              zIndex: 100,
-              pointerEvents: 'auto'
-            }}
-          >
-            新規登録
-          </button>
-        </>
-      )}
 
       {/* メールアドレスでログイン */}
       {authMode === 'login' && loginMethod === 'email' && (
@@ -780,7 +602,7 @@ export default function WelcomeScreen() {
             height: '0px',
             left: '69px',
             top: '427.5px',
-            border: '1px solid #06C755'
+            border: '1px solid #E9ECEF'
           }} />
           <div style={{
             position: 'absolute',
@@ -886,7 +708,7 @@ export default function WelcomeScreen() {
               height: '48px',
               left: '53px',
               top: '584px',
-              background: loading ? '#CCCCCC' : '#06C755',
+              background: loading ? '#CCCCCC' : '#FF8A5C',
               border: '1px solid #E5E5E5',
               borderRadius: '8px',
               fontFamily: '"Noto Sans JP", sans-serif',
@@ -908,7 +730,7 @@ export default function WelcomeScreen() {
             height: '0px',
             left: '69px',
             top: '655.5px',
-            border: '1px solid #06C755'
+            border: '1px solid #E9ECEF'
           }} />
           <div style={{
             position: 'absolute',
@@ -997,193 +819,6 @@ export default function WelcomeScreen() {
         </form>
       )}
 
-      {/* 新規登録方法選択 */}
-      {authMode === 'register' && !registerMethod && !loginMethod && (
-        <div style={{
-          position: 'relative',
-          width: '100%',
-          height: '100%'
-        }}>
-          {/* 新規登録セクション */}
-          <div style={{
-            position: 'absolute',
-            width: '256px',
-            height: '0px',
-            left: '69px',
-            top: '427.5px',
-            border: '1px solid #06C755'
-          }} />
-          <div style={{
-            position: 'absolute',
-            width: '72px',
-            height: '16px',
-            left: '161px',
-            top: '420px',
-            background: '#FFFFFF'
-          }} />
-          <div style={{
-            position: 'absolute',
-            width: '72px',
-            height: '24px',
-            left: '161px',
-            top: '416px',
-            fontFamily: '"Noto Sans JP", sans-serif',
-            fontStyle: 'normal',
-            fontWeight: 700,
-            fontSize: '16px',
-            lineHeight: '24px',
-            textAlign: 'center',
-            color: '#000000'
-          }}>
-            新規登録
-          </div>
-
-          {/* Googleログインボタン */}
-          <button
-            type="button"
-            onClick={handleGoogleLogin}
-            disabled={loading}
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              padding: '16px 24px',
-              position: 'absolute',
-              width: '287px',
-              height: '47px',
-              left: '53.5px',
-              top: '456px',
-              background: '#FFFFFF',
-              borderRadius: '7.5px',
-              border: '1px solid #E5E5E5',
-              fontFamily: '"Noto Sans JP", sans-serif',
-              fontSize: '16px',
-              fontWeight: 700,
-              lineHeight: '24px',
-              color: '#000000',
-              cursor: loading ? 'not-allowed' : 'pointer',
-              opacity: loading ? 0.6 : 1,
-              zIndex: 100,
-              pointerEvents: loading ? 'none' : 'auto'
-            }}
-          >
-            <div style={{ position: 'absolute', left: '16px' }}>
-              <GoogleIcon />
-            </div>
-            <span style={{ width: '100%', textAlign: 'center' }}>Google</span>
-          </button>
-
-          {/* メールアドレス新規登録ボタン */}
-          <button
-            type="button"
-            onClick={() => {
-              console.log('[WelcomeScreen] Email REGISTRATION button clicked (register method selection)')
-              console.log('[WelcomeScreen] Current state - authMode:', authMode, 'registerMethod:', registerMethod)
-              setRegisterMethod('email')
-              console.log('[WelcomeScreen] After setRegisterMethod - registerMethod should be email')
-            }}
-            disabled={loading}
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              padding: '16px 24px',
-              position: 'absolute',
-              width: '287px',
-              height: '47px',
-              left: '53.5px',
-              top: '520.5px',
-              background: '#FFFFFF',
-              borderRadius: '7.5px',
-              border: '1px solid #E5E5E5',
-              fontFamily: '"Noto Sans JP", sans-serif',
-              fontSize: '16px',
-              fontWeight: 700,
-              lineHeight: '24px',
-              color: '#000000',
-              cursor: loading ? 'not-allowed' : 'pointer',
-              opacity: loading ? 0.6 : 1,
-              zIndex: 150,
-              pointerEvents: loading ? 'none' : 'auto'
-            }}
-          >
-            <div style={{ position: 'absolute', left: '16px' }}>
-              <MailIcon color="#000000" />
-            </div>
-            <span style={{ width: '100%', textAlign: 'center' }}>メールアドレス</span>
-          </button>
-
-          {/* またはセパレーター */}
-          <div style={{
-            position: 'absolute',
-            width: '256px',
-            height: '0px',
-            left: '69px',
-            top: '591.5px',
-            border: '1px solid #06C755',
-            zIndex: 1
-          }} />
-          <div style={{
-            position: 'absolute',
-            width: '64px',
-            height: '16px',
-            left: '165px',
-            top: '584px',
-            background: '#FFFFFF',
-            zIndex: 2
-          }} />
-          <div style={{
-            position: 'absolute',
-            width: '64px',
-            height: '24px',
-            left: '165px',
-            top: '580px',
-            fontFamily: '"Noto Sans JP", sans-serif',
-            fontStyle: 'normal',
-            fontWeight: 700,
-            fontSize: '16px',
-            lineHeight: '24px',
-            textAlign: 'center',
-            color: '#000000',
-            zIndex: 2
-          }}>
-            または
-          </div>
-
-          {/* ログインボタン */}
-          <button
-            type="button"
-            onClick={handleNavigateToLogin}
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              padding: '16px 24px',
-              gap: '10px',
-              position: 'absolute',
-              width: '287px',
-              height: '47px',
-              left: '53.5px',
-              top: '620.5px',
-              background: '#FFFFFF',
-              border: '1px solid #E5E5E5',
-              borderRadius: '7.5px',
-              fontFamily: '"Noto Sans JP", sans-serif',
-              fontSize: '16px',
-              fontWeight: 700,
-              lineHeight: '24px',
-              textAlign: 'center',
-              color: '#000000',
-              cursor: 'pointer',
-              zIndex: 100,
-              pointerEvents: 'auto'
-            }}
-          >
-            ログイン
-          </button>
-        </div>
-      )}
 
       {/* メールアドレスで新規登録 */}
       {authMode === 'register' && registerMethod === 'email' && (
@@ -1239,7 +874,7 @@ export default function WelcomeScreen() {
             height: '0px',
             left: '69px',
             top: '427.5px',
-            border: '1px solid #06C755'
+            border: '1px solid #E9ECEF'
           }} />
           <div style={{
             position: 'absolute',
@@ -1366,7 +1001,7 @@ export default function WelcomeScreen() {
                 height: '48px',
                 left: '53px',
                 top: '584px',
-                background: loading ? '#CCCCCC' : '#06C755',
+                background: loading ? '#CCCCCC' : '#FF8A5C',
                 border: '1px solid #E5E5E5',
                 borderRadius: '8px',
                 fontFamily: '"Noto Sans JP", sans-serif',
@@ -1391,7 +1026,7 @@ export default function WelcomeScreen() {
             height: '0px',
             left: '69px',
             top: '655.5px',
-            border: '1px solid #06C755'
+            border: '1px solid #E9ECEF'
           }} />
           <div style={{
             position: 'absolute',

@@ -120,7 +120,7 @@ export default function ImageUpload({
             width: '100%',
             height: '200px',
             background: '#F7F7F7',
-            border: '2px solid #06C755',
+            border: '2px solid #FF8A5C',
             borderRadius: '8px',
             position: 'relative'
           }}>
@@ -192,7 +192,7 @@ export default function ImageUpload({
             }}
             onMouseEnter={(e) => {
               if (!uploading) {
-                (e.currentTarget as HTMLDivElement).style.borderColor = '#06C755'
+                (e.currentTarget as HTMLDivElement).style.borderColor = '#FF8A5C'
               }
             }}
             onMouseLeave={(e) => {

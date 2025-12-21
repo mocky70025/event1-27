@@ -122,7 +122,7 @@ export default function NotificationBox({ userProfile, onBack, onUnreadCountChan
             width: '48px',
             height: '48px',
             border: '3px solid #E5E5E5',
-            borderTopColor: '#06C755',
+            borderTopColor: '#FF8A5C',
             borderRadius: '50%',
             animation: 'spin 1s linear infinite',
             margin: '0 auto 16px'
@@ -149,7 +149,7 @@ export default function NotificationBox({ userProfile, onBack, onUnreadCountChan
               border: 'none',
               fontFamily: 'Inter, sans-serif',
               fontSize: '16px',
-              color: '#06C755',
+              color: '#FF8A5C',
               cursor: 'pointer'
             }}
           >
@@ -206,7 +206,7 @@ export default function NotificationBox({ userProfile, onBack, onUnreadCountChan
                   borderRadius: '12px',
                   padding: '16px',
                   cursor: notification.is_read ? 'default' : 'pointer',
-                  border: notification.is_read ? 'none' : '2px solid #06C755'
+                  border: notification.is_read ? 'none' : '2px solid #FF8A5C'
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
@@ -225,7 +225,7 @@ export default function NotificationBox({ userProfile, onBack, onUnreadCountChan
                       width: '8px',
                       height: '8px',
                       borderRadius: '50%',
-                      background: '#06C755',
+                      background: '#FF8A5C',
                       flexShrink: 0,
                       marginTop: '4px'
                     }}></span>

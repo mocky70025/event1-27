@@ -208,10 +208,10 @@ export default function ExhibitorProfile({ userProfile, onBack }: ExhibitorProfi
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
-          }}
-        >
+            }}
+          >
           ←
-        </button>
+          </button>
         <h1 style={{
           fontSize: '18px',
           fontWeight: 600,
@@ -221,26 +221,26 @@ export default function ExhibitorProfile({ userProfile, onBack }: ExhibitorProfi
         }}>
           プロフィール
         </h1>
-      </div>
+        </div>
 
       <div className="container mx-auto" style={{ padding: '16px', maxWidth: isDesktop ? '800px' : '393px' }}>
 
         {exhibitorData && (
           <>
             {/* 情報確認セクション */}
-            <div style={{
-              background: '#FFFFFF',
+          <div style={{
+            background: '#FFFFFF',
               boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)',
               borderRadius: '8px',
-              padding: '24px',
+            padding: '24px',
               marginBottom: '16px'
             }}>
               <h2 style={{
                 fontSize: '18px',
                 fontWeight: 700,
                 color: '#000000',
-                marginBottom: '24px'
-              }}>
+            marginBottom: '24px'
+          }}>
                 情報を確認してください
               </h2>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -407,23 +407,23 @@ export default function ExhibitorProfile({ userProfile, onBack }: ExhibitorProfi
                   overflow: 'hidden'
                 }}>
                   {getImageUrl(exhibitorData.business_license_image_url) ? (
-                    <img
-                      src={getImageUrl(exhibitorData.business_license_image_url)!}
-                      alt="営業許可証"
-                      style={{
-                        width: '100%',
+                      <img
+                        src={getImageUrl(exhibitorData.business_license_image_url)!}
+                        alt="営業許可証"
+                        style={{
+                          width: '100%',
                         height: '100%',
                         objectFit: 'contain'
-                      }}
-                    />
+                        }}
+                      />
                   ) : (
                     <span style={{ color: '#999999', fontSize: '14px' }}>画像なし</span>
                   )}
-                </div>
+                    </div>
                 {getImageUrl(exhibitorData.business_license_image_url) && (
                   <div style={{
                     background: '#E6F7ED',
-                    borderRadius: '8px',
+                          borderRadius: '8px',
                     padding: '12px',
                     display: 'flex',
                     alignItems: 'center',
@@ -437,8 +437,8 @@ export default function ExhibitorProfile({ userProfile, onBack }: ExhibitorProfi
                       <div style={{ fontSize: '14px', fontWeight: 600, color: '#06C755' }}>有効</div>
                       <div style={{ fontSize: '12px', color: '#666666' }}>期限: 2025/12/31</div>
                     </div>
-                  </div>
-                )}
+                    </div>
+                  )}
               </div>
             </div>
           </>
@@ -492,7 +492,7 @@ export default function ExhibitorProfile({ userProfile, onBack }: ExhibitorProfi
             ログアウト
           </button>
         </div>
-      </div>
+        </div>
       </div>
     </div>
   )

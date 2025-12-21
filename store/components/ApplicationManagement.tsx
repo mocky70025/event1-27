@@ -336,20 +336,20 @@ export default function ApplicationManagement({ userProfile, onBack }: Applicati
                   }}
                 >
                   {/* ステータスバッジ */}
-                  <span style={{
+                    <span style={{
                     position: 'absolute',
                     top: '12px',
                     left: '12px',
-                    padding: '4px 12px',
+                      padding: '4px 12px',
                     borderRadius: '16px',
-                    fontSize: '12px',
-                    fontWeight: 500,
-                    lineHeight: '120%',
-                    background: statusColor.bg,
-                    color: statusColor.text
-                  }}>
-                    {getStatusText(application.application_status)}
-                  </span>
+                      fontSize: '12px',
+                      fontWeight: 500,
+                      lineHeight: '120%',
+                      background: statusColor.bg,
+                      color: statusColor.text
+                    }}>
+                      {getStatusText(application.application_status)}
+                    </span>
                   
                   <div style={{ marginTop: '8px' }}>
                     <h3 style={{

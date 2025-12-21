@@ -119,7 +119,7 @@ export default function OrganizerProfile({ userProfile }: OrganizerProfileProps)
             width: '48px',
             height: '48px',
             border: '3px solid #E5E5E5',
-            borderTopColor: '#06C755',
+            borderTopColor: '#FF8A5C',
             borderRadius: '50%',
             animation: 'spin 1s linear infinite',
             margin: '0 auto 16px'
@@ -170,7 +170,7 @@ export default function OrganizerProfile({ userProfile }: OrganizerProfileProps)
             onClick={() => setIsEditing(true)}
             style={{
               padding: '8px 16px',
-              background: '#06C755',
+              background: '#FF8A5C',
               color: '#FFFFFF',
               borderRadius: '8px',
               border: 'none',
@@ -339,7 +339,7 @@ export default function OrganizerProfile({ userProfile }: OrganizerProfileProps)
                   fontSize: '16px',
                   fontWeight: 600,
                   lineHeight: '150%',
-                  color: organizerData.is_approved ? '#06C755' : '#B8860B'
+                  color: organizerData.is_approved ? '#FF8A5C' : '#B8860B'
                 }}>{organizerData.is_approved ? '承認済み' : '承認待ち'}</p>
               </div>
 

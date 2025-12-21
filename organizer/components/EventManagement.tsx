@@ -207,7 +207,7 @@ export default function EventManagement({ userProfile }: EventManagementProps) {
             width: '48px',
             height: '48px',
             border: '3px solid #E5E5E5',
-            borderTopColor: '#06C755',
+            borderTopColor: '#FF8A5C',
             borderRadius: '50%',
             animation: 'spin 1s linear infinite',
             margin: '0 auto 16px'
@@ -463,7 +463,7 @@ export default function EventManagement({ userProfile }: EventManagementProps) {
         >
           {tabItems.map((item) => {
             const isActive = currentView === item.key
-            const activeColor = '#06C755'
+            const activeColor = '#FF8A5C'
             const inactiveColor = '#666666'
             return (
               <button

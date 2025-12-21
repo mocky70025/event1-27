@@ -59,7 +59,7 @@ export default function EventList({ events, onEventUpdated, onEdit, onViewApplic
         // @ts-ignore
         const approvalStatus = event.approval_status || 'pending'
         const statusColor = approvalStatus === 'approved' 
-          ? { bg: '#E6F7ED', text: '#06C755' }
+          ? { bg: '#E6F7ED', text: '#FF8A5C' }
           : approvalStatus === 'rejected'
           ? { bg: '#FFE6E6', text: '#FF3B30' }
           : { bg: '#FFF9E6', text: '#B8860B' }
@@ -155,7 +155,7 @@ export default function EventList({ events, onEventUpdated, onEdit, onViewApplic
                   onClick={() => onViewApplications && onViewApplications(event)}
                   style={{
                     padding: '8px 16px',
-                    background: '#06C755',
+                    background: '#FF8A5C',
                     color: '#FFFFFF',
                     borderRadius: '8px',
                     border: 'none',
@@ -172,7 +172,7 @@ export default function EventList({ events, onEventUpdated, onEdit, onViewApplic
                   onClick={() => onEdit && onEdit(event)}
                   style={{
                     padding: '8px 16px',
-                    background: '#06C755',
+                    background: '#FF8A5C',
                     color: '#FFFFFF',
                     borderRadius: '8px',
                     border: 'none',

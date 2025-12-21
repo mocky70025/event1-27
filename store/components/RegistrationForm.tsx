@@ -655,7 +655,7 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
             margin: '0 8px',
             marginTop: '-20px'
           }} />
-
+        
           {/* ステップ2 */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1 }}>
             {currentStep === 2 ? (
@@ -709,7 +709,7 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
             margin: '0 8px',
             marginTop: '-20px'
           }} />
-
+        
           {/* ステップ3 */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1 }}>
             {currentStep >= 3 ? (
@@ -755,7 +755,7 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
         maxWidth: '393px',
       background: '#FFFFFF',
         minHeight: isDesktop ? 'auto' : '852px'
-      }}>
+    }}>
         <div className="container mx-auto" style={{ padding: '9px 16px', maxWidth: '393px' }}>
         <ProgressIndicator />
         
@@ -1262,13 +1262,13 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
       alignItems: 'flex-start',
       padding: isDesktop ? '40px 20px' : 0
     }}>
-      <div style={{
-        position: 'relative',
-        width: '100%',
+    <div style={{ 
+      position: 'relative',
+      width: '100%',
         maxWidth: '393px',
-        background: '#FFFFFF',
+      background: '#FFFFFF',
         minHeight: isDesktop ? 'auto' : '852px'
-      }}>
+    }}>
         <div className="container mx-auto" style={{ padding: '9px 16px', maxWidth: '393px' }}>
         <ProgressIndicator />
         
@@ -1633,8 +1633,8 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
             元のページに戻る
           </button>
         </div>
+        </div>
       </div>
-    </div>
     )
   }
 
@@ -1649,13 +1649,13 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
       alignItems: 'flex-start',
       padding: isDesktop ? '40px 20px' : 0
     }}>
-      <div style={{
-        position: 'relative',
-        width: '100%',
+    <div style={{ 
+      position: 'relative',
+      width: '100%',
         maxWidth: '393px',
-        background: '#FFFFFF',
+      background: '#FFFFFF',
         minHeight: isDesktop ? 'auto' : '852px'
-      }}>
+    }}>
         <div className="container mx-auto" style={{ padding: '9px 16px', maxWidth: '393px' }}>
         <ProgressIndicator />
         

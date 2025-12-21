@@ -226,7 +226,7 @@ export default function EventApplications({ eventId, eventName, organizerId, org
                 : `【${eventData.event_name}】出店申し込みが却下されました`
               const emailHtml = `
                 <div style="font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif; line-height: 1.6; color: #333;">
-                  <h2 style="color: ${status === 'approved' ? '#06C755' : '#FF3B30'}; margin-bottom: 16px;">${title}</h2>
+                  <h2 style="color: ${status === 'approved' ? '#FF8A5C' : '#FF3B30'}; margin-bottom: 16px;">${title}</h2>
                   <p>${message}</p>
                   <p style="margin-top: 24px; margin-bottom: 8px;">アプリ内で詳細を確認してください。</p>
                   <hr style="border: none; border-top: 1px solid #E5E5E5; margin: 24px 0;">
@@ -276,7 +276,7 @@ export default function EventApplications({ eventId, eventName, organizerId, org
       case 'pending':
         return { bg: '#FFF9E6', text: '#B8860B' }
       case 'approved':
-        return { bg: '#E6F7ED', text: '#06C755' }
+        return { bg: '#E6F7ED', text: '#FF8A5C' }
       case 'rejected':
         return { bg: '#FFE6E6', text: '#FF3B30' }
       default:
@@ -475,7 +475,7 @@ export default function EventApplications({ eventId, eventName, organizerId, org
             width: '48px',
             height: '48px',
             border: '3px solid #E5E5E5',
-            borderTopColor: '#06C755',
+            borderTopColor: '#FF8A5C',
             borderRadius: '50%',
             animation: 'spin 1s linear infinite',
             margin: '0 auto 16px'
@@ -519,7 +519,7 @@ export default function EventApplications({ eventId, eventName, organizerId, org
                 fontFamily: '"Noto Sans JP", sans-serif',
                 fontSize: '16px',
                 lineHeight: '150%',
-                color: '#06C755',
+                color: '#FF8A5C',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
@@ -705,7 +705,7 @@ export default function EventApplications({ eventId, eventName, organizerId, org
                       disabled={licenseVerificationStatus.verifying}
                       style={{
                         padding: '6px 12px',
-                        background: licenseVerificationStatus.verifying ? '#CCCCCC' : '#06C755',
+                        background: licenseVerificationStatus.verifying ? '#CCCCCC' : '#FF8A5C',
                         color: '#FFFFFF',
                         borderRadius: '6px',
                         border: 'none',
@@ -725,7 +725,7 @@ export default function EventApplications({ eventId, eventName, organizerId, org
                       padding: '8px 12px',
                       background: licenseVerificationStatus.result === 'yes' ? '#E6F7E6' : '#FFE6E6',
                       borderRadius: '6px',
-                      border: `1px solid ${licenseVerificationStatus.result === 'yes' ? '#06C755' : '#FF3B30'}`
+                      border: `1px solid ${licenseVerificationStatus.result === 'yes' ? '#FF8A5C' : '#FF3B30'}`
                     }}>
                       <p style={{
                         fontFamily: '"Noto Sans JP", sans-serif',
@@ -885,7 +885,7 @@ export default function EventApplications({ eventId, eventName, organizerId, org
               fontFamily: '"Noto Sans JP", sans-serif',
               fontSize: '16px',
               lineHeight: '150%',
-              color: '#06C755',
+              color: '#FF8A5C',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
@@ -980,7 +980,7 @@ export default function EventApplications({ eventId, eventName, organizerId, org
                 style={{
                   width: '100%',
                   padding: '12px 16px',
-                  background: '#06C755',
+                  background: '#FF8A5C',
                   color: '#FFFFFF',
                   borderRadius: '8px',
                   border: 'none',
@@ -1104,7 +1104,7 @@ export default function EventApplications({ eventId, eventName, organizerId, org
                           style={{
                             flex: 1,
                             padding: '12px 16px',
-                            background: '#06C755',
+                            background: '#FF8A5C',
                             color: '#FFFFFF',
                             borderRadius: '8px',
                             border: 'none',

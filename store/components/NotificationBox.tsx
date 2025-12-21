@@ -213,23 +213,23 @@ export default function NotificationBox({ userProfile, onBack, onUnreadCountChan
         </div>
 
         <div className="container mx-auto" style={{ padding: '16px', maxWidth: '394px' }}>
-          {notifications.length === 0 ? (
-            <div style={{
-              background: '#FFFFFF',
-              boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
-              borderRadius: '12px',
-              padding: '48px 24px',
-              textAlign: 'center'
-            }}>
-              <p style={{
-                fontFamily: 'Inter, sans-serif',
-                fontSize: '16px',
-                lineHeight: '150%',
-                color: '#666666'
-              }}>通知はありません</p>
-            </div>
-          ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        {notifications.length === 0 ? (
+          <div style={{
+            background: '#FFFFFF',
+            boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
+            borderRadius: '12px',
+            padding: '48px 24px',
+            textAlign: 'center'
+          }}>
+            <p style={{
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '16px',
+              lineHeight: '150%',
+              color: '#666666'
+            }}>通知はありません</p>
+          </div>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {notifications.map((notification) => {
                 // 通知タイプに応じたアイコンを取得
                 const getNotificationIcon = () => {
@@ -259,14 +259,14 @@ export default function NotificationBox({ userProfile, onBack, onUnreadCountChan
                 }
 
                 return (
-                  <div
-                    key={notification.id}
-                    onClick={() => !notification.is_read && markAsRead(notification.id)}
-                    style={{
+              <div
+                key={notification.id}
+                onClick={() => !notification.is_read && markAsRead(notification.id)}
+                style={{
                       background: '#FFFFFF',
                       borderRadius: '8px',
-                      padding: '16px',
-                      cursor: notification.is_read ? 'default' : 'pointer',
+                  padding: '16px',
+                  cursor: notification.is_read ? 'default' : 'pointer',
                       border: '1px solid #FF8A5C',
                       position: 'relative',
                       marginBottom: '12px'
@@ -287,49 +287,49 @@ export default function NotificationBox({ userProfile, onBack, onUnreadCountChan
                       </div>
                       <div style={{ flex: 1 }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '4px' }}>
-                          <h3 style={{
-                            fontSize: '16px',
-                            fontWeight: 700,
-                            lineHeight: '120%',
-                            color: '#000000',
+                  <h3 style={{
+                    fontSize: '16px',
+                    fontWeight: 700,
+                    lineHeight: '120%',
+                    color: '#000000',
                             margin: 0
-                          }}>
-                            {notification.title}
-                          </h3>
-                          {!notification.is_read && (
-                            <span style={{
-                              width: '8px',
-                              height: '8px',
-                              borderRadius: '50%',
+                  }}>
+                    {notification.title}
+                  </h3>
+                  {!notification.is_read && (
+                    <span style={{
+                      width: '8px',
+                      height: '8px',
+                      borderRadius: '50%',
                               background: '#FF8A5C',
-                              flexShrink: 0,
+                      flexShrink: 0,
                               marginTop: '6px'
-                            }}></span>
-                          )}
-                        </div>
-                        <p style={{
-                          fontSize: '14px',
-                          lineHeight: '150%',
+                    }}></span>
+                  )}
+                </div>
+                <p style={{
+                  fontSize: '14px',
+                  lineHeight: '150%',
                           color: '#000000',
                           margin: '4px 0 8px 0'
-                        }}>
-                          {notification.message}
-                        </p>
-                        <p style={{
-                          fontSize: '12px',
-                          lineHeight: '120%',
-                          color: '#999999',
+                }}>
+                  {notification.message}
+                </p>
+                  <p style={{
+                    fontSize: '12px',
+                    lineHeight: '120%',
+                    color: '#999999',
                           margin: 0
-                        }}>
-                          {formatDate(notification.created_at)}
-                        </p>
-                      </div>
+                }}>
+                  {formatDate(notification.created_at)}
+                </p>
+              </div>
                     </div>
                   </div>
                 )
               })}
-            </div>
-          )}
+          </div>
+        )}
         </div>
       </div>
     </div>

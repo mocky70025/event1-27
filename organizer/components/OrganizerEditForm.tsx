@@ -213,7 +213,7 @@ export default function OrganizerEditForm({
               fontFamily: 'Inter, sans-serif',
               fontSize: '16px',
               lineHeight: '150%',
-              color: '#06C755',
+              color: '#FF8A5C',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
@@ -299,7 +299,7 @@ export default function OrganizerEditForm({
                             width: '20px',
                             height: '20px',
                             border: '1px solid #E5E5E5',
-                            accentColor: formData.gender === value ? '#06C755' : undefined
+                            accentColor: formData.gender === value ? '#FF8A5C' : undefined
                           }}
                         />
                         <span style={{
@@ -407,7 +407,7 @@ export default function OrganizerEditForm({
               disabled={loading}
               style={{
                 padding: '16px 24px',
-                background: loading ? '#D9D9D9' : '#06C755',
+                background: loading ? '#D9D9D9' : '#FF8A5C',
                 color: '#FFFFFF',
                 borderRadius: '8px',
                 border: 'none',

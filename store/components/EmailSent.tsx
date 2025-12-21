@@ -27,8 +27,8 @@ export default function EmailSent() {
         {/* ロゴ */}
         <div style={{
           width: '80px',
-          height: '80px',
-          background: '#5DABA8',
+            height: '80px',
+            background: '#5DABA8',
           borderRadius: '12px',
           marginBottom: '16px',
           display: 'flex',
