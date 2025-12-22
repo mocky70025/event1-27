@@ -1194,17 +1194,17 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
         
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '48px 0' }}>
           <div style={{
-            width: '96px',
-            height: '96px',
-            background: '#2563eb',
-            borderRadius: '8px',
+            width: '64px',
+            height: '64px',
+            background: '#FF8A5C',
+            borderRadius: '50%',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             marginBottom: '24px'
           }}>
-            <svg style={{ width: '64px', height: '64px', color: '#FFFFFF' }} fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+            <svg style={{ width: '32px', height: '32px', color: '#FFFFFF' }} fill="currentColor" viewBox="0 0 24 24">
+              <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="#FFFFFF"/>
             </svg>
           </div>
           
@@ -1219,16 +1219,24 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
             登録完了
           </h2>
           
-          <p style={{
-            fontFamily: '"Noto Sans JP", sans-serif',
-            fontSize: '16px',
-            lineHeight: '150%',
-            color: '#666666',
-            marginBottom: '32px',
-            textAlign: 'center'
-          }}>
-            登録が完了しました。運営側の承認をお待ちください。
-          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '32px', textAlign: 'center' }}>
+            <p style={{
+              fontFamily: '"Noto Sans JP", sans-serif',
+              fontSize: '16px',
+              lineHeight: '150%',
+              color: '#666666'
+            }}>
+              主催者登録が完了しました
+            </p>
+            <p style={{
+              fontFamily: '"Noto Sans JP", sans-serif',
+              fontSize: '16px',
+              lineHeight: '150%',
+              color: '#666666'
+            }}>
+              メールアドレスに確認メールを送信しました
+            </p>
+          </div>
           
           <button
             onClick={onRegistrationComplete}
@@ -1242,7 +1250,7 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
               padding: '14px 24px',
               gap: '10px',
               height: '48px',
-              background: '#2563eb',
+              background: '#FF8A5C',
               borderRadius: '8px',
               border: 'none',
               fontFamily: '"Noto Sans JP", sans-serif',
@@ -1255,17 +1263,17 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
               boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = '#1d4ed8'
+              e.currentTarget.style.background = '#FF7840'
               e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
               e.currentTarget.style.transform = 'translateY(-1px)'
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = '#2563eb'
+              e.currentTarget.style.background = '#FF8A5C'
               e.currentTarget.style.boxShadow = '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
               e.currentTarget.style.transform = 'translateY(0)'
             }}
           >
-            マイページへ
+            ホームへ戻る
           </button>
         </div>
       </div>

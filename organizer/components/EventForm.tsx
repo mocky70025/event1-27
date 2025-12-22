@@ -880,44 +880,128 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
     }
   }
 
-  // プログレスインジケーター
+  // プログレスインジケーター（RegistrationFormと同じスタイル）
   const ProgressIndicator = () => (
-    <div style={{
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      gap: '8px',
-      marginBottom: '24px',
-      padding: '0 16px'
-    }}>
-      {[1, 2, 3].map((step) => (
-        <div key={step} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <div style={{
-            width: '32px',
-            height: '32px',
-            borderRadius: '50%',
-            background: currentStep >= step ? '#FF8A5C' : '#E9ECEF',
-            color: currentStep >= step ? '#FFFFFF' : '#6C757D',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontFamily: 'Inter, sans-serif',
-            fontSize: '14px',
-            fontWeight: 700,
-            transition: 'all 0.3s ease'
-          }}>
-            {step}
-          </div>
-          {step < 3 && (
-            <div style={{
-              width: '40px',
-              height: '2px',
-              background: currentStep > step ? '#FF8A5C' : '#E9ECEF',
-              transition: 'all 0.3s ease'
-            }} />
+    <div className="flex items-center justify-center" style={{ marginBottom: '48px', paddingTop: '24px' }}>
+      <div className="relative" style={{ width: '250.5px', height: '16px' }}>
+        {/* ステップ1の円 */}
+        <div 
+          className="absolute rounded-full flex items-center justify-center"
+          style={{
+            width: '16px',
+            height: '16px',
+            left: '0px',
+            top: '0px',
+            backgroundColor: currentStep >= 1 ? '#FF8A5C' : 'transparent',
+            border: currentStep >= 1 ? 'none' : '1px solid #FF8A5C',
+          }}
+        >
+          {currentStep > 1 && (
+            <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+            </svg>
           )}
         </div>
-      ))}
+        
+        {/* 線1（ステップ1と2の間） */}
+        <div 
+          className="absolute"
+          style={{
+            width: '101.75px',
+            height: '4px',
+            left: '15.75px',
+            top: '6px',
+            backgroundColor: currentStep >= 2 ? '#FF8A5C' : '#D9D9D9',
+          }}
+        />
+        
+        {/* ステップ2の円 */}
+        <div 
+          className="absolute rounded-full flex items-center justify-center"
+          style={{
+            width: '16px',
+            height: '16px',
+            left: '117px',
+            top: '0px',
+            backgroundColor: currentStep >= 2 ? '#FF8A5C' : 'transparent',
+            border: currentStep >= 2 ? 'none' : '1px solid #FF8A5C',
+          }}
+        >
+          {currentStep > 2 && (
+            <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+            </svg>
+          )}
+        </div>
+        
+        {/* 線2（ステップ2と3の間） */}
+        <div 
+          className="absolute"
+          style={{
+            width: '101.75px',
+            height: '4px',
+            left: '133px',
+            top: '6px',
+            backgroundColor: currentStep >= 3 ? '#FF8A5C' : '#D9D9D9',
+          }}
+        />
+        
+        {/* ステップ3の円 */}
+        <div 
+          className="absolute rounded-full flex items-center justify-center"
+          style={{
+            width: '16px',
+            height: '16px',
+            left: '234.5px',
+            top: '0px',
+            backgroundColor: currentStep >= 3 ? '#FF8A5C' : 'transparent',
+            border: currentStep >= 3 ? 'none' : '1px solid #FF8A5C',
+          }}
+        >
+          {currentStep >= 3 && (
+            <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+            </svg>
+          )}
+        </div>
+        
+        {/* ラベル */}
+        <div className="absolute top-6 left-0" style={{ width: '250.5px', height: '20px' }}>
+          {/* 情報入力 - 円の中心は8px（left: 0px + 円の半径8px） */}
+          <span 
+            className="absolute text-[14px] text-gray-700 whitespace-nowrap"
+            style={{
+              left: '8px',
+              transform: 'translateX(-50%)',
+              fontFamily: '"Noto Sans JP", sans-serif'
+            }}
+          >
+            情報入力
+          </span>
+          {/* 情報確認 - 円の中心は125px（left: 117px + 円の半径8px） */}
+          <span 
+            className="absolute text-[14px] text-gray-700 whitespace-nowrap"
+            style={{
+              left: '125px',
+              transform: 'translateX(-50%)',
+              fontFamily: '"Noto Sans JP", sans-serif'
+            }}
+          >
+            情報確認
+          </span>
+          {/* 登録完了 - 円の中心は242.5px（left: 234.5px + 円の半径8px） */}
+          <span 
+            className="absolute text-[14px] text-gray-700 whitespace-nowrap"
+            style={{
+              left: '242.5px',
+              transform: 'translateX(-50%)',
+              fontFamily: '"Noto Sans JP", sans-serif'
+            }}
+          >
+            登録完了
+          </span>
+        </div>
+      </div>
     </div>
   )
 
@@ -965,7 +1049,7 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
               color: '#6C757D',
               marginBottom: '32px'
             }}>
-              イベント「{submittedEvent.event_name}」の登録が完了しました。
+              イベントが登録されました
             </p>
             <button
               type="button"
@@ -993,7 +1077,7 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
                 e.currentTarget.style.background = '#FF8A5C'
               }}
             >
-              イベント管理へ
+              ホームへ戻る
             </button>
           </div>
         </div>
@@ -1048,13 +1132,14 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
           }}>
             <h2 style={{
               fontFamily: 'Inter, sans-serif',
-              fontSize: '18px',
+              fontSize: '20px',
               fontWeight: 700,
               lineHeight: '120%',
-              color: '#2C3E50',
-              marginBottom: '16px'
+              color: '#000000',
+              marginBottom: '24px',
+              textAlign: 'center'
             }}>
-              入力内容の確認
+              イベント情報を確認してください
             </h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div>
@@ -1080,31 +1165,19 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
             </div>
           </div>
 
-          <div style={{ display: 'flex', gap: '16px', justifyContent: 'center' }}>
-            <button
-              type="button"
-              onClick={() => setCurrentStep(1)}
-              style={{
-                ...buttonSecondaryStyle,
-                flex: 1
-              }}
-            >
-              修正する
-            </button>
-            <button
-              type="button"
-              onClick={handleSubmit}
-              disabled={loading}
-              style={{
-                ...buttonPrimaryStyle,
-                background: loading ? '#D9D9D9' : '#FF8A5C',
-                cursor: loading ? 'not-allowed' : 'pointer',
-                flex: 1
-              }}
-            >
-              {loading ? (eventId ? '更新中...' : '作成中...') : (eventId ? 'イベント更新' : 'イベント作成')}
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={handleSubmit}
+            disabled={loading}
+            style={{
+              ...buttonPrimaryStyle,
+              width: '100%',
+              background: loading ? '#D9D9D9' : '#FF8A5C',
+              cursor: loading ? 'not-allowed' : 'pointer'
+            }}
+          >
+            {loading ? (eventId ? '更新中...' : '作成中...') : '次へ'}
+          </button>
         </div>
       </div>
     )
@@ -1140,7 +1213,7 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
             lineHeight: '120%',
             color: '#000000'
           }}>
-            {eventId ? 'イベント編集' : 'イベント掲載'}
+            イベント情報を入力してください
           </h1>
           <div style={{ width: '60px' }}></div>
         </div>
