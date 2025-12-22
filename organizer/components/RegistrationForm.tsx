@@ -1179,6 +1179,7 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
           次に進む
         </button>
       </div>
+      </div>
     </div>
   )
 
