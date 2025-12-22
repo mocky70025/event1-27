@@ -284,22 +284,16 @@ export default function WelcomeScreen() {
           padding: '0 20px'
         }}>
           <div style={{
-            width: isDesktop ? '120px' : '100px',
-            height: isDesktop ? '120px' : '100px',
-            margin: '0 auto 24px',
+            width: '64px',
+            height: '64px',
+            margin: '0 auto 12px',
             background: '#5DABA8',
-            borderRadius: '20px',
+            borderRadius: '8px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0px 8px 32px rgba(0, 0, 0, 0.08)'
+            boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)'
           }}>
-            <div style={{
-              fontSize: isDesktop ? '48px' : '40px',
-              fontWeight: 800,
-              color: '#ffffff',
-              letterSpacing: '-0.02em'
-            }}>🚚</div>
           </div>
           <h1 style={{
             fontSize: isDesktop ? '28px' : '24px',
