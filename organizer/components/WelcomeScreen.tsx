@@ -252,27 +252,31 @@ export default function WelcomeScreen() {
   return (
     <div style={{
       minHeight: '100vh',
+      width: '100%',
+      background: '#E8F5F5',
       display: 'flex',
+      flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: isDesktop ? '48px 24px' : '24px 16px',
-      background: '#E8F5F5'
+      padding: isDesktop ? '40px 20px' : 0
     }}>
+      {/* 白いカード */}
       <div style={{
         width: '100%',
-        maxWidth: isDesktop ? '480px' : '352px',
-        background: '#FFFFFF',
+        maxWidth: '393px',
+        marginTop: '224px',
+        marginBottom: '0',
+        background: 'white',
         borderRadius: '16px',
         boxShadow: '0px 8px 32px rgba(0, 0, 0, 0.08)',
         padding: '0',
         position: 'relative',
-        minHeight: '472px',
-        margin: '0 auto'
+        minHeight: '404px'
       }}>
         {/* ヘッダー */}
         <div style={{
           textAlign: 'center',
-          marginTop: '40px',
+          marginTop: '36px',
           marginBottom: '32px',
           padding: '0 20px'
         }}>
