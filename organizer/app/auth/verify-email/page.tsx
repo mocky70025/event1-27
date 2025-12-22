@@ -130,7 +130,7 @@ export default function VerifyEmailPage() {
               width: '48px',
               height: '48px',
               border: '3px solid #E5E5E5',
-              borderTopColor: '#06C755',
+              borderTopColor: '#FF8A5C',
               borderRadius: '50%',
               animation: 'spin 1s linear infinite',
               margin: '0 auto 24px'
@@ -161,7 +161,7 @@ export default function VerifyEmailPage() {
             <div style={{
               width: '64px',
               height: '64px',
-              background: '#06C755',
+              background: '#FF8A5C',
               borderRadius: '50%',
               display: 'flex',
               alignItems: 'center',
@@ -235,7 +235,7 @@ export default function VerifyEmailPage() {
               onClick={() => router.push('/')}
               style={{
                 padding: '12px 24px',
-                background: '#06C755',
+                background: '#FF8A5C',
                 color: '#FFFFFF',
                 borderRadius: '8px',
                 border: 'none',

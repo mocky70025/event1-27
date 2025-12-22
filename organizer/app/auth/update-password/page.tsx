@@ -94,7 +94,7 @@ export default function UpdatePasswordPage() {
                 fontFamily: 'Inter, sans-serif',
                 fontSize: '14px',
                 lineHeight: '150%',
-                color: '#06C755'
+                color: '#FF8A5C'
               }}>
                 {message}
               </p>
@@ -187,7 +187,7 @@ export default function UpdatePasswordPage() {
                   style={{
                     width: '100%',
                     padding: '16px 24px',
-                    background: loading ? '#CCCCCC' : '#06C755',
+                    background: loading ? '#CCCCCC' : '#FF8A5C',
                     borderRadius: '8px',
                     border: 'none',
                     fontFamily: 'Inter, sans-serif',

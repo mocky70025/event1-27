@@ -25,10 +25,10 @@ export async function POST(request: NextRequest) {
     const emailSubject = `【${eventName}】出店者情報がスプレッドシートにエクスポートされました`
     const emailBodyHtml = `
       <div style="font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif; line-height: 1.6; color: #333;">
-        <h2 style="color: #06C755; margin-bottom: 16px;">${eventName}の申し込みが締め切られました</h2>
+        <h2 style="color: #FF8A5C; margin-bottom: 16px;">${eventName}の申し込みが締め切られました</h2>
         <p>出店者情報をGoogleスプレッドシートにエクスポートしました。</p>
         <p style="margin-top: 24px; margin-bottom: 8px;"><strong>スプレッドシートのリンク：</strong></p>
-        <p style="margin-bottom: 24px;"><a href="${spreadsheetUrl}" style="color: #06C755; text-decoration: underline;">${spreadsheetUrl}</a></p>
+        <p style="margin-bottom: 24px;"><a href="${spreadsheetUrl}" style="color: #FF8A5C; text-decoration: underline;">${spreadsheetUrl}</a></p>
         <hr style="border: none; border-top: 1px solid #E5E5E5; margin: 24px 0;">
         <p style="font-size: 12px; color: #666666;">このメールは自動送信されています。</p>
       </div>

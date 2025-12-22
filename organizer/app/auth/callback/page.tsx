@@ -225,7 +225,7 @@ export default function AuthCallback() {
             onClick={() => router.push('/')}
             style={{
               padding: '12px 24px',
-              background: '#06C755',
+              background: '#FF8A5C',
               color: '#FFFFFF',
               border: 'none',
               borderRadius: '8px',
@@ -248,7 +248,7 @@ export default function AuthCallback() {
           width: '48px',
           height: '48px',
           border: '3px solid #E5E5E5',
-          borderTopColor: '#06C755',
+          borderTopColor: '#FF8A5C',
           borderRadius: '50%',
           animation: 'spin 1s linear infinite',
           margin: '0 auto 16px'

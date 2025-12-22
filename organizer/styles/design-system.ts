@@ -6,7 +6,7 @@
 export const colors = {
   // プライマリカラー
   primary: {
-    main: '#06C755',
+    main: '#FF8A5C',
     dark: '#05B04A',
     light: '#E6F7ED',
   },
@@ -25,7 +25,7 @@ export const colors = {
   
   // ステータスカラー
   status: {
-    success: '#06C755',
+    success: '#FF8A5C',
     successLight: '#E6F7ED',
     warning: '#FFB800',
     warningLight: '#FFF9E6',
@@ -43,7 +43,7 @@ export const colors = {
     },
     approved: {
       bg: '#E6F7ED',
-      text: '#06C755',
+      text: '#FF8A5C',
     },
     rejected: {
       bg: '#FFE6E6',
