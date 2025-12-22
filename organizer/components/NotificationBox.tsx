@@ -116,7 +116,7 @@ export default function NotificationBox({ userProfile, onBack, onUnreadCountChan
 
   if (loading) {
     return (
-      <div style={{ background: '#F7F7F7', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ background: '#E8F5F5', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ textAlign: 'center' }}>
           <div style={{
             width: '48px',
@@ -139,7 +139,7 @@ export default function NotificationBox({ userProfile, onBack, onUnreadCountChan
   }
 
   return (
-    <div style={{ background: '#F7F7F7', minHeight: '100vh' }}>
+    <div style={{ background: '#E8F5F5', minHeight: '100vh' }}>
       <div className="container mx-auto" style={{ padding: '9px 16px', maxWidth: '394px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px', paddingTop: '24px' }}>
           <button

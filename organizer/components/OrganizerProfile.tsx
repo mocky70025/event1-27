@@ -109,7 +109,7 @@ export default function OrganizerProfile({ userProfile }: OrganizerProfileProps)
         maxWidth: isDesktop ? '600px' : '393px',
         minHeight: '852px',
         margin: '0 auto',
-        background: '#FFFFFF',
+        background: '#E8F5F5',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center'
@@ -187,7 +187,7 @@ export default function OrganizerProfile({ userProfile }: OrganizerProfileProps)
 
         {!organizerData ? (
           <div style={{
-            background: '#FFFFFF',
+            background: '#E8F5F5',
             boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
             borderRadius: '12px',
             padding: '24px',
@@ -203,7 +203,7 @@ export default function OrganizerProfile({ userProfile }: OrganizerProfileProps)
           </div>
         ) : (
           <div style={{
-            background: '#FFFFFF',
+            background: '#E8F5F5',
             boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
             borderRadius: '12px',
             padding: '24px',
@@ -388,7 +388,7 @@ export default function OrganizerProfile({ userProfile }: OrganizerProfileProps)
 
         {/* ログアウトボタン */}
         <div style={{
-          background: '#FFFFFF',
+          background: '#E8F5F5',
           boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
           borderRadius: '12px',
           padding: '24px',
