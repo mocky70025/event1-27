@@ -1285,7 +1285,6 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
           </button>
         </div>
       </div>
-      </div>
     </div>
   )
 
