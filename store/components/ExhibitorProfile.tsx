@@ -669,8 +669,6 @@ export default function ExhibitorProfile({ userProfile, onBack }: ExhibitorProfi
                 </div>
               </div>
             </div>
-          </>
-        )}
 
             {/* 編集するボタン */}
             <div style={{ padding: '0 20px', marginBottom: '100px' }}>

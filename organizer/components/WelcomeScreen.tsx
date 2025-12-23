@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
+import { getLineLoginUrl } from '@/lib/auth'
 
 type AuthMode = 'initial' | 'login' | 'register'
 type LoginMethod = 'line' | 'email' | 'google'
@@ -158,6 +159,30 @@ export default function WelcomeScreen() {
       console.error('[WelcomeScreen] Error in handleGoogleRegister:', error)
       setError('Google新規登録のURL生成に失敗しました。もう一度お試しください。')
       setLoading(false)
+    }
+  }
+
+  const handleLineLogin = () => {
+    try {
+      console.log('[WelcomeScreen] LINE Login button clicked')
+      const loginUrl = getLineLoginUrl()
+      console.log('[WelcomeScreen] LINE Login URL generated, redirecting to:', loginUrl.replace(/state=[^&]+/, 'state=***'))
+      window.location.href = loginUrl
+    } catch (error) {
+      console.error('[WelcomeScreen] Error in handleLineLogin:', error)
+      setError('LINEログインのURL生成に失敗しました。もう一度お試しください。')
+    }
+  }
+
+  const handleLineRegister = () => {
+    try {
+      console.log('[WelcomeScreen] LINE Register button clicked')
+      const loginUrl = getLineLoginUrl()
+      console.log('[WelcomeScreen] LINE Register URL generated, redirecting to:', loginUrl.replace(/state=[^&]+/, 'state=***'))
+      window.location.href = loginUrl
+    } catch (error) {
+      console.error('[WelcomeScreen] Error in handleLineRegister:', error)
+      setError('LINE新規登録のURL生成に失敗しました。もう一度お試しください。')
     }
   }
 
