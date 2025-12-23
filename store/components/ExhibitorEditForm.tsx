@@ -707,47 +707,6 @@ export default function ExhibitorEditForm({
                       onImageDelete={() => handleImageDelete('fire_equipment_layout_image_url')}
                     />
                   </div>
-
-                    <ImageUpload
-                      label="車検証"
-                      documentType="vehicle_inspection"
-                      userId={userProfile.userId}
-                      currentImageUrl={imageUrls.vehicle_inspection_image_url}
-                      onUploadComplete={(url) => handleImageUpload('vehicle_inspection_image_url', url)}
-                      onUploadError={(error) => alert(error)}
-                      onImageDelete={() => handleImageDelete('vehicle_inspection_image_url')}
-                    />
-
-                    <ImageUpload
-                      label="自動車検査証"
-                      documentType="automobile_inspection"
-                      userId={userProfile.userId}
-                      currentImageUrl={imageUrls.automobile_inspection_image_url}
-                      onUploadComplete={(url) => handleImageUpload('automobile_inspection_image_url', url)}
-                      onUploadError={(error) => alert(error)}
-                      onImageDelete={() => handleImageDelete('automobile_inspection_image_url')}
-                    />
-
-                    <ImageUpload
-                      label="PL保険"
-                      documentType="pl_insurance"
-                      userId={userProfile.userId}
-                      currentImageUrl={imageUrls.pl_insurance_image_url}
-                      onUploadComplete={(url) => handleImageUpload('pl_insurance_image_url', url)}
-                      onUploadError={(error) => alert(error)}
-                      onImageDelete={() => handleImageDelete('pl_insurance_image_url')}
-                    />
-
-                    <ImageUpload
-                      label="火器類配置図"
-                      documentType="fire_equipment_layout"
-                      userId={userProfile.userId}
-                      currentImageUrl={imageUrls.fire_equipment_layout_image_url}
-                      onUploadComplete={(url) => handleImageUpload('fire_equipment_layout_image_url', url)}
-                      onUploadError={(error) => alert(error)}
-                      onImageDelete={() => handleImageDelete('fire_equipment_layout_image_url')}
-                    />
-                  </div>
                 </div>
               </div>
 
