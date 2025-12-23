@@ -267,17 +267,18 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
     display: 'flex',
     flexDirection: 'row' as const,
     alignItems: 'center',
-    padding: '12px 16px',
+    padding: '16px',
     gap: '10px',
     width: '100%',
     height: '48px',
     background: '#FFFFFF',
-    border: hasError ? '2px solid #ef4444' : '1px solid #e5e7eb',
-    borderRadius: '8px',
+    border: hasError ? '2px solid #ef4444' : '2px solid #E9ECEF',
+    borderRadius: '16px',
     transition: 'all 0.2s ease-in-out',
     fontSize: '16px',
     lineHeight: '1.5',
-    color: '#111827'
+    color: '#2C3E50',
+    fontFamily: '"Noto Sans JP", sans-serif'
   })
 
   const labelStyle = {
@@ -285,8 +286,8 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
     fontSize: '14px',
     fontWeight: 500,
     lineHeight: '1.4',
-    color: '#111827',
-    marginBottom: '8px',
+    color: '#2C3E50',
+    marginBottom: '10px',
     display: 'block' as const
   }
 
@@ -294,7 +295,7 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
     fontFamily: '"Noto Sans JP", sans-serif',
     fontSize: '16px',
     lineHeight: '1.5',
-    color: hasValue ? '#111827' : '#6b7280',
+    color: hasValue ? '#2C3E50' : '#6C757D',
     border: 'none',
     outline: 'none',
     width: '100%',
@@ -673,7 +674,7 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
               width: '100%',
               height: '48px',
               background: '#FF8A5C',
-              borderRadius: '8px',
+              borderRadius: '16px',
               border: 'none',
               fontFamily: '"Noto Sans JP", sans-serif',
               fontSize: '16px',
@@ -714,7 +715,7 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
           fontSize: '20px',
           fontWeight: 700,
           lineHeight: '120%',
-          color: '#000000',
+          color: '#2C3E50',
           marginBottom: '24px',
           textAlign: 'center'
         }}>
@@ -723,38 +724,37 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
         
         <div style={{
           background: '#FFFFFF',
-          boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-          borderRadius: '12px',
+          boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
+          borderRadius: '16px',
           padding: '24px',
-          marginBottom: '24px',
-          border: '1px solid #f3f4f6'
+          marginBottom: '24px'
         }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             <div>
-              <label style={{ ...labelStyle, marginBottom: '8px', display: 'block' }}>会社名</label>
-              <p style={{ fontFamily: '"Noto Sans JP", sans-serif', fontSize: '16px', fontWeight: 600, lineHeight: '150%', color: '#000000' }}>{formData.company_name}</p>
+              <label style={{ ...labelStyle, marginBottom: '10px', display: 'block', color: '#2C3E50' }}>会社名</label>
+              <p style={{ fontFamily: '"Noto Sans JP", sans-serif', fontSize: '16px', fontWeight: 600, lineHeight: '150%', color: '#2C3E50' }}>{formData.company_name}</p>
             </div>
             <div>
-              <label style={{ ...labelStyle, marginBottom: '8px', display: 'block' }}>名前</label>
-              <p style={{ fontFamily: '"Noto Sans JP", sans-serif', fontSize: '16px', fontWeight: 600, lineHeight: '150%', color: '#000000' }}>{formData.name}</p>
+              <label style={{ ...labelStyle, marginBottom: '10px', display: 'block', color: '#2C3E50' }}>名前</label>
+              <p style={{ fontFamily: '"Noto Sans JP", sans-serif', fontSize: '16px', fontWeight: 600, lineHeight: '150%', color: '#2C3E50' }}>{formData.name}</p>
             </div>
             <div>
-              <label style={{ ...labelStyle, marginBottom: '8px', display: 'block' }}>性別</label>
-              <p style={{ fontFamily: '"Noto Sans JP", sans-serif', fontSize: '16px', fontWeight: 600, lineHeight: '150%', color: '#000000' }}>
+              <label style={{ ...labelStyle, marginBottom: '10px', display: 'block', color: '#2C3E50' }}>性別</label>
+              <p style={{ fontFamily: '"Noto Sans JP", sans-serif', fontSize: '16px', fontWeight: 600, lineHeight: '150%', color: '#2C3E50' }}>
                 {formData.gender === '男' ? '男性' : formData.gender === '女' ? '女性' : formData.gender === 'それ以外' ? 'その他' : ''}
               </p>
             </div>
             <div>
-              <label style={{ ...labelStyle, marginBottom: '8px', display: 'block' }}>年齢</label>
-              <p style={{ fontFamily: '"Noto Sans JP", sans-serif', fontSize: '16px', fontWeight: 600, lineHeight: '150%', color: '#000000' }}>{formData.age}歳</p>
+              <label style={{ ...labelStyle, marginBottom: '10px', display: 'block', color: '#2C3E50' }}>年齢</label>
+              <p style={{ fontFamily: '"Noto Sans JP", sans-serif', fontSize: '16px', fontWeight: 600, lineHeight: '150%', color: '#2C3E50' }}>{formData.age}歳</p>
             </div>
             <div>
-              <label style={{ ...labelStyle, marginBottom: '8px', display: 'block' }}>電話番号</label>
-              <p style={{ fontFamily: '"Noto Sans JP", sans-serif', fontSize: '16px', fontWeight: 600, lineHeight: '150%', color: '#000000' }}>{formData.phone_number}</p>
+              <label style={{ ...labelStyle, marginBottom: '10px', display: 'block', color: '#2C3E50' }}>電話番号</label>
+              <p style={{ fontFamily: '"Noto Sans JP", sans-serif', fontSize: '16px', fontWeight: 600, lineHeight: '150%', color: '#2C3E50' }}>{formData.phone_number}</p>
             </div>
             <div>
-              <label style={{ ...labelStyle, marginBottom: '8px', display: 'block' }}>メールアドレス</label>
-              <p style={{ fontFamily: '"Noto Sans JP", sans-serif', fontSize: '16px', fontWeight: 600, lineHeight: '150%', color: '#000000' }}>{formData.email}</p>
+              <label style={{ ...labelStyle, marginBottom: '10px', display: 'block', color: '#2C3E50' }}>メールアドレス</label>
+              <p style={{ fontFamily: '"Noto Sans JP", sans-serif', fontSize: '16px', fontWeight: 600, lineHeight: '150%', color: '#2C3E50' }}>{formData.email}</p>
             </div>
           </div>
         </div>
@@ -773,13 +773,13 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
               gap: '10px',
               height: '48px',
               background: '#FFFFFF',
-              border: '2px solid #2563eb',
-              borderRadius: '8px',
+              border: '2px solid #FF8A5C',
+              borderRadius: '16px',
               fontFamily: '"Noto Sans JP", sans-serif',
               fontSize: '16px',
               fontWeight: 600,
               lineHeight: '1.5',
-              color: '#2563eb',
+              color: '#FF8A5C',
               cursor: 'pointer',
               transition: 'all 0.2s ease-in-out',
               boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
@@ -807,8 +807,8 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
               padding: '14px 24px',
               gap: '10px',
               height: '48px',
-              background: loading ? '#9ca3af' : '#2563eb',
-              borderRadius: '8px',
+              background: loading ? '#9ca3af' : '#FF8A5C',
+              borderRadius: '16px',
               border: 'none',
               fontFamily: '"Noto Sans JP", sans-serif',
               fontSize: '16px',
@@ -821,20 +821,20 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
             }}
             onMouseEnter={(e) => {
               if (!loading) {
-                e.currentTarget.style.background = '#1d4ed8'
+                e.currentTarget.style.background = '#FF7840'
                 e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
                 e.currentTarget.style.transform = 'translateY(-1px)'
               }
             }}
             onMouseLeave={(e) => {
               if (!loading) {
-                e.currentTarget.style.background = '#2563eb'
+                e.currentTarget.style.background = '#FF8A5C'
                 e.currentTarget.style.boxShadow = '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
                 e.currentTarget.style.transform = 'translateY(0)'
               }
             }}
           >
-            {loading ? '登録中...' : '登録する'}
+            {loading ? '登録中...' : '次へ'}
           </button>
         </div>
       </div>
@@ -865,37 +865,61 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
         })
       }}>
       <div className="container mx-auto" style={{ padding: isDesktop ? '20px 32px' : '9px 16px', maxWidth: isDesktop ? '600px' : '393px' }}>
-        {/* ヘッダーカード */}
+        {/* ヘッダーカード - SVGデコレーションを直接埋め込み、テキストはReactで制御 */}
         <div style={{
           position: 'relative',
-          background: '#FFFFFF',
-          borderRadius: '16px',
-          padding: '32px 24px',
+          width: '100%',
+          height: isDesktop ? '93px' : '93px',
           marginBottom: '24px',
-          boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)',
-          overflow: 'hidden'
+          maxWidth: isDesktop ? '600px' : '393px',
+          margin: '0 auto 24px auto'
         }}>
-          {/* デコレーション - 星 */}
-          <svg style={{ position: 'absolute', top: '61px', left: '212px', width: '11px', height: '11px' }} viewBox="0 0 11 11" fill="none">
-            <path d="M5.504 0.2835C5.811 0.1078 6.189 0.1078 6.496 0.2835L11.481 3.1318C12.152 3.5157 12.152 4.4843 11.481 4.8682L6.496 7.7165C6.189 7.8922 5.811 7.8922 5.504 7.7165L0.519 4.8682C-0.152 4.4843 -0.152 3.5157 0.519 3.1318L5.504 0.2835Z" fill="#E9ECEF" transform="scale(0.5)"/>
+          <svg 
+            width="100%" 
+            height="100%" 
+            viewBox="0 0 417 125" 
+            preserveAspectRatio="xMidYMid meet"
+            style={{ position: 'absolute', top: 0, left: 0 }}
+          >
+            <defs>
+              <filter id="filter0_d_header" x="0" y="0" width="417" height="93" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+                <feFlood floodOpacity="0" result="BackgroundImageFix"/>
+                <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
+                <feOffset/>
+                <feGaussianBlur stdDeviation="4"/>
+                <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/>
+                <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+                <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+              </filter>
+            </defs>
+            {/* カード背景 */}
+            <g filter="url(#filter0_d_header)">
+              <rect x="32" y="32" width="353" height="93" rx="16" fill="white"/>
+            </g>
+            {/* デコレーション - 星（左） */}
+            <path d="M212.504 61.2835C212.811 61.1078 213.189 61.1078 213.496 61.2835L239.481 76.1318C240.152 76.5157 240.152 77.4843 239.481 77.8682L213.496 92.7165C213.189 92.8922 212.811 92.8922 212.504 92.7165L186.519 77.8682C185.848 77.4843 185.848 76.5157 186.519 76.1318L212.504 61.2835Z" fill="#E9ECEF"/>
+            {/* デコレーション - 星（右） */}
+            <path d="M333.504 61.2835C333.811 61.1078 334.189 61.1078 334.496 61.2835L360.481 76.1318C361.152 76.5157 361.152 77.4843 360.481 77.8682L334.496 92.7165C334.189 92.8922 333.811 92.8922 333.504 92.7165L307.519 77.8682C306.848 77.4843 306.848 76.5157 307.519 76.1318L333.504 61.2835Z" fill="#E9ECEF"/>
+            {/* デコレーション - 線（左） */}
+            <line x1="120" y1="77" x2="184" y2="77" stroke="#E9ECEF" strokeWidth="2"/>
+            {/* デコレーション - 線（右） */}
+            <line x1="242" y1="77" x2="306" y2="77" stroke="#E9ECEF" strokeWidth="2"/>
           </svg>
-          <svg style={{ position: 'absolute', top: '61px', right: '58px', width: '11px', height: '11px' }} viewBox="0 0 11 11" fill="none">
-            <path d="M5.504 0.2835C5.811 0.1078 6.189 0.1078 6.496 0.2835L11.481 3.1318C12.152 3.5157 12.152 4.4843 11.481 4.8682L6.496 7.7165C6.189 7.8922 5.811 7.8922 5.504 7.7165L0.519 4.8682C-0.152 4.4843 -0.152 3.5157 0.519 3.1318L5.504 0.2835Z" fill="#E9ECEF" transform="scale(0.5)"/>
-          </svg>
-          {/* デコレーション - 線 */}
-          <div style={{ position: 'absolute', top: '77px', left: '120px', width: '64px', height: '2px', background: '#E9ECEF' }}></div>
-          <div style={{ position: 'absolute', top: '77px', right: '58px', width: '64px', height: '2px', background: '#E9ECEF' }}></div>
-          
+          {/* テキストはReactで制御（動的変更に対応） */}
           <h2 style={{ 
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
             fontFamily: '"Noto Sans JP", sans-serif',
             fontSize: '20px',
             fontWeight: 700,
             lineHeight: '120%',
             color: '#2C3E50',
-            textAlign: 'center',
-            margin: 0
+            margin: 0,
+            whiteSpace: 'nowrap'
           }}>
-            主催者登録
+            主催者情報登録フォーム
           </h2>
         </div>
 
@@ -906,7 +930,7 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
           borderRadius: '16px',
           padding: '24px',
           marginBottom: '24px',
-          boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.05)'
+          boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)'
         }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', alignItems: 'center' }}>
             {/* 会社名 */}
@@ -1065,7 +1089,7 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
               width: '24px',
               height: '24px',
               background: termsAccepted ? '#FF8A5C' : '#FFFFFF',
-              border: termsAccepted ? 'none' : '1px solid #E5E5E5',
+              border: termsAccepted ? 'none' : '2px solid #E9ECEF',
               borderRadius: '8px',
               position: 'relative',
               display: 'flex',
@@ -1143,7 +1167,7 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
               fontFamily: '"Noto Sans JP", sans-serif',
               fontSize: '16px',
               lineHeight: '150%',
-              color: '#111827'
+              color: '#2C3E50'
             }}>
               に同意する
             </span>
@@ -1167,8 +1191,8 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
             width: '100%',
             maxWidth: '330px',
             height: '48px',
-            background: termsAccepted && !loading ? '#2563eb' : '#9ca3af',
-            borderRadius: '8px',
+            background: termsAccepted && !loading ? '#FF8A5C' : '#9ca3af',
+            borderRadius: '16px',
             border: 'none',
             fontFamily: '"Noto Sans JP", sans-serif',
             fontSize: '16px',
@@ -1183,20 +1207,20 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
           }}
           onMouseEnter={(e) => {
             if (termsAccepted && !loading) {
-              e.currentTarget.style.background = '#1d4ed8'
+              e.currentTarget.style.background = '#FF7840'
               e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
               e.currentTarget.style.transform = 'translateY(-1px)'
             }
           }}
           onMouseLeave={(e) => {
             if (termsAccepted && !loading) {
-              e.currentTarget.style.background = '#2563eb'
+              e.currentTarget.style.background = '#FF8A5C'
               e.currentTarget.style.boxShadow = '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
               e.currentTarget.style.transform = 'translateY(0)'
             }
           }}
         >
-          次に進む
+          次へ
         </button>
       </div>
       </div>
@@ -1223,16 +1247,16 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
         
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '48px 0' }}>
           <div style={{
-            width: '64px',
-            height: '64px',
+            width: '80px',
+            height: '80px',
             background: '#FF8A5C',
             borderRadius: '50%',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            marginBottom: '24px'
+            marginBottom: '32px'
           }}>
-            <svg style={{ width: '32px', height: '32px', color: '#FFFFFF' }} fill="currentColor" viewBox="0 0 24 24">
+            <svg style={{ width: '40px', height: '40px', color: '#FFFFFF' }} fill="currentColor" viewBox="0 0 24 24">
               <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="#FFFFFF"/>
             </svg>
           </div>
@@ -1242,18 +1266,18 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
             fontSize: '24px',
             fontWeight: 700,
             lineHeight: '120%',
-            color: '#000000',
-            marginBottom: '16px'
+            color: '#2C3E50',
+            marginBottom: '24px'
           }}>
             登録完了
           </h2>
           
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '32px', textAlign: 'center' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '40px', textAlign: 'center' }}>
             <p style={{
               fontFamily: '"Noto Sans JP", sans-serif',
               fontSize: '16px',
               lineHeight: '150%',
-              color: '#666666'
+              color: '#6C757D'
             }}>
               主催者登録が完了しました
             </p>
@@ -1261,7 +1285,7 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
               fontFamily: '"Noto Sans JP", sans-serif',
               fontSize: '16px',
               lineHeight: '150%',
-              color: '#666666'
+              color: '#6C757D'
             }}>
               メールアドレスに確認メールを送信しました
             </p>
@@ -1276,29 +1300,29 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
               flexDirection: 'row',
               justifyContent: 'center',
               alignItems: 'center',
-              padding: '14px 24px',
+              padding: '16px 24px',
               gap: '10px',
-              height: '48px',
+              height: '56px',
               background: '#FF8A5C',
-              borderRadius: '8px',
+              borderRadius: '16px',
               border: 'none',
               fontFamily: '"Noto Sans JP", sans-serif',
-              fontSize: '16px',
-              fontWeight: 600,
+              fontSize: '18px',
+              fontWeight: 700,
               lineHeight: '1.5',
               color: '#FFFFFF',
               cursor: 'pointer',
               transition: 'all 0.2s ease-in-out',
-              boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
+              boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)'
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = '#FF7840'
-              e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
+              e.currentTarget.style.boxShadow = '0px 2px 8px rgba(0, 0, 0, 0.1)'
               e.currentTarget.style.transform = 'translateY(-1px)'
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.background = '#FF8A5C'
-              e.currentTarget.style.boxShadow = '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
+              e.currentTarget.style.boxShadow = '0px 2px 8px rgba(0, 0, 0, 0.1)'
               e.currentTarget.style.transform = 'translateY(0)'
             }}
           >

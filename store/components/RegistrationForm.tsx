@@ -604,7 +604,7 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
         justifyContent: 'center', 
         marginBottom: '32px', 
         paddingTop: '24px',
-        background: '#fff5f0',
+        background: '#E8F5F5',
         padding: '24px 16px'
       }}>
         <div style={{ position: 'relative', width: '100%', maxWidth: '320px', display: 'flex', alignItems: 'center' }}>
@@ -741,43 +741,93 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
   // ステップ1: 情報登録
   const renderStep1 = () => (
     <div style={{ 
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
       minHeight: '100vh',
       width: '100%',
-      background: '#fff5f0',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'flex-start',
+      background: '#E8F5F5',
       padding: isDesktop ? '40px 20px' : 0
     }}>
-    <div style={{ 
-      position: 'relative',
-      width: '100%',
-        maxWidth: '393px',
-      background: '#FFFFFF',
-        minHeight: isDesktop ? 'auto' : '852px'
-    }}>
-        <div className="container mx-auto" style={{ padding: '9px 16px', maxWidth: '393px' }}>
-        <ProgressIndicator />
-        
-        <h2 style={{ 
-          fontFamily: '"Noto Sans JP", sans-serif',
-          fontSize: '20px',
-          fontWeight: 700,
-          lineHeight: '120%',
-          color: '#000000',
+      <div style={{ 
+        position: 'relative',
+        width: '100%',
+        maxWidth: isDesktop ? '600px' : '393px',
+        minHeight: isDesktop ? '800px' : '852px',
+        background: '#E8F5F5',
+        ...(isDesktop && {
+          padding: '40px 0',
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+          borderRadius: '12px'
+        })
+      }}>
+      <div className="container mx-auto" style={{ padding: isDesktop ? '20px 32px' : '9px 16px', maxWidth: isDesktop ? '600px' : '393px' }}>
+        {/* ヘッダーカード - SVGデコレーションを直接埋め込み、テキストはReactで制御 */}
+        <div style={{
+          position: 'relative',
+          width: '100%',
+          height: isDesktop ? '93px' : '93px',
           marginBottom: '24px',
-          marginTop: '16px',
-          textAlign: 'center'
+          maxWidth: isDesktop ? '600px' : '393px',
+          margin: '0 auto 24px auto'
         }}>
-          情報登録をしてください
-        </h2>
+          <svg 
+            width="100%" 
+            height="100%" 
+            viewBox="0 0 417 125" 
+            preserveAspectRatio="xMidYMid meet"
+            style={{ position: 'absolute', top: 0, left: 0 }}
+          >
+            <defs>
+              <filter id="filter0_d_exhibitor" x="0" y="0" width="417" height="93" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+                <feFlood floodOpacity="0" result="BackgroundImageFix"/>
+                <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
+                <feOffset/>
+                <feGaussianBlur stdDeviation="4"/>
+                <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/>
+                <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+                <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+              </filter>
+            </defs>
+            {/* カード背景 */}
+            <g filter="url(#filter0_d_exhibitor)">
+              <rect x="32" y="32" width="353" height="93" rx="16" fill="white"/>
+            </g>
+            {/* デコレーション - 星（左） */}
+            <path d="M212.504 61.2835C212.811 61.1078 213.189 61.1078 213.496 61.2835L239.481 76.1318C240.152 76.5157 240.152 77.4843 239.481 77.8682L213.496 92.7165C213.189 92.8922 212.811 92.8922 212.504 92.7165L186.519 77.8682C185.848 77.4843 185.848 76.5157 186.519 76.1318L212.504 61.2835Z" fill="#E9ECEF"/>
+            {/* デコレーション - 星（右） */}
+            <path d="M333.504 61.2835C333.811 61.1078 334.189 61.1078 334.496 61.2835L360.481 76.1318C361.152 76.5157 361.152 77.4843 360.481 77.8682L334.496 92.7165C334.189 92.8922 333.811 92.8922 333.504 92.7165L307.519 77.8682C306.848 77.4843 306.848 76.5157 307.519 76.1318L333.504 61.2835Z" fill="#E9ECEF"/>
+            {/* デコレーション - 線（左） */}
+            <line x1="120" y1="77" x2="184" y2="77" stroke="#E9ECEF" strokeWidth="2"/>
+            {/* デコレーション - 線（右） */}
+            <line x1="242" y1="77" x2="306" y2="77" stroke="#E9ECEF" strokeWidth="2"/>
+          </svg>
+          {/* テキストはReactで制御（動的変更に対応） */}
+          <h2 style={{ 
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            fontFamily: '"Noto Sans JP", sans-serif',
+            fontSize: '20px',
+            fontWeight: 700,
+            lineHeight: '120%',
+            color: '#2C3E50',
+            margin: 0,
+            whiteSpace: 'nowrap'
+          }}>
+            出店者情報登録フォーム
+          </h2>
+        </div>
+
+        <ProgressIndicator />
         
         <div style={{
           background: '#FFFFFF',
-          boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
-          borderRadius: '12px',
+          borderRadius: '16px',
           padding: '24px',
-          marginBottom: '24px'
+          marginBottom: '24px',
+          boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.05)'
         }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', alignItems: 'center' }}>
             {/* 名前 */}
@@ -1244,7 +1294,7 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
             marginRight: 'auto'
           }}
         >
-          次に進む
+          次へ
         </button>
       </div>
       </div>
@@ -1256,7 +1306,7 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
     <div style={{ 
       minHeight: '100vh',
       width: '100%',
-      background: '#fff5f0',
+      background: '#E8F5F5',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'flex-start',
@@ -1266,7 +1316,7 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
       position: 'relative',
       width: '100%',
         maxWidth: '393px',
-      background: '#FFFFFF',
+      background: '#E8F5F5',
         minHeight: isDesktop ? 'auto' : '852px'
     }}>
         <div className="container mx-auto" style={{ padding: '9px 16px', maxWidth: '393px' }}>
@@ -1349,7 +1399,7 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
                     width: '330px',
                     height: '200px',
                     background: '#F7F7F7',
-                    border: '2px solid #06C755',
+                    border: '2px solid #5DABA8',
                     borderRadius: '8px'
                   }}>
                     <img
@@ -1381,7 +1431,7 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
                     width: '330px',
                     height: '200px',
                     background: '#F7F7F7',
-                    border: '2px solid #06C755',
+                    border: '2px solid #5DABA8',
                     borderRadius: '8px'
                   }}>
                     <img
@@ -1413,7 +1463,7 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
                     width: '330px',
                     height: '200px',
                     background: '#F7F7F7',
-                    border: '2px solid #06C755',
+                    border: '2px solid #5DABA8',
                     borderRadius: '8px'
                   }}>
                     <img
@@ -1445,7 +1495,7 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
                     width: '330px',
                     height: '200px',
                     background: '#F7F7F7',
-                    border: '2px solid #06C755',
+                    border: '2px solid #5DABA8',
                     borderRadius: '8px'
                   }}>
                     <img
@@ -1477,7 +1527,7 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
                     width: '330px',
                     height: '200px',
                     background: '#F7F7F7',
-                    border: '2px solid #06C755',
+                    border: '2px solid #5DABA8',
                     borderRadius: '8px'
                   }}>
                     <img
@@ -1511,13 +1561,13 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
               gap: '10px',
               height: '48px',
               background: '#FFFFFF',
-              border: '2px solid #06C755',
+              border: '2px solid #5DABA8',
               borderRadius: '8px',
               fontFamily: '"Noto Sans JP", sans-serif',
               fontSize: '16px',
               fontWeight: 700,
               lineHeight: '19px',
-              color: '#06C755',
+              color: '#5DABA8',
               cursor: 'pointer'
             }}
           >
@@ -1535,7 +1585,7 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
               padding: '16px 24px',
               gap: '10px',
               height: '48px',
-              background: loading ? '#D9D9D9' : '#06C755',
+              background: loading ? '#D9D9D9' : '#5DABA8',
               borderRadius: '8px',
               border: 'none',
               fontFamily: '"Noto Sans JP", sans-serif',
@@ -1561,7 +1611,7 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
       <div style={{
         minHeight: '100vh',
       width: '100%',
-      background: '#fff5f0',
+      background: '#E8F5F5',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'flex-start',
@@ -1571,7 +1621,7 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
         position: 'relative',
         width: '100%',
         maxWidth: '393px',
-        background: '#FFFFFF',
+        background: '#E8F5F5',
         minHeight: isDesktop ? 'auto' : '852px'
       }}>
         <div className="container mx-auto" style={{ padding: '9px 16px', maxWidth: '393px' }}>
@@ -1618,7 +1668,7 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
               gap: '10px',
               width: '100%',
               height: '48px',
-              background: '#06C755',
+              background: '#5DABA8',
               borderRadius: '8px',
               border: 'none',
               fontFamily: '"Noto Sans JP", sans-serif',
@@ -1641,76 +1691,154 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
   // ステップ3: 登録完了
   const renderStep3 = () => (
     <div style={{ 
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
       minHeight: '100vh',
       width: '100%',
-      background: '#fff5f0',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'flex-start',
+      background: '#E8F5F5',
       padding: isDesktop ? '40px 20px' : 0
     }}>
-    <div style={{ 
-      position: 'relative',
-      width: '100%',
-        maxWidth: '393px',
-      background: '#FFFFFF',
-        minHeight: isDesktop ? 'auto' : '852px'
-    }}>
-        <div className="container mx-auto" style={{ padding: '9px 16px', maxWidth: '393px' }}>
-        <ProgressIndicator />
-        
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '48px 0' }}>
+      <div style={{ 
+        position: 'relative',
+        width: '100%',
+        maxWidth: isDesktop ? '600px' : '393px',
+        minHeight: isDesktop ? '800px' : '852px',
+        background: '#E8F5F5',
+        ...(isDesktop && {
+          padding: '40px 0',
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+          borderRadius: '12px'
+        })
+      }}>
+        <div className="container mx-auto" style={{ padding: isDesktop ? '20px 32px' : '9px 16px', maxWidth: isDesktop ? '600px' : '393px' }}>
+          {/* ヘッダーカード - SVGデコレーションを直接埋め込み、テキストはReactで制御 */}
           <div style={{
-            width: '96px',
-            height: '96px',
-            background: '#06C755',
-            borderRadius: '8px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginBottom: '24px'
+            position: 'relative',
+            width: '100%',
+            height: isDesktop ? '93px' : '93px',
+            marginBottom: '24px',
+            maxWidth: isDesktop ? '600px' : '393px',
+            margin: '0 auto 24px auto'
           }}>
-            <svg style={{ width: '64px', height: '64px', color: '#FFFFFF' }} fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+            <svg 
+              width="100%" 
+              height="100%" 
+              viewBox="0 0 417 125" 
+              preserveAspectRatio="xMidYMid meet"
+              style={{ position: 'absolute', top: 0, left: 0 }}
+            >
+              <defs>
+                <filter id="filter0_d_exhibitor_step3" x="0" y="0" width="417" height="93" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+                  <feFlood floodOpacity="0" result="BackgroundImageFix"/>
+                  <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
+                  <feOffset/>
+                  <feGaussianBlur stdDeviation="4"/>
+                  <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/>
+                  <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+                  <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+                </filter>
+              </defs>
+              {/* カード背景 */}
+              <g filter="url(#filter0_d_exhibitor_step3)">
+                <rect x="32" y="32" width="353" height="93" rx="16" fill="white"/>
+              </g>
+              {/* デコレーション - 星（左） */}
+              <path d="M212.752 61.7178C212.906 61.6299 213.094 61.6299 213.248 61.7178L239.232 76.5654C239.568 76.7574 239.568 77.2426 239.232 77.4346L213.248 92.2822C213.094 92.3701 212.906 92.3701 212.752 92.2822L186.768 77.4346C186.432 77.2426 186.432 76.7574 186.768 76.5654L212.752 61.7178Z" fill="#A8D5BA" stroke="#A8D5BA"/>
+              {/* デコレーション - 星（右） */}
+              <path d="M333.504 61.2835C333.811 61.1078 334.189 61.1078 334.496 61.2835L360.481 76.1318C361.152 76.5157 361.152 77.4843 360.481 77.8682L334.496 92.7165C334.189 92.8922 333.811 92.8922 333.504 92.7165L307.519 77.8682C306.848 77.4843 306.848 76.5157 307.519 76.1318L333.504 61.2835Z" fill="#A8D5BA"/>
+              {/* デコレーション - 線（左） */}
+              <line x1="120" y1="77" x2="184" y2="77" stroke="#A8D5BA" strokeWidth="2"/>
+              {/* デコレーション - 線（右） */}
+              <line x1="242" y1="77" x2="306" y2="77" stroke="#A8D5BA" strokeWidth="2"/>
             </svg>
+            {/* テキストはReactで制御（動的変更に対応） */}
+            <h2 style={{ 
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              fontFamily: '"Noto Sans JP", sans-serif',
+              fontSize: '20px',
+              fontWeight: 700,
+              lineHeight: '120%',
+              color: '#2C3E50',
+              margin: 0,
+              whiteSpace: 'nowrap'
+            }}>
+              出店者情報登録フォーム
+            </h2>
           </div>
+
+          <ProgressIndicator />
           
-          <h2 style={{
-            fontFamily: '"Noto Sans JP", sans-serif',
-            fontSize: '24px',
-            fontWeight: 700,
-            lineHeight: '120%',
-            color: '#000000',
-            marginBottom: '32px'
-          }}>
-            登録完了
-          </h2>
-          
-          <button
-            onClick={onRegistrationComplete}
-            style={{
-              width: '100%',
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '48px 0' }}>
+            {/* チェックマークアイコン */}
+            <div style={{
+              width: '80px',
+              height: '80px',
+              background: '#5DABA8',
+              borderRadius: '50%',
               display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'center',
               alignItems: 'center',
-              padding: '16px 24px',
-              gap: '10px',
-              height: '48px',
-              background: '#06C755',
-              borderRadius: '8px',
-              border: 'none',
+              justifyContent: 'center',
+              marginBottom: '24px'
+            }}>
+              <svg style={{ width: '48px', height: '48px', color: '#FFFFFF' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            
+            <h2 style={{
+              fontFamily: '"Noto Sans JP", sans-serif',
+              fontSize: '24px',
+              fontWeight: 700,
+              lineHeight: '120%',
+              color: '#000000',
+              marginBottom: '16px',
+              textAlign: 'center'
+            }}>
+              登録完了
+            </h2>
+
+            <p style={{
               fontFamily: '"Noto Sans JP", sans-serif',
               fontSize: '16px',
-              fontWeight: 700,
-              lineHeight: '19px',
-              color: '#FFFFFF',
-              cursor: 'pointer'
-            }}
-          >
-            マイページへ
-          </button>
-        </div>
+              fontWeight: 400,
+              lineHeight: '150%',
+              color: '#666666',
+              marginBottom: '32px',
+              textAlign: 'center'
+            }}>
+              出店者登録が完了しました
+            </p>
+            
+            <button
+              onClick={onRegistrationComplete}
+              style={{
+                width: '100%',
+                maxWidth: '330px',
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                padding: '16px 24px',
+                gap: '10px',
+                height: '48px',
+                background: '#FFFFFF',
+                borderRadius: '8px',
+                border: '2px solid #5DABA8',
+                fontFamily: '"Noto Sans JP", sans-serif',
+                fontSize: '16px',
+                fontWeight: 700,
+                lineHeight: '19px',
+                color: '#5DABA8',
+                cursor: 'pointer'
+              }}
+            >
+              ホームへ戻る
+            </button>
+          </div>
         </div>
       </div>
     </div>

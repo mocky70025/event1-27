@@ -824,27 +824,17 @@ export default function WelcomeScreen() {
 
         {/* メールアドレスでログイン */}
         {authMode === 'login' && loginMethod === 'email' && (
-          <form onSubmit={handleEmailLogin} style={{ padding: '0 20px' }}>
+          <form onSubmit={handleEmailLogin} style={{ padding: '0 20px', paddingBottom: '32px' }}>
             <h2 style={{
               fontSize: '18px',
               fontWeight: 700,
               color: '#2C3E50',
-              marginBottom: '20px',
+              marginBottom: '32px',
               textAlign: 'center',
               position: 'relative',
-              paddingBottom: '12px'
+              paddingTop: '8px'
             }}>
-              <span style={{
-                position: 'absolute',
-                bottom: 0,
-                left: '50%',
-                transform: 'translateX(-50%)',
-                width: '48px',
-                height: '3px',
-                background: '#5DABA8',
-                borderRadius: '2px'
-              }} />
-              ログイン
+              メールアドレスでログイン
             </h2>
 
             <input
@@ -858,9 +848,9 @@ export default function WelcomeScreen() {
                 padding: '14px 16px',
                 fontSize: '15px',
                 lineHeight: 1.5,
-                color: email ? '#111827' : '#9ca3af',
+                color: email ? '#2C3E50' : '#6C757D',
                 background: '#ffffff',
-                border: '2px solid #E9ECEF',
+                border: '1px solid #E9ECEF',
                 borderRadius: '12px',
                 marginBottom: '16px',
                 transition: 'all 200ms cubic-bezier(0.4, 0, 0.2, 1)',
@@ -887,11 +877,11 @@ export default function WelcomeScreen() {
                 padding: '14px 16px',
                 fontSize: '15px',
                 lineHeight: 1.5,
-                color: password ? '#111827' : '#9ca3af',
+                color: password ? '#2C3E50' : '#6C757D',
                 background: '#ffffff',
-                border: '2px solid #E9ECEF',
+                border: '1px solid #E9ECEF',
                 borderRadius: '12px',
-                marginBottom: '24px',
+                marginBottom: '32px',
                 transition: 'all 200ms cubic-bezier(0.4, 0, 0.2, 1)',
                 boxSizing: 'border-box'
               }}
@@ -922,35 +912,12 @@ export default function WelcomeScreen() {
                 color: '#ffffff',
                 cursor: loading ? 'not-allowed' : 'pointer',
                 transition: 'all 200ms cubic-bezier(0.4, 0, 0.2, 1)',
-                boxShadow: loading ? 'none' : '0 4px 6px -1px rgba(16, 185, 129, 0.3), 0 2px 4px -1px rgba(16, 185, 129, 0.2)',
-                marginBottom: '24px'
+                boxShadow: loading ? 'none' : '0px 2px 8px rgba(0, 0, 0, 0.08)',
+                marginBottom: '16px'
               }}
             >
-              {loading ? 'ログイン中...' : 'ログイン'}
+              {loading ? 'ログイン中...' : '次へ'}
             </button>
-
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              margin: '24px 0',
-              gap: '16px'
-            }}>
-              <div style={{
-                flex: 1,
-                height: '1px',
-                background: 'linear-gradient(90deg, transparent, #e5e7eb, transparent)'
-              }} />
-              <span style={{
-                fontSize: '14px',
-                color: '#9ca3af',
-                fontWeight: 500
-              }}>または</span>
-              <div style={{
-                flex: 1,
-                height: '1px',
-                background: 'linear-gradient(90deg, transparent, #e5e7eb, transparent)'
-              }} />
-            </div>
 
             <button
               type="button"
@@ -969,16 +936,16 @@ export default function WelcomeScreen() {
                 padding: '16px 24px',
                 background: '#ffffff',
                 borderRadius: '12px',
-                border: '2px solid #E9ECEF',
+                border: '1px solid #E9ECEF',
                 fontSize: '15px',
                 fontWeight: 600,
-                color: '#111827',
+                color: '#2C3E50',
                 cursor: 'pointer',
                 transition: 'all 200ms cubic-bezier(0.4, 0, 0.2, 1)',
-                boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)'
+                boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)'
               }}
             >
-              別の方法でログイン
+              戻る
             </button>
           </form>
         )}
@@ -1142,27 +1109,17 @@ export default function WelcomeScreen() {
 
         {/* メールアドレスで新規登録 */}
         {authMode === 'register' && registerMethod === 'email' && (
-          <form onSubmit={handleEmailRegister} style={{ padding: '0 20px' }}>
+          <form onSubmit={handleEmailRegister} style={{ padding: '0 20px', paddingBottom: '32px' }}>
             <h2 style={{
               fontSize: '18px',
               fontWeight: 700,
               color: '#2C3E50',
-              marginBottom: '20px',
+              marginBottom: '32px',
               textAlign: 'center',
               position: 'relative',
-              paddingBottom: '12px'
+              paddingTop: '8px'
             }}>
-              <span style={{
-                position: 'absolute',
-                bottom: 0,
-                left: '50%',
-                transform: 'translateX(-50%)',
-                width: '48px',
-                height: '3px',
-                background: '#5DABA8',
-                borderRadius: '2px'
-              }} />
-              新規登録
+              メールアドレスで新規登録
             </h2>
 
             <input
@@ -1178,9 +1135,9 @@ export default function WelcomeScreen() {
                 lineHeight: 1.5,
                 color: registerEmail ? '#2C3E50' : '#6C757D',
                 background: '#ffffff',
-                border: '2px solid #E9ECEF',
+                border: '1px solid #E9ECEF',
                 borderRadius: '12px',
-                marginBottom: '24px',
+                marginBottom: '32px',
                 transition: 'all 200ms cubic-bezier(0.4, 0, 0.2, 1)',
                 boxSizing: 'border-box'
               }}
@@ -1197,10 +1154,6 @@ export default function WelcomeScreen() {
             <button
               type="submit"
               disabled={loading || !registerEmail}
-              onClick={async (e) => {
-                e.preventDefault()
-                await handleEmailRegister(e as any)
-              }}
               style={{
                 width: '100%',
                 display: 'flex',
@@ -1215,37 +1168,15 @@ export default function WelcomeScreen() {
                 color: '#ffffff',
                 cursor: loading || !registerEmail ? 'not-allowed' : 'pointer',
                 transition: 'all 200ms cubic-bezier(0.4, 0, 0.2, 1)',
-                boxShadow: loading || !registerEmail ? 'none' : '0px 8px 32px rgba(0, 0, 0, 0.08)',
-                marginBottom: '24px'
+                boxShadow: loading || !registerEmail ? 'none' : '0px 2px 8px rgba(0, 0, 0, 0.08)',
+                marginBottom: '16px'
               }}
             >
-              {loading ? '送信中...' : '新規登録'}
+              {loading ? '送信中...' : '次へ'}
             </button>
 
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              margin: '24px 0',
-              gap: '16px'
-            }}>
-              <div style={{
-                flex: 1,
-                height: '1px',
-                background: 'linear-gradient(90deg, transparent, #e5e7eb, transparent)'
-              }} />
-              <span style={{
-                fontSize: '14px',
-                color: '#9ca3af',
-                fontWeight: 500
-              }}>または</span>
-              <div style={{
-                flex: 1,
-                height: '1px',
-                background: 'linear-gradient(90deg, transparent, #e5e7eb, transparent)'
-              }} />
-        </div>
-
-        <button
+            <button
+              type="button"
               onClick={() => {
                 setRegisterMethod(null)
                 setError('')
@@ -1253,25 +1184,25 @@ export default function WelcomeScreen() {
                 setRegisterPassword('')
                 setRegisterPasswordConfirm('')
               }}
-          style={{
+              style={{
                 width: '100%',
-            display: 'flex',
+                display: 'flex',
                 alignItems: 'center',
-            justifyContent: 'center',
-            padding: '16px 24px',
+                justifyContent: 'center',
+                padding: '16px 24px',
                 background: '#ffffff',
                 borderRadius: '12px',
-                border: '2px solid #E9ECEF',
+                border: '1px solid #E9ECEF',
                 fontSize: '15px',
                 fontWeight: 600,
-                color: '#111827',
+                color: '#2C3E50',
                 cursor: 'pointer',
                 transition: 'all 200ms cubic-bezier(0.4, 0, 0.2, 1)',
-                boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)'
+                boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)'
               }}
             >
-              別の方法で新規登録
-        </button>
+              戻る
+            </button>
           </form>
         )}
       </div>

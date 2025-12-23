@@ -31,7 +31,7 @@ export default function EventManagement({ userProfile }: EventManagementProps) {
   const [showEventForm, setShowEventForm] = useState(false)
   const [eventToEdit, setEventToEdit] = useState<Event | null>(null)
   const [eventForApplications, setEventForApplications] = useState<Event | null>(null)
-  const [currentView, setCurrentView] = useState<'events' | 'profile' | 'notifications'>('events')
+  const [currentView, setCurrentView] = useState<'home' | 'create' | 'notifications' | 'profile'>('home')
   const [loading, setLoading] = useState(true)
   const [navVisible, setNavVisible] = useState(true)
   const [unreadNotificationCount, setUnreadNotificationCount] = useState(0)
@@ -279,7 +279,7 @@ export default function EventManagement({ userProfile }: EventManagementProps) {
 
   const renderCurrentView = () => {
     switch (currentView) {
-      case 'events':
+      case 'home':
         return (
           <div style={{ 
             position: 'relative',
@@ -287,81 +287,30 @@ export default function EventManagement({ userProfile }: EventManagementProps) {
             maxWidth: isDesktop ? '1000px' : '393px',
             minHeight: '852px',
             margin: '0 auto',
-            background: '#FFFFFF'
+            background: '#E8F5F5'
           }}>
-            <div className="container mx-auto" style={{ padding: '9px 16px', maxWidth: '393px', paddingBottom: '24px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', paddingTop: '24px' }}>
-                <h1 style={{
-                  fontFamily: '"Noto Sans JP", sans-serif',
-                  fontSize: '20px',
-                  fontWeight: 700,
-                  lineHeight: '120%',
-                  color: '#000000'
-                }}>イベント管理</h1>
-                {!organizer.is_approved && (
-                  <div style={{
-                    background: '#fef3c7',
-                    border: '1px solid #fbbf24',
-                    borderRadius: '8px',
-                    padding: '12px 16px',
-                    marginBottom: '16px',
-                    width: '100%',
-                    boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
-                  }}>
-                    <p style={{
-                      fontFamily: '"Noto Sans JP", sans-serif',
-                      fontSize: '14px',
-                      lineHeight: '1.5',
-                      color: '#92400e',
-                      margin: 0,
-                      fontWeight: 500
-                    }}>
-                      承認待ち: 運営側の承認後、イベントの掲載が可能になります。
-                    </p>
-                  </div>
-                )}
-                <button
-                  onClick={() => {
-                    if (!organizer.is_approved) {
-                      alert('運営側の承認が必要です。承認後、イベントの掲載が可能になります。')
-                      return
-                    }
-                    setShowEventForm(true)
-                  }}
-                  disabled={!organizer.is_approved}
-                  style={{
-                    padding: '10px 20px',
-                    background: organizer.is_approved ? '#2563eb' : '#9ca3af',
-                    color: '#FFFFFF',
-                    borderRadius: '8px',
-                    border: 'none',
-                    cursor: organizer.is_approved ? 'pointer' : 'not-allowed',
-                    fontFamily: '"Noto Sans JP", sans-serif',
-                    fontSize: '14px',
-                    fontWeight: 600,
-                    lineHeight: '1.5',
-                    transition: 'all 0.2s ease-in-out',
-                    boxShadow: organizer.is_approved ? '0 1px 2px 0 rgba(0, 0, 0, 0.05)' : 'none'
-                  }}
-                  onMouseEnter={(e) => {
-                    if (organizer.is_approved) {
-                      e.currentTarget.style.background = '#1d4ed8'
-                      e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
-                      e.currentTarget.style.transform = 'translateY(-1px)'
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (organizer.is_approved) {
-                      e.currentTarget.style.background = '#2563eb'
-                      e.currentTarget.style.boxShadow = '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
-                      e.currentTarget.style.transform = 'translateY(0)'
-                    }
-                  }}
-                >
-                  新しいイベントを掲載
-                </button>
-              </div>
+            {/* ヘッダー */}
+            <div style={{
+              background: '#FF8A5C',
+              width: '100%',
+              maxWidth: isDesktop ? '1000px' : '393px',
+              height: '64px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto'
+            }}>
+              <h1 style={{
+                fontFamily: '"Noto Sans JP", sans-serif',
+                fontSize: '20px',
+                fontWeight: 700,
+                lineHeight: '120%',
+                color: '#FFFFFF',
+                margin: 0
+              }}>主催者マイページ</h1>
+            </div>
 
+            <div className="container mx-auto" style={{ padding: '24px 16px', maxWidth: '393px', paddingBottom: '24px' }}>
               <EventList 
                 events={events} 
                 onEventUpdated={fetchOrganizerData}
@@ -371,28 +320,39 @@ export default function EventManagement({ userProfile }: EventManagementProps) {
             </div>
           </div>
         )
+      case 'create':
+        // イベント作成画面（EventForm）は別途表示されるため、ここでは何も表示しない
+        return null
       case 'profile':
         return (
           <div style={{ paddingBottom: '24px' }}>
-            <OrganizerProfile userProfile={userProfile} />
+            <OrganizerProfile userProfile={userProfile} onBack={() => setCurrentView('home')} />
           </div>
         )
       case 'notifications':
         return (
-          <NotificationBox userProfile={userProfile} onBack={() => setCurrentView('events')} onUnreadCountChange={setUnreadNotificationCount} />
+          <NotificationBox userProfile={userProfile} onBack={() => setCurrentView('home')} onUnreadCountChange={setUnreadNotificationCount} />
         )
       default:
         return null
     }
   }
 
-  const CalendarIcon = () => (
+  const HomeIcon = () => (
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path
-        d="M7 2a1 1 0 0 0-1 1v1H5a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3h-1V3a1 1 0 1 0-2 0v1H8V3a1 1 0 0 0-1-1Zm12 6v11a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V8h14Z"
+        d="M12 2L2 12H5V20H11V14H13V20H19V12H22L12 2Z"
         fill="currentColor"
       />
-      <path d="M7 11h4v4H7v-4Zm6 0h4v4h-4v-4Z" fill="currentColor" />
+    </svg>
+  )
+
+  const CreateIcon = () => (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M12 2C11.4477 2 11 2.44772 11 3V11H3C2.44772 11 2 11.4477 2 12C2 12.5523 2.44772 13 3 13H11V21C11 21.5523 11.4477 22 12 22C12.5523 22 13 21.5523 13 21V13H21C21.5523 13 22 12.5523 22 12C22 11.4477 21.5523 11 21 11H13V3C13 2.44772 12.5523 2 12 2Z"
+        fill="currentColor"
+      />
     </svg>
   )
 
@@ -419,9 +379,10 @@ export default function EventManagement({ userProfile }: EventManagementProps) {
   )
 
   const tabItems: Array<{ key: typeof currentView; label: string; icon: JSX.Element }> = [
-    { key: 'events', label: 'イベント', icon: <CalendarIcon /> },
-    { key: 'profile', label: '登録情報', icon: <ProfileIcon /> },
-    { key: 'notifications', label: '通知', icon: <NotificationIcon /> }
+    { key: 'home', label: 'ホーム', icon: <HomeIcon /> },
+    { key: 'create', label: 'イベント作成', icon: <CreateIcon /> },
+    { key: 'notifications', label: '通知', icon: <NotificationIcon /> },
+    { key: 'profile', label: 'プロフィール', icon: <ProfileIcon /> }
   ]
 
   return (
@@ -434,8 +395,9 @@ export default function EventManagement({ userProfile }: EventManagementProps) {
       background: '#E8F5F5',
       paddingBottom: 'calc(env(safe-area-inset-bottom, 0) + 88px)'
     }}>
-      {renderCurrentView()}
+      {!showEventForm && renderCurrentView()}
 
+      {!showEventForm && (
       <nav
         style={{
           position: 'fixed',
@@ -443,9 +405,8 @@ export default function EventManagement({ userProfile }: EventManagementProps) {
           right: 0,
           bottom: 0,
           zIndex: 1000,
-          background: '#FFFFFF',
-          borderTop: '1px solid #E5E5E5',
-          boxShadow: '0px -2px 8px rgba(0, 0, 0, 0.08)',
+          background: '#E8F5F5',
+          borderTop: '1px solid #E9ECEF',
           willChange: 'transform',
           transition: 'transform 0.25s ease-out',
           transform: navVisible ? 'translateY(0) translateZ(0)' : 'translateY(110%) translateZ(0)'
@@ -454,62 +415,92 @@ export default function EventManagement({ userProfile }: EventManagementProps) {
         <div
           style={{
             display: 'flex',
-            justifyContent: 'space-around',
+            justifyContent: 'space-between',
             alignItems: 'center',
             width: '100%',
+            maxWidth: '393px',
+            margin: '0 auto',
             padding: '8px 16px',
-            paddingBottom: 'calc(env(safe-area-inset-bottom, 0) + 8px)'
+            paddingBottom: 'calc(env(safe-area-inset-bottom, 0) + 8px)',
+            minHeight: '56px',
+            boxSizing: 'border-box'
           }}
         >
           {tabItems.map((item) => {
-            const isActive = currentView === item.key
+            const isActive = currentView === item.key || (item.key === 'create' && showEventForm)
             const activeColor = '#FF8A5C'
             const inactiveColor = '#666666'
             return (
-              <button
+              <div
                 key={item.key}
-                onClick={() => setCurrentView(item.key)}
                 style={{
-                  flex: 1,
-                  background: 'transparent',
-                  border: 'none',
+                  flex: '1 1 0',
                   display: 'flex',
-                  flexDirection: 'column',
+                  justifyContent: 'center',
                   alignItems: 'center',
-                  gap: '4px',
-                  cursor: 'pointer',
-                  fontFamily: '"Noto Sans JP", sans-serif'
+                  minWidth: 0
                 }}
               >
-                <span style={{ color: isActive ? activeColor : inactiveColor, position: 'relative' }}>
-                  {item.icon}
-                  {item.key === 'notifications' && unreadNotificationCount > 0 && (
-                    <span style={{
-                      position: 'absolute',
-                      top: '-4px',
-                      right: '-4px',
-                      width: '16px',
-                      height: '16px',
-                      borderRadius: '50%',
-                      background: '#FF3B30',
-                      color: '#FFFFFF',
-                      fontFamily: '"Noto Sans JP", sans-serif',
-                      fontSize: '10px',
-                      fontWeight: 600,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center'
-                    }}>
-                      {unreadNotificationCount > 9 ? '9+' : unreadNotificationCount}
-                    </span>
-                  )}
-                </span>
-                <span style={{ fontSize: '12px', color: isActive ? activeColor : inactiveColor }}>{item.label}</span>
-              </button>
+                <button
+                  onClick={() => {
+                    if (item.key === 'create') {
+                      if (!organizer.is_approved) {
+                        alert('運営側の承認が必要です。承認後、イベントの掲載が可能になります。')
+                        return
+                      }
+                      setShowEventForm(true)
+                    } else {
+                      setCurrentView(item.key)
+                    }
+                  }}
+                  style={{
+                    width: '88px',
+                    height: '56px',
+                    background: '#FFFFFF',
+                    border: 'none',
+                    borderRadius: '8px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '4px',
+                    cursor: 'pointer',
+                    fontFamily: '"Noto Sans JP", sans-serif',
+                    boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
+                    padding: 0
+                  }}
+                >
+                  <span style={{ color: isActive ? activeColor : inactiveColor, position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    {item.icon}
+                    {item.key === 'notifications' && unreadNotificationCount > 0 && (
+                      <span style={{
+                        position: 'absolute',
+                        top: '-4px',
+                        right: '-4px',
+                        width: '16px',
+                        height: '16px',
+                        borderRadius: '50%',
+                        background: '#FF3B30',
+                        color: '#FFFFFF',
+                        fontFamily: '"Noto Sans JP", sans-serif',
+                        fontSize: '10px',
+                        fontWeight: 600,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}>
+                        {unreadNotificationCount > 9 ? '9+' : unreadNotificationCount}
+                      </span>
+                    )}
+                  </span>
+                  <span style={{ fontSize: '12px', color: isActive ? activeColor : inactiveColor }}>{item.label}</span>
+                </button>
+              </div>
             )
           })}
         </div>
       </nav>
+      )}
     </div>
   )
 }

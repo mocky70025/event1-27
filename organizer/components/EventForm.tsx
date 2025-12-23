@@ -1008,77 +1008,111 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
   // ステップ3: 登録完了画面
   if (currentStep === 3 && submittedEvent) {
   return (
-      <div style={{ background: '#E8F5F5', minHeight: '100vh' }}>
-        <div className="container mx-auto" style={{ padding: '9px 16px', maxWidth: '394px' }}>
-          <ProgressIndicator />
+      <div style={{ background: '#E8F5F5', minHeight: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'flex-start', padding: '40px 20px' }}>
+        <div style={{ maxWidth: '393px', width: '100%' }}>
+          {/* ヘッダー */}
           <div style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            zIndex: 1000,
             background: '#FFFFFF',
-            borderRadius: '16px',
-            padding: '48px 24px',
+            padding: '16px',
             textAlign: 'center',
-            boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)'
+            fontFamily: '"Noto Sans JP", sans-serif',
+            fontSize: '18px',
+            fontWeight: 700,
+            lineHeight: '120%',
+            color: '#2C3E50',
+            boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)',
+            maxWidth: '1000px',
+            margin: '0 auto'
           }}>
+            主催者イベント掲載完了
+          </div>
+
+          <div style={{ paddingTop: '64px', paddingBottom: '24px' }}>
             <div style={{
-              width: '64px',
-              height: '64px',
-              borderRadius: '50%',
-              background: '#FF8A5C',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              margin: '0 auto 24px'
+              background: '#FFFFFF',
+              borderRadius: '16px',
+              padding: '48px 24px',
+              textAlign: 'center',
+              boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)'
             }}>
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="#FFFFFF"/>
-              </svg>
-            </div>
-            <h2 style={{
-              fontFamily: 'Inter, sans-serif',
-              fontSize: '24px',
-              fontWeight: 700,
-              lineHeight: '120%',
-              color: '#2C3E50',
-              marginBottom: '16px'
-            }}>
-              イベント登録が完了しました
-            </h2>
-            <p style={{
-              fontFamily: 'Inter, sans-serif',
-              fontSize: '16px',
-              lineHeight: '150%',
-              color: '#6C757D',
-              marginBottom: '32px'
-            }}>
-              イベントが登録されました
-            </p>
-            <button
-              type="button"
-              onClick={() => {
-                onEventCreated(submittedEvent)
-                onCancel()
-              }}
-              style={{
-                width: '100%',
-                height: '48px',
+              {/* チェックマークアイコン */}
+              <div style={{
+                width: '80px',
+                height: '80px',
+                borderRadius: '50%',
                 background: '#FF8A5C',
-                borderRadius: '12px',
-                border: 'none',
-                fontFamily: 'Inter, sans-serif',
-                fontSize: '16px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 40px'
+              }}>
+                <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M20 30L14 24L11 27L20 36L37 19L34 16L20 30Z" fill="#FFFFFF"/>
+                </svg>
+              </div>
+
+              {/* タイトル */}
+              <h2 style={{
+                fontFamily: '"Noto Sans JP", sans-serif',
+                fontSize: '20px',
                 fontWeight: 700,
-                color: '#FFFFFF',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = '#FF7A4C'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = '#FF8A5C'
-              }}
-            >
-              ホームへ戻る
-            </button>
+                lineHeight: '120%',
+                color: '#2C3E50',
+                marginBottom: '16px',
+                marginTop: 0
+              }}>
+                主催者イベント掲載完了
+              </h2>
+
+              {/* 説明テキスト */}
+              <p style={{
+                fontFamily: '"Noto Sans JP", sans-serif',
+                fontSize: '16px',
+                lineHeight: '150%',
+                color: '#6C757D',
+                marginBottom: '32px',
+                marginTop: 0
+              }}>
+                イベントが正常に掲載されました。
+              </p>
+
+              {/* ボタン */}
+              <button
+                type="button"
+                onClick={() => {
+                  onEventCreated(submittedEvent)
+                  onCancel()
+                }}
+                style={{
+                  width: '100%',
+                  padding: '12px 24px',
+                  background: '#FF8A5C',
+                  borderRadius: '8px',
+                  border: 'none',
+                  fontFamily: '"Noto Sans JP", sans-serif',
+                  fontSize: '16px',
+                  fontWeight: 700,
+                  lineHeight: '120%',
+                  color: '#FFFFFF',
+                  cursor: 'pointer',
+                  boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)',
+                  transition: 'all 0.2s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = '#FF7840'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = '#FF8A5C'
+                }}
+              >
+                ホームへ戻る
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -1183,40 +1217,60 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
     )
   }
 
+  // 編集モードかどうかを判定
+  const isEditMode = !!(initialEvent?.id || eventId)
+
   // ステップ1: 全部の情報入力
   return (
     <div style={{ background: '#E8F5F5', minHeight: '100vh' }}>
       <div className="container mx-auto" style={{ padding: '9px 16px', maxWidth: '394px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '24px', marginBottom: '24px' }}>
-          <button
-            type="button"
-            onClick={onCancel}
-            style={{
-              background: 'transparent',
-              border: 'none',
-              fontFamily: 'Inter, sans-serif',
-              fontSize: '16px',
-              lineHeight: '150%',
-              color: '#FF8A5C',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px'
-            }}
-          >
-            ← 戻る
-          </button>
-          <h1 style={{
-            fontFamily: 'Inter, sans-serif',
-            fontSize: '20px',
-            fontWeight: 700,
-            lineHeight: '120%',
-            color: '#000000'
-          }}>
-            イベント情報を入力してください
-          </h1>
-          <div style={{ width: '60px' }}></div>
+        {/* ヘッダー */}
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 1000,
+          background: '#FFFFFF',
+          padding: '16px',
+          boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)',
+          maxWidth: '1000px',
+          margin: '0 auto'
+        }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', maxWidth: '394px', margin: '0 auto' }}>
+            <button
+              type="button"
+              onClick={onCancel}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                fontFamily: '"Noto Sans JP", sans-serif',
+                fontSize: '16px',
+                lineHeight: '150%',
+                color: '#FF8A5C',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px'
+              }}
+            >
+              ← 戻る
+            </button>
+            <h1 style={{
+              fontFamily: '"Noto Sans JP", sans-serif',
+              fontSize: '18px',
+              fontWeight: 700,
+              lineHeight: '120%',
+              color: '#2C3E50',
+              textAlign: 'center'
+            }}>
+              {isEditMode ? '主催者イベント編集' : 'イベント情報を入力してください'}
+            </h1>
+            <div style={{ width: '60px' }}></div>
+          </div>
         </div>
+
+        <div style={{ paddingTop: '64px' }}>
 
         <ProgressIndicator />
 

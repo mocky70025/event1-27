@@ -26,7 +26,6 @@ export default function ApplicationManagement({ userProfile, onBack }: Applicati
   const [applications, setApplications] = useState<Application[]>([])
   const [loading, setLoading] = useState(true)
   const [isDesktop, setIsDesktop] = useState(false)
-  const [activeTab, setActiveTab] = useState<'all' | 'pending' | 'approved'>('all')
 
   // 画面サイズを検出
   useEffect(() => {
@@ -119,13 +118,13 @@ export default function ApplicationManagement({ userProfile, onBack }: Applicati
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'pending':
-        return { bg: '#FFF4E6', text: '#FF8A5C' }
+        return { bg: '#FFF4E6', text: '#FF8A5C', border: '#FF8A5C' }
       case 'approved':
-        return { bg: '#E6F7ED', text: '#06C755' }
+        return { bg: '#E6F7ED', text: '#5DABA8', border: '#5DABA8' }
       case 'rejected':
-        return { bg: '#FFE6E6', text: '#FF3B30' }
+        return { bg: '#FFE6E6', text: '#FF3B30', border: '#FF3B30' }
       default:
-        return { bg: '#F7F7F7', text: '#666666' }
+        return { bg: '#F7F7F7', text: '#6C757D', border: '#E9ECEF' }
     }
   }
 
@@ -141,20 +140,13 @@ export default function ApplicationManagement({ userProfile, onBack }: Applicati
         return '不明'
     }
   }
-  
-  const filteredApplications = applications.filter(app => {
-    if (activeTab === 'all') return true
-    if (activeTab === 'pending') return app.application_status === 'pending'
-    if (activeTab === 'approved') return app.application_status === 'approved'
-    return true
-  })
 
   if (loading) {
     return (
       <div style={{ 
         minHeight: '100vh',
         width: '100%',
-        background: '#fff5f0',
+        background: '#FFF5F0',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -163,13 +155,14 @@ export default function ApplicationManagement({ userProfile, onBack }: Applicati
         <div style={{ 
           textAlign: 'center',
           maxWidth: '393px',
-          width: '100%'
+          width: '100%',
+          margin: '0 auto'
         }}>
           <div style={{
             width: '48px',
             height: '48px',
             border: '3px solid #E5E5E5',
-            borderTopColor: '#06C755',
+            borderTopColor: '#5DABA8',
             borderRadius: '50%',
             animation: 'spin 1s linear infinite',
             margin: '0 auto 16px'
@@ -178,7 +171,7 @@ export default function ApplicationManagement({ userProfile, onBack }: Applicati
             fontFamily: '"Noto Sans JP", sans-serif',
             fontSize: '16px',
             lineHeight: '150%',
-            color: '#666666'
+            color: '#2C3E50'
           }}>申し込み一覧を読み込み中...</p>
         </div>
       </div>
@@ -189,7 +182,7 @@ export default function ApplicationManagement({ userProfile, onBack }: Applicati
     <div style={{ 
       minHeight: '100vh',
       width: '100%',
-      background: '#fff5f0',
+      background: '#FFF5F0',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'flex-start',
@@ -199,13 +192,15 @@ export default function ApplicationManagement({ userProfile, onBack }: Applicati
         position: 'relative',
         width: '100%',
         maxWidth: '393px',
-        background: '#fff5f0',
-        minHeight: isDesktop ? 'auto' : '852px'
+        background: '#FFF5F0',
+        minHeight: isDesktop ? 'auto' : '852px',
+        margin: '0 auto'
       }}>
       {/* ヘッダー */}
       <div style={{
         background: '#5DABA8',
-        padding: '12px 16px',
+        height: '64px',
+        padding: '0 16px',
         display: 'flex',
         alignItems: 'center',
         gap: '12px'
@@ -216,7 +211,6 @@ export default function ApplicationManagement({ userProfile, onBack }: Applicati
             background: 'transparent',
             border: 'none',
             color: '#FFFFFF',
-            fontSize: '20px',
             cursor: 'pointer',
             padding: '4px',
             display: 'flex',
@@ -224,84 +218,31 @@ export default function ApplicationManagement({ userProfile, onBack }: Applicati
             justifyContent: 'center'
           }}
         >
-          ←
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18.5 34.5199V31.5199L30.5 26.2358V29.6875L22.2841 32.9858L22.3949 32.8068V33.233L22.2841 33.054L30.5 36.3523V39.804L18.5 34.5199Z" transform="translate(-18.5 -26.2358) scale(0.6)" fill="#FFFFFF"/>
+            <path d="M15 18L9 12L15 6" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
         </button>
         <h1 style={{
           fontSize: '18px',
           fontWeight: 600,
+          fontFamily: '"Noto Sans JP", sans-serif',
           color: '#FFFFFF',
           margin: 0,
-          flex: 1
+          flex: 1,
+          textAlign: 'center'
         }}>
-          申し込み管理
+          申し込み履歴
         </h1>
+        <div style={{ width: '32px' }}></div>
       </div>
 
-      <div className="container mx-auto" style={{ padding: '16px', maxWidth: isDesktop ? '800px' : '393px' }}>
-        {/* タブ */}
-        <div style={{
-          display: 'flex',
-          gap: '8px',
-          marginBottom: '24px'
-        }}>
-          <button
-            onClick={() => setActiveTab('all')}
-            style={{
-              flex: 1,
-              padding: '10px 16px',
-              background: activeTab === 'all' ? '#5DABA8' : 'transparent',
-              color: activeTab === 'all' ? '#FFFFFF' : '#666666',
-              border: 'none',
-              borderRadius: '8px',
-              fontSize: '14px',
-              fontWeight: 600,
-              cursor: 'pointer',
-              transition: 'all 0.2s'
-            }}
-          >
-            すべて
-          </button>
-          <button
-            onClick={() => setActiveTab('pending')}
-            style={{
-              flex: 1,
-              padding: '10px 16px',
-              background: activeTab === 'pending' ? '#5DABA8' : 'transparent',
-              color: activeTab === 'pending' ? '#FFFFFF' : '#666666',
-              border: 'none',
-              borderRadius: '8px',
-              fontSize: '14px',
-              fontWeight: 600,
-              cursor: 'pointer',
-              transition: 'all 0.2s'
-            }}
-          >
-            承認待ち
-          </button>
-          <button
-            onClick={() => setActiveTab('approved')}
-            style={{
-              flex: 1,
-              padding: '10px 16px',
-              background: activeTab === 'approved' ? '#5DABA8' : 'transparent',
-              color: activeTab === 'approved' ? '#FFFFFF' : '#666666',
-              border: 'none',
-              borderRadius: '8px',
-              fontSize: '14px',
-              fontWeight: 600,
-              cursor: 'pointer',
-              transition: 'all 0.2s'
-            }}
-          >
-            承認済み
-          </button>
-        </div>
-
-        {filteredApplications.length === 0 ? (
+      <div style={{ padding: '16px' }}>
+        {applications.length === 0 ? (
           <div style={{
             background: '#FFFFFF',
             boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
-            borderRadius: '12px',
+            borderRadius: '16px',
             padding: '48px 24px',
             textAlign: 'center'
           }}>
@@ -309,82 +250,118 @@ export default function ApplicationManagement({ userProfile, onBack }: Applicati
               fontFamily: '"Noto Sans JP", sans-serif',
               fontSize: '16px',
               lineHeight: '150%',
-              color: '#666666',
+              color: '#2C3E50',
               marginBottom: '8px'
             }}>申し込み履歴がありません</p>
             <p style={{
               fontFamily: '"Noto Sans JP", sans-serif',
               fontSize: '14px',
               lineHeight: '120%',
-              color: '#999999',
+              color: '#6C757D',
               marginTop: '8px'
             }}>イベント一覧から出店申し込みを行ってください</p>
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {filteredApplications.map((application) => {
+            {applications.map((application) => {
               const statusColor = getStatusColor(application.application_status)
               return (
                 <div
                   key={application.id}
                   style={{
                     background: '#FFFFFF',
-                    boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)',
-                    borderRadius: '8px',
+                    border: `2px solid ${statusColor.border}`,
+                    boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
+                    borderRadius: '16px',
                     padding: '16px',
                     position: 'relative'
                   }}
                 >
                   {/* ステータスバッジ */}
-                    <span style={{
+                  <span style={{
                     position: 'absolute',
                     top: '12px',
-                    left: '12px',
-                      padding: '4px 12px',
+                    right: '12px',
+                    padding: '4px 12px',
                     borderRadius: '16px',
-                      fontSize: '12px',
-                      fontWeight: 500,
-                      lineHeight: '120%',
-                      background: statusColor.bg,
-                      color: statusColor.text
-                    }}>
-                      {getStatusText(application.application_status)}
-                    </span>
+                    fontSize: '12px',
+                    fontWeight: 600,
+                    lineHeight: '120%',
+                    background: statusColor.bg,
+                    color: statusColor.text
+                  }}>
+                    {getStatusText(application.application_status)}
+                  </span>
                   
+                  {application.event.main_image_url && (
+                    <div style={{ marginBottom: '16px' }}>
+                      <img
+                        src={application.event.main_image_url}
+                        alt={application.event.event_name}
+                        style={{
+                          width: '100%',
+                          height: '160px',
+                          objectFit: 'cover',
+                          borderRadius: '12px',
+                          background: '#F7F7F7'
+                        }}
+                      />
+                    </div>
+                  )}
+
                   <div style={{ marginTop: '8px' }}>
                     <h3 style={{
-                      fontSize: '16px',
+                      fontSize: '18px',
                       fontWeight: 700,
-                      lineHeight: '120%',
-                      color: '#000000',
-                      marginBottom: '12px'
+                      fontFamily: '"Noto Sans JP", sans-serif',
+                      lineHeight: '150%',
+                      color: '#2C3E50',
+                      marginBottom: '12px',
+                      marginTop: statusColor.bg !== '#F7F7F7' ? '0' : '0'
                     }}>
                       {application.event.event_name}
                     </h3>
                     
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '12px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                          <path d="M9 11L11 13L15 9" stroke="#666666" strokeWidth="2" strokeLinecap="round"/>
-                          <rect x="3" y="5" width="18" height="14" rx="2" stroke="#666666" strokeWidth="2"/>
+                          <path d="M9 11L11 13L15 9" stroke="#6C757D" strokeWidth="2" strokeLinecap="round"/>
+                          <rect x="3" y="5" width="18" height="14" rx="2" stroke="#6C757D" strokeWidth="2"/>
                         </svg>
                         <span style={{
                           fontSize: '14px',
-                          color: '#666666'
+                          fontFamily: '"Noto Sans JP", sans-serif',
+                          color: '#6C757D',
+                          lineHeight: '150%'
                         }}>
                           申込日: {new Date(application.applied_at).toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit' })}
                         </span>
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                          <circle cx="12" cy="12" r="10" stroke="#666666" strokeWidth="2"/>
-                          <path d="M12 6V12L16 14" stroke="#666666" strokeWidth="2" strokeLinecap="round"/>
+                          <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z" fill="#6C757D"/>
                         </svg>
                         <span style={{
                           fontSize: '14px',
-                          color: '#666666'
+                          fontFamily: '"Noto Sans JP", sans-serif',
+                          color: '#6C757D',
+                          lineHeight: '150%'
                         }}>
                           {application.event.venue_name}
+                        </span>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                          <circle cx="12" cy="12" r="10" stroke="#6C757D" strokeWidth="2"/>
+                          <path d="M12 6V12L16 14" stroke="#6C757D" strokeWidth="2" strokeLinecap="round"/>
+                        </svg>
+                        <span style={{
+                          fontSize: '14px',
+                          fontFamily: '"Noto Sans JP", sans-serif',
+                          color: '#6C757D',
+                          lineHeight: '150%'
+                        }}>
+                          {new Date(application.event.event_start_date).toLocaleDateString('ja-JP', { month: 'long', day: 'numeric' })} - {new Date(application.event.event_end_date).toLocaleDateString('ja-JP', { month: 'long', day: 'numeric' })}
                         </span>
                       </div>
                     </div>
@@ -393,113 +370,23 @@ export default function ApplicationManagement({ userProfile, onBack }: Applicati
                       display: 'flex',
                       justifyContent: 'space-between',
                       alignItems: 'center',
-                      paddingTop: '12px',
+                      paddingTop: '16px',
                       borderTop: '1px solid #E9ECEF'
                     }}>
                       <span style={{
                         fontSize: '14px',
+                        fontFamily: '"Noto Sans JP", sans-serif',
                         color: '#5DABA8',
-                        fontWeight: 500
+                        fontWeight: 600,
+                        lineHeight: '150%'
                       }}>
                         詳細を見る
                       </span>
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                        <path d="M9 18L15 12L9 6" stroke="#5DABA8" strokeWidth="2" strokeLinecap="round"/>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M9 18L15 12L9 6" stroke="#5DABA8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                     </div>
                   </div>
-
-                  {application.event.main_image_url && (
-                    <div style={{ marginBottom: '16px' }}>
-                      <img
-                        src={application.event.main_image_url}
-                        alt={application.event.event_name}
-                        style={{
-                          width: '100%',
-                          height: '120px',
-                          objectFit: 'contain',
-                          borderRadius: '8px',
-                          background: '#FFFFFF'
-                        }}
-                      />
-                    </div>
-                  )}
-
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: application.application_status === 'pending' ? '16px' : '0' }}>
-                    <span style={{
-                      fontFamily: '"Noto Sans JP", sans-serif',
-                      fontSize: '14px',
-                      lineHeight: '120%',
-                      color: '#666666'
-                    }}>申し込み日: {formatDate(application.applied_at)}</span>
-                    {application.application_status === 'approved' && (
-                      <span style={{
-                        fontFamily: '"Noto Sans JP", sans-serif',
-                        fontSize: '14px',
-                        fontWeight: 600,
-                        lineHeight: '120%',
-                        color: '#06C755'
-                      }}>✓ 出店可能</span>
-                    )}
-                    {application.application_status === 'rejected' && (
-                      <span style={{
-                        fontFamily: '"Noto Sans JP", sans-serif',
-                        fontSize: '14px',
-                        fontWeight: 600,
-                        lineHeight: '120%',
-                        color: '#FF3B30'
-                      }}>✗ 出店不可</span>
-                    )}
-                    {application.application_status === 'pending' && (
-                      <span style={{
-                        fontFamily: '"Noto Sans JP", sans-serif',
-                        fontSize: '14px',
-                        fontWeight: 600,
-                        lineHeight: '120%',
-                        color: '#B8860B'
-                      }}>⏳ 審査中</span>
-                    )}
-                  </div>
-
-                  {/* 取り消しボタン（審査中の場合のみ表示） */}
-                  {application.application_status === 'pending' && (
-                    <button
-                      onClick={async () => {
-                        if (!confirm('この申し込みを取り消しますか？')) return
-
-                        try {
-                          const { error } = await supabase
-                            .from('event_applications')
-                            .delete()
-                            .eq('id', application.id)
-
-                          if (error) throw error
-
-                          // 一覧を再取得
-                          await fetchApplications()
-                          alert('申し込みを取り消しました')
-                        } catch (error) {
-                          console.error('Failed to cancel application:', error)
-                          alert('申し込みの取り消しに失敗しました')
-                        }
-                      }}
-                      style={{
-                        width: '100%',
-                        padding: '12px 24px',
-                        background: '#FF4444',
-                        color: '#FFFFFF',
-                        borderRadius: '8px',
-                        border: 'none',
-                        fontFamily: '"Noto Sans JP", sans-serif',
-                        fontSize: '16px',
-                        fontWeight: 600,
-                        lineHeight: '120%',
-                        cursor: 'pointer'
-                      }}
-                    >
-                      申し込みを取り消す
-                    </button>
-                  )}
                 </div>
               )
             })}

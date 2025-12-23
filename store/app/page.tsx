@@ -9,6 +9,7 @@ import EventList from '@/components/EventList'
 import ExhibitorProfile from '@/components/ExhibitorProfile'
 import ApplicationManagement from '@/components/ApplicationManagement'
 import NotificationBox from '@/components/NotificationBox'
+import ExhibitorHome from '@/components/ExhibitorHome'
 import LoadingSpinner from '@/components/LoadingSpinner'
 import EmailConfirmationBanner from '@/components/EmailConfirmationBanner'
 import EmailConfirmationPending from '@/components/EmailConfirmationPending'
@@ -19,7 +20,7 @@ export default function Home() {
   const [userProfile, setUserProfile] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [hasActiveSession, setHasActiveSession] = useState(false)
-  const [currentView, setCurrentView] = useState<'events' | 'profile' | 'applications' | 'notifications'>('events')
+  const [currentView, setCurrentView] = useState<'home' | 'events' | 'profile' | 'applications' | 'notifications'>('home')
   const [navVisible, setNavVisible] = useState(true)
   const [unreadNotificationCount, setUnreadNotificationCount] = useState(0)
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null)
@@ -345,16 +346,18 @@ export default function Home() {
 
   const renderCurrentView = () => {
     switch (currentView) {
+      case 'home':
+        return <ExhibitorHome userProfile={userProfile} onNavigate={setCurrentView} />
       case 'events':
-        return <EventList userProfile={userProfile} onBack={() => setCurrentView('events')} />
+        return <EventList userProfile={userProfile} onBack={() => setCurrentView('home')} />
       case 'profile':
-        return <ExhibitorProfile userProfile={userProfile} onBack={() => setCurrentView('events')} />
+        return <ExhibitorProfile userProfile={userProfile} onBack={() => setCurrentView('home')} />
       case 'applications':
-        return <ApplicationManagement userProfile={userProfile} onBack={() => setCurrentView('events')} />
+        return <ApplicationManagement userProfile={userProfile} onBack={() => setCurrentView('home')} />
       case 'notifications':
-        return <NotificationBox userProfile={userProfile} onBack={() => setCurrentView('events')} onUnreadCountChange={setUnreadNotificationCount} />
+        return <NotificationBox userProfile={userProfile} onBack={() => setCurrentView('home')} onUnreadCountChange={setUnreadNotificationCount} />
       default:
-        return <EventList userProfile={userProfile} onBack={() => setCurrentView('events')} />
+        return <ExhibitorHome userProfile={userProfile} onNavigate={setCurrentView} />
     }
   }
 
@@ -398,11 +401,23 @@ export default function Home() {
     </svg>
   )
 
+  const CalendarIcon = () => (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M8 2V6M16 2V6M3 10H21M5 4H19C20.1046 4 21 4.89543 21 6V20C21 21.1046 20.1046 22 19 22H5C3.89543 22 3 21.1046 3 20V6C3 4.89543 3.89543 4 5 4Z"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+
   const tabItems: Array<{ key: typeof currentView; label: string; icon: JSX.Element }> = [
-    { key: 'notifications', label: '通知', icon: <NotificationIcon /> },
-    { key: 'applications', label: '履歴', icon: <HistoryIcon /> },
+    { key: 'home', label: 'カレンダー', icon: <CalendarIcon /> },
+    { key: 'home', label: 'マイページ', icon: <ProfileIcon /> },
     { key: 'events', label: '検索', icon: <SearchIcon /> },
-    { key: 'profile', label: 'プロフィール', icon: <ProfileIcon /> }
+    { key: 'notifications', label: '設定', icon: <NotificationIcon /> }
   ]
 
   // メール未確認の場合はバナーを表示
@@ -442,14 +457,16 @@ export default function Home() {
             paddingBottom: 'calc(env(safe-area-inset-bottom, 0) + 8px)'
           }}
         >
-          {tabItems.map((item) => {
-            const isActive = currentView === item.key
+          {tabItems.map((item, index) => {
+            // カレンダーとマイページは両方homeビューに遷移
+            const viewKey = item.key === 'home' && index === 1 ? 'home' : item.key
+            const isActive = currentView === viewKey || (currentView === 'home' && item.key === 'home')
             const activeColor = '#5DABA8'
             const inactiveColor = '#666666'
             return (
               <button
-                key={item.key}
-                onClick={() => setCurrentView(item.key)}
+                key={`${item.key}-${index}`}
+                onClick={() => setCurrentView(viewKey)}
                 style={{
                   flex: 1,
                   background: 'transparent',

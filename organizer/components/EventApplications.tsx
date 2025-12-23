@@ -56,6 +56,7 @@ export default function EventApplications({ eventId, eventName, organizerId, org
   const [isApplicationClosed, setIsApplicationClosed] = useState(false)
   const [closingApplication, setClosingApplication] = useState(false)
   const [selectedExhibitor, setSelectedExhibitor] = useState<ExhibitorDetail | null>(null)
+  const [selectedApplicationId, setSelectedApplicationId] = useState<string | null>(null)
   const [isDesktop, setIsDesktop] = useState(false)
   const [licenseVerificationStatus, setLicenseVerificationStatus] = useState<{
     verifying: boolean
@@ -172,10 +173,15 @@ export default function EventApplications({ eventId, eventName, organizerId, org
       }
 
       // ステータスを更新
-      const { error } = await supabase
+      const { error: updateError } = await supabase
         .from('event_applications')
         .update({ application_status: status })
         .eq('id', applicationId)
+
+      if (updateError) throw updateError
+
+      // 申し込み一覧を更新
+      await fetchApplications()
 
       if (error) throw error
 
@@ -253,6 +259,11 @@ export default function EventApplications({ eventId, eventName, organizerId, org
 
       // データを再取得
       await fetchApplications()
+      
+      // 出店者詳細画面を閉じる
+      setSelectedExhibitor(null)
+      setSelectedApplicationId(null)
+      
       alert(status === 'approved' ? '申し込みを承認しました' : '申し込みを却下しました')
     } catch (error) {
       console.error('Failed to update application:', error)
@@ -424,7 +435,7 @@ export default function EventApplications({ eventId, eventName, organizerId, org
     }
   }
 
-  const handleViewExhibitorDetail = async (exhibitorId: string) => {
+  const handleViewExhibitorDetail = async (exhibitorId: string, applicationId?: string) => {
     setLoadingExhibitorDetail(true)
     try {
       const response = await fetch(`/api/events/applicants?eventId=${eventId}&organizerId=${organizerId}`)
@@ -442,6 +453,15 @@ export default function EventApplications({ eventId, eventName, organizerId, org
       }
 
       setSelectedExhibitor(exhibitor)
+      if (applicationId) {
+        setSelectedApplicationId(applicationId)
+      } else {
+        // applicationIdが指定されていない場合、applicationsから見つける
+        const app = applications.find((a) => a.exhibitor.id === exhibitorId)
+        if (app) {
+          setSelectedApplicationId(app.id)
+        }
+      }
       // 出店者詳細を開くときに期限確認の状態をリセット
       setLicenseVerificationStatus({
         verifying: false,
@@ -492,6 +512,11 @@ export default function EventApplications({ eventId, eventName, organizerId, org
   }
 
   if (selectedExhibitor) {
+    // 該当する申し込み情報を取得
+    const selectedApplication = selectedApplicationId 
+      ? applications.find((app) => app.id === selectedApplicationId)
+      : null
+    
     return (
       <div style={{ 
         position: 'relative',
@@ -499,13 +524,14 @@ export default function EventApplications({ eventId, eventName, organizerId, org
         maxWidth: isDesktop ? '1000px' : '393px',
         minHeight: '852px',
         margin: '0 auto',
-        background: '#FFFFFF'
+        background: '#E8F5F5'
       }}>
         <div className="container mx-auto" style={{ padding: isDesktop ? '20px 32px' : '9px 16px', maxWidth: isDesktop ? '1000px' : '393px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', paddingTop: '24px' }}>
             <button
               onClick={() => {
                 setSelectedExhibitor(null)
+                setSelectedApplicationId(null)
                 setLicenseVerificationStatus({
                   verifying: false,
                   result: null,
@@ -533,15 +559,15 @@ export default function EventApplications({ eventId, eventName, organizerId, org
               fontSize: '20px',
               fontWeight: 700,
               lineHeight: '120%',
-              color: '#000000'
-            }}>出店者情報</h1>
+              color: '#2C3E50'
+            }}>主催者申し込み確認画面</h1>
             <div style={{ width: '60px' }}></div>
           </div>
 
           <div style={{
-            background: '#E8F5F5',
+            background: '#FFFFFF',
             boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
-            borderRadius: '12px',
+            borderRadius: '16px',
             padding: '24px',
             marginBottom: '16px'
           }}>
@@ -550,7 +576,7 @@ export default function EventApplications({ eventId, eventName, organizerId, org
               fontSize: '18px',
               fontWeight: 700,
               lineHeight: '120%',
-              color: '#000000',
+              color: '#2C3E50',
               marginBottom: '16px'
             }}>基本情報</h2>
             
@@ -560,14 +586,14 @@ export default function EventApplications({ eventId, eventName, organizerId, org
                   fontFamily: '"Noto Sans JP", sans-serif',
                   fontSize: '14px',
                   lineHeight: '120%',
-                  color: '#666666',
+                  color: '#6C757D',
                   marginBottom: '4px'
                 }}>名前</p>
                 <p style={{
                   fontFamily: '"Noto Sans JP", sans-serif',
                   fontSize: '16px',
                   lineHeight: '120%',
-                  color: '#000000'
+                  color: '#2C3E50'
                 }}>{selectedExhibitor.name}</p>
               </div>
               
@@ -576,14 +602,14 @@ export default function EventApplications({ eventId, eventName, organizerId, org
                   fontFamily: '"Noto Sans JP", sans-serif',
                   fontSize: '14px',
                   lineHeight: '120%',
-                  color: '#666666',
+                  color: '#6C757D',
                   marginBottom: '4px'
                 }}>性別</p>
                 <p style={{
                   fontFamily: '"Noto Sans JP", sans-serif',
                   fontSize: '16px',
                   lineHeight: '120%',
-                  color: '#000000'
+                  color: '#2C3E50'
                 }}>{selectedExhibitor.gender}</p>
               </div>
               
@@ -592,14 +618,14 @@ export default function EventApplications({ eventId, eventName, organizerId, org
                   fontFamily: '"Noto Sans JP", sans-serif',
                   fontSize: '14px',
                   lineHeight: '120%',
-                  color: '#666666',
+                  color: '#6C757D',
                   marginBottom: '4px'
                 }}>年齢</p>
                 <p style={{
                   fontFamily: '"Noto Sans JP", sans-serif',
                   fontSize: '16px',
                   lineHeight: '120%',
-                  color: '#000000'
+                  color: '#2C3E50'
                 }}>{selectedExhibitor.age}歳</p>
               </div>
               
@@ -608,14 +634,14 @@ export default function EventApplications({ eventId, eventName, organizerId, org
                   fontFamily: '"Noto Sans JP", sans-serif',
                   fontSize: '14px',
                   lineHeight: '120%',
-                  color: '#666666',
+                  color: '#6C757D',
                   marginBottom: '4px'
                 }}>電話番号</p>
                 <p style={{
                   fontFamily: '"Noto Sans JP", sans-serif',
                   fontSize: '16px',
                   lineHeight: '120%',
-                  color: '#000000'
+                  color: '#2C3E50'
                 }}>{selectedExhibitor.phone_number}</p>
               </div>
               
@@ -624,14 +650,14 @@ export default function EventApplications({ eventId, eventName, organizerId, org
                   fontFamily: '"Noto Sans JP", sans-serif',
                   fontSize: '14px',
                   lineHeight: '120%',
-                  color: '#666666',
+                  color: '#6C757D',
                   marginBottom: '4px'
                 }}>メールアドレス</p>
                 <p style={{
                   fontFamily: '"Noto Sans JP", sans-serif',
                   fontSize: '16px',
                   lineHeight: '120%',
-                  color: '#000000'
+                  color: '#2C3E50'
                 }}>{selectedExhibitor.email}</p>
               </div>
               
@@ -641,14 +667,14 @@ export default function EventApplications({ eventId, eventName, organizerId, org
                     fontFamily: '"Noto Sans JP", sans-serif',
                     fontSize: '14px',
                     lineHeight: '120%',
-                    color: '#666666',
+                    color: '#6C757D',
                     marginBottom: '4px'
                   }}>ジャンルカテゴリ</p>
                   <p style={{
                     fontFamily: '"Noto Sans JP", sans-serif',
                     fontSize: '16px',
                     lineHeight: '120%',
-                    color: '#000000'
+                    color: '#2C3E50'
                   }}>{selectedExhibitor.genre_category}</p>
                 </div>
               )}
@@ -659,14 +685,14 @@ export default function EventApplications({ eventId, eventName, organizerId, org
                     fontFamily: '"Noto Sans JP", sans-serif',
                     fontSize: '14px',
                     lineHeight: '120%',
-                    color: '#666666',
+                    color: '#6C757D',
                     marginBottom: '4px'
                   }}>ジャンル自由回答</p>
                   <p style={{
                     fontFamily: '"Noto Sans JP", sans-serif',
                     fontSize: '16px',
                     lineHeight: '120%',
-                    color: '#000000'
+                    color: '#2C3E50'
                   }}>{selectedExhibitor.genre_free_text}</p>
                 </div>
               )}
@@ -674,9 +700,9 @@ export default function EventApplications({ eventId, eventName, organizerId, org
           </div>
 
           <div style={{
-            background: '#E8F5F5',
+            background: '#FFFFFF',
             boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
-            borderRadius: '12px',
+            borderRadius: '16px',
             padding: '24px',
             marginBottom: '16px'
           }}>
@@ -685,7 +711,7 @@ export default function EventApplications({ eventId, eventName, organizerId, org
               fontSize: '18px',
               fontWeight: 700,
               lineHeight: '120%',
-              color: '#000000',
+              color: '#2C3E50',
               marginBottom: '16px'
             }}>書類</h2>
             
@@ -697,7 +723,7 @@ export default function EventApplications({ eventId, eventName, organizerId, org
                       fontFamily: '"Noto Sans JP", sans-serif',
                       fontSize: '14px',
                       lineHeight: '120%',
-                      color: '#666666',
+                      color: '#6C757D',
                       margin: 0
                     }}>営業許可証</p>
                     <button
@@ -731,7 +757,7 @@ export default function EventApplications({ eventId, eventName, organizerId, org
                         fontFamily: '"Noto Sans JP", sans-serif',
                         fontSize: '12px',
                         lineHeight: '120%',
-                        color: '#000000',
+                        color: '#2C3E50',
                         margin: 0,
                         fontWeight: 700
                       }}>
@@ -743,7 +769,7 @@ export default function EventApplications({ eventId, eventName, organizerId, org
                           fontFamily: '"Noto Sans JP", sans-serif',
                           fontSize: '11px',
                           lineHeight: '120%',
-                          color: '#666666',
+                          color: '#6C757D',
                           margin: '4px 0 0 0'
                         }}>
                           {licenseVerificationStatus.reason}
@@ -769,7 +795,7 @@ export default function EventApplications({ eventId, eventName, organizerId, org
                     fontFamily: '"Noto Sans JP", sans-serif',
                     fontSize: '14px',
                     lineHeight: '120%',
-                    color: '#666666',
+                    color: '#6C757D',
                     marginBottom: '8px'
                   }}>車検証</p>
                   <img
@@ -790,7 +816,7 @@ export default function EventApplications({ eventId, eventName, organizerId, org
                     fontFamily: '"Noto Sans JP", sans-serif',
                     fontSize: '14px',
                     lineHeight: '120%',
-                    color: '#666666',
+                    color: '#6C757D',
                     marginBottom: '8px'
                   }}>自動車検査証</p>
                   <img
@@ -811,7 +837,7 @@ export default function EventApplications({ eventId, eventName, organizerId, org
                     fontFamily: '"Noto Sans JP", sans-serif',
                     fontSize: '14px',
                     lineHeight: '120%',
-                    color: '#666666',
+                    color: '#6C757D',
                     marginBottom: '8px'
                   }}>PL保険</p>
                   <img
@@ -832,7 +858,7 @@ export default function EventApplications({ eventId, eventName, organizerId, org
                     fontFamily: '"Noto Sans JP", sans-serif',
                     fontSize: '14px',
                     lineHeight: '120%',
-                    color: '#666666',
+                    color: '#6C757D',
                     marginBottom: '8px'
                   }}>火器類配置図</p>
                   <img
@@ -856,11 +882,71 @@ export default function EventApplications({ eventId, eventName, organizerId, org
                   fontFamily: '"Noto Sans JP", sans-serif',
                   fontSize: '14px',
                   lineHeight: '120%',
-                  color: '#666666'
+                  color: '#6C757D'
                 }}>登録されている書類はありません</p>
               )}
             </div>
           </div>
+
+          {/* 承認・却下ボタン */}
+          {selectedApplication && selectedApplication.application_status === 'pending' && (
+            <div style={{
+              display: 'flex',
+              gap: '8px',
+              marginTop: '16px'
+            }}>
+              <button
+                onClick={() => handleApplicationApproval(selectedApplication.id, 'approved')}
+                style={{
+                  flex: 1,
+                  padding: '12px 16px',
+                  background: '#FF8A5C',
+                  color: '#FFFFFF',
+                  borderRadius: '8px',
+                  border: 'none',
+                  fontFamily: '"Noto Sans JP", sans-serif',
+                  fontSize: '16px',
+                  fontWeight: 700,
+                  lineHeight: '19px',
+                  cursor: 'pointer',
+                  boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = '#FF7840'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = '#FF8A5C'
+                }}
+              >
+                承認
+              </button>
+              <button
+                onClick={() => handleApplicationApproval(selectedApplication.id, 'rejected')}
+                style={{
+                  flex: 1,
+                  padding: '12px 16px',
+                  background: '#FF3B30',
+                  color: '#FFFFFF',
+                  borderRadius: '8px',
+                  border: 'none',
+                  fontFamily: '"Noto Sans JP", sans-serif',
+                  fontSize: '16px',
+                  fontWeight: 700,
+                  lineHeight: '19px',
+                  cursor: 'pointer',
+                  boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = '#FF2B20'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = '#FF3B30'
+                }}
+              >
+                却下
+              </button>
+            </div>
+          )}
         </div>
       </div>
     )
@@ -1078,7 +1164,7 @@ export default function EventApplications({ eventId, eventName, organizerId, org
 
                   <div style={{ display: 'flex', gap: '8px', flexDirection: 'column' }}>
                     <button
-                      onClick={() => handleViewExhibitorDetail(application.exhibitor.id)}
+                      onClick={() => handleViewExhibitorDetail(application.exhibitor.id, application.id)}
                       disabled={loadingExhibitorDetail}
                       style={{
                         width: '100%',

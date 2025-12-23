@@ -38,8 +38,7 @@ export default function EventList({ events, onEventUpdated, onEdit, onViewApplic
     return (
       <div style={{
         background: '#FFFFFF',
-        boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
-        borderRadius: '12px',
+        border: '1px solid #E9ECEF',
         padding: '48px 24px',
         textAlign: 'center'
       }}>
@@ -47,163 +46,92 @@ export default function EventList({ events, onEventUpdated, onEdit, onViewApplic
           fontFamily: '"Noto Sans JP", sans-serif',
           fontSize: '16px',
           lineHeight: '150%',
-          color: '#666666'
+          color: '#6C757D'
         }}>掲載中のイベントはありません</p>
       </div>
     )
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       {events.map((event) => {
-        // @ts-ignore
-        const approvalStatus = event.approval_status || 'pending'
-        const statusColor = approvalStatus === 'approved' 
-          ? { bg: '#E6F7ED', text: '#FF8A5C' }
-          : approvalStatus === 'rejected'
-          ? { bg: '#FFE6E6', text: '#FF3B30' }
-          : { bg: '#FFF9E6', text: '#B8860B' }
-        const statusText = approvalStatus === 'approved' ? '承認済み' : approvalStatus === 'rejected' ? '却下' : '審査中'
-
         return (
           <div
             key={event.id}
+            onClick={() => {
+              // クリック時に詳細を表示する場合はここで処理
+              // 現在はクリックしても何もしない（SVGデザインに合わせてシンプルに）
+            }}
             style={{
               background: '#FFFFFF',
-              boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
-              borderRadius: '12px',
-              overflow: 'hidden'
+              border: '1px solid #E9ECEF',
+              borderRadius: '0',
+              padding: '12px',
+              display: 'flex',
+              gap: '16px',
+              cursor: 'pointer',
+              transition: 'background-color 0.2s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#F8F9FA'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = '#FFFFFF'
             }}
           >
-            {event.main_image_url && (
-              <div style={{ position: 'relative', height: '200px', width: '100%', overflow: 'hidden' }}>
+            {/* 左側: 画像 */}
+            <div style={{
+              width: '160px',
+              height: '139px',
+              background: '#E9ECEF',
+              borderRadius: '0',
+              flexShrink: 0,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              overflow: 'hidden'
+            }}>
+              {event.main_image_url ? (
                 <img
                   src={event.main_image_url}
                   alt={event.event_name}
                   style={{
                     width: '100%',
                     height: '100%',
-                    objectFit: 'contain',
-                    background: '#FFFFFF'
+                    objectFit: 'cover'
                   }}
                 />
-              </div>
-            )}
+              ) : (
+                <div style={{
+                  width: '100%',
+                  height: '100%',
+                  background: '#E9ECEF'
+                }} />
+              )}
+            </div>
             
-            <div style={{ padding: '16px' }}>
+            {/* 右側: タイトルと説明 */}
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <h3 style={{
                 fontFamily: '"Noto Sans JP", sans-serif',
-                fontSize: '18px',
+                fontSize: '16px',
                 fontWeight: 700,
-                lineHeight: '120%',
-                color: '#000000',
-                marginBottom: '12px'
+                lineHeight: '150%',
+                color: '#2C3E50',
+                margin: 0
               }}>
                 {event.event_name}
               </h3>
               
-              <div style={{
-                fontFamily: '"Noto Sans JP", sans-serif',
-                fontSize: '14px',
-                lineHeight: '120%',
-                color: '#666666',
-                marginBottom: '12px',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '4px'
-              }}>
-                <p>開催期間: {event.event_display_period}</p>
-                {event.event_time && <p>時間: {event.event_time}</p>}
-                <p>会場: {event.venue_name}</p>
-              </div>
-
               <p style={{
                 fontFamily: '"Noto Sans JP", sans-serif',
-                fontSize: '14px',
-                lineHeight: '120%',
-                color: '#000000',
-                marginBottom: '16px'
+                fontSize: '16px',
+                lineHeight: '150%',
+                color: '#6C757D',
+                margin: 0
               }}>
-                {event.lead_text}
+                {event.lead_text || 'イベントの説明がここに表示されます'}
               </p>
-
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                <div style={{
-                  fontFamily: '"Noto Sans JP", sans-serif',
-                  fontSize: '12px',
-                  lineHeight: '120%',
-                  color: '#999999'
-                }}>
-                  作成日: {new Date(event.created_at).toLocaleDateString('ja-JP')}
-                </div>
-                <span style={{
-                  padding: '4px 12px',
-                  borderRadius: '12px',
-                  fontFamily: '"Noto Sans JP", sans-serif',
-                  fontSize: '12px',
-                  fontWeight: 500,
-                  lineHeight: '120%',
-                  background: statusColor.bg,
-                  color: statusColor.text
-                }}>
-                  {statusText}
-                </span>
-              </div>
-
-              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                <button
-                  onClick={() => onViewApplications && onViewApplications(event)}
-                  style={{
-                    padding: '8px 16px',
-                    background: '#FF8A5C',
-                    color: '#FFFFFF',
-                    borderRadius: '8px',
-                    border: 'none',
-                    fontFamily: '"Noto Sans JP", sans-serif',
-                    fontSize: '14px',
-                    fontWeight: 500,
-                    lineHeight: '120%',
-                    cursor: 'pointer'
-                  }}
-                >
-                  申し込み管理
-                </button>
-                <button
-                  onClick={() => onEdit && onEdit(event)}
-                  style={{
-                    padding: '8px 16px',
-                    background: '#FF8A5C',
-                    color: '#FFFFFF',
-                    borderRadius: '8px',
-                    border: 'none',
-                    fontFamily: '"Noto Sans JP", sans-serif',
-                    fontSize: '14px',
-                    fontWeight: 500,
-                    lineHeight: '120%',
-                    cursor: 'pointer'
-                  }}
-                >
-                  編集
-                </button>
-                <button
-                  onClick={() => handleDelete(event.id)}
-                  disabled={deleting === event.id}
-                  style={{
-                    padding: '8px 16px',
-                    background: deleting === event.id ? '#D9D9D9' : '#FF3B30',
-                    color: '#FFFFFF',
-                    borderRadius: '8px',
-                    border: 'none',
-                    fontFamily: '"Noto Sans JP", sans-serif',
-                    fontSize: '14px',
-                    fontWeight: 500,
-                    lineHeight: '120%',
-                    cursor: deleting === event.id ? 'not-allowed' : 'pointer'
-                  }}
-                >
-                  {deleting === event.id ? '削除中...' : '削除'}
-                </button>
-              </div>
             </div>
           </div>
         )

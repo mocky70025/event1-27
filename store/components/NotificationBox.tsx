@@ -130,7 +130,7 @@ export default function NotificationBox({ userProfile, onBack, onUnreadCountChan
       <div style={{ 
         minHeight: '100vh',
         width: '100%',
-        background: '#fff5f0',
+        background: '#FFF5F0',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -139,13 +139,14 @@ export default function NotificationBox({ userProfile, onBack, onUnreadCountChan
         <div style={{ 
           textAlign: 'center',
           maxWidth: '393px',
-          width: '100%'
+          width: '100%',
+          margin: '0 auto'
         }}>
           <div style={{
             width: '48px',
             height: '48px',
             border: '3px solid #E5E5E5',
-            borderTopColor: '#06C755',
+            borderTopColor: '#5DABA8',
             borderRadius: '50%',
             animation: 'spin 1s linear infinite',
             margin: '0 auto 16px'
@@ -154,18 +155,27 @@ export default function NotificationBox({ userProfile, onBack, onUnreadCountChan
             fontFamily: '"Noto Sans JP", sans-serif',
             fontSize: '16px',
             lineHeight: '150%',
-            color: '#666666'
+            color: '#6C757D'
           }}>通知を読み込み中...</p>
         </div>
       </div>
     )
   }
 
+  // ベルアイコン（SVGから）
+  const BellIcon = () => (
+    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="20" cy="20" r="20" fill="white"/>
+      <path d="M20 12C18.3431 12 17 13.3431 17 15V17.09C16.72 17.03 16.427 17 16.127 17C14.957 17 13.933 17.58 13.38 18.46C13.136 18.85 13 19.31 13 19.78V22.5C13 23.33 13.67 24 14.5 24H20.5C21.33 24 22 23.33 22 22.5V20C22 18.3431 20.6569 17 19 17H20V15C20 13.3431 18.6569 12 17 12H20Z" fill="#5DABA8"/>
+      <path d="M26.5 21C26.7761 21 27 20.7761 27 20.5C27 20.2239 26.7761 20 26.5 20H25V18C25 16.8954 24.1046 16 23 16H22C21.4477 16 21 15.5523 21 15V13C21 12.4477 21.4477 12 22 12H24C25.6569 12 27 13.3431 27 15V20.5C27 20.7761 26.7761 21 26.5 21Z" fill="#5DABA8"/>
+    </svg>
+  )
+
   return (
     <div style={{ 
       minHeight: '100vh',
       width: '100%',
-      background: '#fff5f0',
+      background: '#FFF5F0',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'flex-start',
@@ -174,16 +184,19 @@ export default function NotificationBox({ userProfile, onBack, onUnreadCountChan
       <div style={{
         width: '100%',
         maxWidth: '393px',
-        background: '#fff5f0',
-        minHeight: isDesktop ? 'auto' : '100vh'
+        background: '#FFF5F0',
+        minHeight: isDesktop ? 'auto' : '100vh',
+        margin: '0 auto'
       }}>
         {/* ヘッダー */}
         <div style={{
           background: '#5DABA8',
-          padding: '12px 16px',
+          height: '64px',
+          padding: '0 16px',
           display: 'flex',
           alignItems: 'center',
-          gap: '12px'
+          gap: '12px',
+          position: 'relative'
         }}>
           <button
             onClick={onBack}
@@ -199,100 +212,81 @@ export default function NotificationBox({ userProfile, onBack, onUnreadCountChan
               justifyContent: 'center'
             }}
           >
-            ←
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10.5 13.5L7.5 9L10.5 4.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
           </button>
           <h1 style={{
-            fontSize: '18px',
-            fontWeight: 600,
+            fontSize: '20px',
+            fontWeight: 700,
             color: '#FFFFFF',
             margin: 0,
-            flex: 1
+            flex: 1,
+            fontFamily: '"Noto Sans JP", sans-serif'
           }}>
             通知
           </h1>
         </div>
 
-        <div className="container mx-auto" style={{ padding: '16px', maxWidth: '394px' }}>
+        <div style={{ padding: '24px 16px', maxWidth: '393px', margin: '0 auto' }}>
         {notifications.length === 0 ? (
           <div style={{
             background: '#FFFFFF',
             boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
-            borderRadius: '12px',
+            borderRadius: '16px',
             padding: '48px 24px',
             textAlign: 'center'
           }}>
             <p style={{
-              fontFamily: 'Inter, sans-serif',
+              fontFamily: '"Noto Sans JP", sans-serif',
               fontSize: '16px',
               lineHeight: '150%',
-              color: '#666666'
+              color: '#6C757D'
             }}>通知はありません</p>
           </div>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               {notifications.map((notification) => {
-                // 通知タイプに応じたアイコンを取得
-                const getNotificationIcon = () => {
-                  if (notification.notification_type === 'application_approved') {
-                    return (
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="#5DABA8"/>
-                        <path d="M2 17L12 22L22 17" stroke="#5DABA8" strokeWidth="2"/>
-                        <path d="M2 12L12 17L22 12" stroke="#5DABA8" strokeWidth="2"/>
-                      </svg>
-                    )
-                  } else if (notification.notification_type === 'event_added') {
-                    return (
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <rect x="3" y="4" width="18" height="18" rx="2" stroke="#5DABA8" strokeWidth="2"/>
-                        <path d="M3 10H21" stroke="#5DABA8" strokeWidth="2"/>
-                      </svg>
-                    )
-                  } else {
-                    return (
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <circle cx="12" cy="12" r="10" stroke="#5DABA8" strokeWidth="2"/>
-                        <path d="M9 12L11 14L15 10" stroke="#5DABA8" strokeWidth="2" strokeLinecap="round"/>
-                      </svg>
-                    )
-                  }
-                }
-
                 return (
               <div
                 key={notification.id}
                 onClick={() => !notification.is_read && markAsRead(notification.id)}
                 style={{
                       background: '#FFFFFF',
-                      borderRadius: '8px',
+                      borderRadius: '16px',
                   padding: '16px',
                   cursor: notification.is_read ? 'default' : 'pointer',
-                      border: '1px solid #FF8A5C',
+                      border: '2px solid #FF8A5C',
                       position: 'relative',
-                      marginBottom: '12px'
+                      boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)'
                     }}
                   >
-                    <div style={{ display: 'flex', gap: '12px' }}>
+                    <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+                      {/* ベルアイコン */}
                       <div style={{
-                        width: '40px',
-                        height: '40px',
-                        borderRadius: '8px',
-                        background: '#f0f8f7',
+                        width: '48px',
+                        height: '48px',
+                        borderRadius: '50%',
+                        background: 'white',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        flexShrink: 0
+                        flexShrink: 0,
+                        border: '2px solid #FF8A5C',
+                        boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)'
                       }}>
-                        {getNotificationIcon()}
+                        <BellIcon />
                       </div>
-                      <div style={{ flex: 1 }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '4px' }}>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
                   <h3 style={{
                     fontSize: '16px',
                     fontWeight: 700,
-                    lineHeight: '120%',
-                    color: '#000000',
-                            margin: 0
+                    lineHeight: '150%',
+                    color: '#2C3E50',
+                            margin: 0,
+                            fontFamily: '"Noto Sans JP", sans-serif',
+                            wordBreak: 'break-word'
                   }}>
                     {notification.title}
                   </h3>
@@ -303,23 +297,27 @@ export default function NotificationBox({ userProfile, onBack, onUnreadCountChan
                       borderRadius: '50%',
                               background: '#FF8A5C',
                       flexShrink: 0,
-                              marginTop: '6px'
+                              marginTop: '6px',
+                              marginLeft: '8px'
                     }}></span>
                   )}
                 </div>
                 <p style={{
                   fontSize: '14px',
                   lineHeight: '150%',
-                          color: '#000000',
-                          margin: '4px 0 8px 0'
+                          color: '#2C3E50',
+                          margin: '0 0 8px 0',
+                          fontFamily: '"Noto Sans JP", sans-serif',
+                          wordBreak: 'break-word'
                 }}>
                   {notification.message}
                 </p>
                   <p style={{
                     fontSize: '12px',
                     lineHeight: '120%',
-                    color: '#999999',
-                          margin: 0
+                    color: '#6C757D',
+                          margin: 0,
+                          fontFamily: '"Noto Sans JP", sans-serif'
                 }}>
                   {formatDate(notification.created_at)}
                 </p>
