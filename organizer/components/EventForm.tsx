@@ -1223,53 +1223,53 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
   // ステップ1: 全部の情報入力
   return (
     <div style={{ background: '#E8F5F5', minHeight: '100vh' }}>
-      <div className="container mx-auto" style={{ padding: '9px 16px', maxWidth: '394px' }}>
-        {/* ヘッダー */}
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 1000,
-          background: '#FFFFFF',
-          padding: '16px',
-          boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)',
-          maxWidth: '1000px',
-          margin: '0 auto'
-        }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', maxWidth: '394px', margin: '0 auto' }}>
-            <button
-              type="button"
-              onClick={onCancel}
-              style={{
-                background: 'transparent',
-                border: 'none',
-                fontFamily: '"Noto Sans JP", sans-serif',
-                fontSize: '16px',
-                lineHeight: '150%',
-                color: '#FF8A5C',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '4px'
-              }}
-            >
-              ← 戻る
-            </button>
-            <h1 style={{
+      {/* ヘッダー */}
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 1000,
+        background: '#FFFFFF',
+        padding: '16px',
+        boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)',
+        maxWidth: '1000px',
+        margin: '0 auto'
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', maxWidth: '394px', margin: '0 auto' }}>
+          <button
+            type="button"
+            onClick={onCancel}
+            style={{
+              background: 'transparent',
+              border: 'none',
               fontFamily: '"Noto Sans JP", sans-serif',
-              fontSize: '18px',
-              fontWeight: 700,
-              lineHeight: '120%',
-              color: '#2C3E50',
-              textAlign: 'center'
-            }}>
-              {isEditMode ? '主催者イベント編集' : 'イベント情報を入力してください'}
-            </h1>
-            <div style={{ width: '60px' }}></div>
-          </div>
+              fontSize: '16px',
+              lineHeight: '150%',
+              color: '#FF8A5C',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px'
+            }}
+          >
+            ← 戻る
+          </button>
+          <h1 style={{
+            fontFamily: '"Noto Sans JP", sans-serif',
+            fontSize: '18px',
+            fontWeight: 700,
+            lineHeight: '120%',
+            color: '#2C3E50',
+            textAlign: 'center'
+          }}>
+            {isEditMode ? '主催者イベント編集' : 'イベント情報を入力してください'}
+          </h1>
+          <div style={{ width: '60px' }}></div>
         </div>
+      </div>
 
+      <div className="container mx-auto" style={{ padding: '9px 16px', maxWidth: '394px' }}>
         <div style={{ paddingTop: '64px' }}>
 
         <ProgressIndicator />
