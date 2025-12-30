@@ -122,7 +122,7 @@ export default function ExhibitorHome({ userProfile, onNavigate }: ExhibitorHome
     <div style={{
       minHeight: '100vh',
       width: '100%',
-      background: '#FFFFFF', // 外側は白
+      background: '#FFFFFF',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center'
@@ -142,7 +142,7 @@ export default function ExhibitorHome({ userProfile, onNavigate }: ExhibitorHome
         width: '100%',
         flexShrink: 0,
         height: '64px',
-        background: 'linear-gradient(180deg, #5DABA8 0%, #4A9A97 100%)', // Secondary Main（出店者用）
+        background: 'linear-gradient(180deg, #5DABA8 0%, #4A9A97 100%)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -164,7 +164,7 @@ export default function ExhibitorHome({ userProfile, onNavigate }: ExhibitorHome
       <div style={{
         width: '100%',
         flexShrink: 0,
-        background: '#E8F5F5', // スマホフレーム範囲内は薄い青緑（出店者用）
+        background: '#E8F5F5',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -204,7 +204,7 @@ export default function ExhibitorHome({ userProfile, onNavigate }: ExhibitorHome
                 background: 'white',
                 borderRadius: '12px',
                 padding: '16px',
-                boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)', // Shadow SM
+                boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)'
                 cursor: 'pointer'
               }}
             >
