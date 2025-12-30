@@ -285,7 +285,6 @@ export default function ExhibitorHome({ userProfile, onNavigate }: ExhibitorHome
       </div>
       </div>
       </div>
-      </div>
     </div>
   )
 }

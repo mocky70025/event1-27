@@ -482,12 +482,11 @@ export default function Home() {
           position: 'fixed',
           bottom: 0,
           left: '50%',
-          transform: 'translateX(-50%)',
           width: '393px',
           minWidth: '393px',
           flexShrink: 0,
           height: '80px',
-          background: '#E8F5F5', // Secondary Light（出店者用）
+          background: '#E8F5F5',
           borderTop: '1px solid #E9ECEF',
           display: 'flex',
           alignItems: 'center',
@@ -496,7 +495,9 @@ export default function Home() {
           zIndex: 1000,
           willChange: 'transform',
           transition: 'transform 0.25s ease-out',
-          transform: navVisible ? 'translateY(0) translateZ(0)' : 'translateY(110%) translateZ(0)'
+          transform: navVisible 
+            ? 'translateX(-50%) translateY(0) translateZ(0)' 
+            : 'translateX(-50%) translateY(110%) translateZ(0)'
         }}
       >
         <button
