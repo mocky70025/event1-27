@@ -28,19 +28,21 @@ export default function Home() {
   useEffect(() => {
     const initializeAuth = async () => {
       try {
+        console.log('[Home] Starting auth initialization...')
+        
         // まず、Supabase Authのセッションを確認
         const { data: { session }, error: sessionError } = await supabase.auth.getSession()
         
+        console.log('[Home] Session check result:', {
+          hasSession: !!session,
+          sessionError: sessionError?.message,
+          userId: session?.user?.id
+        })
+        
         // セッションが無効な場合、すべてのsessionStorageをクリア
         if (!session || sessionError) {
-          console.log('[Home] No valid session, clearing all sessionStorage')
-          sessionStorage.removeItem('line_profile')
-          sessionStorage.removeItem('auth_type')
-          sessionStorage.removeItem('user_id')
-          sessionStorage.removeItem('user_email')
-          sessionStorage.removeItem('is_registered')
-          sessionStorage.removeItem('email_confirmed')
-          sessionStorage.removeItem('show_email_sent')
+          console.log('[Home] No valid session, clearing all sessionStorage and showing WelcomeScreen')
+          sessionStorage.clear() // すべてをクリア
           setUserProfile(null)
           setIsRegistered(false)
           setHasActiveSession(false)
@@ -54,6 +56,13 @@ export default function Home() {
         const storedUserId = sessionStorage.getItem('user_id')
         const storedEmail = sessionStorage.getItem('user_email')
         const storedIsRegistered = sessionStorage.getItem('is_registered') === 'true'
+        
+        console.log('[Home] Session exists, checking auth type:', {
+          hasSavedProfile: !!savedProfile,
+          authType,
+          storedUserId,
+          storedIsRegistered
+        })
         
         if (session && session.user) {
           // Supabaseのセッションが存在する場合、優先的に使用
@@ -75,6 +84,11 @@ export default function Home() {
               console.log('[Home] LINE Login user profile set:', { userId: profile.userId, isRegistered: isRegisteredValue })
             } catch (error) {
               console.error('[Home] Failed to parse profile from sessionStorage:', error)
+              // パースエラーの場合、セッションをクリア
+              sessionStorage.clear()
+              setUserProfile(null)
+              setIsRegistered(false)
+              setHasActiveSession(false)
             }
           } else {
             // メール認証またはGoogle認証
@@ -135,14 +149,22 @@ export default function Home() {
               emailConfirmed: isEmailConfirmed || true
             })
           }
+        } else {
+          // セッションが存在しない場合
+          console.log('[Home] No session.user, clearing sessionStorage and showing WelcomeScreen')
+          sessionStorage.clear()
+          setUserProfile(null)
+          setIsRegistered(false)
+          setHasActiveSession(false)
         }
       } catch (error) {
         console.error('[Auth] Initialization error:', error)
+        sessionStorage.clear() // エラー時もクリア
         setUserProfile(null)
         setIsRegistered(false)
         setHasActiveSession(false)
       } finally {
-        console.log('[Home] Auth initialization complete, setting loading to false')
+        console.log('[Home] Auth initialization complete, setting loading to false. userProfile:', userProfile ? 'exists' : 'null')
         setLoading(false)
       }
     }
