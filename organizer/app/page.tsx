@@ -4,9 +4,6 @@ import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { type LineProfile, isLiffEnvironment } from '@/lib/auth'
 import WelcomeScreen from '@/components/WelcomeScreen'
-import PreviewSelector from '@/components/PreviewSelector'
-import EmailConfirmationPreview from '@/components/EmailConfirmationPreview'
-import RegistrationFormPreview from '@/components/RegistrationFormPreview'
 import RegistrationForm from '@/components/RegistrationForm'
 import EventManagement from '@/components/EventManagement'
 import LoadingSpinner from '@/components/LoadingSpinner'
@@ -175,10 +172,7 @@ export default function Home() {
   }
 
   if (!userProfile) {
-    // デザイン作業中は PreviewSelector を表示
-    return <PreviewSelector />
-    // return <RegistrationFormPreview />
-    // return <WelcomeScreen />
+    return <WelcomeScreen />
   }
 
   // メール確認待ちの状態で、まだ登録していない場合は、メール確認待ち画面を表示
