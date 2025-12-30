@@ -301,20 +301,30 @@ export default function WelcomeScreen() {
     <div style={{
       minHeight: '100vh',
       width: '100%',
-      background: 'linear-gradient(-44.94deg, rgba(255, 245, 240, 1) 0%, rgba(232, 245, 245, 1) 99.95%)',
+      background: '#FFFFFF', // 外側は白
       display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: isDesktop ? '40px 20px' : 0
+      justifyContent: 'center'
     }}>
+      <div style={{
+        width: '393px',
+        minWidth: '393px',
+        flexShrink: 0,
+        background: '#FFF5F0', // スマホフレーム範囲内は薄いオレンジ
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingTop: '32px',
+        paddingBottom: '32px',
+        paddingLeft: '20px',
+        paddingRight: '20px'
+      }}>
       {/* 白いカード */}
       <div style={{
         width: '100%',
-        maxWidth: '393px',
         background: 'white',
         borderRadius: '16px',
-        boxShadow: '0px 8px 32px rgba(0, 0, 0, 0.08)',
+        boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)', // Shadow LG
         padding: '0',
         position: 'relative',
         minHeight: '472px'
@@ -326,38 +336,45 @@ export default function WelcomeScreen() {
           marginBottom: '32px',
           padding: '0 20px'
         }}>
+          {/* ヘッダー（ロゴ、タイトル、サブタイトル） */}
           <div style={{
-            width: '64px',
-            height: '64px',
-            margin: '0 auto 12px',
-            background: '#FF8A5C',
-            borderRadius: '8px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)'
+            textAlign: 'center',
+            marginBottom: '16px'
           }}>
+            {/* ロゴ */}
+            <div style={{
+              width: '64px',
+              height: '64px',
+              background: '#FF8A5C',
+              borderRadius: '8px',
+              boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)',
+              margin: '0 auto 12px'
+            }} />
+            {/* タイトル */}
+            <h1 style={{
+              margin: '0 0 8px',
+              fontSize: '24px',
+              fontFamily: '"Inter", sans-serif',
+              fontStyle: 'normal',
+              fontWeight: 700,
+              color: '#2C3E50',
+              lineHeight: 'normal'
+            }}>
+              デミセル
+            </h1>
+            {/* サブタイトル */}
+            <p style={{
+              margin: 0,
+              fontSize: '15px',
+              fontFamily: '"Inter", sans-serif',
+              fontStyle: 'normal',
+              fontWeight: 400,
+              color: '#6C757D',
+              lineHeight: 'normal'
+            }}>
+              主催者向けプラットフォーム
+            </p>
           </div>
-          <h1 style={{
-            fontSize: '24px',
-            fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-            fontStyle: 'italic',
-            fontWeight: 700,
-            lineHeight: 1.3,
-            color: '#2C3E50',
-            margin: '0 0 12px',
-            textAlign: 'center'
-          }}>
-            デミセル
-          </h1>
-          <p style={{
-            fontSize: '15px',
-            color: '#6C757D',
-            margin: 0,
-            lineHeight: 1.6
-          }}>
-            主催者向けプラットフォーム
-          </p>
         </div>
 
         {/* エラーメッセージ */}
@@ -404,7 +421,7 @@ export default function WelcomeScreen() {
             }}>
               <div style={{
                 display: 'flex',
-                borderBottom: '1px solid #E9ECEF',
+                borderBottom: '1px solid #E5E7EB', // Gray Border
                 position: 'relative'
               }}>
                 <button
@@ -415,11 +432,11 @@ export default function WelcomeScreen() {
                     padding: '16px 0',
                     background: 'transparent',
                     border: 'none',
-                    fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                    fontFamily: '"Inter", sans-serif',
                     fontSize: '16px',
                     fontStyle: 'normal',
-                    fontWeight: activeTab === 'login' ? 600 : 400,
-                    color: activeTab === 'login' ? '#FF8A5C' : '#6C757D',
+                    fontWeight: 400, // Regular（非アクティブ時）
+                    color: activeTab === 'login' ? '#FF8A5C' : '#666666', // Primary Main / Gray
                     cursor: 'pointer',
                     position: 'relative',
                     transition: 'all 200ms ease'
@@ -433,7 +450,7 @@ export default function WelcomeScreen() {
                       left: 0,
                       right: 0,
                       height: '2px',
-                      background: '#FF8A5C',
+                      background: '#FF8A5C', // Primary Main
                       borderRadius: '1px 1px 0 0'
                     }} />
                   )}
@@ -446,11 +463,11 @@ export default function WelcomeScreen() {
                     padding: '16px 0',
                     background: 'transparent',
                     border: 'none',
-                    fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                    fontFamily: '"Inter", sans-serif',
                     fontSize: '16px',
                     fontStyle: 'normal',
-                    fontWeight: activeTab === 'register' ? 600 : 400,
-                    color: activeTab === 'register' ? '#FF8A5C' : '#6C757D',
+                    fontWeight: activeTab === 'register' ? 600 : 400, // Semi Bold（アクティブ時）/ Regular（非アクティブ時）
+                    color: activeTab === 'register' ? '#FF8A5C' : '#666666', // Primary Main / Gray
                     cursor: 'pointer',
                     position: 'relative',
                     transition: 'all 200ms ease'
@@ -464,7 +481,7 @@ export default function WelcomeScreen() {
                       left: 0,
                       right: 0,
                       height: '2px',
-                      background: '#FF8A5C',
+                      background: '#FF8A5C', // Primary Main
                       borderRadius: '1px 1px 0 0'
                     }} />
                   )}
@@ -488,14 +505,14 @@ export default function WelcomeScreen() {
                   padding: '16px 24px',
                   background: '#ffffff',
                   borderRadius: '12px',
-                  border: '1px solid #E9ECEF',
+                  border: '1px solid #E5E7EB', // Gray Border
                   fontSize: '16px',
                   fontWeight: 600,
-                  color: '#2C3E50',
+                  color: '#1A1A1A', // Gray Dark
                   cursor: loading ? 'not-allowed' : 'pointer',
                   opacity: loading ? 0.6 : 1,
                   transition: 'all 200ms cubic-bezier(0.4, 0, 0.2, 1)',
-                  boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)',
+                  boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)', // Shadow SM
                   marginBottom: '16px',
                   fontFamily: '"Inter", sans-serif',
                   lineHeight: '100%'
@@ -523,18 +540,18 @@ export default function WelcomeScreen() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   padding: '16px 24px',
-                  background: '#FF8A5C',
+                  background: '#FF8A5C', // Primary Main
                   borderRadius: '12px',
                   border: 'none',
                   fontSize: '15px',
-                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                  fontStyle: 'italic',
+                  fontFamily: '"Inter", sans-serif',
+                  fontStyle: 'normal',
                   fontWeight: 700,
                   color: '#ffffff',
                   cursor: loading ? 'not-allowed' : 'pointer',
                   opacity: loading ? 0.6 : 1,
                   transition: 'all 200ms cubic-bezier(0.4, 0, 0.2, 1)',
-                  boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)',
+                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)', // Shadow MD
                   lineHeight: '100%'
                 }}
               >
@@ -562,14 +579,14 @@ export default function WelcomeScreen() {
                   padding: '16px 24px',
                   background: '#ffffff',
                   borderRadius: '12px',
-                  border: '1px solid #E9ECEF',
+                  border: '1px solid #E5E7EB', // Gray Border
                   fontSize: '16px',
                   fontWeight: 600,
-                  color: '#2C3E50',
+                  color: '#1A1A1A', // Gray Dark
                   cursor: loading ? 'not-allowed' : 'pointer',
                   opacity: loading ? 0.6 : 1,
                   transition: 'all 200ms cubic-bezier(0.4, 0, 0.2, 1)',
-                  boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)',
+                  boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)', // Shadow SM
                   marginBottom: '16px',
                   fontFamily: '"Inter", sans-serif',
                   lineHeight: '100%'
@@ -595,18 +612,18 @@ export default function WelcomeScreen() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   padding: '16px 24px',
-                  background: '#FF8A5C',
+                  background: '#FF8A5C', // Primary Main
                   borderRadius: '12px',
                   border: 'none',
                   fontSize: '15px',
-                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                  fontStyle: 'italic',
+                  fontFamily: '"Inter", sans-serif',
+                  fontStyle: 'normal',
                   fontWeight: 700,
                   color: '#ffffff',
                   cursor: loading ? 'not-allowed' : 'pointer',
                   opacity: loading ? 0.6 : 1,
                   transition: 'all 200ms cubic-bezier(0.4, 0, 0.2, 1)',
-                  boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)',
+                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)', // Shadow MD
                   lineHeight: '100%'
                 }}
               >
@@ -623,203 +640,278 @@ export default function WelcomeScreen() {
 
       {/* メールアドレスでログイン */}
       {authMode === 'login' && loginMethod === 'email' && (
-        <div style={{ width: '100%', padding: '0 20px' }}>
-          {/* エラーメッセージ */}
-          {error && (
+        <div style={{ width: '100%' }}>
+          {/* タブ切り替え */}
+          <div style={{
+            padding: '0 20px',
+            marginBottom: '32px'
+          }}>
             <div style={{
-              marginBottom: '24px',
-              padding: '14px 18px',
-              background: '#fef2f2',
-              border: '2px solid #fecaca',
-              borderRadius: '12px',
               display: 'flex',
-              alignItems: 'center',
-              gap: '12px'
+              borderBottom: '1px solid #E5E7EB', // Gray Border
+              position: 'relative'
             }}>
+              <button
+                type="button"
+                onClick={() => {
+                  setAuthMode('initial')
+                  setActiveTab('login')
+                  setLoginMethod(null)
+                }}
+                style={{
+                  flex: 1,
+                  padding: '16px 0',
+                  background: 'transparent',
+                  border: 'none',
+                  fontFamily: '"Inter", sans-serif',
+                  fontSize: '16px',
+                  fontStyle: 'normal',
+                  fontWeight: 600, // Semi Bold（アクティブ時）
+                  color: '#FF8A5C', // Primary Main
+                  cursor: 'pointer',
+                  position: 'relative',
+                  transition: 'all 200ms ease'
+                }}
+              >
+                ログイン
+                <div style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  height: '2px',
+                  background: '#FF8A5C', // Primary Main
+                  borderRadius: '1px 1px 0 0'
+                }} />
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setAuthMode('initial')
+                  setActiveTab('register')
+                  setLoginMethod(null)
+                }}
+                style={{
+                  flex: 1,
+                  padding: '16px 0',
+                  background: 'transparent',
+                  border: 'none',
+                  fontFamily: '"Inter", sans-serif',
+                  fontSize: '16px',
+                  fontStyle: 'normal',
+                  fontWeight: 400, // Regular（非アクティブ時）
+                  color: '#666666', // Gray
+                  cursor: 'pointer',
+                  position: 'relative',
+                  transition: 'all 200ms ease'
+                }}
+              >
+                新規登録
+              </button>
+            </div>
+          </div>
+
+          <div style={{ padding: '0 20px' }}>
+            {/* エラーメッセージ */}
+            {error && (
               <div style={{
-                width: '20px',
-                height: '20px',
-                borderRadius: '50%',
-                background: '#ef4444',
+                marginBottom: '24px',
+                padding: '14px 18px',
+                background: '#fef2f2',
+                border: '2px solid #fecaca',
+                borderRadius: '12px',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
-                flexShrink: 0
+                gap: '12px'
               }}>
-                <span style={{ color: '#ffffff', fontSize: '12px', fontWeight: 700 }}>!</span>
+                <div style={{
+                  width: '20px',
+                  height: '20px',
+                  borderRadius: '50%',
+                  background: '#ef4444',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0
+                }}>
+                  <span style={{ color: '#ffffff', fontSize: '12px', fontWeight: 700 }}>!</span>
+                </div>
+                <p style={{
+                  margin: 0,
+                  fontSize: '14px',
+                  color: '#991b1b',
+                  fontWeight: 500,
+                  lineHeight: 1.5
+                }}>{error}</p>
               </div>
-              <p style={{
-                margin: 0,
-                fontSize: '14px',
-                color: '#991b1b',
-                fontWeight: 500,
-                lineHeight: 1.5
-              }}>{error}</p>
-            </div>
-          )}
+            )}
 
-          {/* LINEボタン */}
-          <button
-            type="button"
-            onClick={handleLineLogin}
-            disabled={loading}
-            style={{
-              width: '100%',
-              position: 'relative',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '16px 24px',
-              background: '#FF8A5C',
-              borderRadius: '12px',
-              border: 'none',
-              fontSize: '16px',
-              fontWeight: 600,
-              color: '#ffffff',
-              cursor: loading ? 'not-allowed' : 'pointer',
-              opacity: loading ? 0.6 : 1,
-              transition: 'all 200ms cubic-bezier(0.4, 0, 0.2, 1)',
-              boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)',
-              marginBottom: '24px',
-              fontFamily: '"Inter", sans-serif',
-              lineHeight: '100%'
-            }}
-          >
-            <div style={{ position: 'absolute', left: '24px' }}>
-              <LineIcon />
-            </div>
-            <span>LINE</span>
-          </button>
-
-          {/* メールアドレス入力フィールド */}
-          <label style={{
-            display: 'block',
-            fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-            fontSize: '14px',
-            fontStyle: 'italic',
-            fontWeight: 700,
-            color: '#2C3E50',
-            marginBottom: '8px'
-          }}>
-            メールアドレス
-          </label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            style={{
-              width: '100%',
-              height: '44px',
-              padding: '0 16px',
-              background: '#FFFFFF',
-              border: '1px solid #E9ECEF',
-              borderRadius: '8px',
-              fontSize: '15px',
-              lineHeight: '44px',
-              color: email ? '#2C3E50' : '#6C757D',
-              marginBottom: '20px',
-              boxSizing: 'border-box',
-              fontFamily: '"Inter", sans-serif'
-            }}
-            placeholder="example@email.com"
-          />
-
-          {/* パスワード入力フィールド */}
-          <div style={{ marginBottom: '8px' }}>
+            {/* メールアドレス入力フィールド */}
             <label style={{
-              display: 'inline',
-              fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+              display: 'block',
+              fontFamily: '"Inter", sans-serif',
               fontSize: '14px',
-              fontStyle: 'italic',
+              fontStyle: 'normal',
               fontWeight: 700,
-              color: '#2C3E50'
+              color: '#2C3E50', // Gray Dark
+              marginBottom: '8px'
+            }}>
+              メールアドレス
+            </label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              style={{
+                width: '100%',
+                height: '44px',
+                padding: '0 16px',
+                background: '#FFFFFF',
+                border: '1px solid #E5E7EB', // Gray Border
+                borderRadius: '8px',
+                fontSize: '15px',
+                lineHeight: '44px',
+                color: email ? '#2C3E50' : '#6C757D', // Gray Dark / Gray
+                marginBottom: '20px',
+                boxSizing: 'border-box',
+                fontFamily: '"Inter", sans-serif'
+              }}
+              placeholder="example@email.com"
+            />
+
+            {/* パスワード入力フィールド */}
+            <label style={{
+              display: 'block',
+              fontFamily: '"Inter", sans-serif',
+              fontSize: '14px',
+              fontStyle: 'normal',
+              fontWeight: 700,
+              color: '#2C3E50', // Gray Dark
+              marginBottom: '8px'
             }}>
               パスワード
+              <span style={{ 
+                fontFamily: '"Inter", sans-serif', 
+                color: '#89cff0', 
+                fontWeight: 400, 
+                fontStyle: 'normal' 
+              }}>
+                （忘れた場合はここをクリック）
+              </span>
             </label>
-            <span style={{ color: '#89cff0', fontWeight: 700, fontStyle: 'italic' }}>（忘れた場合はここをクリック）</span>
-          </div>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            style={{
-              width: '100%',
-              height: '44px',
-              padding: '0 16px',
-              background: '#FFFFFF',
-              border: '1px solid #E9ECEF',
-              borderRadius: '8px',
-              fontSize: '15px',
-              lineHeight: '44px',
-              color: password ? '#2C3E50' : '#6C757D',
-              marginBottom: '24px',
-              boxSizing: 'border-box',
-              fontFamily: '"Inter", sans-serif'
-            }}
-            placeholder="6文字以上"
-          />
-
-          {/* ボタン（横並び） */}
-          <div style={{ display: 'flex', gap: '10px', marginBottom: '16px', justifyContent: 'space-between' }}>
-            {/* ログインボタン */}
-            <button
-              type="button"
-              onClick={handleEmailLogin}
-              disabled={loading}
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
               style={{
-                width: '140px',
-                height: '52px',
-                padding: '0',
-                background: loading ? '#CCCCCC' : '#FF8A5C',
-                border: 'none',
-                borderRadius: '12px',
-                fontSize: '15px',
-                fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                fontStyle: 'italic',
-                fontWeight: 700,
-                lineHeight: '52px',
-                textAlign: 'center',
-                color: '#FFFFFF',
-                cursor: loading ? 'not-allowed' : 'pointer',
-                boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)'
-              }}
-            >
-              {loading ? 'ログイン中...' : 'ログイン'}
-            </button>
-
-            {/* 別の方法ボタン */}
-            <button
-              type="button"
-              onClick={() => {
-                setAuthMode('initial')
-                setActiveTab('login')
-                setLoginMethod(null)
-                setError('')
-                setEmail('')
-                setPassword('')
-              }}
-              style={{
-                width: '140px',
-                height: '52px',
-                padding: '0',
+                width: '100%',
+                height: '44px',
+                padding: '0 16px',
                 background: '#FFFFFF',
-                border: '1px solid #E9ECEF',
-                borderRadius: '12px',
+                border: '1px solid #E5E7EB', // Gray Border
+                borderRadius: '8px',
                 fontSize: '15px',
-                fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                fontStyle: 'italic',
-                fontWeight: 700,
-                lineHeight: '52px',
-                textAlign: 'center',
-                color: '#6C757D',
-                cursor: 'pointer',
-                boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)'
+                lineHeight: '44px',
+                color: password ? '#2C3E50' : '#6C757D', // Gray Dark / Gray
+                marginBottom: '24px',
+                boxSizing: 'border-box',
+                fontFamily: '"Inter", sans-serif'
               }}
-            >
-              別の方法
-            </button>
+              placeholder="6文字以上"
+            />
+
+            {/* ボタン（縦並び） */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '16px' }}>
+              {/* 新規登録ボタン */}
+              <button
+                type="button"
+                onClick={async () => {
+                  if (!email || !password) {
+                    setError('メールアドレスとパスワードを入力してください')
+                    return
+                  }
+                  if (password.length < 6) {
+                    setError('パスワードは6文字以上で入力してください')
+                    return
+                  }
+                  setLoading(true)
+                  setError('')
+                  try {
+                    const { data, error } = await supabase.auth.signUp({
+                      email,
+                      password,
+                      options: {
+                        emailRedirectTo: `${window.location.origin}/auth/callback`
+                      }
+                    })
+                    if (error) throw error
+                    if (data.user) {
+                      // 登録成功
+                      setError('')
+                      // メール確認画面に遷移するか、成功メッセージを表示
+                    }
+                  } catch (err: any) {
+                    setError(err.message || '登録に失敗しました')
+                  } finally {
+                    setLoading(false)
+                  }
+                }}
+                disabled={loading}
+                style={{
+                  width: '100%',
+                  height: '52px',
+                  padding: '0',
+                  background: loading ? '#CCCCCC' : '#FF8A5C', // Primary Main
+                  border: 'none',
+                  borderRadius: '12px',
+                  fontSize: '15px',
+                  fontFamily: '"Inter", sans-serif',
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  lineHeight: '52px',
+                  textAlign: 'center',
+                  color: '#FFFFFF',
+                  cursor: loading ? 'not-allowed' : 'pointer',
+                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)' // Shadow MD
+                }}
+              >
+                {loading ? '登録中...' : '新規登録'}
+              </button>
+
+              {/* 別の方法ボタン */}
+              <button
+                type="button"
+                onClick={() => {
+                  setAuthMode('initial')
+                  setActiveTab('login')
+                  setLoginMethod(null)
+                  setError('')
+                  setEmail('')
+                  setPassword('')
+                }}
+                style={{
+                  width: '100%',
+                  height: '52px',
+                  padding: '0',
+                  background: '#FFFFFF',
+                  border: '1px solid #E5E7EB', // Gray Border
+                  borderRadius: '12px',
+                  fontSize: '15px',
+                  fontFamily: '"Inter", sans-serif',
+                  fontStyle: 'normal',
+                  fontWeight: 400, // Regular
+                  lineHeight: '52px',
+                  textAlign: 'center',
+                  color: '#2C3E50', // Gray Dark
+                  cursor: 'pointer',
+                  boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)' // Shadow SM
+                }}
+              >
+                別の方法
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -827,173 +919,254 @@ export default function WelcomeScreen() {
 
       {/* メールアドレスで新規登録 */}
       {authMode === 'register' && registerMethod === 'email' && (
-        <div style={{ width: '100%', padding: '0 20px' }}>
-          {/* エラーメッセージ */}
-          {error && (
+        <div style={{ width: '100%' }}>
+          {/* タブ切り替え */}
+          <div style={{
+            padding: '0 20px',
+            marginBottom: '32px'
+          }}>
             <div style={{
-              marginBottom: '24px',
-              padding: '14px 18px',
-              background: '#fef2f2',
-              border: '2px solid #fecaca',
-              borderRadius: '12px',
               display: 'flex',
-              alignItems: 'center',
-              gap: '12px'
+              borderBottom: '1px solid #E5E7EB', // Gray Border
+              position: 'relative'
             }}>
+              <button
+                type="button"
+                onClick={() => {
+                  setAuthMode('initial')
+                  setActiveTab('login')
+                  setRegisterMethod(null)
+                  setError('')
+                  setRegisterEmail('')
+                  setRegisterPassword('')
+                  setRegisterPasswordConfirm('')
+                }}
+                style={{
+                  flex: 1,
+                  padding: '16px 0',
+                  background: 'transparent',
+                  border: 'none',
+                  fontFamily: '"Inter", sans-serif',
+                  fontSize: '16px',
+                  fontStyle: 'normal',
+                  fontWeight: 400, // Regular（非アクティブ時）
+                  color: '#6C757D', // Gray
+                  cursor: 'pointer',
+                  position: 'relative',
+                  transition: 'all 200ms ease'
+                }}
+              >
+                ログイン
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setAuthMode('initial')
+                  setActiveTab('register')
+                  setRegisterMethod(null)
+                  setError('')
+                  setRegisterEmail('')
+                  setRegisterPassword('')
+                  setRegisterPasswordConfirm('')
+                }}
+                style={{
+                  flex: 1,
+                  padding: '16px 0',
+                  background: 'transparent',
+                  border: 'none',
+                  fontFamily: '"Inter", sans-serif',
+                  fontSize: '16px',
+                  fontStyle: 'normal',
+                  fontWeight: 600, // Semi Bold（アクティブ時）
+                  color: '#FF8A5C', // Primary Main
+                  cursor: 'pointer',
+                  position: 'relative',
+                  transition: 'all 200ms ease'
+                }}
+              >
+                新規登録
+                <div style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  height: '2px',
+                  background: '#FF8A5C', // Primary Main
+                  borderRadius: '1px 1px 0 0'
+                }} />
+              </button>
+            </div>
+          </div>
+
+          <div style={{ padding: '0 20px' }}>
+            {/* エラーメッセージ */}
+            {error && (
               <div style={{
-                width: '20px',
-                height: '20px',
-                borderRadius: '50%',
-                background: '#ef4444',
+                marginBottom: '24px',
+                padding: '14px 18px',
+                background: '#fef2f2',
+                border: '2px solid #fecaca',
+                borderRadius: '12px',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
-                flexShrink: 0
+                gap: '12px'
               }}>
-                <span style={{ color: '#ffffff', fontSize: '12px', fontWeight: 700 }}>!</span>
+                <div style={{
+                  width: '20px',
+                  height: '20px',
+                  borderRadius: '50%',
+                  background: '#ef4444',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0
+                }}>
+                  <span style={{ color: '#ffffff', fontSize: '12px', fontWeight: 700 }}>!</span>
+                </div>
+                <p style={{
+                  margin: 0,
+                  fontSize: '14px',
+                  color: '#991b1b',
+                  fontWeight: 500,
+                  lineHeight: 1.5
+                }}>{error}</p>
               </div>
-              <p style={{
-                margin: 0,
-                fontSize: '14px',
-                color: '#991b1b',
-                fontWeight: 500,
-                lineHeight: 1.5
-              }}>{error}</p>
-            </div>
-          )}
+            )}
 
-          {/* メールアドレス入力フィールド */}
-          <label style={{
-            display: 'block',
-            fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-            fontSize: '14px',
-            fontStyle: 'italic',
-            fontWeight: 700,
-            color: '#2C3E50',
-            marginBottom: '8px'
-          }}>
-            メールアドレス
-          </label>
-          <input
-            type="email"
-            value={registerEmail}
-            onChange={(e) => setRegisterEmail(e.target.value)}
-            required
-            style={{
-              width: '100%',
-              height: '44px',
-              padding: '0 16px',
-              background: '#FFFFFF',
-              border: '1px solid #E9ECEF',
-              borderRadius: '8px',
-              fontSize: '15px',
-              lineHeight: '44px',
-              color: registerEmail ? '#2C3E50' : '#6C757D',
-              marginBottom: '20px',
-              boxSizing: 'border-box',
-              fontFamily: '"Inter", sans-serif'
-            }}
-            placeholder="example@email.com"
-          />
-
-          {/* パスワード入力フィールド */}
-          <label style={{
-            display: 'block',
-            fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-            fontSize: '14px',
-            fontStyle: 'italic',
-            fontWeight: 700,
-            color: '#2C3E50',
-            marginBottom: '8px'
-          }}>
-            パスワード
-          </label>
-          <input
-            type="password"
-            value={registerPassword}
-            onChange={(e) => setRegisterPassword(e.target.value)}
-            required
-            minLength={6}
-            style={{
-              width: '100%',
-              height: '44px',
-              padding: '0 16px',
-              background: '#FFFFFF',
-              border: '1px solid #E9ECEF',
-              borderRadius: '8px',
-              fontSize: '15px',
-              lineHeight: '44px',
-              color: registerPassword ? '#2C3E50' : '#6C757D',
-              marginBottom: '24px',
-              boxSizing: 'border-box',
-              fontFamily: '"Inter", sans-serif'
-            }}
-            placeholder="6文字以上"
-          />
-
-          {/* ボタン（横並び） */}
-          <div style={{ display: 'flex', gap: '10px', marginBottom: '16px', justifyContent: 'space-between' }}>
-            {/* 新規登録ボタン */}
-            <button
-              type="button"
-              onClick={handleEmailRegister}
-              disabled={loading}
+            {/* メールアドレス入力フィールド */}
+            <label style={{
+              display: 'block',
+              fontFamily: '"Inter", sans-serif',
+              fontSize: '14px',
+              fontStyle: 'normal',
+              fontWeight: 700,
+              color: '#2C3E50', // Gray Dark
+              marginBottom: '8px'
+            }}>
+              メールアドレス
+            </label>
+            <input
+              type="email"
+              value={registerEmail}
+              onChange={(e) => setRegisterEmail(e.target.value)}
+              required
               style={{
-                width: '140px',
-                height: '52px',
-                padding: '0',
-                background: loading ? '#CCCCCC' : '#FF8A5C',
-                border: 'none',
-                borderRadius: '12px',
-                fontSize: '15px',
-                fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                fontStyle: 'italic',
-                fontWeight: 700,
-                lineHeight: '52px',
-                textAlign: 'center',
-                color: '#FFFFFF',
-                cursor: loading ? 'not-allowed' : 'pointer',
-                boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)'
-              }}
-            >
-              {loading ? '登録中...' : '新規登録'}
-            </button>
-
-            {/* 別の方法ボタン */}
-            <button
-              type="button"
-              onClick={() => {
-                setAuthMode('initial')
-                setActiveTab('register')
-                setRegisterMethod(null)
-                setError('')
-                setRegisterEmail('')
-                setRegisterPassword('')
-                setRegisterPasswordConfirm('')
-              }}
-              style={{
-                width: '140px',
-                height: '52px',
-                padding: '0',
+                width: '100%',
+                height: '44px',
+                padding: '0 16px',
                 background: '#FFFFFF',
-                border: '1px solid #E9ECEF',
-                borderRadius: '12px',
+                border: '1px solid #E5E7EB', // Gray Border
+                borderRadius: '8px',
                 fontSize: '15px',
-                fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                fontStyle: 'italic',
-                fontWeight: 700,
-                lineHeight: '52px',
-                textAlign: 'center',
-                color: '#6C757D',
-                cursor: 'pointer',
-                boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)'
+                lineHeight: '44px',
+                color: registerEmail ? '#2C3E50' : '#6C757D', // Gray Dark / Gray
+                marginBottom: '20px',
+                boxSizing: 'border-box',
+                fontFamily: '"Inter", sans-serif'
               }}
-            >
-              別の方法
-            </button>
+              placeholder="example@email.com"
+            />
+
+            {/* パスワード入力フィールド */}
+            <label style={{
+              display: 'block',
+              fontFamily: '"Inter", sans-serif',
+              fontSize: '14px',
+              fontStyle: 'normal',
+              fontWeight: 700,
+              color: '#2C3E50', // Gray Dark
+              marginBottom: '8px'
+            }}>
+              パスワード
+            </label>
+            <input
+              type="password"
+              value={registerPassword}
+              onChange={(e) => setRegisterPassword(e.target.value)}
+              required
+              minLength={6}
+              style={{
+                width: '100%',
+                height: '44px',
+                padding: '0 16px',
+                background: '#FFFFFF',
+                border: '1px solid #E5E7EB', // Gray Border
+                borderRadius: '8px',
+                fontSize: '15px',
+                lineHeight: '44px',
+                color: registerPassword ? '#2C3E50' : '#6C757D', // Gray Dark / Gray
+                marginBottom: '24px',
+                boxSizing: 'border-box',
+                fontFamily: '"Inter", sans-serif'
+              }}
+              placeholder="6文字以上"
+            />
+
+            {/* ボタン（縦並び） */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '16px' }}>
+              {/* 新規登録ボタン */}
+              <button
+                type="button"
+                onClick={handleEmailRegister}
+                disabled={loading}
+                style={{
+                  width: '100%',
+                  height: '52px',
+                  padding: '0',
+                  background: loading ? '#CCCCCC' : '#FF8A5C', // Primary Main
+                  border: 'none',
+                  borderRadius: '12px',
+                  fontSize: '15px',
+                  fontFamily: '"Inter", sans-serif',
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  lineHeight: '52px',
+                  textAlign: 'center',
+                  color: '#FFFFFF',
+                  cursor: loading ? 'not-allowed' : 'pointer',
+                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)' // Shadow MD
+                }}
+              >
+                {loading ? '登録中...' : '新規登録'}
+              </button>
+
+              {/* 別の方法ボタン */}
+              <button
+                type="button"
+                onClick={() => {
+                  setAuthMode('initial')
+                  setActiveTab('register')
+                  setRegisterMethod(null)
+                  setError('')
+                  setRegisterEmail('')
+                  setRegisterPassword('')
+                  setRegisterPasswordConfirm('')
+                }}
+                style={{
+                  width: '100%',
+                  height: '52px',
+                  padding: '0',
+                  background: '#FFFFFF',
+                  border: '1px solid #E5E7EB', // Gray Border
+                  borderRadius: '12px',
+                  fontSize: '15px',
+                  fontFamily: '"Inter", sans-serif',
+                  fontStyle: 'normal',
+                  fontWeight: 400, // Regular
+                  lineHeight: '52px',
+                  textAlign: 'center',
+                  color: '#2C3E50', // Gray Dark
+                  cursor: 'pointer',
+                  boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)' // Shadow SM
+                }}
+              >
+                別の方法
+              </button>
+            </div>
           </div>
         </div>
       )}
+      </div>
       </div>
     </div>
   )
