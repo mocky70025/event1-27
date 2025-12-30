@@ -2,8 +2,8 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { supabase, type Organizer } from '@/lib/supabase'
-
 import { type LineProfile } from '@/lib/auth'
+import ProgressBar from './ProgressBar'
 
 interface RegistrationFormProps {
   userProfile: LineProfile
@@ -693,285 +693,67 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
     )
   }
 
-  // ステップ2: 情報確認
-  const renderStep2 = () => (
-    <div style={{ 
-      position: 'relative',
-      width: '100%',
-      maxWidth: isDesktop ? '600px' : '393px',
-      minHeight: isDesktop ? '800px' : '852px',
-      margin: '0 auto',
-      background: '#E8F5F5',
-      ...(isDesktop && {
-        padding: '40px 0',
-        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-        borderRadius: '12px'
-      })
-    }}>
-      <div className="container mx-auto" style={{ padding: isDesktop ? '20px 32px' : '9px 16px', maxWidth: isDesktop ? '600px' : '393px' }}>
-        <ProgressIndicator />
-        
-        <div style={{
-          background: '#FFFFFF',
-          borderRadius: '16px',
-          padding: '20px',
-          marginBottom: '24px',
-          boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)'
-        }}>
-          <h2 style={{ 
-            fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-            fontSize: '20px',
-            fontStyle: 'italic',
-            fontWeight: 700,
-            lineHeight: '120%',
-            color: '#2C3E50',
-            marginBottom: '24px',
-            paddingLeft: '4px'
-          }}>
-            情報を確認してください
-          </h2>
-          
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-            {/* お名前 */}
-            <div>
-              <label style={{
-                fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                fontSize: '14px',
-                fontStyle: 'italic',
-                fontWeight: 700,
-                lineHeight: '1.4',
-                color: '#2C3E50',
-                marginBottom: '8px',
-                display: 'block'
-              }}>
-                お名前
-              </label>
-              <p style={{
-                fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                fontSize: '15px',
-                fontWeight: 400,
-                lineHeight: '150%',
-                color: '#2C3E50',
-                margin: 0
-              }}>
-                {formData.name}
-              </p>
-            </div>
-
-            {/* 性別 */}
-            <div>
-              <label style={{
-                fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                fontSize: '14px',
-                fontStyle: 'italic',
-                fontWeight: 700,
-                lineHeight: '1.4',
-                color: '#2C3E50',
-                marginBottom: '8px',
-                display: 'block'
-              }}>
-                性別
-              </label>
-              <p style={{
-                fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                fontSize: '15px',
-                fontWeight: 400,
-                lineHeight: '150%',
-                color: '#2C3E50',
-                margin: 0
-              }}>
-                {formData.gender === '男' ? '男性' : formData.gender === '女' ? '女性' : formData.gender === 'それ以外' ? 'その他' : ''}
-              </p>
-            </div>
-
-            {/* 年齢 */}
-            <div>
-              <label style={{
-                fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                fontSize: '14px',
-                fontStyle: 'italic',
-                fontWeight: 700,
-                lineHeight: '1.4',
-                color: '#2C3E50',
-                marginBottom: '8px',
-                display: 'block'
-              }}>
-                年齢
-              </label>
-              <p style={{
-                fontFamily: '"Inter", sans-serif',
-                fontSize: '15px',
-                fontWeight: 400,
-                lineHeight: '150%',
-                color: '#2C3E50',
-                margin: 0
-              }}>
-                {formData.age}
-              </p>
-            </div>
-
-            {/* 電話番号 */}
-            <div>
-              <label style={{
-                fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                fontSize: '14px',
-                fontStyle: 'italic',
-                fontWeight: 700,
-                lineHeight: '1.4',
-                color: '#2C3E50',
-                marginBottom: '8px',
-                display: 'block'
-              }}>
-                電話番号
-              </label>
-              <p style={{
-                fontFamily: '"Inter", sans-serif',
-                fontSize: '15px',
-                fontWeight: 400,
-                lineHeight: '150%',
-                color: '#2C3E50',
-                margin: 0
-              }}>
-                {formData.phone_number}
-              </p>
-            </div>
-
-            {/* メールアドレス */}
-            <div>
-              <label style={{
-                fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                fontSize: '14px',
-                fontStyle: 'italic',
-                fontWeight: 700,
-                lineHeight: '1.4',
-                color: '#2C3E50',
-                marginBottom: '8px',
-                display: 'block'
-              }}>
-                メールアドレス
-              </label>
-              <p style={{
-                fontFamily: '"Inter", sans-serif',
-                fontSize: '15px',
-                fontWeight: 400,
-                lineHeight: '150%',
-                color: '#2C3E50',
-                margin: 0
-              }}>
-                {formData.email}
-              </p>
-            </div>
-
-            {/* 会社名 */}
-            <div>
-              <label style={{
-                fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                fontSize: '14px',
-                fontStyle: 'italic',
-                fontWeight: 700,
-                lineHeight: '1.4',
-                color: '#2C3E50',
-                marginBottom: '8px',
-                display: 'block'
-              }}>
-                会社名
-              </label>
-              <p style={{
-                fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                fontSize: '15px',
-                fontWeight: 400,
-                lineHeight: '150%',
-                color: '#2C3E50',
-                margin: 0
-              }}>
-                {formData.company_name}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* ボタン */}
-        <button
-          onClick={() => handleSubmit()}
-          disabled={loading}
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-            padding: '0',
-            gap: '8px',
-            width: '100%',
-            maxWidth: '289px',
-            height: '52px',
-            background: loading ? '#9ca3af' : '#FF8A5C',
-            borderRadius: '12px',
-            border: 'none',
-            fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-            fontSize: '15px',
-            fontStyle: 'italic',
-            fontWeight: 700,
-            lineHeight: '52px',
-            color: '#FFFFFF',
-            cursor: loading ? 'not-allowed' : 'pointer',
-            marginLeft: 'auto',
-            marginRight: 'auto',
-            transition: 'all 0.2s ease-in-out',
-            boxShadow: loading ? 'none' : '0px 2px 8px rgba(0, 0, 0, 0.08)'
-          }}
-        >
-          次へ進む
-          <svg style={{ width: '10px', height: '10px', marginTop: '-2px' }} viewBox="0 0 5 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 0L5 5L0 10" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </button>
-      </div>
-    </div>
-  )
-
   // ステップ1: 情報登録
   const renderStep1 = () => (
-    <div style={{ 
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
+    <div style={{
       minHeight: '100vh',
       width: '100%',
-      background: '#E8F5F5',
-      padding: isDesktop ? '40px 20px' : 0
+      background: '#FFFFFF', // 外側は白
+      display: 'flex',
+      justifyContent: 'center'
     }}>
-      <div style={{ 
-        position: 'relative',
-        width: '100%',
-        maxWidth: isDesktop ? '600px' : '393px',
-        minHeight: isDesktop ? '800px' : '852px',
-        background: '#E8F5F5',
-        ...(isDesktop && {
-          padding: '40px 0',
-          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-          borderRadius: '12px'
-        })
+      <div style={{
+        width: '393px',
+        minWidth: '393px',
+        flexShrink: 0,
+        background: '#FFF5F0', // スマホフレーム範囲内は薄いオレンジ
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        paddingTop: '0px',
+        paddingBottom: '32px',
+        paddingLeft: '20px',
+        paddingRight: '20px',
+        boxSizing: 'border-box'
       }}>
-      <div className="container mx-auto" style={{ padding: isDesktop ? '20px 32px' : '9px 16px', maxWidth: isDesktop ? '600px' : '393px' }}>
-        <ProgressIndicator />
-        
-        <div style={{
-          background: '#FFFFFF',
-          borderRadius: '16px',
-          padding: '20px',
-          marginBottom: '24px',
-          boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)'
-        }}>
-          {/* フォームタイトル */}
+      {/* プログレスバー */}
+      <div style={{
+        width: '100%',
+        height: '93px',
+        marginTop: '32px',
+        marginBottom: '16px',
+        background: 'white',
+        borderRadius: '16px',
+        boxShadow: '0px 8px 32px rgba(0, 0, 0, 0.08)', // Shadow LG
+        overflow: 'hidden',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        boxSizing: 'border-box'
+      }}>
+        <ProgressBar type="organizer" step="form" />
+      </div>
+
+      {/* フォーム */}
+      <div style={{
+        width: '100%',
+        background: 'white',
+        borderRadius: '16px',
+        boxShadow: '0px 8px 32px rgba(0, 0, 0, 0.08)', // Shadow LG
+        paddingTop: '32px',
+        paddingBottom: '32px',
+        paddingLeft: '20px',
+        paddingRight: '20px',
+        boxSizing: 'border-box'
+      }}>
+          {/* タイトル */}
           <h2 style={{
-            fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+            margin: '0 0 24px',
             fontSize: '20px',
-            fontStyle: 'italic',
+            fontFamily: '"Inter", sans-serif',
+            fontStyle: 'normal',
             fontWeight: 700,
-            lineHeight: '120%',
-            color: '#2C3E50',
-            marginBottom: '24px',
-            paddingLeft: '4px'
+            color: '#2C3E50'
           }}>
             情報を入力してください
           </h2>
@@ -1159,6 +941,119 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
             <path d="M0 0L5 5L0 10" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </button>
+      </div>
+      </div>
+    </div>
+  )
+
+  // ステップ2: 情報確認
+  const renderStep2 = () => (
+    <div style={{
+      minHeight: '100vh',
+      width: '100%',
+      background: '#FFFFFF', // 外側は白
+      display: 'flex',
+      justifyContent: 'center'
+    }}>
+      <div style={{
+        width: '393px',
+        minWidth: '393px',
+        flexShrink: 0,
+        background: '#FFF5F0', // スマホフレーム範囲内は薄いオレンジ
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        paddingTop: '0px',
+        paddingBottom: '32px',
+        paddingLeft: '20px',
+        paddingRight: '20px',
+        boxSizing: 'border-box'
+      }}>
+      {/* プログレスバー */}
+      <div style={{
+        width: '100%',
+        height: '93px',
+        marginTop: '32px',
+        marginBottom: '16px',
+        background: 'white',
+        borderRadius: '16px',
+        boxShadow: '0px 8px 32px rgba(0, 0, 0, 0.08)', // Shadow LG
+        overflow: 'hidden',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        boxSizing: 'border-box'
+      }}>
+        <ProgressBar type="organizer" step="confirmation" />
+      </div>
+
+      {/* 確認フォーム */}
+      <div style={{
+        width: '100%',
+        background: 'white',
+        borderRadius: '16px',
+        boxShadow: '0px 8px 32px rgba(0, 0, 0, 0.08)', // Shadow LG
+        paddingTop: '32px',
+        paddingBottom: '32px',
+        paddingLeft: '20px',
+        paddingRight: '20px',
+        boxSizing: 'border-box'
+      }}>
+        {/* タイトル */}
+        <h2 style={{
+          margin: '0 0 24px',
+          fontSize: '20px',
+          fontFamily: '"Inter", sans-serif',
+          fontStyle: 'normal',
+          fontWeight: 700,
+          color: '#2C3E50'
+        }}>
+          入力内容を確認してください
+        </h2>
+        {/* TODO: 確認内容を表示 */}
+        <div style={{ marginBottom: '24px' }}>
+          <p>確認内容は後で実装します</p>
+        </div>
+        {/* ボタン */}
+        <div style={{ display: 'flex', gap: '16px' }}>
+          <button
+            type="button"
+            onClick={handleBack}
+            style={{
+              flex: 1,
+              height: '52px',
+              background: '#FFFFFF',
+              border: '1px solid #E5E7EB',
+              borderRadius: '12px',
+              fontFamily: '"Inter", sans-serif',
+              fontSize: '15px',
+              fontWeight: 700,
+              color: '#6C757D',
+              cursor: 'pointer'
+            }}
+          >
+            戻る
+          </button>
+          <button
+            type="button"
+            onClick={handleSubmit}
+            disabled={loading}
+            style={{
+              flex: 1,
+              height: '52px',
+              background: loading ? '#CCCCCC' : '#FF8A5C',
+              border: 'none',
+              borderRadius: '12px',
+              fontFamily: '"Inter", sans-serif',
+              fontSize: '15px',
+              fontWeight: 700,
+              color: '#FFFFFF',
+              cursor: loading ? 'not-allowed' : 'pointer'
+            }}
+          >
+            {loading ? '登録中...' : '登録する'}
+          </button>
+        </div>
       </div>
       </div>
     </div>
