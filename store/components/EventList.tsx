@@ -121,9 +121,13 @@ export default function EventList({ userProfile, onBack }: EventListProps) {
         .select('*')
 
       // approval_statusカラムが存在する場合のみフィルタリング
-      // 注意: カラムが存在しない場合は、クエリ実行時にエラーが発生する可能性があります
-      // その場合は、エラーハンドリングで処理します
-      query = query.eq('approval_status', 'approved')
+      // カラムが存在しない場合はエラーになるので、try-catchで処理
+      try {
+        query = query.eq('approval_status', 'approved')
+      } catch (error) {
+        // カラムが存在しない場合はスキップ
+        console.log('[EventList] approval_status column may not exist, skipping filter')
+      }
 
       if (effectiveFilters.periodStart) {
         query = query.gte('event_end_date', effectiveFilters.periodStart)
