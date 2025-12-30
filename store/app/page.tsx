@@ -46,6 +46,7 @@ export default function Home() {
           setUserProfile(null)
           setIsRegistered(false)
           setHasActiveSession(false)
+          setLoading(false)
           return
         }
         
@@ -143,33 +144,45 @@ export default function Home() {
             fromStorage: storedIsRegistered && !exhibitor
           })
         } else if (!savedProfile && authType === 'email' && sessionStorage.getItem('user_id')) {
-          const storedUserId = sessionStorage.getItem('user_id')
-          const storedEmail = sessionStorage.getItem('user_email')
-          const storedIsRegistered = sessionStorage.getItem('is_registered') === 'true'
-          
-          // セッションが無効な場合、sessionStorageをクリア
+          // セッションが無効な場合、sessionStorageをクリアして終了
           if (!session) {
             sessionStorage.removeItem('auth_type')
             sessionStorage.removeItem('user_id')
             sessionStorage.removeItem('user_email')
             sessionStorage.removeItem('is_registered')
             sessionStorage.removeItem('email_confirmed')
+            setUserProfile(null)
+            setIsRegistered(false)
+            setHasActiveSession(false)
             console.log('[Home] No valid session for email auth, cleared sessionStorage')
             return
           }
           
+          const storedUserId = sessionStorage.getItem('user_id')
+          const storedEmail = sessionStorage.getItem('user_email')
+          const storedIsRegistered = sessionStorage.getItem('is_registered') === 'true'
+          
           console.log('[Home] Email auth from storage:', storedUserId)
           const { data: { session: storageSession } } = await supabase.auth.getSession()
-          const emailConfirmedFromStorage = sessionStorage.getItem('email_confirmed') === 'true'
           
-          const effectiveEmailConfirmed = emailConfirmedFromStorage || !!storageSession
-          
-          if (storageSession) {
-            setHasActiveSession(true)
-          } else {
+          // セッションが無効な場合、userProfileを設定しない
+          if (!storageSession) {
+            sessionStorage.removeItem('auth_type')
+            sessionStorage.removeItem('user_id')
+            sessionStorage.removeItem('user_email')
+            sessionStorage.removeItem('is_registered')
+            sessionStorage.removeItem('email_confirmed')
+            setUserProfile(null)
+            setIsRegistered(false)
             setHasActiveSession(false)
+            console.log('[Home] No valid storage session, cleared sessionStorage')
+            return
           }
           
+          const emailConfirmedFromStorage = sessionStorage.getItem('email_confirmed') === 'true'
+          const effectiveEmailConfirmed = emailConfirmedFromStorage || !!storageSession
+          
+          setHasActiveSession(true)
           setUserProfile({
             userId: storedUserId,
             email: storedEmail || '',
@@ -212,9 +225,17 @@ export default function Home() {
           })
         } else if (!savedProfile) {
           console.log('[Home] No auth found')
+          // 認証情報がない場合、確実にuserProfileをnullに設定
+          setUserProfile(null)
+          setIsRegistered(false)
+          setHasActiveSession(false)
         }
       } catch (error) {
         console.error('[Auth] Initialization error:', error)
+        // エラーが発生した場合も、userProfileをnullに設定
+        setUserProfile(null)
+        setIsRegistered(false)
+        setHasActiveSession(false)
       } finally {
         console.log('[Home] Auth initialization complete, setting loading to false')
         setLoading(false)
