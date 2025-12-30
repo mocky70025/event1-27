@@ -67,25 +67,24 @@ export default function OrganizerEditForm({
   })
 
   const labelStyle = {
+    display: 'block' as const,
     fontFamily: '"Inter", "Noto Sans JP", sans-serif',
     fontSize: '14px',
-    fontStyle: 'italic' as const,
+    fontStyle: 'normal' as const,
     fontWeight: 700,
-    lineHeight: '120%',
     color: '#2C3E50',
-    marginBottom: '8px',
-    display: 'block' as const
+    marginBottom: '8px'
   }
 
   const inputStyle = (hasValue: boolean) => ({
     fontFamily: '"Inter", "Noto Sans JP", sans-serif',
     fontSize: '15px',
-    lineHeight: '150%',
     color: hasValue ? '#2C3E50' : '#6C757D',
     border: 'none',
     outline: 'none',
     width: '100%',
-    background: 'transparent'
+    background: 'transparent',
+    padding: 0
   })
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -217,114 +216,154 @@ export default function OrganizerEditForm({
   }, [])
 
   return (
-    <div style={{ 
-      position: 'relative',
+    <div style={{
+      minHeight: '100vh',
       width: '100%',
-      maxWidth: isDesktop ? '600px' : '393px',
-      minHeight: '852px',
-      margin: '0 auto',
-      background: '#E8F5F5'
+      background: '#FFFFFF', // 外側は白
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center'
     }}>
-      {/* ヘッダー */}
       <div style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 1000,
-        background: '#FF8A5C',
-        color: '#FFFFFF',
-        padding: '16px',
-        textAlign: 'center',
-        fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-        fontSize: '18px',
-        fontWeight: 700,
-        lineHeight: '120%',
-        boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)',
-        maxWidth: isDesktop ? '1000px' : '393px',
-        margin: '0 auto',
-        boxSizing: 'border-box',
+        width: '393px',
+        minWidth: '393px',
+        maxWidth: '393px',
+        flexShrink: 0,
         display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '64px'
+        flexDirection: 'column',
+        alignItems: 'stretch',
+        boxSizing: 'border-box'
       }}>
-        <button
-          onClick={onCancel}
-          style={{
-            position: 'absolute',
-            left: '16px',
-            background: 'none',
-            border: 'none',
-            color: '#FFFFFF',
-            cursor: 'pointer',
-            padding: '4px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontFamily: '"Inter", sans-serif',
-            fontSize: '24px',
+        {/* ヘッダー */}
+        <div style={{
+          width: '100%',
+          flexShrink: 0,
+          height: '64px',
+          background: 'linear-gradient(180deg, #FF8A5C 0%, #FF7840 100%)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          position: 'relative',
+          boxSizing: 'border-box'
+        }}>
+          <h1 style={{
+            margin: 0,
+            fontSize: '18px',
+            fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+            fontStyle: 'normal',
             fontWeight: 700,
-            lineHeight: '1'
-          }}
-        >
-          &lt;
-        </button>
-        プロフィール編集
-      </div>
-
-      <div style={{ paddingTop: '88px', paddingBottom: '24px', paddingLeft: '20px', paddingRight: '20px' }}>
-
-        <form onSubmit={handleSubmit}>
-          <div style={{
-            background: '#FFFFFF',
-            borderRadius: '16px',
-            padding: '20px',
-            boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)'
+            color: 'white'
           }}>
-            <h2 style={{
-              fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-              fontSize: '20px',
-              fontStyle: 'italic',
+            プロフィール編集
+          </h1>
+          <button
+            onClick={onCancel}
+            style={{
+              position: 'absolute',
+              left: '16px',
+              background: 'transparent',
+              border: 'none',
+              fontSize: '24px',
+              fontFamily: '"Inter", sans-serif',
+              fontStyle: 'normal',
               fontWeight: 700,
-              lineHeight: '120%',
-              color: '#2C3E50',
-              marginBottom: '24px',
-              paddingLeft: '4px'
-            }}>
-              情報を入力してください
-            </h2>
+              color: 'white',
+              cursor: 'pointer',
+              padding: 0,
+              width: '24px',
+              height: '24px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          >
+            &lt;
+          </button>
+        </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              {/* お名前 */}
-              <div style={{ width: '100%', maxWidth: '289px', position: 'relative' }} data-error-field="name">
+        <div style={{
+          width: '100%',
+          flexShrink: 0,
+          background: '#FFF5F0', // スマホフレーム範囲内は薄いオレンジ
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          paddingTop: '16px',
+          paddingBottom: '32px',
+          paddingLeft: '20px',
+          paddingRight: '20px',
+          boxSizing: 'border-box'
+        }}>
+          {/* コンテンツエリア */}
+          <div style={{
+            width: '100%'
+          }}>
+            <form onSubmit={handleSubmit}>
+              <div style={{
+                width: '100%',
+                background: 'white',
+                borderRadius: '16px',
+                boxShadow: '0px 8px 32px rgba(0, 0, 0, 0.08)', // Shadow LG
+                paddingTop: '32px',
+                paddingBottom: '32px',
+                paddingLeft: '20px',
+                paddingRight: '20px',
+                boxSizing: 'border-box'
+              }}>
+                {/* タイトル */}
+                <h2 style={{
+                  margin: '0 0 24px',
+                  fontSize: '20px',
+                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  color: '#2C3E50'
+                }}>
+                  情報を入力してください
+                </h2>
+
+                {/* お名前 */}
                 <label style={labelStyle}>お名前</label>
-                <div style={{ ...formFieldStyle(errors.name), width: '100%' }}>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    placeholder="例: 山田太郎"
-                    style={inputStyle(!!formData.name)}
-                  />
-                </div>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  placeholder="例: 山田太郎"
+                  style={{
+                    width: '100%',
+                    padding: '12px 16px',
+                    marginBottom: '24px',
+                    border: errors.name ? '1px solid #FF3B30' : '1px solid #E9ECEF',
+                    borderRadius: '8px',
+                    fontSize: '15px',
+                    fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                    color: formData.name ? '#2C3E50' : '#6C757D',
+                    boxSizing: 'border-box'
+                  }}
+                />
                 {errors.name && (
-                  <p style={{ fontSize: '12px', color: '#FF3B30', marginTop: '4px' }}>入力してください</p>
+                  <p style={{ fontSize: '12px', color: '#FF3B30', marginTop: '-20px', marginBottom: '24px' }}>入力してください</p>
                 )}
-              </div>
 
-              {/* 性別 */}
-              <div style={{ width: '100%', maxWidth: '289px', position: 'relative' }} data-error-field="gender">
+                {/* 性別 */}
                 <label style={labelStyle}>性別</label>
-                <div style={{ ...formFieldStyle(errors.gender), width: '100%', position: 'relative' }}>
+                <div style={{ position: 'relative', marginBottom: '24px' }}>
                   <select
                     name="gender"
                     value={formData.gender}
                     onChange={handleInputChange}
                     style={{
-                      ...inputStyle(!!formData.gender),
+                      width: '100%',
+                      padding: '12px 16px',
+                      border: errors.gender ? '1px solid #FF3B30' : '1px solid #E9ECEF',
+                      borderRadius: '8px',
+                      fontSize: '15px',
+                      fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                      color: formData.gender ? '#2C3E50' : '#6C757D',
                       appearance: 'none',
+                      backgroundColor: 'white',
+                      boxSizing: 'border-box',
                       cursor: 'pointer'
                     }}
                   >
@@ -333,93 +372,114 @@ export default function OrganizerEditForm({
                     <option value="女">女性</option>
                     <option value="それ以外">その他</option>
                   </select>
-                  <svg
-                    width="8"
-                    height="5"
-                    viewBox="0 0 8 5"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    style={{
-                      position: 'absolute',
-                      right: '16px',
-                      pointerEvents: 'none'
-                    }}
-                  >
-                    <path d="M1 1L4 4L7 1" stroke="#6C757D" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
+                  <div style={{
+                    position: 'absolute',
+                    right: '16px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    pointerEvents: 'none'
+                  }}>
+                    <svg width="8" height="5" viewBox="0 0 8 5" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M0.75 0.75L4 4.25L7.25 0.75" stroke="#6C757D" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
                 </div>
                 {errors.gender && (
-                  <p style={{ fontSize: '12px', color: '#FF3B30', marginTop: '4px' }}>選択してください</p>
+                  <p style={{ fontSize: '12px', color: '#FF3B30', marginTop: '-20px', marginBottom: '24px' }}>選択してください</p>
                 )}
-              </div>
 
-              {/* 年齢 */}
-              <div style={{ width: '100%', maxWidth: '289px', position: 'relative' }} data-error-field="age">
+                {/* 年齢 */}
                 <label style={labelStyle}>年齢</label>
-                <div style={{ ...formFieldStyle(errors.age), width: '100%' }}>
-                  <input
-                    type="number"
-                    name="age"
-                    min="0"
-                    max="100"
-                    value={formData.age || ''}
-                    onChange={handleInputChange}
-                    placeholder="例: 35"
-                    style={inputStyle(formData.age > 0)}
-                  />
-                </div>
+                <input
+                  type="number"
+                  name="age"
+                  min="0"
+                  max="100"
+                  value={formData.age || ''}
+                  onChange={handleInputChange}
+                  placeholder="例: 35"
+                  style={{
+                    width: '100%',
+                    padding: '12px 16px',
+                    marginBottom: '24px',
+                    border: errors.age ? '1px solid #FF3B30' : '1px solid #E9ECEF',
+                    borderRadius: '8px',
+                    fontSize: '15px',
+                    fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                    color: formData.age ? '#2C3E50' : '#6C757D',
+                    boxSizing: 'border-box'
+                  }}
+                />
                 {errors.age && (
-                  <p style={{ fontSize: '12px', color: '#FF3B30', marginTop: '4px' }}>入力してください</p>
+                  <p style={{ fontSize: '12px', color: '#FF3B30', marginTop: '-20px', marginBottom: '24px' }}>入力してください</p>
                 )}
-              </div>
 
-              {/* 電話番号 */}
-              <div style={{ width: '100%', maxWidth: '289px', position: 'relative' }} data-error-field="phone_number">
+                {/* 電話番号 */}
                 <label style={labelStyle}>電話番号</label>
-                <div style={{ ...formFieldStyle(errors.phone_number), width: '100%' }}>
-                  <input
-                    type="tel"
-                    name="phone_number"
-                    value={formData.phone_number}
-                    onChange={handleInputChange}
-                    placeholder="例: 090-1234-5678"
-                    style={inputStyle(!!formData.phone_number)}
-                  />
-                </div>
+                <input
+                  type="tel"
+                  name="phone_number"
+                  value={formData.phone_number}
+                  onChange={handleInputChange}
+                  placeholder="例: 090-1234-5678"
+                  style={{
+                    width: '100%',
+                    padding: '12px 16px',
+                    marginBottom: '24px',
+                    border: errors.phone_number ? '1px solid #FF3B30' : '1px solid #E9ECEF',
+                    borderRadius: '8px',
+                    fontSize: '15px',
+                    fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                    color: formData.phone_number ? '#2C3E50' : '#6C757D',
+                    boxSizing: 'border-box'
+                  }}
+                />
                 {errors.phone_number && (
-                  <p style={{ fontSize: '12px', color: '#FF3B30', marginTop: '4px' }}>入力してください</p>
+                  <p style={{ fontSize: '12px', color: '#FF3B30', marginTop: '-20px', marginBottom: '24px' }}>入力してください</p>
                 )}
-              </div>
 
-              {/* メールアドレス */}
-              <div style={{ width: '100%', maxWidth: '289px', position: 'relative' }} data-error-field="email">
+                {/* メールアドレス */}
                 <label style={labelStyle}>メールアドレス</label>
-                <div style={{ ...formFieldStyle(errors.email), width: '100%' }}>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    placeholder="例: example@email.com"
-                    style={inputStyle(!!formData.email)}
-                  />
-                </div>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  placeholder="例: example@email.com"
+                  style={{
+                    width: '100%',
+                    padding: '12px 16px',
+                    marginBottom: '24px',
+                    border: errors.email ? '1px solid #FF3B30' : '1px solid #E9ECEF',
+                    borderRadius: '8px',
+                    fontSize: '15px',
+                    fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                    color: formData.email ? '#2C3E50' : '#6C757D',
+                    boxSizing: 'border-box'
+                  }}
+                />
                 {errors.email && (
-                  <p style={{ fontSize: '12px', color: '#FF3B30', marginTop: '4px' }}>入力してください</p>
+                  <p style={{ fontSize: '12px', color: '#FF3B30', marginTop: '-20px', marginBottom: '24px' }}>入力してください</p>
                 )}
-              </div>
 
-              {/* ジャンル */}
-              <div style={{ width: '100%', maxWidth: '289px', position: 'relative' }} data-error-field="genre">
+                {/* ジャンル */}
                 <label style={labelStyle}>ジャンル</label>
-                <div style={{ ...formFieldStyle(errors.genre), width: '100%', position: 'relative' }}>
+                <div style={{ position: 'relative', marginBottom: '32px' }}>
                   <select
                     name="genre"
                     value={formData.genre}
                     onChange={handleInputChange}
                     style={{
-                      ...inputStyle(!!formData.genre),
+                      width: '100%',
+                      padding: '12px 16px',
+                      border: errors.genre ? '1px solid #FF3B30' : '1px solid #E9ECEF',
+                      borderRadius: '8px',
+                      fontSize: '15px',
+                      fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                      color: formData.genre ? '#2C3E50' : '#6C757D',
                       appearance: 'none',
+                      backgroundColor: 'white',
+                      boxSizing: 'border-box',
                       cursor: 'pointer'
                     }}
                   >
@@ -427,54 +487,47 @@ export default function OrganizerEditForm({
                     <option value="飲食">飲食</option>
                     <option value="その他">その他</option>
                   </select>
-                  <svg
-                    width="8"
-                    height="5"
-                    viewBox="0 0 8 5"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    style={{
-                      position: 'absolute',
-                      right: '16px',
-                      pointerEvents: 'none'
-                    }}
-                  >
-                    <path d="M1 1L4 4L7 1" stroke="#6C757D" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
+                  <div style={{
+                    position: 'absolute',
+                    right: '16px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    pointerEvents: 'none'
+                  }}>
+                    <svg width="8" height="5" viewBox="0 0 8 5" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M0.75 0.75L4 4.25L7.25 0.75" stroke="#6C757D" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
                 </div>
                 {errors.genre && (
-                  <p style={{ fontSize: '12px', color: '#FF3B30', marginTop: '4px' }}>選択してください</p>
+                  <p style={{ fontSize: '12px', color: '#FF3B30', marginTop: '-28px', marginBottom: '32px' }}>選択してください</p>
                 )}
-              </div>
-            </div>
-          </div>
 
-          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '24px' }}>
-            <button
-              type="submit"
-              disabled={loading}
-              style={{
-                width: '100%',
-                maxWidth: '289px',
-                height: '52px',
-                padding: '0',
-                background: loading ? '#D9D9D9' : '#FF8A5C',
-                color: '#FFFFFF',
-                borderRadius: '12px',
-                border: 'none',
-                fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                fontSize: '15px',
-                fontStyle: 'italic',
-                fontWeight: 700,
-                lineHeight: '52px',
-                cursor: loading ? 'not-allowed' : 'pointer',
-                boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)'
-              }}
-            >
-              {loading ? '保存中...' : '保存する'}
-            </button>
+                {/* 保存するボタン */}
+                <button
+                  type="submit"
+                  disabled={loading}
+                  style={{
+                    width: '100%',
+                    padding: '16px 24px',
+                    background: loading ? '#D9D9D9' : '#FF8A5C', // Primary Default
+                    borderRadius: '12px',
+                    border: 'none',
+                    fontSize: '15px',
+                    fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                    fontStyle: 'normal',
+                    fontWeight: 700,
+                    color: 'white',
+                    cursor: loading ? 'not-allowed' : 'pointer',
+                    boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)', // Shadow SM
+                  }}
+                >
+                  {loading ? '保存中...' : '保存する'}
+                </button>
+              </div>
+            </form>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   )

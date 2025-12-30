@@ -488,138 +488,6 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
     }
   }
 
-  // 進捗インジケーター（3ステップ）- Figmaデザインに合わせて更新
-  const ProgressIndicator = () => (
-    <div style={{
-      background: '#FFFFFF',
-      borderRadius: '16px',
-      boxShadow: '0px 8px 32px rgba(0, 0, 0, 0.08)',
-      padding: '20px',
-      marginBottom: '24px',
-      position: 'relative',
-      width: '100%',
-      height: '93px'
-    }}>
-      <div style={{
-        position: 'relative',
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between'
-      }}>
-        {/* ステップ1: 情報登録（アクティブ） */}
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '8px',
-          flex: 1
-        }}>
-          <div style={{
-            width: '56px',
-            height: '32px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}>
-            {/* トラックアイコン（簡易版） */}
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="4" y="14" width="16" height="10" rx="1" fill="#FF8A5C"/>
-              <rect x="20" y="16" width="8" height="8" rx="1" fill="#FF8A5C"/>
-              <circle cx="10" cy="26" r="2" fill="white"/>
-              <circle cx="24" cy="26" r="2" fill="white"/>
-            </svg>
-          </div>
-          <span style={{
-            fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-            fontSize: '13px',
-            color: '#2C3E50',
-            textAlign: 'center'
-          }}>
-            情報登録
-          </span>
-        </div>
-
-        {/* 線1 */}
-        <div style={{
-          width: '64px',
-          height: '1px',
-          background: '#E9ECEF',
-          marginTop: '-16px'
-        }} />
-
-        {/* ステップ2: 情報確認 */}
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '8px',
-          flex: 1
-        }}>
-          <div style={{
-            width: '56px',
-            height: '32px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}>
-            {/* ダイヤモンドアイコン */}
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M16 8L24 16L16 24L8 16L16 8Z" fill={currentStep >= 2 ? '#FF8A5C' : '#E9ECEF'}/>
-            </svg>
-          </div>
-          <span style={{
-            fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-            fontSize: '13px',
-            color: '#6C757D',
-            textAlign: 'center'
-          }}>
-            情報確認
-          </span>
-        </div>
-
-        {/* 線2 */}
-        <div style={{
-          width: '64px',
-          height: '1px',
-          background: '#E9ECEF',
-          marginTop: '-16px'
-        }} />
-
-        {/* ステップ3: 登録完了 */}
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '8px',
-          flex: 1
-        }}>
-          <div style={{
-            width: '56px',
-            height: '32px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}>
-            {/* ダイヤモンドアイコン */}
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M16 8L24 16L16 24L8 16L16 8Z" fill={currentStep >= 3 ? '#FF8A5C' : '#E9ECEF'}/>
-            </svg>
-          </div>
-          <span style={{
-            fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-            fontSize: '13px',
-            color: '#6C757D',
-            textAlign: 'center'
-          }}>
-            登録完了
-          </span>
-        </div>
-      </div>
-    </div>
-  )
-
   // 利用規約ページ
   if (showTermsPage) {
     return (
@@ -902,46 +770,42 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
               )}
             </div>
           </div>
-        </div>
 
-        {/* ボタン */}
-        <button
-          type="button"
-          onClick={handleNext}
-          disabled={loading}
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-            padding: '0',
-            gap: '8px',
-            width: '100%',
-            maxWidth: '289px',
-            height: '52px',
-            background: loading ? '#9ca3af' : '#FF8A5C',
-            borderRadius: '12px',
-            border: 'none',
-            fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-            fontSize: '15px',
-            fontStyle: 'italic',
-            fontWeight: 700,
-            lineHeight: '52px',
-            color: '#FFFFFF',
-            cursor: loading ? 'not-allowed' : 'pointer',
-            marginTop: '24px',
-            marginLeft: 'auto',
-            marginRight: 'auto',
-            transition: 'all 0.2s ease-in-out',
-            boxShadow: loading ? 'none' : '0px 2px 8px rgba(0, 0, 0, 0.08)'
-          }}
-        >
-          次へ進む
-          <svg style={{ width: '10px', height: '10px', marginTop: '-2px' }} viewBox="0 0 5 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 0L5 5L0 10" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </button>
-      </div>
+          {/* ボタン */}
+          <button
+            type="button"
+            onClick={handleNext}
+            disabled={loading}
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+              padding: '0',
+              gap: '8px',
+              width: '100%',
+              height: '52px',
+              background: loading ? '#9ca3af' : '#FF8A5C',
+              borderRadius: '12px',
+              border: 'none',
+              fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+              fontSize: '15px',
+              fontStyle: 'normal',
+              fontWeight: 700,
+              lineHeight: '52px',
+              color: '#FFFFFF',
+              cursor: loading ? 'not-allowed' : 'pointer',
+              marginTop: '24px',
+              transition: 'all 0.2s ease-in-out',
+              boxShadow: loading ? 'none' : '0px 2px 8px rgba(0, 0, 0, 0.08)'
+            }}
+          >
+            次へ進む
+            <svg style={{ width: '8px', height: '10px' }} viewBox="0 0 8 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1.5 1L6.5 5L1.5 9" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   )
@@ -1003,57 +867,183 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
         <h2 style={{
           margin: '0 0 24px',
           fontSize: '20px',
-          fontFamily: '"Inter", sans-serif',
+          fontFamily: '"Inter", "Noto Sans JP", sans-serif',
           fontStyle: 'normal',
           fontWeight: 700,
           color: '#2C3E50'
         }}>
-          入力内容を確認してください
+          情報を確認してください
         </h2>
-        {/* TODO: 確認内容を表示 */}
-        <div style={{ marginBottom: '24px' }}>
-          <p>確認内容は後で実装します</p>
-        </div>
-        {/* ボタン */}
-        <div style={{ display: 'flex', gap: '16px' }}>
-          <button
-            type="button"
-            onClick={handleBack}
-            style={{
-              flex: 1,
-              height: '52px',
-              background: '#FFFFFF',
-              border: '1px solid #E5E7EB',
-              borderRadius: '12px',
-              fontFamily: '"Inter", sans-serif',
-              fontSize: '15px',
-              fontWeight: 700,
-              color: '#6C757D',
-              cursor: 'pointer'
-            }}
-          >
-            戻る
-          </button>
-          <button
-            type="button"
-            onClick={handleSubmit}
-            disabled={loading}
-            style={{
-              flex: 1,
-              height: '52px',
-              background: loading ? '#CCCCCC' : '#FF8A5C',
-              border: 'none',
-              borderRadius: '12px',
-              fontFamily: '"Inter", sans-serif',
-              fontSize: '15px',
-              fontWeight: 700,
-              color: '#FFFFFF',
-              cursor: loading ? 'not-allowed' : 'pointer'
-            }}
-          >
-            {loading ? '登録中...' : '登録する'}
-          </button>
-        </div>
+
+        {/* お名前 */}
+        <label style={{
+          display: 'block',
+          fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+          fontSize: '14px',
+          fontStyle: 'normal',
+          fontWeight: 700,
+          color: '#2C3E50',
+          marginBottom: '8px'
+        }}>
+          お名前
+        </label>
+        <p style={{
+          margin: '0 0 24px',
+          fontSize: '15px',
+          fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+          fontStyle: 'normal',
+          fontWeight: 400,
+          color: '#2C3E50'
+        }}>
+          {formData.name}
+        </p>
+
+        {/* 性別 */}
+        <label style={{
+          display: 'block',
+          fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+          fontSize: '14px',
+          fontStyle: 'normal',
+          fontWeight: 700,
+          color: '#2C3E50',
+          marginBottom: '8px'
+        }}>
+          性別
+        </label>
+        <p style={{
+          margin: '0 0 24px',
+          fontSize: '15px',
+          fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+          fontStyle: 'normal',
+          fontWeight: 400,
+          color: '#2C3E50'
+        }}>
+          {formData.gender === '男' ? '男性' : formData.gender === '女' ? '女性' : formData.gender === 'それ以外' ? 'その他' : ''}
+        </p>
+
+        {/* 年齢 */}
+        <label style={{
+          display: 'block',
+          fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+          fontSize: '14px',
+          fontStyle: 'normal',
+          fontWeight: 700,
+          color: '#2C3E50',
+          marginBottom: '8px'
+        }}>
+          年齢
+        </label>
+        <p style={{
+          margin: '0 0 24px',
+          fontSize: '15px',
+          fontFamily: '"Inter", sans-serif',
+          fontStyle: 'normal',
+          fontWeight: 400,
+          color: '#2C3E50'
+        }}>
+          {formData.age || ''}
+        </p>
+
+        {/* 電話番号 */}
+        <label style={{
+          display: 'block',
+          fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+          fontSize: '14px',
+          fontStyle: 'normal',
+          fontWeight: 700,
+          color: '#2C3E50',
+          marginBottom: '8px'
+        }}>
+          電話番号
+        </label>
+        <p style={{
+          margin: '0 0 24px',
+          fontSize: '15px',
+          fontFamily: '"Inter", sans-serif',
+          fontStyle: 'normal',
+          fontWeight: 400,
+          color: '#2C3E50'
+        }}>
+          {formData.phone_number}
+        </p>
+
+        {/* メールアドレス */}
+        <label style={{
+          display: 'block',
+          fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+          fontSize: '14px',
+          fontStyle: 'normal',
+          fontWeight: 700,
+          color: '#2C3E50',
+          marginBottom: '8px'
+        }}>
+          メールアドレス
+        </label>
+        <p style={{
+          margin: '0 0 24px',
+          fontSize: '15px',
+          fontFamily: '"Inter", sans-serif',
+          fontStyle: 'normal',
+          fontWeight: 400,
+          color: '#2C3E50'
+        }}>
+          {formData.email}
+        </p>
+
+        {/* 会社名 */}
+        <label style={{
+          display: 'block',
+          fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+          fontSize: '14px',
+          fontStyle: 'normal',
+          fontWeight: 700,
+          color: '#2C3E50',
+          marginBottom: '8px'
+        }}>
+          会社名
+        </label>
+        <p style={{
+          margin: '0 0 32px',
+          fontSize: '15px',
+          fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+          fontStyle: 'normal',
+          fontWeight: 400,
+          color: '#2C3E50'
+        }}>
+          {formData.company_name}
+        </p>
+
+        {/* 次へ進むボタン */}
+        <button
+          type="button"
+          onClick={handleSubmit}
+          disabled={loading}
+          style={{
+            width: '100%',
+            padding: '16px 24px',
+            background: loading ? '#CCCCCC' : '#FF8A5C', // Primary Default
+            borderRadius: '12px',
+            border: 'none',
+            fontSize: '15px',
+            fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+            fontStyle: 'normal',
+            fontWeight: 700,
+            color: 'white',
+            cursor: loading ? 'not-allowed' : 'pointer',
+            boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)', // Shadow SM
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px'
+          }}
+        >
+          <span>{loading ? '登録中...' : '次へ進む'}</span>
+          {!loading && (
+            <svg width="8" height="10" viewBox="0 0 8 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1.5 1L6.5 5L1.5 9" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          )}
+        </button>
       </div>
       </div>
     </div>
@@ -1061,116 +1051,121 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
 
   // ステップ3: 登録完了
   const renderStep3 = () => (
-    <div style={{ 
-      position: 'relative',
+    <div style={{
+      minHeight: '100vh',
       width: '100%',
-      maxWidth: isDesktop ? '600px' : '393px',
-      minHeight: isDesktop ? '800px' : '852px',
-      margin: '0 auto',
-      background: '#E8F5F5',
-      ...(isDesktop && {
-        padding: '40px 0',
-        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-        borderRadius: '12px'
-      })
+      background: '#FFFFFF', // 外側は白
+      display: 'flex',
+      justifyContent: 'center'
     }}>
-      <div className="container mx-auto" style={{ padding: isDesktop ? '20px 32px' : '9px 16px', maxWidth: isDesktop ? '600px' : '393px' }}>
-        <ProgressIndicator />
-        
-        <div style={{
-          background: '#FFFFFF',
-          borderRadius: '16px',
-          padding: '40px 20px',
-          marginBottom: '24px',
-          boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center'
+      <div style={{
+        width: '393px',
+        minWidth: '393px',
+        flexShrink: 0,
+        background: '#FFF5F0', // スマホフレーム範囲内は薄いオレンジ
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        paddingTop: '0px',
+        paddingBottom: '32px',
+        paddingLeft: '20px',
+        paddingRight: '20px',
+        boxSizing: 'border-box'
+      }}>
+      {/* プログレスバー */}
+      <div style={{
+        width: '100%',
+        height: '93px',
+        marginTop: '32px',
+        marginBottom: '16px',
+        background: 'white',
+        borderRadius: '16px',
+        boxShadow: '0px 8px 32px rgba(0, 0, 0, 0.08)', // Shadow LG
+        overflow: 'hidden',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        boxSizing: 'border-box'
+      }}>
+        <ProgressBar type="organizer" step="complete" />
+      </div>
+
+      {/* コンテンツ */}
+      <div style={{
+        width: '100%',
+        background: 'white',
+        borderRadius: '16px',
+        boxShadow: '0px 8px 32px rgba(0, 0, 0, 0.08)', // Shadow LG
+        paddingTop: '32px',
+        paddingBottom: '32px',
+        paddingLeft: '20px',
+        paddingRight: '20px',
+        textAlign: 'center',
+        boxSizing: 'border-box'
+      }}>
+        <h1 style={{
+          margin: '0 0 16px',
+          fontSize: '24px',
+          fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+          fontStyle: 'normal',
+          fontWeight: 700,
+          color: '#2C3E50'
         }}>
-          <div style={{
-            width: '80px',
-            height: '80px',
-            background: '#FF8A5C',
-            borderRadius: '50%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginBottom: '40px'
-          }}>
-            <svg style={{ width: '33px', height: '21px', color: '#FFFFFF' }} fill="none" viewBox="0 0 33 21" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2 10.5L11 19.5L31 2.5" stroke="white" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </div>
-          
-          <h2 style={{
+          登録完了
+        </h1>
+        <p style={{
+          margin: '0 0 4px',
+          fontSize: '14px',
+          fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+          fontStyle: 'normal',
+          fontWeight: 400,
+          color: '#6C757D'
+        }}>
+          主催者登録が完了しました
+        </p>
+        <p style={{
+          margin: '0 0 4px',
+          fontSize: '14px',
+          fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+          fontStyle: 'normal',
+          fontWeight: 400,
+          color: '#6C757D'
+        }}>
+          運営の許可があり次第
+        </p>
+        <p style={{
+          margin: '0 0 32px',
+          fontSize: '14px',
+          fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+          fontStyle: 'normal',
+          fontWeight: 400,
+          color: '#6C757D'
+        }}>
+          イベントの掲載が可能になります
+        </p>
+
+        {/* ホームへ進むボタン */}
+        <button
+          type="button"
+          onClick={onRegistrationComplete}
+          style={{
+            width: '100%',
+            padding: '16px 24px',
+            background: '#FF8A5C', // Primary Default
+            borderRadius: '12px',
+            border: 'none',
+            fontSize: '16px',
             fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-            fontSize: '24px',
+            fontStyle: 'normal',
             fontWeight: 700,
-            lineHeight: '120%',
-            color: '#2C3E50',
-            marginBottom: '20px',
-            textAlign: 'center'
-          }}>
-            登録完了
-          </h2>
-          
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '40px', textAlign: 'center' }}>
-            <p style={{
-              fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-              fontSize: '14px',
-              lineHeight: '150%',
-              color: '#6C757D',
-              margin: 0
-            }}>
-              主催者登録が完了しました
-            </p>
-            <p style={{
-              fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-              fontSize: '14px',
-              lineHeight: '150%',
-              color: '#6C757D',
-              margin: 0
-            }}>
-              メールアドレスに確認メールを送信しました
-            </p>
-          </div>
-          
-          <button
-            onClick={onRegistrationComplete}
-            style={{
-              width: '100%',
-              maxWidth: '289px',
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              padding: '0',
-              height: '52px',
-              background: '#FF8A5C',
-              borderRadius: '12px',
-              border: 'none',
-              fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-              fontSize: '16px',
-              fontWeight: 700,
-              lineHeight: '52px',
-              color: '#FFFFFF',
-              cursor: 'pointer',
-              transition: 'all 0.2s ease-in-out',
-              boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = '#FF7840'
-              e.currentTarget.style.boxShadow = '0px 2px 8px rgba(0, 0, 0, 0.08)'
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = '#FF8A5C'
-              e.currentTarget.style.boxShadow = '0px 2px 8px rgba(0, 0, 0, 0.08)'
-            }}
-          >
-            ホームへ戻る
-          </button>
-        </div>
+            color: 'white',
+            cursor: 'pointer',
+            boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)', // Shadow SM
+          }}
+        >
+          ホームへ進む
+        </button>
+      </div>
       </div>
     </div>
   )

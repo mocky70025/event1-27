@@ -56,34 +56,50 @@ export default function EventDetail({ event, onBack, onEdit }: EventDetailProps)
   }
 
   return (
-    <div style={{ background: '#E8F5F5', minHeight: '100vh' }}>
-      <div className="container mx-auto" style={{ padding: '0', maxWidth: '393px' }}>
+    <div style={{
+      minHeight: '100vh',
+      width: '100%',
+      background: '#FFFFFF', // 外側は白
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center'
+    }}>
+      <div style={{
+        width: '393px',
+        minWidth: '393px',
+        maxWidth: '393px',
+        flexShrink: 0,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'stretch',
+        boxSizing: 'border-box'
+      }}>
         {/* ヘッダー */}
         <div style={{
-          position: 'relative',
           width: '100%',
-          height: '220px',
-          background: 'linear-gradient(180deg, #E8F5F5 0%, #FFFFFF 100%)',
+          flexShrink: 0,
+          height: '64px',
+          background: 'linear-gradient(180deg, #FF8A5C 0%, #FF7840 100%)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          marginBottom: '0'
+          position: 'relative',
+          boxSizing: 'border-box'
         }}>
-          {/* 戻るボタン */}
           <button
             onClick={onBack}
             style={{
               position: 'absolute',
               left: '16px',
-              top: '16px',
               background: 'transparent',
               border: 'none',
-              fontFamily: '"Inter", "Noto Sans JP", sans-serif',
               fontSize: '24px',
+              fontFamily: '"Inter", sans-serif',
+              fontStyle: 'normal',
               fontWeight: 700,
-              color: '#2C3E50',
+              color: 'white',
               cursor: 'pointer',
-              zIndex: 10,
+              padding: 0,
               width: '24px',
               height: '24px',
               display: 'flex',
@@ -93,343 +109,347 @@ export default function EventDetail({ event, onBack, onEdit }: EventDetailProps)
           >
             &lt;
           </button>
-
-          {/* イベントアイコン */}
-          <div style={{
-            fontSize: '48px',
-            lineHeight: '48px',
-            marginTop: '40px'
-          }}>
-            🎪
-          </div>
         </div>
 
-        {/* メインコンテンツ */}
-        <div style={{ padding: '16px', paddingTop: '0' }}>
-          {/* ジャンルタグ */}
+        <div style={{
+          width: '100%',
+          flexShrink: 0,
+          background: '#FFF5F0', // スマホフレーム範囲内は薄いオレンジ
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          paddingTop: '16px',
+          paddingBottom: '80px',
+          paddingLeft: '20px',
+          paddingRight: '20px',
+          boxSizing: 'border-box'
+        }}>
+          {/* コンテンツエリア */}
           <div style={{
-            display: 'inline-block',
-            background: '#FF8A5C',
-            borderRadius: '14px',
-            padding: '6px 12px',
-            marginBottom: '8px'
+            width: '100%'
           }}>
-            <span style={{
-              fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-              fontSize: '12px',
-              fontWeight: 700,
-              color: '#FFFFFF'
+            {/* イベント詳細 */}
+            <div style={{
+              width: '100%',
+              background: 'white',
+              borderRadius: '16px',
+              padding: '24px',
+              boxShadow: '0px 8px 32px rgba(0, 0, 0, 0.08)', // Shadow LG
+              boxSizing: 'border-box'
             }}>
-              {event.genre || 'イベント'}
-            </span>
-          </div>
-
-          {/* イベント名 */}
-          <h1 style={{
-            fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-            fontSize: '24px',
-            fontWeight: 700,
-            lineHeight: '120%',
-            color: '#2C3E50',
-            marginTop: '0',
-            marginBottom: '16px'
-          }}>
-            {event.event_name}
-          </h1>
-
-          {/* イベント詳細カード */}
-          <div style={{
-            background: '#FFFFFF',
-            borderRadius: '16px',
-            padding: '16px',
-            marginBottom: '24px',
-            boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)'
-          }}>
-            {/* 日付 */}
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: '16px' }}>
-              <div style={{ width: '18px', height: '18px', flexShrink: 0, marginTop: '2px' }}>
-                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="3" y="4" width="12" height="11" rx="1" stroke="#2C3E50" strokeWidth="1.5"/>
-                  <line x1="6" y1="2" x2="6" y2="4" stroke="#2C3E50" strokeWidth="1.5" strokeLinecap="round"/>
-                  <line x1="12" y1="2" x2="12" y2="4" stroke="#2C3E50" strokeWidth="1.5" strokeLinecap="round"/>
-                  <line x1="6" y1="8" x2="6" y2="8" stroke="#2C3E50" strokeWidth="1.5" strokeLinecap="round"/>
-                  <line x1="9" y1="8" x2="9" y2="8" stroke="#2C3E50" strokeWidth="1.5" strokeLinecap="round"/>
-                  <line x1="12" y1="8" x2="12" y2="8" stroke="#2C3E50" strokeWidth="1.5" strokeLinecap="round"/>
-                </svg>
-              </div>
-              <span style={{
+              {/* カテゴリ */}
+              <div style={{
+                display: 'inline-block',
+                padding: '4px 12px',
+                background: '#FF8A5C',
+                borderRadius: '12px',
+                fontSize: '12px',
                 fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                fontSize: '14px',
-                lineHeight: '150%',
+                fontStyle: 'normal',
+                fontWeight: 700,
+                color: 'white',
+                marginBottom: '12px'
+              }}>
+                {event.genre || 'イベント'}
+              </div>
+
+              {/* タイトル */}
+              <h1 style={{
+                margin: '0 0 16px',
+                fontSize: '24px',
+                fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                fontStyle: 'normal',
+                fontWeight: 700,
                 color: '#2C3E50'
               }}>
-                {formatPeriod()}
-              </span>
-            </div>
-
-            {/* 時間 */}
-            {event.event_time && (
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: '16px' }}>
-                <div style={{ width: '18px', height: '18px', flexShrink: 0, marginTop: '2px' }}>
-                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="9" cy="9" r="7.5" stroke="#2C3E50" strokeWidth="1.5"/>
-                    <line x1="9" y1="9" x2="9" y2="5" stroke="#2C3E50" strokeWidth="1.5" strokeLinecap="round"/>
-                    <line x1="9" y1="9" x2="12" y2="9" stroke="#2C3E50" strokeWidth="1.5" strokeLinecap="round"/>
-                  </svg>
-                </div>
-                <span style={{
-                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                {event.event_name}
+              </h1>
+              {/* 日時 */}
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                marginBottom: '8px'
+              }}>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2H11V1H9V2H7V1H5V2H4C2.9 2 2 2.9 2 4V14C2 15.1 2.9 16 4 16H12C13.1 16 14 15.1 14 14V4C14 2.9 13.1 2 12 2ZM12 14H4V8H12V14ZM12 6H4V4H12V6Z" fill="#2C3E50"/>
+                </svg>
+                <p style={{
+                  margin: 0,
                   fontSize: '14px',
-                  lineHeight: '150%',
+                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                  fontStyle: 'normal',
+                  fontWeight: 400,
                   color: '#2C3E50'
                 }}>
-                  {event.event_time}
-                </span>
+                  {formatPeriod()}
+                </p>
               </div>
-            )}
 
-            {/* 会場 */}
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: '8px' }}>
-              <div style={{ width: '18px', height: '18px', flexShrink: 0, marginTop: '2px' }}>
-                <svg width="8" height="11.5" viewBox="0 0 8 11.5" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M4 0C1.79 0 0 1.79 0 4C0 7 4 11.5 4 11.5C4 11.5 8 7 8 4C8 1.79 6.21 0 4 0ZM4 5.5C3.17 5.5 2.5 4.83 2.5 4C2.5 3.17 3.17 2.5 4 2.5C4.83 2.5 5.5 3.17 5.5 4C5.5 4.83 4.83 5.5 4 5.5Z" fill="#2C3E50"/>
-                </svg>
-              </div>
-              <div style={{ flex: 1 }}>
+              {/* 時間 */}
+              {event.event_time && (
                 <div style={{
-                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                  fontSize: '14px',
-                  lineHeight: '150%',
-                  color: '#2C3E50',
-                  marginBottom: '4px'
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  marginBottom: '8px'
                 }}>
-                  {event.venue_name || ''}
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 2C4.7 2 2 4.7 2 8C2 11.3 4.7 14 8 14C11.3 14 14 11.3 14 8C14 4.7 11.3 2 8 2ZM8 13C5.24 13 3 10.76 3 8C3 5.24 5.24 3 8 3C10.76 3 13 5.24 13 8C13 10.76 10.76 13 8 13ZM8.5 5H7.5V8.5L10.5 10.5L11.25 9.5L8.5 8V5Z" fill="#2C3E50"/>
+                  </svg>
+                  <p style={{
+                    margin: 0,
+                    fontSize: '14px',
+                    fontFamily: '"Inter", sans-serif',
+                    fontStyle: 'normal',
+                    fontWeight: 400,
+                    color: '#2C3E50'
+                  }}>
+                    {event.event_time}
+                  </p>
                 </div>
-                {formatAddress() && (
-                  <div style={{
+              )}
+
+              {/* 場所 */}
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                marginBottom: '24px'
+              }}>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M8 0C4.13 0 1 3.13 1 7C1 12.25 8 16 8 16C8 16 15 12.25 15 7C15 3.13 11.87 0 8 0ZM8 9.5C6.62 9.5 5.5 8.38 5.5 7C5.5 5.62 6.62 4.5 8 4.5C9.38 4.5 10.5 5.62 10.5 7C10.5 8.38 9.38 9.5 8 9.5Z" fill="#2C3E50"/>
+                </svg>
+                <div>
+                  <p style={{
+                    margin: '0 0 2px',
+                    fontSize: '14px',
                     fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                    fontSize: '12px',
-                    lineHeight: '150%',
+                    fontStyle: 'normal',
+                    fontWeight: 400,
+                    color: '#2C3E50'
+                  }}>
+                    {event.venue_name || ''}
+                  </p>
+                  {formatAddress() && (
+                    <p style={{
+                      margin: 0,
+                      fontSize: '12px',
+                      fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                      fontStyle: 'normal',
+                      fontWeight: 400,
+                      color: '#6C757D'
+                    }}>
+                      {formatAddress()}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              {/* イベント概要 */}
+              <h2 style={{
+                margin: '0 0 12px',
+                fontSize: '18px',
+                fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                fontStyle: 'normal',
+                fontWeight: 700,
+                color: '#2C3E50'
+              }}>
+                イベント概要
+              </h2>
+              {event.event_description && (
+                <>
+                  {event.event_description.split('\n').map((line, index, array) => (
+                    <p key={index} style={{
+                      margin: index === array.length - 1 ? '0 0 24px' : '0 0 8px',
+                      fontSize: '14px',
+                      fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                      fontStyle: 'normal',
+                      fontWeight: 400,
+                      color: '#6C757D',
+                      lineHeight: '1.6'
+                    }}>
+                      {line}
+                    </p>
+                  ))}
+                </>
+              )}
+
+              {/* 詳細情報 */}
+              <h2 style={{
+                margin: '0 0 12px',
+                fontSize: '18px',
+                fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                fontStyle: 'normal',
+                fontWeight: 700,
+                color: '#2C3E50'
+              }}>
+                詳細情報
+              </h2>
+              {/* 申込期間 */}
+              {formatApplicationPeriod() && (
+                <div style={{
+                  borderTop: '1px solid #E9ECEF',
+                  paddingTop: '12px',
+                  marginBottom: '12px'
+                }}>
+                  <p style={{
+                    margin: '0 0 4px',
+                    fontSize: '13px',
+                    fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                    fontStyle: 'normal',
+                    fontWeight: 700,
                     color: '#6C757D'
                   }}>
-                    {formatAddress()}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* イベント概要 */}
-          <div style={{ marginBottom: '24px' }}>
-            <h2 style={{
-              fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-              fontSize: '18px',
-              fontWeight: 700,
-              lineHeight: '120%',
-              color: '#2C3E50',
-              marginBottom: '16px'
-            }}>
-              イベント概要
-            </h2>
-            {event.event_description && (
-              <div style={{
-                fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                fontSize: '14px',
-                lineHeight: '150%',
-                color: '#6C757D',
-                whiteSpace: 'pre-line'
-              }}>
-                {event.event_description.split('\n').map((line, index) => (
-                  <div key={index} style={{ marginBottom: '8px' }}>
-                    {line}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* 詳細情報カード */}
-          <div style={{
-            background: '#FFFFFF',
-            borderRadius: '16px',
-            padding: '16px',
-            marginBottom: '24px',
-            boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)'
-          }}>
-            <h2 style={{
-              fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-              fontSize: '18px',
-              fontWeight: 700,
-              lineHeight: '120%',
-              color: '#2C3E50',
-              marginBottom: '16px'
-            }}>
-              詳細情報
-            </h2>
-
-            {/* 申込期間 */}
-            {formatApplicationPeriod() && (
-              <>
-                <div style={{ marginBottom: '12px' }}>
-                  <div style={{
-                    fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                    fontSize: '13px',
-                    fontWeight: 700,
-                    lineHeight: '150%',
-                    color: '#6C757D',
-                    marginBottom: '4px'
-                  }}>
                     申込期間
-                  </div>
-                  <div style={{
-                    fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                  </p>
+                  <p style={{
+                    margin: '0 0 12px',
                     fontSize: '14px',
-                    lineHeight: '150%',
+                    fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                    fontStyle: 'normal',
+                    fontWeight: 400,
                     color: '#2C3E50'
                   }}>
                     {formatApplicationPeriod()}
-                  </div>
+                  </p>
                 </div>
+              )}
+              {/* 出店料 */}
+              {event.fee_info && (
                 <div style={{
-                  width: '100%',
-                  height: '1px',
-                  background: '#E9ECEF',
-                  marginBottom: '16px'
-                }} />
-              </>
-            )}
-
-            {/* 出店料 */}
-            {event.fee_info && (
-              <>
-                <div style={{ marginBottom: '12px' }}>
-                  <div style={{
-                    fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                  borderTop: '1px solid #E9ECEF',
+                  paddingTop: '12px',
+                  marginBottom: '12px'
+                }}>
+                  <p style={{
+                    margin: '0 0 4px',
                     fontSize: '13px',
+                    fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                    fontStyle: 'normal',
                     fontWeight: 700,
-                    lineHeight: '150%',
-                    color: '#6C757D',
-                    marginBottom: '4px'
+                    color: '#6C757D'
                   }}>
                     出店料
-                  </div>
-                  <div style={{
-                    fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                  </p>
+                  <p style={{
+                    margin: '0 0 12px',
                     fontSize: '14px',
-                    lineHeight: '150%',
+                    fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                    fontStyle: 'normal',
+                    fontWeight: 400,
                     color: '#2C3E50'
                   }}>
                     {event.fee_info}
-                  </div>
+                  </p>
                 </div>
+              )}
+              {/* 募集区画数 */}
+              {event.organizer_info && (
                 <div style={{
-                  width: '100%',
-                  height: '1px',
-                  background: '#E9ECEF',
-                  marginBottom: '16px'
-                }} />
-              </>
-            )}
-
-            {/* 募集区画数 */}
-            {event.organizer_info && (
-              <div>
-                <div style={{
-                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                  fontSize: '13px',
-                  fontWeight: 700,
-                  lineHeight: '150%',
-                  color: '#6C757D',
-                  marginBottom: '4px'
+                  borderTop: '1px solid #E9ECEF',
+                  paddingTop: '12px',
+                  marginBottom: '24px'
                 }}>
-                  募集区画数
+                  <p style={{
+                    margin: '0 0 4px',
+                    fontSize: '13px',
+                    fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                    fontStyle: 'normal',
+                    fontWeight: 700,
+                    color: '#6C757D'
+                  }}>
+                    募集区画数
+                  </p>
+                  <p style={{
+                    margin: 0,
+                    fontSize: '14px',
+                    fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                    fontStyle: 'normal',
+                    fontWeight: 400,
+                    color: '#2C3E50'
+                  }}>
+                    {event.organizer_info}
+                  </p>
                 </div>
-                <div style={{
-                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                  fontSize: '14px',
-                  lineHeight: '150%',
-                  color: '#2C3E50'
-                }}>
-                  {event.organizer_info}
-                </div>
-              </div>
-            )}
-          </div>
+              )}
 
-          {/* お問い合わせカード */}
-          <div style={{
-            background: '#FFFFFF',
-            borderRadius: '16px',
-            padding: '16px',
-            marginBottom: '24px',
-            boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)'
-          }}>
-            <h2 style={{
-              fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-              fontSize: '18px',
-              fontWeight: 700,
-              lineHeight: '120%',
-              color: '#2C3E50',
-              marginBottom: '16px'
-            }}>
-              お問い合わせ
-            </h2>
-            {event.contact_name && (
-              <div style={{
+              {/* お問い合わせ */}
+              <h2 style={{
+                margin: '0 0 12px',
+                fontSize: '18px',
                 fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                fontSize: '14px',
-                lineHeight: '150%',
-                color: '#2C3E50',
-                marginBottom: '8px'
+                fontStyle: 'normal',
+                fontWeight: 700,
+                color: '#2C3E50'
               }}>
-                主催者: {event.contact_name}
-              </div>
-            )}
-            {event.contact_phone && (
+                お問い合わせ
+              </h2>
               <div style={{
-                fontFamily: '"Inter", sans-serif',
-                fontSize: '14px',
-                lineHeight: '150%',
-                color: '#6C757D',
-                marginBottom: '8px'
+                borderTop: '1px solid #E9ECEF',
+                paddingTop: '12px',
+                marginBottom: '24px'
               }}>
-                TEL: {event.contact_phone}
+                {event.contact_name && (
+                  <p style={{
+                    margin: '0 0 4px',
+                    fontSize: '14px',
+                    fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                    fontStyle: 'normal',
+                    fontWeight: 400,
+                    color: '#2C3E50'
+                  }}>
+                    主催者: {event.contact_name}
+                  </p>
+                )}
+                {event.contact_phone && (
+                  <p style={{
+                    margin: '0 0 4px',
+                    fontSize: '14px',
+                    fontFamily: '"Inter", sans-serif',
+                    fontStyle: 'normal',
+                    fontWeight: 400,
+                    color: '#6C757D'
+                  }}>
+                    TEL: {event.contact_phone}
+                  </p>
+                )}
+                {event.contact_email && (
+                  <p style={{
+                    margin: 0,
+                    fontSize: '14px',
+                    fontFamily: '"Inter", sans-serif',
+                    fontStyle: 'normal',
+                    fontWeight: 400,
+                    color: '#6C757D'
+                  }}>
+                    {event.contact_email}
+                  </p>
+                )}
               </div>
-            )}
-            {event.contact_email && (
-              <div style={{
-                fontFamily: '"Inter", sans-serif',
-                fontSize: '14px',
-                lineHeight: '150%',
-                color: '#6C757D'
-              }}>
-                {event.contact_email}
-              </div>
-            )}
-          </div>
 
-          {/* このイベントを編集するボタン */}
-          <button
-            onClick={onEdit}
-            style={{
-              width: '100%',
-              maxWidth: '353px',
-              height: '52px',
-              background: '#FF8A5C',
-              borderRadius: '12px',
-              border: 'none',
-              fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-              fontSize: '16px',
-              fontWeight: 700,
-              lineHeight: '52px',
-              color: '#FFFFFF',
-              cursor: 'pointer',
-              boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)',
-              marginBottom: '24px'
-            }}
-          >
-            このイベントを編集する
-          </button>
+              {/* 編集ボタン */}
+              <button
+                onClick={onEdit}
+                style={{
+                  width: '100%',
+                  padding: '16px 24px',
+                  background: '#FF8A5C', // Primary Default
+                  borderRadius: '12px',
+                  border: 'none',
+                  fontSize: '16px',
+                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  color: 'white',
+                  cursor: 'pointer',
+                  boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)', // Shadow SM
+                }}
+              >
+                このイベントを編集する
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

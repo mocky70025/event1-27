@@ -889,7 +889,6 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
     }
   }
 
-
   // ステップ3: 登録完了画面
   if (currentStep === 3 && submittedEvent) {
     return (
@@ -1071,383 +1070,194 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
             }}>
               イベント情報を確認してください
             </h2>
+            {/* イベント名 */}
+            <label style={{
+              display: 'block',
+              fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+              fontSize: '14px',
+              fontStyle: 'normal',
+              fontWeight: 700,
+              color: '#2C3E50',
+              marginBottom: '8px'
+            }}>
+              イベント名
+            </label>
+            <p style={{
+              margin: '0 0 24px',
+              fontSize: '15px',
+              fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+              fontStyle: 'normal',
+              fontWeight: 400,
+              color: '#2C3E50'
+            }}>
+              {formData.event_name || '未入力'}
+            </p>
+            {/* イベント名フリガナ */}
+            <label style={{
+              display: 'block',
+              fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+              fontSize: '14px',
+              fontStyle: 'normal',
+              fontWeight: 700,
+              color: '#2C3E50',
+              marginBottom: '8px'
+            }}>
+              イベント名フリガナ
+            </label>
+            <p style={{
+              margin: '0 0 24px',
+              fontSize: '15px',
+              fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+              fontStyle: 'normal',
+              fontWeight: 400,
+              color: '#2C3E50'
+            }}>
+              {formData.event_name_furigana || '未入力'}
+            </p>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              <div>
-                <label style={labelStyle}>イベント名</label>
-                <p style={{
+            {/* ジャンル */}
+            <label style={{
+              display: 'block',
+              fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+              fontSize: '14px',
+              fontStyle: 'normal',
+              fontWeight: 700,
+              color: '#2C3E50',
+              marginBottom: '8px'
+            }}>
+              ジャンル
+            </label>
+            <p style={{
+              margin: '0 0 24px',
+              fontSize: '15px',
+              fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+              fontStyle: 'normal',
+              fontWeight: 400,
+              color: '#2C3E50'
+            }}>
+              {formData.genre || '未選択'}
+            </p>
+            {/* その他のフィールドは簡略化 */}
+            {formData.schedules && formData.schedules.length > 0 && (
+              <>
+                <label style={{
+                  display: 'block',
                   fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                  fontSize: '15px',
-                  fontWeight: 400,
-                  lineHeight: '150%',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: 700,
                   color: '#2C3E50',
-                  margin: 0
-                }}>{formData.event_name || '未入力'}</p>
-              </div>
-              <div>
-                <label style={labelStyle}>イベント名フリガナ</label>
-                <p style={{
-                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                  fontSize: '15px',
-                  fontWeight: 400,
-                  lineHeight: '150%',
-                  color: '#2C3E50',
-                  margin: 0
-                }}>{formData.event_name_furigana || '未入力'}</p>
-              </div>
-              <div>
-                <label style={labelStyle}>ジャンル</label>
-                <p style={{
-                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                  fontSize: '15px',
-                  fontWeight: 400,
-                  lineHeight: '150%',
-                  color: '#2C3E50',
-                  margin: 0
-                }}>{formData.genre || '未選択'}</p>
-              </div>
-              <div>
-                <label style={labelStyle}>イベント日程</label>
-                {formData.schedules && formData.schedules.length > 0 ? (
-                  formData.schedules.map((schedule, index) => (
-                    <p key={index} style={{
-                      margin: index > 0 ? '0 0 4px' : '0 0 4px',
-                      fontSize: '15px',
-                      fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                      fontStyle: 'normal',
-                      fontWeight: 400,
-                      color: '#2C3E50'
-                    }}>
-                      {schedule.date ? formatDateToJapanese(schedule.date) : '未入力'}
-                    </p>
-                  ))
-                ) : (
-                  <p style={{
-                    margin: '0 0 24px',
+                  marginBottom: '8px'
+                }}>
+                  イベント日程
+                </label>
+                {formData.schedules.map((schedule, index) => (
+                  <p key={index} style={{
+                    margin: index > 0 ? '0 0 24px' : '0 0 24px',
                     fontSize: '15px',
                     fontFamily: '"Inter", "Noto Sans JP", sans-serif',
                     fontStyle: 'normal',
                     fontWeight: 400,
                     color: '#2C3E50'
-                  }}>未入力</p>
-                )}
-              </div>
-              <div>
-                <label style={labelStyle}>イベント開催時間</label>
-                {formData.schedules && formData.schedules.length > 0 ? (
-                  formData.schedules.map((schedule, index) => (
-                    <p key={index} style={{
-                      margin: index > 0 ? '0 0 4px' : '0 0 4px',
-                      fontSize: '15px',
-                      fontFamily: '"Inter", sans-serif',
-                      fontStyle: 'normal',
-                      fontWeight: 400,
-                      color: '#2C3E50'
-                    }}>
-                      {schedule.start_time && schedule.end_time ? `${schedule.start_time}~${schedule.end_time}` : '未入力'}
-                    </p>
-                  ))
-                ) : (
-                  <p style={{
-                    margin: '0 0 24px',
-                    fontSize: '15px',
-                    fontFamily: '"Inter", sans-serif',
-                    fontStyle: 'normal',
-                    fontWeight: 400,
-                    color: '#2C3E50'
-                  }}>未入力</p>
-                )}
-              </div>
-              {formData.event_period_notes && (
-                <div>
-                  <label style={labelStyle}>イベント日程の備考</label>
-                  <p style={{
-                    fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                    fontSize: '15px',
-                    fontWeight: 400,
-                    lineHeight: '150%',
-                    color: '#2C3E50',
-                    margin: 0
-                  }}>{formData.event_period_notes}</p>
-                </div>
-              )}
-              <div>
-                <label style={labelStyle}>出店者募集期間</label>
-                <p style={{
-                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                  fontSize: '15px',
-                  fontWeight: 400,
-                  lineHeight: '150%',
-                  color: '#2C3E50',
-                  margin: 0
-                }}>{formData.application_display_period || '未入力'}</p>
-              </div>
-              {formData.application_notes && (
-                <div>
-                  <label style={labelStyle}>出店者募集期間の備考</label>
-                  <p style={{
-                    fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                    fontSize: '15px',
-                    fontWeight: 400,
-                    lineHeight: '150%',
-                    color: '#2C3E50',
-                    margin: 0
-                  }}>{formData.application_notes}</p>
-                </div>
-              )}
-              {formData.lead_text && (
-                <div>
-                  <label style={labelStyle}>イベントのリードテキスト</label>
-                  <p style={{
-                    fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                    fontSize: '15px',
-                    fontWeight: 400,
-                    lineHeight: '150%',
-                    color: '#2C3E50',
-                    margin: 0
-                  }}>{formData.lead_text}</p>
-                </div>
-              )}
-              {formData.event_introduction_text && (
-                <div>
-                  <label style={labelStyle}>イベントの概要</label>
-                  <p style={{
-                    fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                    fontSize: '15px',
-                    fontWeight: 400,
-                    lineHeight: '150%',
-                    color: '#2C3E50',
-                    margin: 0,
-                    whiteSpace: 'pre-wrap'
-                  }}>{formData.event_introduction_text}</p>
-                </div>
-              )}
-              {formData.event_description && (
-                <div>
-                  <label style={labelStyle}>イベントの詳細</label>
-                  <p style={{
-                    fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                    fontSize: '15px',
-                    fontWeight: 400,
-                    lineHeight: '150%',
-                    color: '#2C3E50',
-                    margin: 0,
-                    whiteSpace: 'pre-wrap'
-                  }}>{formData.event_description}</p>
-                </div>
-              )}
-              <div>
-                <label style={labelStyle}>会場名</label>
-                <p style={{
-                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                  fontSize: '15px',
-                  fontWeight: 400,
-                  lineHeight: '150%',
-                  color: '#2C3E50',
-                  margin: 0
-                }}>{formData.venue_name || '未入力'}</p>
-              </div>
-              {formData.venue_postal_code && (
-                <div>
-                  <label style={labelStyle}>郵便番号</label>
-                  <p style={{
-                    fontFamily: '"Inter", sans-serif',
-                    fontSize: '15px',
-                    fontWeight: 400,
-                    lineHeight: '150%',
-                    color: '#2C3E50',
-                    margin: 0
-                  }}>{formData.venue_postal_code}</p>
-                </div>
-              )}
-              {formData.venue_city && (
-                <div>
-                  <label style={labelStyle}>都道府県</label>
-                  <p style={{
-                    fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                    fontSize: '15px',
-                    fontWeight: 400,
-                    lineHeight: '150%',
-                    color: '#2C3E50',
-                    margin: 0
-                  }}>{formData.venue_city}</p>
-                </div>
-              )}
-              {formData.venue_town && (
-                <div>
-                  <label style={labelStyle}>市区町村・郡</label>
-                  <p style={{
-                    fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                    fontSize: '15px',
-                    fontWeight: 400,
-                    lineHeight: '150%',
-                    color: '#2C3E50',
-                    margin: 0
-                  }}>{formData.venue_town}</p>
-                </div>
-              )}
-              {formData.venue_address && (
-                <div>
-                  <label style={labelStyle}>細かい住所</label>
-                  <p style={{
-                    fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                    fontSize: '15px',
-                    fontWeight: 400,
-                    lineHeight: '150%',
-                    color: '#2C3E50',
-                    margin: 0
-                  }}>{formData.venue_address}</p>
-                </div>
-              )}
-              {formData.homepage_url && (
-                <div>
-                  <label style={labelStyle}>イベントホームページURL</label>
-                  <p style={{
-                    fontFamily: '"Inter", sans-serif',
-                    fontSize: '15px',
-                    fontWeight: 400,
-                    lineHeight: '150%',
-                    color: '#2C3E50',
-                    margin: 0
-                  }}>{formData.homepage_url}</p>
-                </div>
-              )}
-              {formData.related_page_url && (
-                <div>
-                  <label style={labelStyle}>イベント関連ページURL</label>
-                  <p style={{
-                    fontFamily: '"Inter", sans-serif',
-                    fontSize: '15px',
-                    fontWeight: 400,
-                    lineHeight: '150%',
-                    color: '#2C3E50',
-                    margin: 0
-                  }}>{formData.related_page_url}</p>
-                </div>
-              )}
-              {formData.contact_name && (
-                <div>
-                  <label style={labelStyle}>連絡先担当者名</label>
-                  <p style={{
-                    fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                    fontSize: '15px',
-                    fontWeight: 400,
-                    lineHeight: '150%',
-                    color: '#2C3E50',
-                    margin: 0
-                  }}>{formData.contact_name}</p>
-                </div>
-              )}
-              {formData.contact_phone && (
-                <div>
-                  <label style={labelStyle}>連絡先電話番号</label>
-                  <p style={{
-                    fontFamily: '"Inter", sans-serif',
-                    fontSize: '15px',
-                    fontWeight: 400,
-                    lineHeight: '150%',
-                    color: '#2C3E50',
-                    margin: 0
-                  }}>{formData.contact_phone}</p>
-                </div>
-              )}
-              {formData.contact_email && (
-                <div>
-                  <label style={labelStyle}>連絡先メールアドレス</label>
-                  <p style={{
-                    fontFamily: '"Inter", sans-serif',
-                    fontSize: '15px',
-                    fontWeight: 400,
-                    lineHeight: '150%',
-                    color: '#2C3E50',
-                    margin: 0
-                  }}>{formData.contact_email}</p>
-                </div>
-              )}
-              {imageUrls.main && (
-                <div>
-                  <label style={labelStyle}>イベントメイン画像</label>
-                  <div style={{
-                    width: '289px',
-                    height: '187px',
-                    background: '#D9D9D9',
-                    borderRadius: '8px',
-                    marginTop: '8px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    overflow: 'hidden'
                   }}>
-                    <img src={imageUrls.main} alt="メイン画像" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'cover' }} />
-                  </div>
-                </div>
-              )}
-            </div>
+                    {schedule.date ? formatDateToJapanese(schedule.date) : '未入力'}
+                  </p>
+                ))}
+              </>
+            )}
+            {formData.venue_name && (
+              <>
+                <label style={{
+                  display: 'block',
+                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  color: '#2C3E50',
+                  marginBottom: '8px'
+                }}>
+                  会場名
+                </label>
+                <p style={{
+                  margin: '0 0 24px',
+                  fontSize: '15px',
+                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                  fontStyle: 'normal',
+                  fontWeight: 400,
+                  color: '#2C3E50'
+                }}>
+                  {formData.venue_name}
+                </p>
+              </>
+            )}
+            {formData.contact_name && (
+              <>
+                <label style={{
+                  display: 'block',
+                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  color: '#2C3E50',
+                  marginBottom: '8px'
+                }}>
+                  連絡先担当者名
+                </label>
+                <p style={{
+                  margin: '0 0 24px',
+                  fontSize: '15px',
+                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                  fontStyle: 'normal',
+                  fontWeight: 400,
+                  color: '#2C3E50'
+                }}>
+                  {formData.contact_name}
+                </p>
+              </>
+            )}
+          </div>
 
-            <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', marginTop: '24px', marginBottom: '24px' }}>
-              <button
-                type="button"
-                onClick={() => setCurrentStep(1)}
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  padding: '0',
-                  gap: '8px',
-                  width: '100%',
-                  maxWidth: '157px',
-                  height: '52px',
-                  background: '#FFFFFF',
-                  borderRadius: '12px',
-                  border: '1px solid #E5E7EB',
-                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                  fontSize: '15px',
-                  fontStyle: 'normal',
-                  fontWeight: 700,
-                  lineHeight: '52px',
-                  color: '#6C757D',
-                  cursor: 'pointer',
-                  boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)'
-                }}
-              >
-                戻る
-              </button>
-              <button
-                type="button"
-                onClick={handleSubmit}
-                disabled={loading}
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  padding: '0',
-                  gap: '8px',
-                  width: '100%',
-                  maxWidth: '157px',
-                  height: '52px',
-                  background: loading ? '#D9D9D9' : '#FF8A5C',
-                  borderRadius: '12px',
-                  border: 'none',
-                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                  fontSize: '15px',
-                  fontStyle: 'normal',
-                  fontWeight: 700,
-                  lineHeight: '52px',
-                  color: '#FFFFFF',
-                  cursor: loading ? 'not-allowed' : 'pointer',
-                  boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)'
-                }}
-              >
-                {loading ? (eventId ? '更新中...' : '作成中...') : '登録する'}
-                {!loading && (
-                  <svg style={{ width: '10px', height: '10px', marginTop: '-2px' }} viewBox="0 0 5 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M0 0L5 5L0 10" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                )}
-              </button>
-            </div>
+          {/* ボタン */}
+          <div style={{ display: 'flex', gap: '16px', marginTop: '24px' }}>
+            <button
+              type="button"
+              onClick={() => setCurrentStep(1)}
+              style={{
+                flex: 1,
+                height: '52px',
+                background: '#FFFFFF',
+                border: '1px solid #E5E7EB',
+                borderRadius: '12px',
+                fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                fontSize: '15px',
+                fontWeight: 700,
+                color: '#6C757D',
+                cursor: 'pointer',
+                boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)'
+              }}
+            >
+              戻る
+            </button>
+            <button
+              type="button"
+              onClick={handleSubmit}
+              disabled={loading}
+              style={{
+                flex: 1,
+                height: '52px',
+                background: loading ? '#CCCCCC' : '#FF8A5C',
+                border: 'none',
+                borderRadius: '12px',
+                fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                fontSize: '15px',
+                fontWeight: 700,
+                color: '#FFFFFF',
+                cursor: loading ? 'not-allowed' : 'pointer',
+                boxShadow: loading ? 'none' : '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
+              }}
+            >
+              {loading ? (eventId ? '更新中...' : '作成中...') : '登録する'}
+            </button>
           </div>
         </div>
       </div>
@@ -1456,66 +1266,93 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
 
   // ステップ1: 全部の情報入力
   return (
-    <div style={{ background: '#E8F5F5', minHeight: '100vh' }}>
-      {/* ヘッダー */}
+    <div style={{
+      minHeight: '100vh',
+      width: '100%',
+      background: '#FFFFFF', // 外側は白
+      display: 'flex',
+      justifyContent: 'center'
+    }}>
       <div style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 1000,
-        background: '#FFFFFF',
-        padding: '16px',
-        boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)',
-        maxWidth: '1000px',
-        margin: '0 auto'
+        width: '393px',
+        minWidth: '393px',
+        flexShrink: 0,
+        background: '#FFF5F0', // スマホフレーム範囲内は薄いオレンジ
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        paddingTop: '0px',
+        paddingBottom: '32px',
+        paddingLeft: '20px',
+        paddingRight: '20px',
+        boxSizing: 'border-box'
       }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', maxWidth: '394px', margin: '0 auto' }}>
-          <button
-            type="button"
-            onClick={onCancel}
-            style={{
-              background: 'transparent',
-              border: 'none',
-              fontFamily: '"Noto Sans JP", sans-serif',
-              fontSize: '16px',
-              lineHeight: '150%',
-              color: '#FF8A5C',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px'
-            }}
-          >
-            ← 戻る
-          </button>
-          <h1 style={{
-            fontFamily: '"Noto Sans JP", sans-serif',
-            fontSize: '18px',
-            fontWeight: 700,
-            lineHeight: '120%',
-            color: '#2C3E50',
-            textAlign: 'center'
-          }}>
-            {isEditMode ? '主催者イベント編集' : 'イベント情報を入力してください'}
-          </h1>
-          <div style={{ width: '60px' }}></div>
+        {/* プログレスバー */}
+        <div style={{
+          width: '100%',
+          height: '93px',
+          marginTop: '32px',
+          marginBottom: '16px',
+          background: 'white',
+          borderRadius: '16px',
+          boxShadow: '0px 8px 32px rgba(0, 0, 0, 0.08)', // Shadow LG
+          overflow: 'hidden',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          boxSizing: 'border-box'
+        }}>
+          <ProgressBar type="organizer" step="form" />
         </div>
-      </div>
 
-      <div className="container mx-auto" style={{ padding: '9px 16px', maxWidth: '394px' }}>
-        <div style={{ paddingTop: '64px' }}>
-
-        {/* ProgressIndicator removed - using ProgressBar component instead in the new design */}
-
-        <form onSubmit={(e) => { e.preventDefault(); handleNextToConfirmation(); }}>
-          {/* メインカード */}
-          <div style={cardStyle}>
-            <h2 style={sectionTitleStyle}>イベント情報を入力してください</h2>
-            <div style={fieldsContainerStyle}>
-              <div style={fieldWrapperStyle}>
-                <label style={labelStyle}>イベント名</label>
-                <div style={formFieldStyle(false)}>
+        {/* フォーム */}
+        <form onSubmit={(e) => { e.preventDefault(); handleNextToConfirmation(); }} style={{ width: '100%' }}>
+          <div style={{
+            width: '100%',
+            background: 'white',
+            borderRadius: '16px',
+            boxShadow: '0px 8px 32px rgba(0, 0, 0, 0.08)', // Shadow LG
+            paddingTop: '32px',
+            paddingBottom: '32px',
+            paddingLeft: '20px',
+            paddingRight: '20px',
+            boxSizing: 'border-box'
+          }}>
+            {/* タイトル */}
+            <h2 style={{
+              margin: '0 0 24px',
+              fontSize: '20px',
+              fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+              fontStyle: 'normal',
+              fontWeight: 700,
+              color: '#2C3E50'
+            }}>
+              イベント情報を入力してください
+            </h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              {/* イベント名 */}
+              <div style={{ width: '100%', position: 'relative' }} data-error-field="event_name">
+                <label style={{
+                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  lineHeight: '1.4',
+                  color: '#2C3E50',
+                  marginBottom: '8px',
+                  display: 'block'
+                }}>イベント名</label>
+                <div style={{
+                  boxSizing: 'border-box',
+                  width: '100%',
+                  height: '44px',
+                  padding: '0 16px',
+                  background: '#FFFFFF',
+                  border: '1px solid #E9ECEF',
+                  borderRadius: '8px',
+                  display: 'flex',
+                  alignItems: 'center'
+                }}>
                   <input
                     id="field-event_name"
                     type="text"
@@ -1523,15 +1360,44 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
                     maxLength={50}
                     value={formData.event_name}
                     onChange={(e) => setFormData({ ...formData, event_name: e.target.value })}
-                    style={inputStyle(!!formData.event_name)}
+                    style={{
+                      fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                      fontSize: '15px',
+                      lineHeight: '150%',
+                      color: formData.event_name ? '#2C3E50' : '#6C757D',
+                      border: 'none',
+                      outline: 'none',
+                      width: '100%',
+                      background: 'transparent'
+                    }}
                     placeholder="例: 静岡フリーマーケット"
                   />
                 </div>
               </div>
 
-              <div style={fieldWrapperStyle}>
-                <label style={labelStyle}>イベント名フリガナ</label>
-                <div style={formFieldStyle(false)}>
+              {/* イベント名フリガナ */}
+              <div style={{ width: '100%', position: 'relative' }} data-error-field="event_name_furigana">
+                <label style={{
+                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  lineHeight: '1.4',
+                  color: '#2C3E50',
+                  marginBottom: '8px',
+                  display: 'block'
+                }}>イベント名フリガナ</label>
+                <div style={{
+                  boxSizing: 'border-box',
+                  width: '100%',
+                  height: '44px',
+                  padding: '0 16px',
+                  background: '#FFFFFF',
+                  border: '1px solid #E9ECEF',
+                  borderRadius: '8px',
+                  display: 'flex',
+                  alignItems: 'center'
+                }}>
                   <input
                     id="field-event_name_furigana"
                     type="text"
@@ -1539,24 +1405,62 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
                     maxLength={50}
                     value={formData.event_name_furigana}
                     onChange={(e) => setFormData({ ...formData, event_name_furigana: e.target.value })}
-                    style={inputStyle(!!formData.event_name_furigana)}
+                    style={{
+                      fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                      fontSize: '15px',
+                      lineHeight: '150%',
+                      color: formData.event_name_furigana ? '#2C3E50' : '#6C757D',
+                      border: 'none',
+                      outline: 'none',
+                      width: '100%',
+                      background: 'transparent'
+                    }}
                     placeholder="例: シズオカフリーマーケット"
                   />
                 </div>
               </div>
 
-              <div style={fieldWrapperStyle}>
-                <label style={labelStyle}>ジャンル</label>
-                <div style={formFieldStyle(false)}>
+              {/* ジャンル */}
+              <div style={{ width: '100%', position: 'relative' }} data-error-field="genre">
+                <label style={{
+                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  lineHeight: '1.4',
+                  color: '#2C3E50',
+                  marginBottom: '8px',
+                  display: 'block'
+                }}>ジャンル</label>
+                <div style={{
+                  boxSizing: 'border-box',
+                  width: '100%',
+                  height: '44px',
+                  padding: '0 16px',
+                  background: '#FFFFFF',
+                  border: '1px solid #E9ECEF',
+                  borderRadius: '8px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  position: 'relative'
+                }}>
                   <select
                     id="field-genre"
                     required
                     value={formData.genre}
                     onChange={(e) => setFormData({ ...formData, genre: e.target.value })}
                     style={{
-                      ...inputStyle(!!formData.genre),
+                      fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                      fontSize: '15px',
+                      lineHeight: '150%',
+                      color: formData.genre ? '#2C3E50' : '#6C757D',
+                      border: 'none',
+                      outline: 'none',
+                      width: '100%',
+                      background: 'transparent',
                       appearance: 'none',
-                      cursor: 'pointer'
+                      cursor: 'pointer',
+                      paddingRight: '30px'
                     }}
                   >
                     <option value="">選択してください</option>
@@ -1566,18 +1470,49 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
                     <option value="文化・芸術">文化・芸術</option>
                     <option value="その他">その他</option>
                   </select>
-                </div>
-              </div>
+                  <svg
+                    width="8"
+                    height="5"
+                    viewBox="0 0 8 5"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    style={{
+                      position: 'absolute',
+                      right: '16px',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      pointerEvents: 'none'
+                    }}
+                  >
+                    <path d="M4 5L0 0H8L4 5Z" fill="#6C757D"/>
+                  </svg>
                 </div>
               </div>
 
           {/* 開催期間 */}
-          <div style={cardStyle}>
-            <h2 style={sectionTitleStyle}>開催期間</h2>
-            <div style={fieldsContainerStyle}>
+          <div style={{ marginTop: '24px' }}>
+            <h2 style={{
+              fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+              fontSize: '18px',
+              fontStyle: 'normal',
+              fontWeight: 700,
+              lineHeight: '120%',
+              color: '#2C3E50',
+              marginBottom: '20px'
+            }}>開催期間</h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               {/* イベント日程 */}
-              <div style={{ width: '100%', maxWidth: '330px' }}>
-                <label style={labelStyle}>イベント日程</label>
+              <div style={{ width: '100%' }}>
+                <label style={{
+                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  lineHeight: '1.4',
+                  color: '#2C3E50',
+                  marginBottom: '8px',
+                  display: 'block'
+                }}>イベント日程</label>
                 
                 {/* 日程リスト */}
                 {formData.schedules.map((schedule, index) => (
@@ -1629,13 +1564,17 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
                             setFormData({ ...formData, schedules: newSchedules })
                           }}
                           style={{
-                            ...inputStyle(!!schedule.date),
+                            fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                            fontSize: '15px',
+                            lineHeight: '150%',
+                            color: schedule.date ? '#2C3E50' : '#6C757D',
+                            border: '1px solid #E5E5E5',
                             padding: '12px 16px',
                             width: '100%',
                             background: '#FFFFFF',
-                            border: '1px solid #E5E5E5',
                             borderRadius: '8px',
-                            boxSizing: 'border-box'
+                            boxSizing: 'border-box',
+                            outline: 'none'
                           }}
                           placeholder="YYYY/MM/DD"
                         />
@@ -1645,10 +1584,14 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
                       <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
                         <div style={{ flex: 1 }}>
                           <label style={{
-                            ...labelStyle,
+                            fontFamily: '"Inter", "Noto Sans JP", sans-serif',
                             fontSize: '12px',
+                            fontStyle: 'normal',
+                            fontWeight: 700,
+                            lineHeight: '1.4',
                             marginBottom: '4px',
-                            color: '#666666'
+                            color: '#666666',
+                            display: 'block'
                           }}>
                             開始時間 <span style={{ color: '#FF3B30' }}>*</span>
                           </label>
@@ -1662,29 +1605,39 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
                               setFormData({ ...formData, schedules: newSchedules })
                             }}
                             style={{
-                              ...inputStyle(!!schedule.start_time),
+                              fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                              fontSize: '15px',
+                              lineHeight: '150%',
+                              color: schedule.start_time ? '#2C3E50' : '#6C757D',
+                              border: '1px solid #E5E5E5',
                               padding: '12px 16px',
                               width: '100%',
                               background: '#FFFFFF',
-                              border: '1px solid #E5E5E5',
                               borderRadius: '8px',
-                              boxSizing: 'border-box'
+                              boxSizing: 'border-box',
+                              outline: 'none'
                             }}
                           />
                         </div>
                         <span style={{
-                          ...rangeSeparatorStyle,
-                          marginTop: '20px',
-                          fontSize: '14px'
+                          fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                          fontSize: '14px',
+                          fontWeight: 700,
+                          color: '#666666',
+                          marginTop: '20px'
                         }}>
                           〜
                         </span>
                         <div style={{ flex: 1 }}>
                           <label style={{
-                            ...labelStyle,
+                            fontFamily: '"Inter", "Noto Sans JP", sans-serif',
                             fontSize: '12px',
+                            fontStyle: 'normal',
+                            fontWeight: 700,
+                            lineHeight: '1.4',
                             marginBottom: '4px',
-                            color: '#666666'
+                            color: '#666666',
+                            display: 'block'
                           }}>
                             終了時間 <span style={{ color: '#FF3B30' }}>*</span>
                           </label>
@@ -1698,13 +1651,17 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
                               setFormData({ ...formData, schedules: newSchedules })
                             }}
                             style={{
-                              ...inputStyle(!!schedule.end_time),
+                              fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                              fontSize: '15px',
+                              lineHeight: '150%',
+                              color: schedule.end_time ? '#2C3E50' : '#6C757D',
+                              border: '1px solid #E5E5E5',
                               padding: '12px 16px',
                               width: '100%',
                               background: '#FFFFFF',
-                              border: '1px solid #E5E5E5',
                               borderRadius: '8px',
-                              boxSizing: 'border-box'
+                              boxSizing: 'border-box',
+                              outline: 'none'
                             }}
                   />
                 </div>
@@ -1749,9 +1706,28 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
                 </button>
               </div>
 
-              <div style={fieldWrapperStyle}>
-                <label style={labelStyle}>イベント開催期間(表示用)</label>
-                <div style={formFieldStyle(false)}>
+              <div style={{ width: '100%', position: 'relative' }}>
+                <label style={{
+                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  lineHeight: '1.4',
+                  color: '#2C3E50',
+                  marginBottom: '8px',
+                  display: 'block'
+                }}>イベント開催期間(表示用)</label>
+                <div style={{
+                  boxSizing: 'border-box',
+                  width: '100%',
+                  height: '44px',
+                  padding: '0 16px',
+                  background: '#FFFFFF',
+                  border: '1px solid #E9ECEF',
+                  borderRadius: '8px',
+                  display: 'flex',
+                  alignItems: 'center'
+                }}>
                   <input
                     id="field-event_display_period"
                     type="text"
@@ -1759,19 +1735,56 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
                     maxLength={50}
                     value={formData.event_display_period}
                     onChange={(e) => setFormData({ ...formData, event_display_period: e.target.value })}
-                    style={inputStyle(!!formData.event_display_period)}
+                    style={{
+                      fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                      fontSize: '15px',
+                      lineHeight: '150%',
+                      color: formData.event_display_period ? '#2C3E50' : '#6C757D',
+                      border: 'none',
+                      outline: 'none',
+                      width: '100%',
+                      background: 'transparent'
+                    }}
                     placeholder="自動生成されます（手動編集も可能）"
                   />
                 </div>
               </div>
 
-              <div style={fieldWrapperStyle}>
-                <label style={labelStyle}>開催期間に関する補足（任意）</label>
-                <div style={formFieldStyle(false, { minHeight: 96 })}>
+              <div style={{ width: '100%', position: 'relative' }}>
+                <label style={{
+                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  lineHeight: '1.4',
+                  color: '#2C3E50',
+                  marginBottom: '8px',
+                  display: 'block'
+                }}>開催期間に関する補足（任意）</label>
+                <div style={{
+                  boxSizing: 'border-box',
+                  width: '100%',
+                  minHeight: '96px',
+                  padding: '12px 16px',
+                  background: '#FFFFFF',
+                  border: '1px solid #E9ECEF',
+                  borderRadius: '8px'
+                }}>
                   <textarea
                     value={formData.event_period_notes}
                     onChange={(e) => setFormData({ ...formData, event_period_notes: e.target.value })}
-                    style={{ ...textareaStyle(!!formData.event_period_notes), minHeight: '72px' }}
+                    style={{
+                      fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                      fontSize: '15px',
+                      lineHeight: '150%',
+                      color: formData.event_period_notes ? '#2C3E50' : '#6C757D',
+                      border: 'none',
+                      outline: 'none',
+                      width: '100%',
+                      background: 'transparent',
+                      resize: 'none',
+                      minHeight: '72px'
+                    }}
                     placeholder="補足事項があれば入力してください"
                   />
                 </div>
@@ -1780,12 +1793,40 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
           </div>
 
           {/* 出店者募集期間 */}
-          <div style={cardStyle}>
-            <h2 style={sectionTitleStyle}>出店者募集期間（任意）</h2>
-            <div style={fieldsContainerStyle}>
-              <div style={fieldWrapperStyle}>
-                <label style={labelStyle}>出店者募集期間（任意）</label>
-                <div style={rangeContainerStyle}>
+          <div style={{ marginTop: '24px' }}>
+            <h2 style={{
+              fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+              fontSize: '18px',
+              fontStyle: 'normal',
+              fontWeight: 700,
+              lineHeight: '120%',
+              color: '#2C3E50',
+              marginBottom: '20px'
+            }}>出店者募集期間（任意）</h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <div style={{ width: '100%', position: 'relative' }}>
+                <label style={{
+                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  lineHeight: '1.4',
+                  color: '#2C3E50',
+                  marginBottom: '8px',
+                  display: 'block'
+                }}>出店者募集期間（任意）</label>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  width: '100%',
+                  padding: '0 16px',
+                  height: '44px',
+                  background: '#FFFFFF',
+                  border: '1px solid #E9ECEF',
+                  borderRadius: '8px',
+                  boxSizing: 'border-box'
+                }}>
                   <input
                     type="date"
                     value={formData.application_start_date}
@@ -1800,9 +1841,23 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
                         application_display_period: newDisplayPeriod
                       })
                     }}
-                    style={{ ...inputStyle(!!formData.application_start_date), flex: 1 }}
+                    style={{
+                      fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                      fontSize: '15px',
+                      lineHeight: '150%',
+                      color: formData.application_start_date ? '#2C3E50' : '#6C757D',
+                      border: 'none',
+                      outline: 'none',
+                      flex: 1,
+                      background: 'transparent'
+                    }}
                   />
-                  <span style={rangeSeparatorStyle}>〜</span>
+                  <span style={{
+                    fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                    fontSize: '16px',
+                    fontWeight: 700,
+                    color: '#666666'
+                  }}>〜</span>
                   <input
                     type="date"
                     value={formData.application_end_date}
@@ -1817,31 +1872,96 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
                         application_display_period: newDisplayPeriod
                       })
                     }}
-                    style={{ ...inputStyle(!!formData.application_end_date), flex: 1 }}
+                    style={{
+                      fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                      fontSize: '15px',
+                      lineHeight: '150%',
+                      color: formData.application_end_date ? '#2C3E50' : '#6C757D',
+                      border: 'none',
+                      outline: 'none',
+                      flex: 1,
+                      background: 'transparent'
+                    }}
                   />
                 </div>
               </div>
 
-              <div style={fieldWrapperStyle}>
-                <label style={labelStyle}>出店者募集期間(表示用)（任意）</label>
-                <div style={formFieldStyle(false)}>
+              <div style={{ width: '100%', position: 'relative' }}>
+                <label style={{
+                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  lineHeight: '1.4',
+                  color: '#2C3E50',
+                  marginBottom: '8px',
+                  display: 'block'
+                }}>出店者募集期間(表示用)（任意）</label>
+                <div style={{
+                  boxSizing: 'border-box',
+                  width: '100%',
+                  height: '44px',
+                  padding: '0 16px',
+                  background: '#FFFFFF',
+                  border: '1px solid #E9ECEF',
+                  borderRadius: '8px',
+                  display: 'flex',
+                  alignItems: 'center'
+                }}>
                   <input
                     type="text"
                     value={formData.application_display_period}
                     onChange={(e) => setFormData({ ...formData, application_display_period: e.target.value })}
-                    style={inputStyle(!!formData.application_display_period)}
+                    style={{
+                      fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                      fontSize: '15px',
+                      lineHeight: '150%',
+                      color: formData.application_display_period ? '#2C3E50' : '#6C757D',
+                      border: 'none',
+                      outline: 'none',
+                      width: '100%',
+                      background: 'transparent'
+                    }}
                     placeholder="自動生成されます（手動編集も可能）"
                   />
                 </div>
               </div>
 
-              <div style={fieldWrapperStyle}>
-                <label style={labelStyle}>出店者募集に関する補足（任意）</label>
-                <div style={formFieldStyle(false, { minHeight: 96 })}>
+              <div style={{ width: '100%', position: 'relative' }}>
+                <label style={{
+                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  lineHeight: '1.4',
+                  color: '#2C3E50',
+                  marginBottom: '8px',
+                  display: 'block'
+                }}>出店者募集に関する補足（任意）</label>
+                <div style={{
+                  boxSizing: 'border-box',
+                  width: '100%',
+                  minHeight: '96px',
+                  padding: '12px 16px',
+                  background: '#FFFFFF',
+                  border: '1px solid #E9ECEF',
+                  borderRadius: '8px'
+                }}>
                   <textarea
                     value={formData.application_notes}
                     onChange={(e) => setFormData({ ...formData, application_notes: e.target.value })}
-                    style={{ ...textareaStyle(!!formData.application_notes), minHeight: '72px' }}
+                    style={{
+                      fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                      fontSize: '15px',
+                      lineHeight: '150%',
+                      color: formData.application_notes ? '#2C3E50' : '#6C757D',
+                      border: 'none',
+                      outline: 'none',
+                      width: '100%',
+                      background: 'transparent',
+                      resize: 'none',
+                      minHeight: '72px'
+                    }}
                     placeholder="補足事項があれば入力してください"
                   />
                 </div>
@@ -1850,44 +1970,136 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
           </div>
 
           {/* イベント内容 */}
-          <div style={cardStyle}>
-            <h2 style={sectionTitleStyle}>イベント内容</h2>
-            <div style={fieldsContainerStyle}>
-              <div style={fieldWrapperStyle}>
-                <label style={labelStyle}>リード文</label>
-                <div style={formFieldStyle(false, { minHeight: 120 })}>
+          <div style={{ marginTop: '24px' }}>
+            <h2 style={{
+              fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+              fontSize: '18px',
+              fontStyle: 'normal',
+              fontWeight: 700,
+              lineHeight: '120%',
+              color: '#2C3E50',
+              marginBottom: '20px'
+            }}>イベント内容</h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <div style={{ width: '100%', position: 'relative' }} data-error-field="lead_text">
+                <label style={{
+                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  lineHeight: '1.4',
+                  color: '#2C3E50',
+                  marginBottom: '8px',
+                  display: 'block'
+                }}>リード文</label>
+                <div style={{
+                  boxSizing: 'border-box',
+                  width: '100%',
+                  minHeight: '120px',
+                  padding: '12px 16px',
+                  background: '#FFFFFF',
+                  border: '1px solid #E9ECEF',
+                  borderRadius: '8px'
+                }}>
                   <textarea
                     id="field-lead_text"
                     required
                     maxLength={100}
                     value={formData.lead_text}
                     onChange={(e) => setFormData({ ...formData, lead_text: e.target.value })}
-                    style={{ ...textareaStyle(!!formData.lead_text), minHeight: '96px' }}
+                    style={{
+                      fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                      fontSize: '15px',
+                      lineHeight: '150%',
+                      color: formData.lead_text ? '#2C3E50' : '#6C757D',
+                      border: 'none',
+                      outline: 'none',
+                      width: '100%',
+                      background: 'transparent',
+                      resize: 'none',
+                      minHeight: '96px'
+                    }}
                   />
                 </div>
               </div>
 
-              <div style={fieldWrapperStyle}>
-                <label style={labelStyle}>イベント紹介文</label>
-                <div style={formFieldStyle(false, { minHeight: 140 })}>
+              <div style={{ width: '100%', position: 'relative' }} data-error-field="event_description">
+                <label style={{
+                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  lineHeight: '1.4',
+                  color: '#2C3E50',
+                  marginBottom: '8px',
+                  display: 'block'
+                }}>イベント紹介文</label>
+                <div style={{
+                  boxSizing: 'border-box',
+                  width: '100%',
+                  minHeight: '140px',
+                  padding: '12px 16px',
+                  background: '#FFFFFF',
+                  border: '1px solid #E9ECEF',
+                  borderRadius: '8px'
+                }}>
                   <textarea
                     id="field-event_description"
                     required
                     maxLength={250}
                     value={formData.event_description}
                     onChange={(e) => setFormData({ ...formData, event_description: e.target.value })}
-                    style={{ ...textareaStyle(!!formData.event_description), minHeight: '120px' }}
+                    style={{
+                      fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                      fontSize: '15px',
+                      lineHeight: '150%',
+                      color: formData.event_description ? '#2C3E50' : '#6C757D',
+                      border: 'none',
+                      outline: 'none',
+                      width: '100%',
+                      background: 'transparent',
+                      resize: 'none',
+                      minHeight: '120px'
+                    }}
                   />
                 </div>
               </div>
 
-              <div style={fieldWrapperStyle}>
-                <label style={labelStyle}>イベント紹介文（長文）（任意）</label>
-                <div style={formFieldStyle(false, { minHeight: 140 })}>
+              <div style={{ width: '100%', position: 'relative' }}>
+                <label style={{
+                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  lineHeight: '1.4',
+                  color: '#2C3E50',
+                  marginBottom: '8px',
+                  display: 'block'
+                }}>イベント紹介文（長文）（任意）</label>
+                <div style={{
+                  boxSizing: 'border-box',
+                  width: '100%',
+                  minHeight: '140px',
+                  padding: '12px 16px',
+                  background: '#FFFFFF',
+                  border: '1px solid #E9ECEF',
+                  borderRadius: '8px'
+                }}>
                   <textarea
                     value={formData.event_introduction_text}
                     onChange={(e) => setFormData({ ...formData, event_introduction_text: e.target.value })}
-                    style={{ ...textareaStyle(!!formData.event_introduction_text), minHeight: '120px' }}
+                    style={{
+                      fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                      fontSize: '15px',
+                      lineHeight: '150%',
+                      color: formData.event_introduction_text ? '#2C3E50' : '#6C757D',
+                      border: 'none',
+                      outline: 'none',
+                      width: '100%',
+                      background: 'transparent',
+                      resize: 'none',
+                      minHeight: '120px'
+                    }}
                     placeholder="イベントの詳細を入力してください"
                   />
                 </div>
@@ -1896,8 +2108,16 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
           </div>
 
           {/* イベント画像 */}
-          <div style={cardStyle}>
-            <h2 style={sectionTitleStyle}>イベント画像（任意）</h2>
+          <div style={{ marginTop: '24px' }}>
+            <h2 style={{
+              fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+              fontSize: '18px',
+              fontStyle: 'normal',
+              fontWeight: 700,
+              lineHeight: '120%',
+              color: '#2C3E50',
+              marginBottom: '20px'
+            }}>イベント画像（任意）</h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', alignItems: 'center' }}>
               <ImageUpload
                 label="メイン画像（任意）"
@@ -1967,33 +2187,97 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
           </div>
 
           {/* 会場情報 */}
-          <div style={cardStyle}>
-            <h2 style={sectionTitleStyle}>会場情報</h2>
-            <div style={fieldsContainerStyle}>
-              <div style={fieldWrapperStyle}>
-                <label style={labelStyle}>会場又は集合場所の名称</label>
-                <div style={formFieldStyle(false)}>
+          <div style={{ marginTop: '24px' }}>
+            <h2 style={{
+              fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+              fontSize: '18px',
+              fontStyle: 'normal',
+              fontWeight: 700,
+              lineHeight: '120%',
+              color: '#2C3E50',
+              marginBottom: '20px'
+            }}>会場情報</h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <div style={{ width: '100%', position: 'relative' }} data-error-field="venue_name">
+                <label style={{
+                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  lineHeight: '1.4',
+                  color: '#2C3E50',
+                  marginBottom: '8px',
+                  display: 'block'
+                }}>会場又は集合場所の名称</label>
+                <div style={{
+                  boxSizing: 'border-box',
+                  width: '100%',
+                  height: '44px',
+                  padding: '0 16px',
+                  background: '#FFFFFF',
+                  border: '1px solid #E9ECEF',
+                  borderRadius: '8px',
+                  display: 'flex',
+                  alignItems: 'center'
+                }}>
                   <input
                     id="field-venue_name"
                     type="text"
                     required
                     value={formData.venue_name}
                     onChange={(e) => setFormData({ ...formData, venue_name: e.target.value })}
-                    style={inputStyle(!!formData.venue_name)}
+                    style={{
+                      fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                      fontSize: '15px',
+                      lineHeight: '150%',
+                      color: formData.venue_name ? '#2C3E50' : '#6C757D',
+                      border: 'none',
+                      outline: 'none',
+                      width: '100%',
+                      background: 'transparent'
+                    }}
                   />
                 </div>
               </div>
 
-              <div style={fieldWrapperStyle}>
-                <label style={labelStyle}>郵便番号（任意）</label>
+              <div style={{ width: '100%', position: 'relative' }}>
+                <label style={{
+                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  lineHeight: '1.4',
+                  color: '#2C3E50',
+                  marginBottom: '8px',
+                  display: 'block'
+                }}>郵便番号（任意）</label>
                 <div style={{ display: 'flex', gap: '12px', width: '100%' }}>
-                  <div style={{ ...formFieldStyle(false), flex: 1 }}>
+                  <div style={{
+                    boxSizing: 'border-box',
+                    flex: 1,
+                    height: '44px',
+                    padding: '0 16px',
+                    background: '#FFFFFF',
+                    border: '1px solid #E9ECEF',
+                    borderRadius: '8px',
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}>
                     <input
                       id="field-venue_postal_code"
                       type="text"
                       value={formData.venue_postal_code}
                       onChange={(e) => setFormData({ ...formData, venue_postal_code: e.target.value })}
-                      style={inputStyle(!!formData.venue_postal_code)}
+                      style={{
+                        fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                        fontSize: '15px',
+                        lineHeight: '150%',
+                        color: formData.venue_postal_code ? '#2C3E50' : '#6C757D',
+                        border: 'none',
+                        outline: 'none',
+                        width: '100%',
+                        background: 'transparent'
+                      }}
                       placeholder="1234567"
                       maxLength={7}
                     />
@@ -2003,7 +2287,7 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
                     onClick={() => fetchAddressFromPostalCode(formData.venue_postal_code)}
                     disabled={addressLoading || formData.venue_postal_code.length !== 7}
                     style={{
-                      fontFamily: 'Inter, sans-serif',
+                      fontFamily: '"Inter", "Noto Sans JP", sans-serif',
                       fontSize: '14px',
                       fontWeight: 700,
                       lineHeight: '17px',
@@ -2013,7 +2297,7 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
                       borderRadius: '8px',
                       padding: '12px 16px',
                       cursor: addressLoading || formData.venue_postal_code.length !== 7 ? 'not-allowed' : 'pointer',
-                      height: '48px'
+                      height: '44px'
                     }}
                   >
                     {addressLoading ? '取得中...' : '住所取得'}
@@ -2021,17 +2305,44 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
                 </div>
               </div>
 
-              <div style={fieldWrapperStyle}>
-                <label style={labelStyle}>都道府県（任意）</label>
-                <div style={formFieldStyle(false)}>
+              <div style={{ width: '100%', position: 'relative' }}>
+                <label style={{
+                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  lineHeight: '1.4',
+                  color: '#2C3E50',
+                  marginBottom: '8px',
+                  display: 'block'
+                }}>都道府県（任意）</label>
+                <div style={{
+                  boxSizing: 'border-box',
+                  width: '100%',
+                  height: '44px',
+                  padding: '0 16px',
+                  background: '#FFFFFF',
+                  border: '1px solid #E9ECEF',
+                  borderRadius: '8px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  position: 'relative'
+                }}>
                   <select
                     value={formData.venue_city}
                     onChange={(e) => setFormData({ ...formData, venue_city: e.target.value })}
                     style={{
-                      ...inputStyle(!!formData.venue_city),
+                      fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                      fontSize: '15px',
+                      lineHeight: '150%',
+                      color: formData.venue_city ? '#2C3E50' : '#6C757D',
+                      border: 'none',
+                      outline: 'none',
+                      width: '100%',
+                      background: 'transparent',
                       appearance: 'none',
                       cursor: 'pointer',
-                      background: 'transparent'
+                      paddingRight: '30px'
                     }}
                   >
                     <option value="">選択してください</option>
@@ -2039,54 +2350,182 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
                       <option key={prefecture} value={prefecture}>{prefecture}</option>
                     ))}
                   </select>
+                  <svg
+                    width="8"
+                    height="5"
+                    viewBox="0 0 8 5"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    style={{
+                      position: 'absolute',
+                      right: '16px',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      pointerEvents: 'none'
+                    }}
+                  >
+                    <path d="M4 5L0 0H8L4 5Z" fill="#6C757D"/>
+                  </svg>
                 </div>
               </div>
 
-              <div style={fieldWrapperStyle}>
-                <label style={labelStyle}>市区町村（任意）</label>
-                <div style={formFieldStyle(false)}>
+              <div style={{ width: '100%', position: 'relative' }}>
+                <label style={{
+                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  lineHeight: '1.4',
+                  color: '#2C3E50',
+                  marginBottom: '8px',
+                  display: 'block'
+                }}>市区町村（任意）</label>
+                <div style={{
+                  boxSizing: 'border-box',
+                  width: '100%',
+                  height: '44px',
+                  padding: '0 16px',
+                  background: '#FFFFFF',
+                  border: '1px solid #E9ECEF',
+                  borderRadius: '8px',
+                  display: 'flex',
+                  alignItems: 'center'
+                }}>
                   <input
                     type="text"
                     value={formData.venue_town}
                     onChange={(e) => setFormData({ ...formData, venue_town: e.target.value })}
-                    style={inputStyle(!!formData.venue_town)}
+                    style={{
+                      fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                      fontSize: '15px',
+                      lineHeight: '150%',
+                      color: formData.venue_town ? '#2C3E50' : '#6C757D',
+                      border: 'none',
+                      outline: 'none',
+                      width: '100%',
+                      background: 'transparent'
+                    }}
                   />
                 </div>
               </div>
 
-              <div style={fieldWrapperStyle}>
-                <label style={labelStyle}>丁目番地号（任意）</label>
-                <div style={formFieldStyle(false)}>
+              <div style={{ width: '100%', position: 'relative' }}>
+                <label style={{
+                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  lineHeight: '1.4',
+                  color: '#2C3E50',
+                  marginBottom: '8px',
+                  display: 'block'
+                }}>丁目番地号（任意）</label>
+                <div style={{
+                  boxSizing: 'border-box',
+                  width: '100%',
+                  height: '44px',
+                  padding: '0 16px',
+                  background: '#FFFFFF',
+                  border: '1px solid #E9ECEF',
+                  borderRadius: '8px',
+                  display: 'flex',
+                  alignItems: 'center'
+                }}>
                   <input
                     type="text"
                     value={formData.venue_address}
                     onChange={(e) => setFormData({ ...formData, venue_address: e.target.value })}
-                    style={inputStyle(!!formData.venue_address)}
+                    style={{
+                      fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                      fontSize: '15px',
+                      lineHeight: '150%',
+                      color: formData.venue_address ? '#2C3E50' : '#6C757D',
+                      border: 'none',
+                      outline: 'none',
+                      width: '100%',
+                      background: 'transparent'
+                    }}
                   />
                 </div>
               </div>
 
-              <div style={fieldWrapperStyle}>
-                <label style={labelStyle}>緯度（任意）</label>
-                <div style={formFieldStyle(false)}>
+              <div style={{ width: '100%', position: 'relative' }}>
+                <label style={{
+                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  lineHeight: '1.4',
+                  color: '#2C3E50',
+                  marginBottom: '8px',
+                  display: 'block'
+                }}>緯度（任意）</label>
+                <div style={{
+                  boxSizing: 'border-box',
+                  width: '100%',
+                  height: '44px',
+                  padding: '0 16px',
+                  background: '#FFFFFF',
+                  border: '1px solid #E9ECEF',
+                  borderRadius: '8px',
+                  display: 'flex',
+                  alignItems: 'center'
+                }}>
                   <input
                     type="text"
                     value={formData.venue_latitude}
                     onChange={(e) => setFormData({ ...formData, venue_latitude: e.target.value })}
-                    style={inputStyle(!!formData.venue_latitude)}
+                    style={{
+                      fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                      fontSize: '15px',
+                      lineHeight: '150%',
+                      color: formData.venue_latitude ? '#2C3E50' : '#6C757D',
+                      border: 'none',
+                      outline: 'none',
+                      width: '100%',
+                      background: 'transparent'
+                    }}
                     placeholder="34.975 など"
                   />
                 </div>
               </div>
 
-              <div style={fieldWrapperStyle}>
-                <label style={labelStyle}>経度（任意）</label>
-                <div style={formFieldStyle(false)}>
+              <div style={{ width: '100%', position: 'relative' }}>
+                <label style={{
+                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  lineHeight: '1.4',
+                  color: '#2C3E50',
+                  marginBottom: '8px',
+                  display: 'block'
+                }}>経度（任意）</label>
+                <div style={{
+                  boxSizing: 'border-box',
+                  width: '100%',
+                  height: '44px',
+                  padding: '0 16px',
+                  background: '#FFFFFF',
+                  border: '1px solid #E9ECEF',
+                  borderRadius: '8px',
+                  display: 'flex',
+                  alignItems: 'center'
+                }}>
                   <input
                     type="text"
                     value={formData.venue_longitude}
                     onChange={(e) => setFormData({ ...formData, venue_longitude: e.target.value })}
-                    style={inputStyle(!!formData.venue_longitude)}
+                    style={{
+                      fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                      fontSize: '15px',
+                      lineHeight: '150%',
+                      color: formData.venue_longitude ? '#2C3E50' : '#6C757D',
+                      border: 'none',
+                      outline: 'none',
+                      width: '100%',
+                      background: 'transparent'
+                    }}
                     placeholder="138.390 など"
                   />
                 </div>
@@ -2095,30 +2534,94 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
           </div>
 
           {/* URL情報 */}
-          <div style={cardStyle}>
-            <h2 style={sectionTitleStyle}>URL情報（任意）</h2>
-            <div style={fieldsContainerStyle}>
-              <div style={fieldWrapperStyle}>
-                <label style={labelStyle}>公式サイトURL（任意）</label>
-                <div style={formFieldStyle(false)}>
+          <div style={{ marginTop: '24px' }}>
+            <h2 style={{
+              fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+              fontSize: '18px',
+              fontStyle: 'normal',
+              fontWeight: 700,
+              lineHeight: '120%',
+              color: '#2C3E50',
+              marginBottom: '20px'
+            }}>URL情報（任意）</h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <div style={{ width: '100%', position: 'relative' }}>
+                <label style={{
+                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  lineHeight: '1.4',
+                  color: '#2C3E50',
+                  marginBottom: '8px',
+                  display: 'block'
+                }}>公式サイトURL（任意）</label>
+                <div style={{
+                  boxSizing: 'border-box',
+                  width: '100%',
+                  height: '44px',
+                  padding: '0 16px',
+                  background: '#FFFFFF',
+                  border: '1px solid #E9ECEF',
+                  borderRadius: '8px',
+                  display: 'flex',
+                  alignItems: 'center'
+                }}>
                   <input
                     type="text"
                     value={formData.homepage_url}
                     onChange={(e) => setFormData({ ...formData, homepage_url: e.target.value })}
-                    style={inputStyle(!!formData.homepage_url)}
+                    style={{
+                      fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                      fontSize: '15px',
+                      lineHeight: '150%',
+                      color: formData.homepage_url ? '#2C3E50' : '#6C757D',
+                      border: 'none',
+                      outline: 'none',
+                      width: '100%',
+                      background: 'transparent'
+                    }}
                     placeholder="https://"
                   />
                 </div>
               </div>
 
-              <div style={fieldWrapperStyle}>
-                <label style={labelStyle}>関連ページURL（任意）</label>
-                <div style={formFieldStyle(false)}>
+              <div style={{ width: '100%', position: 'relative' }}>
+                <label style={{
+                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  lineHeight: '1.4',
+                  color: '#2C3E50',
+                  marginBottom: '8px',
+                  display: 'block'
+                }}>関連ページURL（任意）</label>
+                <div style={{
+                  boxSizing: 'border-box',
+                  width: '100%',
+                  height: '44px',
+                  padding: '0 16px',
+                  background: '#FFFFFF',
+                  border: '1px solid #E9ECEF',
+                  borderRadius: '8px',
+                  display: 'flex',
+                  alignItems: 'center'
+                }}>
                   <input
                     type="text"
                     value={formData.related_page_url}
                     onChange={(e) => setFormData({ ...formData, related_page_url: e.target.value })}
-                    style={inputStyle(!!formData.related_page_url)}
+                    style={{
+                      fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                      fontSize: '15px',
+                      lineHeight: '150%',
+                      color: formData.related_page_url ? '#2C3E50' : '#6C757D',
+                      border: 'none',
+                      outline: 'none',
+                      width: '100%',
+                      background: 'transparent'
+                    }}
                     placeholder="https://"
                   />
                 </div>
@@ -2127,45 +2630,137 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
           </div>
 
           {/* 連絡先情報 */}
-          <div style={cardStyle}>
-            <h2 style={sectionTitleStyle}>連絡先情報</h2>
-            <div style={fieldsContainerStyle}>
-              <div style={fieldWrapperStyle}>
-                <label style={labelStyle}>問い合わせ先名称</label>
-                <div style={formFieldStyle(false)}>
+          <div style={{ marginTop: '24px' }}>
+            <h2 style={{
+              fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+              fontSize: '18px',
+              fontStyle: 'normal',
+              fontWeight: 700,
+              lineHeight: '120%',
+              color: '#2C3E50',
+              marginBottom: '20px'
+            }}>連絡先情報</h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <div style={{ width: '100%', position: 'relative' }} data-error-field="contact_name">
+                <label style={{
+                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  lineHeight: '1.4',
+                  color: '#2C3E50',
+                  marginBottom: '8px',
+                  display: 'block'
+                }}>問い合わせ先名称</label>
+                <div style={{
+                  boxSizing: 'border-box',
+                  width: '100%',
+                  height: '44px',
+                  padding: '0 16px',
+                  background: '#FFFFFF',
+                  border: '1px solid #E9ECEF',
+                  borderRadius: '8px',
+                  display: 'flex',
+                  alignItems: 'center'
+                }}>
                   <input
                     id="field-contact_name"
                     type="text"
                     required
                     value={formData.contact_name}
                     onChange={(e) => setFormData({ ...formData, contact_name: e.target.value })}
-                    style={inputStyle(!!formData.contact_name)}
+                    style={{
+                      fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                      fontSize: '15px',
+                      lineHeight: '150%',
+                      color: formData.contact_name ? '#2C3E50' : '#6C757D',
+                      border: 'none',
+                      outline: 'none',
+                      width: '100%',
+                      background: 'transparent'
+                    }}
                   />
                 </div>
               </div>
 
-              <div style={fieldWrapperStyle}>
-                <label style={labelStyle}>電話番号</label>
-                <div style={formFieldStyle(false)}>
+              <div style={{ width: '100%', position: 'relative' }} data-error-field="contact_phone">
+                <label style={{
+                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  lineHeight: '1.4',
+                  color: '#2C3E50',
+                  marginBottom: '8px',
+                  display: 'block'
+                }}>電話番号</label>
+                <div style={{
+                  boxSizing: 'border-box',
+                  width: '100%',
+                  height: '44px',
+                  padding: '0 16px',
+                  background: '#FFFFFF',
+                  border: '1px solid #E9ECEF',
+                  borderRadius: '8px',
+                  display: 'flex',
+                  alignItems: 'center'
+                }}>
                   <input
                     id="field-contact_phone"
                     type="tel"
                     required
                     value={formData.contact_phone}
                     onChange={(e) => setFormData({ ...formData, contact_phone: e.target.value })}
-                    style={inputStyle(!!formData.contact_phone)}
+                    style={{
+                      fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                      fontSize: '15px',
+                      lineHeight: '150%',
+                      color: formData.contact_phone ? '#2C3E50' : '#6C757D',
+                      border: 'none',
+                      outline: 'none',
+                      width: '100%',
+                      background: 'transparent'
+                    }}
                   />
                 </div>
               </div>
 
-              <div style={fieldWrapperStyle}>
-                <label style={labelStyle}>メールアドレス（任意）</label>
-                <div style={formFieldStyle(false)}>
+              <div style={{ width: '100%', position: 'relative' }}>
+                <label style={{
+                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  lineHeight: '1.4',
+                  color: '#2C3E50',
+                  marginBottom: '8px',
+                  display: 'block'
+                }}>メールアドレス（任意）</label>
+                <div style={{
+                  boxSizing: 'border-box',
+                  width: '100%',
+                  height: '44px',
+                  padding: '0 16px',
+                  background: '#FFFFFF',
+                  border: '1px solid #E9ECEF',
+                  borderRadius: '8px',
+                  display: 'flex',
+                  alignItems: 'center'
+                }}>
                   <input
                     type="email"
                     value={formData.contact_email}
                     onChange={(e) => setFormData({ ...formData, contact_email: e.target.value })}
-                    style={inputStyle(!!formData.contact_email)}
+                    style={{
+                      fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                      fontSize: '15px',
+                      lineHeight: '150%',
+                      color: formData.contact_email ? '#2C3E50' : '#6C757D',
+                      border: 'none',
+                      outline: 'none',
+                      width: '100%',
+                      background: 'transparent'
+                    }}
                   />
                 </div>
               </div>
@@ -2173,64 +2768,177 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
           </div>
 
           {/* その他情報 */}
-          <div style={cardStyle}>
-            <h2 style={sectionTitleStyle}>その他情報（任意）</h2>
-            <div style={fieldsContainerStyle}>
-              <div style={fieldWrapperStyle}>
-                <label style={labelStyle}>駐車場情報（任意）</label>
-                <div style={formFieldStyle(false, { minHeight: 96 })}>
+          <div style={{ marginTop: '24px' }}>
+            <h2 style={{
+              fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+              fontSize: '18px',
+              fontStyle: 'normal',
+              fontWeight: 700,
+              lineHeight: '120%',
+              color: '#2C3E50',
+              marginBottom: '20px'
+            }}>その他情報（任意）</h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <div style={{ width: '100%', position: 'relative' }}>
+                <label style={{
+                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  lineHeight: '1.4',
+                  color: '#2C3E50',
+                  marginBottom: '8px',
+                  display: 'block'
+                }}>駐車場情報（任意）</label>
+                <div style={{
+                  boxSizing: 'border-box',
+                  width: '100%',
+                  minHeight: '96px',
+                  padding: '12px 16px',
+                  background: '#FFFFFF',
+                  border: '1px solid #E9ECEF',
+                  borderRadius: '8px'
+                }}>
                   <textarea
                     value={formData.parking_info}
                     onChange={(e) => setFormData({ ...formData, parking_info: e.target.value })}
-                    style={{ ...textareaStyle(!!formData.parking_info), minHeight: '72px' }}
+                    style={{
+                      fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                      fontSize: '15px',
+                      lineHeight: '150%',
+                      color: formData.parking_info ? '#2C3E50' : '#6C757D',
+                      border: 'none',
+                      outline: 'none',
+                      width: '100%',
+                      background: 'transparent',
+                      resize: 'none',
+                      minHeight: '72px'
+                    }}
                     placeholder="駐車場に関する情報を入力してください"
                   />
                 </div>
               </div>
 
-              <div style={fieldWrapperStyle}>
-                <label style={labelStyle}>料金情報（任意）</label>
-                <div style={formFieldStyle(false, { minHeight: 96 })}>
+              <div style={{ width: '100%', position: 'relative' }}>
+                <label style={{
+                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  lineHeight: '1.4',
+                  color: '#2C3E50',
+                  marginBottom: '8px',
+                  display: 'block'
+                }}>料金情報（任意）</label>
+                <div style={{
+                  boxSizing: 'border-box',
+                  width: '100%',
+                  minHeight: '96px',
+                  padding: '12px 16px',
+                  background: '#FFFFFF',
+                  border: '1px solid #E9ECEF',
+                  borderRadius: '8px'
+                }}>
                   <textarea
                     value={formData.fee_info}
                     onChange={(e) => setFormData({ ...formData, fee_info: e.target.value })}
-                    style={{ ...textareaStyle(!!formData.fee_info), minHeight: '72px' }}
+                    style={{
+                      fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                      fontSize: '15px',
+                      lineHeight: '150%',
+                      color: formData.fee_info ? '#2C3E50' : '#6C757D',
+                      border: 'none',
+                      outline: 'none',
+                      width: '100%',
+                      background: 'transparent',
+                      resize: 'none',
+                      minHeight: '72px'
+                    }}
                     placeholder="料金に関する情報を入力してください"
                   />
                 </div>
               </div>
 
-              <div style={fieldWrapperStyle}>
-                <label style={labelStyle}>主催者情報（任意）</label>
-                <div style={formFieldStyle(false, { minHeight: 96 })}>
+              <div style={{ width: '100%', position: 'relative' }}>
+                <label style={{
+                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  lineHeight: '1.4',
+                  color: '#2C3E50',
+                  marginBottom: '8px',
+                  display: 'block'
+                }}>主催者情報（任意）</label>
+                <div style={{
+                  boxSizing: 'border-box',
+                  width: '100%',
+                  minHeight: '96px',
+                  padding: '12px 16px',
+                  background: '#FFFFFF',
+                  border: '1px solid #E9ECEF',
+                  borderRadius: '8px'
+                }}>
                   <textarea
                     value={formData.organizer_info}
                     onChange={(e) => setFormData({ ...formData, organizer_info: e.target.value })}
-                    style={{ ...textareaStyle(!!formData.organizer_info), minHeight: '72px' }}
+                    style={{
+                      fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                      fontSize: '15px',
+                      lineHeight: '150%',
+                      color: formData.organizer_info ? '#2C3E50' : '#6C757D',
+                      border: 'none',
+                      outline: 'none',
+                      width: '100%',
+                      background: 'transparent',
+                      resize: 'none',
+                      minHeight: '72px'
+                    }}
                     placeholder="主催者に関する情報を入力してください"
                   />
                 </div>
               </div>
             </div>
           </div>
+          </div>
 
-          <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', marginTop: '24px', marginBottom: '24px' }}>
-            <button
-              type="button"
-              onClick={onCancel}
-              style={buttonSecondaryStyle}
-            >
-              キャンセル
-            </button>
+          {/* 次へ進むボタン */}
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '24px' }}>
             <button
               type="submit"
+              disabled={loading}
               style={{
-                ...buttonPrimaryStyle,
-                background: '#FF8A5C',
-                cursor: 'pointer'
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                padding: '0',
+                gap: '8px',
+                width: '100%',
+                maxWidth: '289px',
+                height: '52px',
+                background: loading ? '#9ca3af' : '#FF8A5C',
+                borderRadius: '12px',
+                border: 'none',
+                fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                fontSize: '15px',
+                fontStyle: 'normal',
+                fontWeight: 700,
+                lineHeight: '52px',
+                color: '#FFFFFF',
+                cursor: loading ? 'not-allowed' : 'pointer',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                transition: 'all 0.2s ease-in-out',
+                boxShadow: loading ? 'none' : '0px 2px 8px rgba(0, 0, 0, 0.08)'
               }}
             >
-              次へ
+              {loading ? (eventId ? '更新中...' : '作成中...') : '次へ進む'}
+              {!loading && (
+                <svg style={{ width: '10px', height: '10px', marginTop: '-2px' }} viewBox="0 0 5 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M0 0L5 5L0 10" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              )}
             </button>
           </div>
         </form>

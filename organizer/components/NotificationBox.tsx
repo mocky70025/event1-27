@@ -200,183 +200,196 @@ export default function NotificationBox({ userProfile, onBack, onUnreadCountChan
   }
 
   return (
-    <div style={{ 
+    <div style={{
       minHeight: '100vh',
       width: '100%',
-      background: '#E8F5F5',
+      background: '#FFFFFF', // 外側は白
       display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'flex-start',
-      padding: isDesktop ? '40px 20px' : 0
+      flexDirection: 'column',
+      alignItems: 'center'
     }}>
       <div style={{
-        width: '100%',
-        maxWidth: isDesktop ? '1000px' : '393px',
-        background: '#E8F5F5',
-        minHeight: isDesktop ? 'auto' : '100vh',
-        margin: '0 auto'
+        width: '393px',
+        minWidth: '393px',
+        maxWidth: '393px',
+        flexShrink: 0,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'stretch',
+        boxSizing: 'border-box'
       }}>
         {/* ヘッダー */}
         <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 1000,
-          background: '#FF8A5C',
+          width: '100%',
+          flexShrink: 0,
           height: '64px',
-          padding: '0 16px',
+          background: 'linear-gradient(180deg, #FF8A5C 0%, #FF7840 100%)',
           display: 'flex',
           alignItems: 'center',
-          gap: '12px',
-          maxWidth: isDesktop ? '1000px' : '393px',
-          margin: '0 auto',
-          boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)'
+          justifyContent: 'center',
+          position: 'relative',
+          boxSizing: 'border-box'
         }}>
+          <h1 style={{
+            margin: 0,
+            fontSize: '18px',
+            fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+            fontStyle: 'normal',
+            fontWeight: 700,
+            color: 'white'
+          }}>
+            通知
+          </h1>
           <button
             onClick={onBack}
             style={{
+              position: 'absolute',
+              left: '16px',
               background: 'transparent',
               border: 'none',
-              color: '#FFFFFF',
               fontSize: '24px',
-              fontWeight: 700,
               fontFamily: '"Inter", sans-serif',
+              fontStyle: 'normal',
+              fontWeight: 700,
+              color: 'white',
               cursor: 'pointer',
-              padding: '4px',
+              padding: 0,
+              width: '24px',
+              height: '24px',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
-              lineHeight: '1'
+              justifyContent: 'center'
             }}
           >
             &lt;
           </button>
-          <h1 style={{
-            fontSize: '18px',
-            fontWeight: 700,
-            color: '#FFFFFF',
-            margin: 0,
-            flex: 1,
-            textAlign: 'center',
-            fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-            lineHeight: '120%'
-          }}>
-            通知
-          </h1>
-          {/* 右側のスペース（戻るボタンとバランスを取る） */}
-          <div style={{ width: '24px', height: '24px' }}></div>
         </div>
 
-        <div style={{ 
-          paddingTop: '88px',
-          paddingBottom: '24px',
+        <div style={{
+          width: '100%',
+          flexShrink: 0,
+          background: '#FFF5F0', // スマホフレーム範囲内は薄いオレンジ
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          paddingTop: '16px',
+          paddingBottom: '80px',
           paddingLeft: '20px',
           paddingRight: '20px',
-          maxWidth: isDesktop ? '600px' : '353px', 
-          margin: '0 auto' 
+          boxSizing: 'border-box'
         }}>
-          {notifications.length === 0 ? (
+          {/* コンテンツエリア */}
+          <div style={{
+            width: '100%',
+            maxWidth: '353px'
+          }}>
+            {/* 通知リスト */}
             <div style={{
-              background: '#FFFFFF',
-              boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)',
-              borderRadius: '16px',
-              padding: '48px 24px',
-              textAlign: 'center'
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '16px'
             }}>
-              <p style={{
-                fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                fontSize: '16px',
-                lineHeight: '150%',
-                color: '#6C757D'
-              }}>通知はありません</p>
-            </div>
-          ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              {notifications.map((notification) => (
-                <div
-                  key={notification.id}
-                  onClick={() => !notification.is_read && markAsRead(notification.id)}
-                  style={{
-                    width: '100%',
-                    height: '120px',
-                    background: '#FFFFFF',
-                    borderRadius: '16px',
-                    padding: '20px',
-                    cursor: notification.is_read ? 'default' : 'pointer',
-                    border: notification.is_read ? '1px solid #E9ECEF' : '2px solid #FF8A5C',
-                    position: 'relative',
-                    boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)',
-                    display: 'flex',
-                    gap: '12px',
-                    alignItems: 'flex-start'
-                  }}
-                >
-                  {/* アイコン */}
-                  <div style={{
-                    width: '40px',
-                    height: '40px',
-                    borderRadius: '8px',
-                    background: '#E8F5F5',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexShrink: 0
-                  }}>
-                    {getNotificationIcon(notification.notification_type)}
-                  </div>
-                  
-                  {/* 内容 */}
-                  <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                      <h3 style={{
-                        fontSize: '15px',
-                        fontWeight: notification.is_read ? 400 : 700,
-                        lineHeight: '150%',
-                        color: '#2C3E50',
-                        margin: 0,
-                        fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                        wordBreak: 'break-word',
-                        flex: 1
-                      }}>
-                        {notification.title}
-                      </h3>
-                      {!notification.is_read && (
-                        <div style={{
-                          width: '8px',
-                          height: '8px',
-                          borderRadius: '50%',
-                          background: '#FF8A5C',
-                          flexShrink: 0,
-                          marginLeft: '8px',
-                          marginTop: '6px'
-                        }}></div>
-                      )}
-                    </div>
-                    <p style={{
-                      fontSize: '13px',
-                      lineHeight: '150%',
-                      color: '#6C757D',
-                      margin: 0,
-                      fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                      wordBreak: 'break-word'
-                    }}>
-                      {notification.message}
-                    </p>
-                    <p style={{
-                      fontSize: '12px',
-                      lineHeight: '150%',
-                      color: '#6C757D',
-                      margin: 0,
-                      fontFamily: '"Inter", "Noto Sans JP", sans-serif'
-                    }}>
-                      {formatDate(notification.created_at)}
-                    </p>
-                  </div>
+              {notifications.length === 0 ? (
+                <div style={{
+                  background: 'white',
+                  borderRadius: '12px',
+                  padding: '48px 24px',
+                  boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)',
+                  textAlign: 'center'
+                }}>
+                  <p style={{
+                    fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                    fontSize: '16px',
+                    lineHeight: '150%',
+                    color: '#6C757D'
+                  }}>通知はありません</p>
                 </div>
-              ))}
+              ) : (
+                notifications.map((notification) => {
+                  const getIconBgColor = (type: string) => {
+                    switch (type) {
+                      case 'application_submitted':
+                        return '#FF8A5C'
+                      case 'event_approved':
+                        return '#FFD88A'
+                      case 'organizer_approved':
+                        return '#5DABA8'
+                      default:
+                        return '#FF8A5C'
+                    }
+                  }
+                  return (
+                    <div
+                      key={notification.id}
+                      onClick={() => !notification.is_read && markAsRead(notification.id)}
+                      style={{
+                        background: 'white',
+                        borderRadius: '12px',
+                        padding: '16px',
+                        boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)', // Shadow SM
+                        cursor: notification.is_read ? 'default' : 'pointer'
+                      }}
+                    >
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'flex-start',
+                        gap: '12px'
+                      }}>
+                        <div style={{
+                          width: '40px',
+                          height: '40px',
+                          borderRadius: '50%',
+                          background: getIconBgColor(notification.notification_type),
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          flexShrink: 0
+                        }}>
+                          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M10 2L2 7V9C2 13.55 5.16 17.74 10 19C14.84 17.74 18 13.55 18 9V7L10 2Z" fill="white"/>
+                          </svg>
+                        </div>
+                        <div style={{ flex: 1 }}>
+                          <h3 style={{
+                            margin: '0 0 4px',
+                            fontSize: '15px',
+                            fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                            fontStyle: 'normal',
+                            fontWeight: notification.is_read ? 400 : 700,
+                            color: '#2C3E50'
+                          }}>
+                            {notification.title}
+                          </h3>
+                          <p style={{
+                            margin: '0 0 4px',
+                            fontSize: '13px',
+                            fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                            fontStyle: 'normal',
+                            fontWeight: 400,
+                            color: '#6C757D',
+                            lineHeight: '1.5'
+                          }}>
+                            {notification.message}
+                          </p>
+                          <p style={{
+                            margin: 0,
+                            fontSize: '12px',
+                            fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                            fontStyle: 'normal',
+                            fontWeight: 400,
+                            color: '#6C757D'
+                          }}>
+                            {formatDate(notification.created_at)}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                })
+              )}
             </div>
-          )}
+          </div>
         </div>
       </div>
     </div>

@@ -86,7 +86,7 @@ export default function EventList({ events, onEventUpdated, onEdit, onViewApplic
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
       {events.map((event) => {
         return (
           <div
@@ -97,81 +97,76 @@ export default function EventList({ events, onEventUpdated, onEdit, onViewApplic
               }
             }}
             style={{
-              background: '#FFFFFF',
-              borderRadius: '16px',
+              background: 'white',
+              borderRadius: '12px',
               padding: '16px',
-              display: 'flex',
-              gap: '16px',
-              cursor: 'pointer',
-              boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)'
+              boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)', // Shadow SM
+              cursor: 'pointer'
             }}
           >
-            {/* 左側: 画像 */}
             <div style={{
-              width: '120px',
-              height: '80px',
-              background: '#E9ECEF',
-              borderRadius: '8px',
-              flexShrink: 0,
               display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              overflow: 'hidden'
+              alignItems: 'flex-start',
+              gap: '12px'
             }}>
-              {event.main_image_url ? (
-                <img
-                  src={event.main_image_url}
-                  alt={event.event_name}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover'
-                  }}
-                />
-              ) : (
-                <div style={{
-                  width: '100%',
-                  height: '100%',
-                  background: '#E9ECEF',
-                  borderRadius: '8px'
-                }} />
-              )}
-            </div>
-            
-            {/* 右側: タイトルと情報 */}
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px', justifyContent: 'center' }}>
-              <h3 style={{
-                fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                fontSize: '16px',
-                fontWeight: 700,
-                lineHeight: '120%',
-                color: '#2C3E50',
-                margin: 0
+              <div style={{
+                width: '48px',
+                height: '48px',
+                borderRadius: '8px',
+                background: '#FF8A5C',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0
               }}>
-                {event.event_name}
-              </h3>
-              
-              <p style={{
-                fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                fontSize: '12px',
-                lineHeight: '150%',
-                color: '#6C757D',
-                margin: 0
-              }}>
-                {formatPeriod(event)}
-              </p>
-
-              {formatLocation(event) && (
-                <p style={{
+                <span style={{ fontSize: '24px' }}>🎪</span>
+              </div>
+              <div style={{ flex: 1 }}>
+                <h3 style={{
+                  margin: '0 0 4px',
+                  fontSize: '16px',
                   fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                  fontSize: '12px',
-                  lineHeight: '150%',
-                  color: '#6C757D',
-                  margin: 0
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  color: '#2C3E50'
                 }}>
-                  {formatLocation(event)}
-                </p>
-              )}
+                  {event.event_name}
+                </h3>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  marginBottom: '2px'
+                }}>
+                  <img 
+                    src="/mdi_calendar-outline.svg" 
+                    alt="カレンダー" 
+                    style={{ width: '16px', height: '16px' }}
+                  />
+                  <p style={{
+                    margin: 0,
+                    fontSize: '12px',
+                    fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                    fontStyle: 'normal',
+                    fontWeight: 400,
+                    color: '#6C757D'
+                  }}>
+                    {formatPeriod(event)}
+                  </p>
+                </div>
+                {formatLocation(event) && (
+                  <p style={{
+                    margin: 0,
+                    fontSize: '12px',
+                    fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                    fontStyle: 'normal',
+                    fontWeight: 400,
+                    color: '#6C757D'
+                  }}>
+                    {formatLocation(event)}
+                  </p>
+                )}
+              </div>
             </div>
           </div>
         )
