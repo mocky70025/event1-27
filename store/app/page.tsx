@@ -29,26 +29,22 @@ export default function Home() {
     const initializeAuth = async () => {
       try {
         // まず、セッションを確認
-        const { data: { session } } = await supabase.auth.getSession()
-        const savedProfile = sessionStorage.getItem('line_profile')
-        const authType = sessionStorage.getItem('auth_type')
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession()
         
-        // セッションが無効な場合、すべてのsessionStorageをクリア
-        if (!session) {
-          console.log('[Home] No valid session, clearing all sessionStorage')
-          sessionStorage.removeItem('line_profile')
-          sessionStorage.removeItem('auth_type')
-          sessionStorage.removeItem('user_id')
-          sessionStorage.removeItem('user_email')
-          sessionStorage.removeItem('is_registered')
-          sessionStorage.removeItem('email_confirmed')
-          sessionStorage.removeItem('show_email_sent')
+        // セッションエラーがある場合、またはセッションが無効な場合、すべてのsessionStorageをクリア
+        if (sessionError || !session) {
+          console.log('[Home] No valid session or session error, clearing all sessionStorage', sessionError)
+          // すべてのsessionStorageをクリア
+          sessionStorage.clear()
           setUserProfile(null)
           setIsRegistered(false)
           setHasActiveSession(false)
           setLoading(false)
           return
         }
+        
+        const savedProfile = sessionStorage.getItem('line_profile')
+        const authType = sessionStorage.getItem('auth_type')
         
         // セッションが有効な場合のみ、認証情報を読み込む
         const savedIsRegistered = sessionStorage.getItem('is_registered')
@@ -295,14 +291,16 @@ export default function Home() {
     return <LoadingSpinner />
   }
 
-  // EmailSent画面を表示するかチェック
-  const showEmailSent = typeof window !== 'undefined' && sessionStorage.getItem('show_email_sent') === 'true'
+  // EmailSent画面を表示するかチェック（セッションが有効な場合のみ）
+  const showEmailSent = typeof window !== 'undefined' && 
+    userProfile && 
+    sessionStorage.getItem('show_email_sent') === 'true'
   
   if (showEmailSent) {
     return <EmailSent />
   }
 
-  // ログイン状態のチェック（常にLINE Loginを使用）
+  // ログイン状態のチェック
   if (!userProfile) {
     console.log('[Home] No userProfile, showing WelcomeScreen')
     return <WelcomeScreen />
