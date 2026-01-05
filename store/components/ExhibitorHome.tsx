@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
+import { colors, typography, spacing, borderRadius, shadows } from '../styles/design-system'
 
 interface ExhibitorHomeProps {
   userProfile: any
@@ -48,14 +49,13 @@ export default function ExhibitorHome({ userProfile, onNavigate }: ExhibitorHome
       try {
         query = query.eq('approval_status', 'approved')
       } catch (error) {
-        // カラムが存在しない場合はスキップ
         console.log('[ExhibitorHome] approval_status column may not exist')
       }
 
       const today = new Date().toISOString().split('T')[0]
       query = query.gte('event_end_date', today)
       query = query.order('event_start_date', { ascending: true })
-      query = query.limit(10) // 最新10件を取得
+      query = query.limit(isDesktop ? 20 : 10)
 
       const { data, error } = await query
 
@@ -67,7 +67,6 @@ export default function ExhibitorHome({ userProfile, onNavigate }: ExhibitorHome
 
       let filteredEvents = (data || []) as Event[]
 
-      // approval_statusカラムが存在する場合、クライアント側でもフィルタリング
       if (filteredEvents.length > 0 && 'approval_status' in filteredEvents[0]) {
         filteredEvents = filteredEvents.filter(event => 
           (event as any).approval_status === 'approved' || (event as any).approval_status === null
@@ -108,7 +107,7 @@ export default function ExhibitorHome({ userProfile, onNavigate }: ExhibitorHome
       <div style={{
         minHeight: '100vh',
         width: '100%',
-        background: '#FFFFFF',
+        background: colors.background.primary,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center'
@@ -116,8 +115,8 @@ export default function ExhibitorHome({ userProfile, onNavigate }: ExhibitorHome
         <div style={{
           width: '48px',
           height: '48px',
-          border: `3px solid #E5E5E5`,
-          borderTopColor: '#FF8A5C',
+          border: `3px solid ${colors.neutral[200]}`,
+          borderTopColor: colors.primary[500],
           borderRadius: '50%',
           animation: 'spin 1s linear infinite'
         }}></div>
@@ -129,106 +128,121 @@ export default function ExhibitorHome({ userProfile, onNavigate }: ExhibitorHome
     <div style={{
       minHeight: '100vh',
       width: '100%',
-      background: '#FFFFFF',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center'
+      background: colors.background.primary,
+      paddingBottom: isDesktop ? spacing[12] : spacing[20]
     }}>
-      <div style={{
-        width: '393px',
-        minWidth: '393px',
-        maxWidth: '393px',
-        flexShrink: 0,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'stretch',
-        boxSizing: 'border-box'
-      }}>
       {/* ヘッダー */}
       <div style={{
         width: '100%',
-        flexShrink: 0,
-        height: '64px',
-        background: '#FF8A5C',
+        height: isDesktop ? '80px' : '64px',
+        background: colors.primary[500],
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        position: 'relative',
-        boxSizing: 'border-box'
+        position: 'sticky',
+        top: 0,
+        zIndex: 100,
+        boxShadow: shadows.md,
+        padding: `0 ${isDesktop ? spacing[12] : spacing[4]}`
       }}>
         <h1 style={{
           margin: 0,
-          fontSize: '20px',
-          fontFamily: '"Noto Sans JP", sans-serif',
-          fontStyle: 'normal',
-          fontWeight: 700,
-          color: '#FFFFFF'
+          fontSize: isDesktop ? typography.fontSize['3xl'] : typography.fontSize['2xl'],
+          fontFamily: typography.fontFamily.japanese,
+          fontWeight: typography.fontWeight.bold,
+          color: colors.neutral[0]
         }}>
           マイイベント
         </h1>
       </div>
 
-      <div style={{
-        width: '100%',
-        flexShrink: 0,
-        background: '#FFF0EB',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        paddingTop: '24px',
-        paddingBottom: '80px',
-        paddingLeft: '20px',
-        paddingRight: '20px',
-        boxSizing: 'border-box'
-      }}>
       {/* コンテンツエリア */}
       <div style={{
-        width: '100%',
-        maxWidth: '353px'
+        maxWidth: isDesktop ? '1400px' : '100%',
+        margin: '0 auto',
+        padding: isDesktop ? `${spacing[10]} ${spacing[12]}` : `${spacing[6]} ${spacing[4]}`
       }}>
-      {/* イベントリスト */}
-      <div style={{
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '16px'
-      }}>
+        {/* イベントリスト */}
         {events.length === 0 ? (
           <div style={{
+            background: colors.neutral[0],
+            borderRadius: borderRadius.xl,
+            padding: isDesktop ? `${spacing[16]} ${spacing[10]}` : `${spacing[10]} ${spacing[6]}`,
             textAlign: 'center',
-            padding: '40px 20px',
-            color: '#999999',
-            fontSize: '16px',
-            fontFamily: '"Noto Sans JP", sans-serif'
+            boxShadow: shadows.card
           }}>
-            イベントがありません
-          </div>
-        ) : (
-          events.map((event) => (
-            <div
-              key={event.id}
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" style={{ margin: `0 auto ${spacing[4]}` }}>
+              <rect x="3" y="4" width="18" height="18" rx="2" stroke={colors.neutral[300]} strokeWidth="1.5"/>
+              <path d="M3 10H21" stroke={colors.neutral[300]} strokeWidth="1.5"/>
+              <path d="M8 4V8M16 4V8" stroke={colors.neutral[300]} strokeWidth="1.5" strokeLinecap="round"/>
+            </svg>
+            <p style={{
+              fontFamily: typography.fontFamily.japanese,
+              fontSize: typography.fontSize.lg,
+              lineHeight: typography.lineHeight.relaxed,
+              color: colors.neutral[500],
+              fontWeight: typography.fontWeight.medium
+            }}>
+              イベントがありません
+            </p>
+            <button
               onClick={() => onNavigate('events')}
               style={{
-                background: '#FFFFFF',
-                borderRadius: '12px',
-                padding: '16px',
-                boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)',
+                marginTop: spacing[6],
+                padding: `${spacing[3]} ${spacing[6]}`,
+                background: colors.primary[500],
+                color: colors.neutral[0],
+                border: 'none',
+                borderRadius: borderRadius.lg,
+                fontFamily: typography.fontFamily.japanese,
+                fontSize: typography.fontSize.base,
+                fontWeight: typography.fontWeight.semibold,
                 cursor: 'pointer',
-                border: '1px solid #E5E5E5',
-                transition: 'all 0.2s'
+                transition: 'all 0.2s',
+                boxShadow: shadows.button
               }}
+              onMouseEnter={(e) => e.currentTarget.style.background = colors.primary[600]}
+              onMouseLeave={(e) => e.currentTarget.style.background = colors.primary[500]}
             >
-              <div style={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: '12px'
-              }}>
+              イベントを探す
+            </button>
+          </div>
+        ) : (
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: isDesktop ? 'repeat(auto-fill, minmax(400px, 1fr))' : '1fr',
+            gap: isDesktop ? spacing[6] : spacing[4]
+          }}>
+            {events.map((event) => (
+              <div
+                key={event.id}
+                onClick={() => onNavigate('events')}
+                style={{
+                  background: colors.neutral[0],
+                  borderRadius: borderRadius.xl,
+                  overflow: 'hidden',
+                  boxShadow: shadows.card,
+                  cursor: 'pointer',
+                  border: `1px solid ${colors.neutral[200]}`,
+                  transition: 'all 0.2s'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-4px)'
+                  e.currentTarget.style.boxShadow = shadows.lg
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)'
+                  e.currentTarget.style.boxShadow = shadows.card
+                }}
+              >
+                {/* イベント画像 */}
                 <div style={{
-                  width: '120px',
-                  height: '80px',
-                  borderRadius: '8px',
-                  background: '#D9D9D9',
-                  flexShrink: 0,
+                  width: '100%',
+                  height: isDesktop ? '220px' : '180px',
+                  background: event.main_image_url ? 'transparent' : `linear-gradient(135deg, ${colors.primary[50]} 0%, ${colors.primary[100]} 100%)`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   overflow: 'hidden'
                 }}>
                   {event.main_image_url ? (
@@ -241,62 +255,78 @@ export default function ExhibitorHome({ userProfile, onNavigate }: ExhibitorHome
                         objectFit: 'cover'
                       }}
                     />
-                  ) : null}
+                  ) : (
+                    <span style={{ fontSize: '64px' }}>🎪</span>
+                  )}
                 </div>
-                <div style={{ flex: 1 }}>
+
+                {/* イベント情報 */}
+                <div style={{ padding: isDesktop ? spacing[5] : spacing[4] }}>
                   <h3 style={{
-                    margin: '0 0 8px',
-                    fontSize: '18px',
-                    fontFamily: '"Noto Sans JP", sans-serif',
-                    fontStyle: 'normal',
-                    fontWeight: 700,
-                    color: '#1A1A1A',
-                    lineHeight: '150%'
+                    margin: `0 0 ${spacing[3]} 0`,
+                    fontSize: isDesktop ? typography.fontSize.xl : typography.fontSize.lg,
+                    fontFamily: typography.fontFamily.japanese,
+                    fontWeight: typography.fontWeight.bold,
+                    color: colors.neutral[900],
+                    lineHeight: typography.lineHeight.tight
                   }}>
                     {event.event_name}
                   </h3>
+
                   <div style={{
                     display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    marginBottom: '2px'
+                    flexDirection: 'column',
+                    gap: spacing[2]
                   }}>
-                    <img 
-                      src="/mdi_calendar-outline.svg" 
-                      alt="カレンダー" 
-                      style={{ width: '16px', height: '16px' }}
-                    />
-                    <p style={{
-                      margin: 0,
-                      fontSize: '14px',
-                      fontFamily: '"Noto Sans JP", sans-serif',
-                      fontStyle: 'normal',
-                      fontWeight: 400,
-                      color: '#666666'
+                    {/* 日付 */}
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: spacing[2]
                     }}>
-                      {formatDateRange(event.event_start_date, event.event_end_date)}
-                    </p>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <rect x="3" y="4" width="18" height="18" rx="2" stroke={colors.neutral[500]} strokeWidth="1.5"/>
+                        <path d="M3 10H21" stroke={colors.neutral[500]} strokeWidth="1.5"/>
+                        <path d="M8 4V8M16 4V8" stroke={colors.neutral[500]} strokeWidth="1.5" strokeLinecap="round"/>
+                      </svg>
+                      <p style={{
+                        margin: 0,
+                        fontSize: typography.fontSize.sm,
+                        fontFamily: typography.fontFamily.japanese,
+                        color: colors.neutral[600],
+                        lineHeight: typography.lineHeight.normal
+                      }}>
+                        {formatDateRange(event.event_start_date, event.event_end_date)}
+                      </p>
+                    </div>
+
+                    {/* 場所 */}
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: spacing[2]
+                    }}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" stroke={colors.neutral[500]} strokeWidth="1.5"/>
+                        <circle cx="12" cy="9" r="2.5" stroke={colors.neutral[500]} strokeWidth="1.5"/>
+                      </svg>
+                      <p style={{
+                        margin: 0,
+                        fontSize: typography.fontSize.sm,
+                        fontFamily: typography.fontFamily.japanese,
+                        color: colors.neutral[600],
+                        lineHeight: typography.lineHeight.normal
+                      }}>
+                        {formatLocation(event.venue_city, event.venue_town)}
+                      </p>
+                    </div>
                   </div>
-                  <p style={{
-                    margin: 0,
-                    fontSize: '14px',
-                    fontFamily: '"Noto Sans JP", sans-serif',
-                    fontStyle: 'normal',
-                    fontWeight: 400,
-                    color: '#666666'
-                  }}>
-                    {formatLocation(event.venue_city, event.venue_town)}
-                  </p>
                 </div>
               </div>
-            </div>
-          ))
+            ))}
+          </div>
         )}
-      </div>
-      </div>
-      </div>
       </div>
     </div>
   )
 }
-

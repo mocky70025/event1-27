@@ -1424,25 +1424,23 @@ export default function EventList({ userProfile, onBack }: EventListProps) {
   return (
     <>
       <div style={{ 
-        position: 'relative',
+        minHeight: '100vh',
         width: '100%',
-        maxWidth: isDesktop ? '800px' : '393px',
-        minHeight: '852px',
-        margin: '0 auto',
-        background: '#FFF5F0',
+        background: '#F0FDF4',
         paddingBottom: '100px'
       }}>
         {/* ヘッダー */}
         <div style={{
-          background: '#5DABA8',
-          padding: '0 16px',
-          height: '64px',
+          background: '#22C55E',
+          padding: isDesktop ? '0 48px' : '0 16px',
+          height: isDesktop ? '80px' : '64px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           position: 'sticky',
           top: 0,
-          zIndex: 100
+          zIndex: 100,
+          boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
         }}>
           <button
             onClick={onBack}
@@ -1450,19 +1448,23 @@ export default function EventList({ userProfile, onBack }: EventListProps) {
               background: 'transparent',
               border: 'none',
               color: '#FFFFFF',
-              fontSize: '20px',
+              fontSize: isDesktop ? '24px' : '20px',
               cursor: 'pointer',
-              padding: '4px',
+              padding: '8px',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center'
+              justifyContent: 'center',
+              borderRadius: '8px',
+              transition: 'background 0.2s'
             }}
+            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
+            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
           >
             ←
           </button>
           <div style={{
             fontFamily: '"Noto Sans JP", sans-serif',
-            fontSize: '20px',
+            fontSize: isDesktop ? '28px' : '20px',
             fontWeight: 700,
             color: '#FFFFFF',
             letterSpacing: '0.02em'
@@ -1472,11 +1474,11 @@ export default function EventList({ userProfile, onBack }: EventListProps) {
           <div style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '16px'
+            gap: isDesktop ? '24px' : '16px'
           }}>
             <div style={{
               fontFamily: '"Noto Sans JP", sans-serif',
-              fontSize: '16px',
+              fontSize: isDesktop ? '18px' : '16px',
               fontWeight: 700,
               color: '#FFFFFF'
             }}>
@@ -1484,7 +1486,7 @@ export default function EventList({ userProfile, onBack }: EventListProps) {
             </div>
             <div style={{
               fontFamily: '"Noto Sans JP", sans-serif',
-              fontSize: '16px',
+              fontSize: isDesktop ? '18px' : '16px',
               fontWeight: 700,
               color: '#FFFFFF'
             }}>
@@ -1493,23 +1495,30 @@ export default function EventList({ userProfile, onBack }: EventListProps) {
           </div>
         </div>
 
-        <div className="container mx-auto" style={{ padding: '16px', maxWidth: isDesktop ? '800px' : '393px' }}>
+        <div style={{ 
+          maxWidth: isDesktop ? '1400px' : '100%',
+          margin: '0 auto',
+          padding: isDesktop ? '32px 48px' : '16px'
+        }}>
           {/* 検索バー */}
           <div style={{
             display: 'flex',
-            flexDirection: 'column',
+            flexDirection: isDesktop ? 'row' : 'column',
             gap: '12px',
-            marginBottom: '16px'
+            marginBottom: isDesktop ? '32px' : '16px'
           }}>
             {/* キーワード検索 */}
             <div style={{
+              flex: isDesktop ? 2 : 1,
               background: '#FFFFFF',
-              borderRadius: '16px',
-              border: '2px solid #E9ECEF',
-              padding: '12px 16px',
+              borderRadius: '12px',
+              border: '2px solid #E5E5E5',
+              padding: '14px 18px',
               display: 'flex',
               alignItems: 'center',
-              gap: '12px'
+              gap: '12px',
+              transition: 'all 0.2s',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
             }}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                 <circle cx="11" cy="11" r="8" stroke="#6C757D" strokeWidth="2"/>
@@ -1535,21 +1544,24 @@ export default function EventList({ userProfile, onBack }: EventListProps) {
                   background: 'transparent'
                 }}
               />
-        </div>
+            </div>
 
             {/* ジャンル検索 */}
             <div style={{
+              flex: isDesktop ? 1 : 1,
               background: '#FFFFFF',
-              borderRadius: '16px',
-              border: '2px solid #E9ECEF',
-              padding: '12px 16px',
+              borderRadius: '12px',
+              border: '2px solid #E5E5E5',
+              padding: '14px 18px',
               display: 'flex',
               alignItems: 'center',
-              gap: '12px'
+              gap: '12px',
+              transition: 'all 0.2s',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
             }}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <circle cx="11" cy="11" r="8" stroke="#6C757D" strokeWidth="2"/>
-                <path d="M21 21L16.65 16.65" stroke="#6C757D" strokeWidth="2" strokeLinecap="round"/>
+                <rect x="3" y="3" width="18" height="18" rx="2" stroke="#6C757D" strokeWidth="2"/>
+                <path d="M12 8v8M8 12h8" stroke="#6C757D" strokeWidth="2" strokeLinecap="round"/>
               </svg>
               <select
                 value={formGenre}
@@ -1558,11 +1570,12 @@ export default function EventList({ userProfile, onBack }: EventListProps) {
                   flex: 1,
                   border: 'none',
                   outline: 'none',
-            fontFamily: '"Noto Sans JP", sans-serif',
+                  fontFamily: '"Noto Sans JP", sans-serif',
                   fontSize: '16px',
                   color: formGenre ? '#000000' : '#6C757D',
                   background: 'transparent',
-                  appearance: 'none'
+                  appearance: 'none',
+                  cursor: 'pointer'
                 }}
               >
                 <option value="">ジャンル</option>
@@ -1575,169 +1588,189 @@ export default function EventList({ userProfile, onBack }: EventListProps) {
               </svg>
             </div>
 
-            {/* 詳細検索ボタンと並び替えボタン */}
-            <div style={{
-              display: 'flex',
-              gap: '12px'
-            }}>
-              <button
-                onClick={handleOpenSearchPage}
-                style={{
-                  flex: 1,
-                  background: '#FFFFFF',
-                  border: '2px solid #E9ECEF',
-                  borderRadius: '16px',
-                  padding: '12px 16px',
-                  fontFamily: '"Noto Sans JP", sans-serif',
-                  fontSize: '16px',
-            fontWeight: 700,
-            color: '#000000',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '8px'
-                }}
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                  <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2"/>
-                  <path d="M21 21L16.65 16.65" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                </svg>
-                詳細検索
-              </button>
-              <button
-                style={{
-                  width: '48px',
-                  height: '48px',
-                  background: '#FFFFFF',
-                  border: '2px solid #E9ECEF',
-                  borderRadius: '16px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  cursor: 'pointer'
-                }}
-              >
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                  <path d="M3 6H21M3 12H21M3 18H21" stroke="#6C757D" strokeWidth="2" strokeLinecap="round"/>
-                </svg>
-              </button>
-            </div>
-        </div>
+            {/* 詳細検索ボタン */}
+            <button
+              onClick={handleOpenSearchPage}
+              style={{
+                flex: isDesktop ? 0.8 : 1,
+                background: '#22C55E',
+                border: 'none',
+                borderRadius: '12px',
+                padding: '14px 24px',
+                fontFamily: '"Noto Sans JP", sans-serif',
+                fontSize: '16px',
+                fontWeight: 700,
+                color: '#FFFFFF',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                transition: 'all 0.2s',
+                boxShadow: '0 2px 8px rgba(34, 197, 94, 0.2)'
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.background = '#16A34A'}
+              onMouseLeave={(e) => e.currentTarget.style.background = '#22C55E'}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2"/>
+                <path d="M21 21L16.65 16.65" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+              詳細検索
+            </button>
+          </div>
 
-        {events.length === 0 ? (
-          <div style={{
-            background: '#FFFFFF',
-            borderRadius: '16px',
-            border: '2px solid #E9ECEF',
-            padding: '48px 24px',
-            textAlign: 'center'
-          }}>
-            <p style={{
-              fontFamily: '"Noto Sans JP", sans-serif',
-              fontSize: '16px',
-              lineHeight: '150%',
-              color: '#666666'
+          {events.length === 0 ? (
+            <div style={{
+              background: '#FFFFFF',
+              borderRadius: '16px',
+              border: '2px solid #E5E5E5',
+              padding: '64px 24px',
+              textAlign: 'center',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
             }}>
-              {hasSearched ? '該当するイベントが見つかりませんでした' : '開催予定のイベントがありません'}
-            </p>
-          </div>
-        ) : (
-          <>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '16px' }}>
-            {events.map((event) => (
-              <div
-                key={event.id}
-                onClick={() => handleEventClick(event)}
-                style={{
-                  background: '#FFFFFF',
-                    borderRadius: '16px',
-                    border: '2px solid #E9ECEF',
-                  overflow: 'hidden',
-                  cursor: 'pointer'
-                }}
-              >
-                {event.main_image_url && (
-                  <img
-                    src={event.main_image_url}
-                    alt={event.event_name}
+              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" style={{ margin: '0 auto 16px' }}>
+                <circle cx="11" cy="11" r="8" stroke="#E5E5E5" strokeWidth="2"/>
+                <path d="M21 21L16.65 16.65" stroke="#E5E5E5" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+              <p style={{
+                fontFamily: '"Noto Sans JP", sans-serif',
+                fontSize: '18px',
+                lineHeight: '150%',
+                color: '#666666',
+                fontWeight: 500
+              }}>
+                {hasSearched ? '該当するイベントが見つかりませんでした' : '開催予定のイベントがありません'}
+              </p>
+            </div>
+          ) : (
+            <>
+              <div style={{ 
+                display: 'grid',
+                gridTemplateColumns: isDesktop ? 'repeat(auto-fill, minmax(360px, 1fr))' : '1fr',
+                gap: isDesktop ? '24px' : '16px',
+                marginBottom: '24px'
+              }}>
+                {events.map((event) => (
+                  <div
+                    key={event.id}
+                    onClick={() => handleEventClick(event)}
                     style={{
-                      width: '100%',
-                      height: '200px',
-                        objectFit: 'cover',
-                        background: '#F5F5F5'
+                      background: '#FFFFFF',
+                      borderRadius: '16px',
+                      border: '2px solid #E5E5E5',
+                      overflow: 'hidden',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s',
+                      boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
                     }}
-                  />
-                )}
-                <div style={{ padding: '16px' }}>
-                  <h3 style={{
-                    fontFamily: '"Noto Sans JP", sans-serif',
-                    fontSize: '18px',
-                    fontWeight: 700,
-                    lineHeight: '120%',
-                      color: '#2C3E50',
-                    marginBottom: '8px'
-                  }}>{event.event_name}</h3>
-                  <p style={{
-                    fontFamily: '"Noto Sans JP", sans-serif',
-                    fontSize: '14px',
-                    lineHeight: '120%',
-                      color: '#6C757D',
-                    marginBottom: '8px'
-                  }}>{event.genre}</p>
-                  <p style={{
-                    fontFamily: '"Noto Sans JP", sans-serif',
-                    fontSize: '14px',
-                    lineHeight: '120%',
-                      color: '#6C757D',
-                    marginBottom: '4px'
-                  }}>
-                    {formatDate(event.event_start_date)} 〜 {formatDate(event.event_end_date)}
-                  </p>
-                  <p style={{
-                    fontFamily: '"Noto Sans JP", sans-serif',
-                    fontSize: '14px',
-                    lineHeight: '120%',
-                      color: '#6C757D',
-                    marginBottom: '8px'
-                  }}>{event.venue_name}</p>
-                  <p style={{
-                    fontFamily: '"Noto Sans JP", sans-serif',
-                    fontSize: '14px',
-                    lineHeight: '120%',
-                      color: '#2C3E50',
-                    marginTop: '8px',
-                    display: '-webkit-box',
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: 'vertical',
-                    overflow: 'hidden'
-                  }}>{event.lead_text}</p>
-                </div>
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'translateY(-4px)'
+                      e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.12)'
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'translateY(0)'
+                      e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.05)'
+                    }}
+                  >
+                    {event.main_image_url ? (
+                      <img
+                        src={event.main_image_url}
+                        alt={event.event_name}
+                        style={{
+                          width: '100%',
+                          height: isDesktop ? '220px' : '200px',
+                          objectFit: 'cover',
+                          background: '#F5F5F5'
+                        }}
+                      />
+                    ) : (
+                      <div style={{
+                        width: '100%',
+                        height: isDesktop ? '220px' : '200px',
+                        background: 'linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '48px'
+                      }}>
+                        🎪
+                      </div>
+                    )}
+                    <div style={{ padding: isDesktop ? '20px' : '16px' }}>
+                      <div style={{
+                        display: 'inline-block',
+                        background: '#22C55E',
+                        color: '#FFFFFF',
+                        fontSize: '12px',
+                        fontWeight: 700,
+                        padding: '4px 12px',
+                        borderRadius: '6px',
+                        marginBottom: '12px'
+                      }}>
+                        {event.genre || '祭り・イベント'}
+                      </div>
+                      <h3 style={{
+                        fontFamily: '"Noto Sans JP", sans-serif',
+                        fontSize: isDesktop ? '20px' : '18px',
+                        fontWeight: 700,
+                        lineHeight: '130%',
+                        color: '#2C3E50',
+                        marginBottom: '12px'
+                      }}>{event.event_name}</h3>
+                      <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '6px',
+                        marginBottom: '12px'
+                      }}>
+                        <p style={{
+                          fontFamily: '"Noto Sans JP", sans-serif',
+                          fontSize: '14px',
+                          lineHeight: '140%',
+                          color: '#6C757D',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '6px'
+                        }}>
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                            <rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.5"/>
+                            <path d="M3 10H21" stroke="currentColor" strokeWidth="1.5"/>
+                          </svg>
+                          {formatDate(event.event_start_date)} 〜 {formatDate(event.event_end_date)}
+                        </p>
+                        <p style={{
+                          fontFamily: '"Noto Sans JP", sans-serif',
+                          fontSize: '14px',
+                          lineHeight: '140%',
+                          color: '#6C757D',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '6px'
+                        }}>
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" stroke="currentColor" strokeWidth="1.5"/>
+                            <circle cx="12" cy="9" r="2.5" stroke="currentColor" strokeWidth="1.5"/>
+                          </svg>
+                          {event.venue_name}
+                        </p>
+                      </div>
+                      <p style={{
+                        fontFamily: '"Noto Sans JP", sans-serif',
+                        fontSize: '14px',
+                        lineHeight: '150%',
+                        color: '#2C3E50',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden'
+                      }}>{event.lead_text}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-            
-            {/* 次へボタン */}
-            {events.length > 0 && (
-              <button
-                style={{
-                  width: '100%',
-                  background: '#FFFFFF',
-                  border: '2px solid #E9ECEF',
-                  borderRadius: '16px',
-                  padding: '16px',
-                  fontFamily: '"Noto Sans JP", sans-serif',
-                  fontSize: '16px',
-                  fontWeight: 700,
-                  color: '#2C3E50',
-                  cursor: 'pointer'
-                }}
-              >
-                次へ
-              </button>
-            )}
-          </>
-        )}
+            </>
+          )}
         </div>
       </div>
     </>
