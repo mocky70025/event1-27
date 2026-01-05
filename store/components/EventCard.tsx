@@ -2,26 +2,30 @@
 
 import { useState } from 'react'
 import { supabase, type Event } from '@/lib/supabase'
-import Image from 'next/image'
+import { colors, typography, spacing, borderRadius, shadows, transitions } from '../styles/design-system'
+import Button from './ui/Button'
+import Card from './ui/Card'
+import Badge from './ui/Badge'
 
 interface EventCardProps {
   event: Event
   userProfile: any
+  onClick?: () => void
 }
 
-export default function EventCard({ event, userProfile }: EventCardProps) {
+export default function EventCard({ event, userProfile, onClick }: EventCardProps) {
   const [showDetails, setShowDetails] = useState(false)
   const [applying, setApplying] = useState(false)
 
-  const handleApply = async () => {
-    // 確認ダイアログを表示
+  const handleApply = async (e: React.MouseEvent) => {
+    e.stopPropagation()
+    
     if (!confirm(`「${event.event_name}」に申し込みますか？\n\n申し込み後、主催者による承認が必要です。`)) {
       return
     }
 
     setApplying(true)
     try {
-      // 出店者情報を取得（認証タイプに応じて）
       const authType = userProfile.authType || 'line'
       let exhibitor
 
@@ -45,7 +49,6 @@ export default function EventCard({ event, userProfile }: EventCardProps) {
         throw new Error('出店者情報が見つかりません')
       }
 
-      // 申し込みを登録
       const { data: applicationData, error } = await supabase
         .from('event_applications')
         .insert({
@@ -58,7 +61,6 @@ export default function EventCard({ event, userProfile }: EventCardProps) {
 
       if (error) throw error
 
-      // イベント情報と主催者情報を取得
       const { data: eventData } = await supabase
         .from('events')
         .select('event_name, organizer_id')
@@ -66,26 +68,18 @@ export default function EventCard({ event, userProfile }: EventCardProps) {
         .single()
 
       if (eventData && eventData.organizer_id) {
-        console.log('[EventCard] Organizer ID:', eventData.organizer_id)
-        // 主催者情報を取得
-        const { data: organizerData, error: organizerError } = await supabase
+        const { data: organizerData } = await supabase
           .from('organizers')
           .select('email, user_id, line_user_id')
           .eq('id', eventData.organizer_id)
           .single()
 
-        console.log('[EventCard] Organizer data:', organizerData)
-        console.log('[EventCard] Organizer error:', organizerError)
-
         if (organizerData) {
           const organizerUserId = organizerData.user_id || organizerData.line_user_id
-          console.log('[EventCard] Organizer user ID:', organizerUserId)
 
-          // 主催者に通知を作成
           if (organizerUserId) {
             try {
-              console.log('[EventCard] Creating notification...')
-              const notificationResponse = await fetch('/api/notifications/create', {
+              await fetch('/api/notifications/create', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -99,39 +93,27 @@ export default function EventCard({ event, userProfile }: EventCardProps) {
                 })
               })
 
-              const notificationResult = await notificationResponse.json()
-              console.log('[EventCard] Notification response:', notificationResponse.status, notificationResult)
-
-              if (!notificationResponse.ok) {
-                console.error('[EventCard] Notification creation failed:', notificationResult)
-              }
-
-              // 主催者にメール通知を送信
               if (organizerData.email) {
-                const emailSubject = `【${eventData.event_name}】新しい出店申し込みがありました`
-                const emailHtml = `
-                  <div style="font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif; line-height: 1.6; color: #333;">
-                    <h2 style="color: #06C755; margin-bottom: 16px;">新しい出店申し込み</h2>
-                    <p>${eventData.event_name}に新しい出店申し込みがありました。</p>
-                    <p style="margin-top: 24px; margin-bottom: 8px;">アプリ内で申し込み内容を確認し、承認または却下を行ってください。</p>
-                    <hr style="border: none; border-top: 1px solid #E5E5E5; margin: 24px 0;">
-                    <p style="font-size: 12px; color: #666666;">このメールは自動送信されています。</p>
-                  </div>
-                `
-
                 await fetch('/api/notifications/send-email', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({
                     to: organizerData.email,
-                    subject: emailSubject,
-                    html: emailHtml
+                    subject: `【${eventData.event_name}】新しい出店申し込みがありました`,
+                    html: `
+                      <div style="font-family: ${typography.fontFamily.japanese}; line-height: 1.6; color: ${colors.neutral.gray900};">
+                        <h2 style="color: ${colors.primary.main}; margin-bottom: ${spacing.lg};">新しい出店申し込み</h2>
+                        <p>${eventData.event_name}に新しい出店申し込みがありました。</p>
+                        <p style="margin-top: ${spacing.xl};">アプリ内で申し込み内容を確認し、承認または却下を行ってください。</p>
+                        <hr style="border: none; border-top: 1px solid ${colors.neutral.gray200}; margin: ${spacing.xl} 0;">
+                        <p style="font-size: ${typography.fontSize.caption}; color: ${colors.neutral.gray500};">このメールは自動送信されています。</p>
+                      </div>
+                    `
                   })
                 })
               }
             } catch (notificationError) {
-              console.error('Failed to create notification or send email:', notificationError)
-              // 通知の失敗は申し込みの成功を妨げない
+              console.error('通知の送信に失敗しました:', notificationError)
             }
           }
         }
@@ -139,67 +121,166 @@ export default function EventCard({ event, userProfile }: EventCardProps) {
 
       alert('申し込みが完了しました！')
     } catch (error) {
-      console.error('Application failed:', error)
+      console.error('申し込みに失敗しました:', error)
       alert('申し込みに失敗しました。もう一度お試しください。')
     } finally {
       setApplying(false)
     }
   }
 
+  const formatDateRange = (startDate: string, endDate: string) => {
+    const start = new Date(startDate)
+    const end = new Date(endDate)
+    return `${start.getFullYear()}/${start.getMonth() + 1}/${start.getDate()} - ${end.getMonth() + 1}/${end.getDate()}`
+  }
+
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden">
+    <Card 
+      onClick={onClick}
+      style={{ 
+        cursor: onClick ? 'pointer' : 'default',
+        transition: `all ${transitions.normal}`,
+        border: `1px solid ${colors.neutral.gray200}`,
+      }}
+    >
       {event.main_image_url && (
-        <div className="relative h-48 w-full">
-          <Image
+        <div style={{
+          width: '100%',
+          height: '180px',
+          borderRadius: borderRadius.medium,
+          overflow: 'hidden',
+          marginBottom: spacing.lg,
+          background: colors.neutral.gray100
+        }}>
+          <img
             src={event.main_image_url}
             alt={event.event_name}
-            fill
-            className="object-cover"
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover'
+            }}
           />
         </div>
       )}
       
-      <div className="p-4">
-        <h3 className="text-lg font-semibold text-gray-800 mb-2">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.md }}>
+        {/* ジャンルバッジ */}
+        <Badge variant="info">
+          {event.genre || 'イベント'}
+        </Badge>
+
+        {/* イベント名 */}
+        <h3 style={{
+          fontFamily: typography.fontFamily.japanese,
+          fontSize: typography.fontSize.heading3,
+          fontWeight: typography.fontWeight.bold,
+          color: colors.neutral.gray900,
+          lineHeight: typography.lineHeight.heading3,
+          margin: 0
+        }}>
           {event.event_name}
         </h3>
         
-        <div className="text-sm text-gray-600 mb-3">
-          <p>開催期間: {event.event_display_period}</p>
-          {event.event_time && <p>時間: {event.event_time}</p>}
-          <p>会場: {event.venue_name}</p>
+        {/* 開催情報 */}
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: spacing.sm,
+          fontFamily: typography.fontFamily.japanese,
+          fontSize: typography.fontSize.bodySmall,
+          color: colors.neutral.gray700
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
+            <span style={{ color: colors.neutral.gray500 }}>📅</span>
+            <span>{formatDateRange(event.event_start_date, event.event_end_date)}</span>
+          </div>
+          {event.event_time && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
+              <span style={{ color: colors.neutral.gray500 }}>🕒</span>
+              <span>{event.event_time}</span>
+            </div>
+          )}
+          <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
+            <span style={{ color: colors.neutral.gray500 }}>📍</span>
+            <span>{event.venue_name}</span>
+          </div>
         </div>
 
-        <p className="text-gray-700 text-sm mb-4">
+        {/* リード文 */}
+        <p style={{
+          fontFamily: typography.fontFamily.japanese,
+          fontSize: typography.fontSize.bodySmall,
+          lineHeight: typography.lineHeight.bodySmall,
+          color: colors.neutral.gray700,
+          margin: 0,
+          display: '-webkit-box',
+          WebkitLineClamp: 2,
+          WebkitBoxOrient: 'vertical',
+          overflow: 'hidden'
+        }}>
           {event.lead_text}
         </p>
 
-        <div className="flex space-x-2">
-          <button
-            onClick={() => setShowDetails(!showDetails)}
-            className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 px-4 rounded-md transition-colors"
+        {/* ボタン */}
+        <div style={{ 
+          display: 'flex', 
+          gap: spacing.sm,
+          marginTop: spacing.sm
+        }}>
+          <Button
+            variant="secondary"
+            size="small"
+            onClick={(e) => {
+              e.stopPropagation()
+              setShowDetails(!showDetails)
+            }}
+            style={{ flex: 1 }}
           >
             {showDetails ? '詳細を閉じる' : '詳細を見る'}
-          </button>
+          </Button>
           
-          <button
+          <Button
+            variant="primary"
+            size="small"
             onClick={handleApply}
             disabled={applying}
-            className="flex-1 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 text-white py-2 px-4 rounded-md transition-colors"
+            loading={applying}
+            style={{ flex: 1 }}
           >
-            {applying ? '申し込み中...' : 'このイベントに申し込む'}
-          </button>
+            申し込む
+          </Button>
         </div>
 
+        {/* 詳細表示 */}
         {showDetails && (
-          <div className="mt-4 pt-4 border-t border-gray-200">
-            <h4 className="font-semibold text-gray-800 mb-2">イベント詳細</h4>
-            <p className="text-gray-700 text-sm">
+          <div style={{
+            marginTop: spacing.md,
+            paddingTop: spacing.md,
+            borderTop: `1px solid ${colors.neutral.gray200}`
+          }}>
+            <h4 style={{
+              fontFamily: typography.fontFamily.japanese,
+              fontSize: typography.fontSize.body,
+              fontWeight: typography.fontWeight.semiBold,
+              color: colors.neutral.gray900,
+              marginBottom: spacing.sm
+            }}>
+              イベント詳細
+            </h4>
+            <p style={{
+              fontFamily: typography.fontFamily.japanese,
+              fontSize: typography.fontSize.bodySmall,
+              lineHeight: typography.lineHeight.bodySmall,
+              color: colors.neutral.gray700,
+              margin: 0,
+              whiteSpace: 'pre-line'
+            }}>
               {event.event_description}
             </p>
           </div>
         )}
       </div>
-    </div>
+    </Card>
   )
 }
