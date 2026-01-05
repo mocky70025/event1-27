@@ -7,13 +7,56 @@ interface AdminLoginProps {
   onLoginSuccess: () => void
 }
 
+// 管理者用カラーパレット
+const colors = {
+  primary: '#6366F1',
+  primaryHover: '#4F46E5',
+  primaryLight: '#EEF2FF',
+  neutral: {
+    0: '#FFFFFF',
+    100: '#F5F5F5',
+    200: '#E5E5E5',
+    300: '#D4D4D4',
+    500: '#737373',
+    700: '#404040',
+    900: '#171717',
+  },
+  error: {
+    light: '#FEE2E2',
+    main: '#EF4444',
+    dark: '#DC2626',
+  },
+}
+
+const spacing = {
+  2: '0.5rem',
+  3: '0.75rem',
+  4: '1rem',
+  6: '1.5rem',
+  8: '2rem',
+}
+
+const borderRadius = {
+  base: '0.5rem',
+  md: '0.75rem',
+  lg: '1rem',
+  xl: '1.5rem',
+  full: '9999px',
+}
+
+const shadows = {
+  sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+  md: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)',
+  lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1)',
+  xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
+}
+
 export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
-  // 環境変数から管理者のメールアドレスを取得
   const adminEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL || ''
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -22,7 +65,6 @@ export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
     setError('')
 
     try {
-      // メールアドレスが管理者のメールアドレスと一致するか確認
       if (adminEmail && email !== adminEmail) {
         setError('管理者権限がありません')
         setLoading(false)
@@ -37,7 +79,6 @@ export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
       if (signInError) throw signInError
 
       if (data.user) {
-        // 管理者として認証成功
         sessionStorage.setItem('admin_authenticated', 'true')
         sessionStorage.setItem('admin_email', email)
         onLoginSuccess()
@@ -51,63 +92,262 @@ export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="bg-white rounded-lg shadow-md p-8 w-full max-w-md">
-        <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">運営管理ログイン</h1>
-        
-        {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-            {error}
+    <div style={{
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      background: `linear-gradient(135deg, ${colors.primaryLight} 0%, ${colors.neutral[100]} 100%)`,
+      padding: spacing[6],
+    }}>
+      <div style={{
+        width: '100%',
+        maxWidth: '440px',
+        animation: 'fadeIn 0.5s ease-out',
+      }}>
+        {/* ロゴとタイトル */}
+        <div style={{
+          textAlign: 'center',
+          marginBottom: spacing[8],
+        }}>
+          <div style={{
+            width: '80px',
+            height: '80px',
+            background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.primaryHover} 100%)`,
+            borderRadius: borderRadius.xl,
+            boxShadow: `0 4px 12px rgba(99, 102, 241, 0.3)`,
+            margin: '0 auto',
+            marginBottom: spacing[4],
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '36px',
+          }}>
+            🔐
           </div>
-        )}
-
-        <form onSubmit={handleLogin} className="space-y-4">
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-              メールアドレス
-            </label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="admin@example.com"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-              パスワード
-            </label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="パスワード"
-            />
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {loading ? 'ログイン中...' : 'ログイン'}
-          </button>
-        </form>
-
-        {adminEmail && (
-          <p className="mt-4 text-sm text-gray-500 text-center">
-            管理者メールアドレス: {adminEmail}
+          <h1 style={{
+            fontFamily: '"Poppins", "Inter", sans-serif',
+            fontSize: '2rem',
+            fontWeight: 700,
+            color: colors.neutral[900],
+            marginBottom: spacing[2],
+            letterSpacing: '-0.025em',
+          }}>
+            デミセル
+          </h1>
+          <p style={{
+            fontFamily: '"Noto Sans JP", sans-serif',
+            fontSize: '1rem',
+            color: colors.neutral[500],
+            fontWeight: 500,
+          }}>
+            運営管理システム
           </p>
-        )}
+        </div>
+
+        {/* ログインカード */}
+        <div style={{
+          background: colors.neutral[0],
+          borderRadius: borderRadius.xl,
+          boxShadow: shadows.xl,
+          padding: spacing[8],
+        }}>
+          <h2 style={{
+            fontFamily: '"Noto Sans JP", sans-serif',
+            fontSize: '1.25rem',
+            fontWeight: 700,
+            color: colors.neutral[900],
+            marginBottom: spacing[6],
+            textAlign: 'center',
+          }}>
+            管理者ログイン
+          </h2>
+
+          {error && (
+            <div style={{
+              padding: spacing[4],
+              background: colors.error.light,
+              border: `1px solid ${colors.error.main}`,
+              borderRadius: borderRadius.md,
+              marginBottom: spacing[6],
+            }}>
+              <p style={{
+                margin: 0,
+                fontSize: '0.875rem',
+                color: colors.error.dark,
+                fontWeight: 500,
+              }}>
+                {error}
+              </p>
+            </div>
+          )}
+
+          <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: spacing[6] }}>
+            <div>
+              <label style={{
+                display: 'block',
+                marginBottom: spacing[2],
+                fontFamily: '"Noto Sans JP", sans-serif',
+                fontSize: '0.875rem',
+                fontWeight: 600,
+                color: colors.neutral[700],
+              }}>
+                メールアドレス
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                placeholder="admin@example.com"
+                style={{
+                  width: '100%',
+                  height: '44px',
+                  padding: `0 ${spacing[4]}`,
+                  fontFamily: '"Inter", sans-serif',
+                  fontSize: '1rem',
+                  color: colors.neutral[900],
+                  background: colors.neutral[0],
+                  border: `1px solid ${colors.neutral[300]}`,
+                  borderRadius: borderRadius.md,
+                  outline: 'none',
+                  transition: 'all 0.15s',
+                  boxSizing: 'border-box',
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = colors.primary
+                  e.target.style.boxShadow = `0 0 0 3px ${colors.primaryLight}`
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = colors.neutral[300]
+                  e.target.style.boxShadow = 'none'
+                }}
+              />
+            </div>
+
+            <div>
+              <label style={{
+                display: 'block',
+                marginBottom: spacing[2],
+                fontFamily: '"Noto Sans JP", sans-serif',
+                fontSize: '0.875rem',
+                fontWeight: 600,
+                color: colors.neutral[700],
+              }}>
+                パスワード
+              </label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                placeholder="••••••••"
+                style={{
+                  width: '100%',
+                  height: '44px',
+                  padding: `0 ${spacing[4]}`,
+                  fontFamily: '"Inter", sans-serif',
+                  fontSize: '1rem',
+                  color: colors.neutral[900],
+                  background: colors.neutral[0],
+                  border: `1px solid ${colors.neutral[300]}`,
+                  borderRadius: borderRadius.md,
+                  outline: 'none',
+                  transition: 'all 0.15s',
+                  boxSizing: 'border-box',
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = colors.primary
+                  e.target.style.boxShadow = `0 0 0 3px ${colors.primaryLight}`
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = colors.neutral[300]
+                  e.target.style.boxShadow = 'none'
+                }}
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              style={{
+                width: '100%',
+                height: '52px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: spacing[2],
+                background: colors.primary,
+                color: colors.neutral[0],
+                border: 'none',
+                borderRadius: borderRadius.md,
+                fontFamily: '"Noto Sans JP", sans-serif',
+                fontSize: '1rem',
+                fontWeight: 600,
+                cursor: loading ? 'not-allowed' : 'pointer',
+                transition: 'all 0.2s',
+                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                opacity: loading ? 0.6 : 1,
+              }}
+              onMouseEnter={(e) => {
+                if (!loading) {
+                  e.currentTarget.style.background = colors.primaryHover
+                  e.currentTarget.style.transform = 'translateY(-1px)'
+                  e.currentTarget.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.15)'
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!loading) {
+                  e.currentTarget.style.background = colors.primary
+                  e.currentTarget.style.transform = 'translateY(0)'
+                  e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)'
+                }
+              }}
+            >
+              {loading ? (
+                <>
+                  <div style={{
+                    width: '16px',
+                    height: '16px',
+                    border: `2px solid ${colors.neutral[0]}`,
+                    borderTopColor: 'transparent',
+                    borderRadius: '50%',
+                    animation: 'spin 0.6s linear infinite',
+                  }} />
+                  <span>ログイン中...</span>
+                </>
+              ) : (
+                <span>ログイン</span>
+              )}
+            </button>
+          </form>
+
+          {adminEmail && (
+            <p style={{
+              marginTop: spacing[6],
+              fontSize: '0.75rem',
+              color: colors.neutral[500],
+              textAlign: 'center',
+            }}>
+              管理者メールアドレス: {adminEmail}
+            </p>
+          )}
+        </div>
+
+        {/* フッター */}
+        <div style={{
+          marginTop: spacing[6],
+          textAlign: 'center',
+        }}>
+          <p style={{
+            fontSize: '0.875rem',
+            color: colors.neutral[500],
+            margin: 0,
+          }}>
+            © 2024 デミセル. All rights reserved.
+          </p>
+        </div>
       </div>
     </div>
   )
 }
-

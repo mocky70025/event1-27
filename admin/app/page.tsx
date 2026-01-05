@@ -2,48 +2,89 @@
 
 import { useState, useEffect } from 'react'
 import { supabase, type Organizer, type Event } from '@/lib/supabase'
+import AdminLogin from '@/components/AdminLogin'
+
+// 管理者用カラーパレット
+const colors = {
+  primary: '#6366F1',
+  primaryHover: '#4F46E5',
+  primaryLight: '#EEF2FF',
+  success: '#10B981',
+  successLight: '#D1FAE5',
+  warning: '#F59E0B',
+  warningLight: '#FEF3C7',
+  error: '#EF4444',
+  errorLight: '#FEE2E2',
+  neutral: {
+    0: '#FFFFFF',
+    50: '#FAFAFA',
+    100: '#F5F5F5',
+    200: '#E5E5E5',
+    300: '#D4D4D4',
+    400: '#A3A3A3',
+    500: '#737373',
+    600: '#525252',
+    700: '#404040',
+    800: '#262626',
+    900: '#171717',
+  },
+}
+
+const spacing = {
+  2: '0.5rem',
+  3: '0.75rem',
+  4: '1rem',
+  5: '1.25rem',
+  6: '1.5rem',
+  8: '2rem',
+}
+
+const borderRadius = {
+  base: '0.5rem',
+  md: '0.75rem',
+  lg: '1rem',
+  xl: '1.5rem',
+}
+
+const shadows = {
+  sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+  md: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+  lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+}
 
 export default function AdminDashboard() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [currentView, setCurrentView] = useState<'organizers' | 'events'>('organizers')
   const [organizers, setOrganizers] = useState<Organizer[]>([])
   const [events, setEvents] = useState<Event[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetchData()
+    const authenticated = sessionStorage.getItem('admin_authenticated') === 'true'
+    setIsAuthenticated(authenticated)
+    if (authenticated) {
+      fetchData()
+    } else {
+      setLoading(false)
+    }
   }, [])
-
 
   const fetchData = async () => {
     try {
-      console.log('[Admin] Fetching data...')
-      // 主催者一覧を取得
-      const { data: organizersData, error: organizersError } = await supabase
+      const { data: organizersData } = await supabase
         .from('organizers')
         .select('*')
         .order('created_at', { ascending: false })
 
-      if (organizersError) {
-        console.error('[Admin] Failed to fetch organizers:', organizersError)
-      }
-
-      // イベント一覧を取得
-      const { data: eventsData, error: eventsError } = await supabase
+      const { data: eventsData } = await supabase
         .from('events')
         .select('*')
         .order('created_at', { ascending: false })
 
-      if (eventsError) {
-        console.error('[Admin] Failed to fetch events:', eventsError)
-      }
-
-      console.log('[Admin] Fetched events:', eventsData)
-      console.log('[Admin] Sample event approval_status:', eventsData?.[0]?.approval_status)
-
       setOrganizers(organizersData || [])
       setEvents(eventsData || [])
     } catch (error) {
-      console.error('[Admin] Failed to fetch data:', error)
+      console.error('Failed to fetch data:', error)
     } finally {
       setLoading(false)
     }
@@ -57,8 +98,6 @@ export default function AdminDashboard() {
         .eq('id', organizerId)
 
       if (error) throw error
-
-      // データを再取得
       await fetchData()
       alert(approved ? '主催者を承認しました' : '主催者の承認を取り消しました')
     } catch (error) {
@@ -67,6 +106,21 @@ export default function AdminDashboard() {
     }
   }
 
+  const handleEventApproval = async (eventId: string, status: 'approved' | 'rejected') => {
+    try {
+      const { error } = await supabase
+        .from('events')
+        .update({ approval_status: status })
+        .eq('id', eventId)
+
+      if (error) throw error
+      await fetchData()
+      alert(status === 'approved' ? 'イベントを承認しました' : 'イベントを却下しました')
+    } catch (error) {
+      console.error('Failed to update event:', error)
+      alert('更新に失敗しました')
+    }
+  }
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
@@ -75,100 +129,277 @@ export default function AdminDashboard() {
       month: 'long',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     })
+  }
+
+  if (!isAuthenticated) {
+    return <AdminLogin onLoginSuccess={() => {
+      setIsAuthenticated(true)
+      fetchData()
+    }} />
   }
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-2 border-[#06C755] border-t-transparent mx-auto mb-4"></div>
-          <p className="text-gray-600">データを読み込み中...</p>
+      <div style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: colors.neutral[50],
+      }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{
+            width: '48px',
+            height: '48px',
+            border: `3px solid ${colors.neutral[200]}`,
+            borderTopColor: colors.primary,
+            borderRadius: '50%',
+            animation: 'spin 0.8s linear infinite',
+            margin: '0 auto 16px',
+          }} />
+          <p style={{
+            fontSize: '1rem',
+            color: colors.neutral[600],
+          }}>
+            データを読み込み中...
+          </p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div style={{
+      minHeight: '100vh',
+      background: colors.neutral[50],
+    }}>
       {/* ヘッダー */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="container mx-auto px-4 py-4">
-          <h1 className="text-2xl font-bold text-gray-800">運営管理</h1>
+      <div style={{
+        background: colors.neutral[0],
+        boxShadow: shadows.sm,
+        borderBottom: `1px solid ${colors.neutral[200]}`,
+      }}>
+        <div style={{
+          maxWidth: '1280px',
+          margin: '0 auto',
+          padding: spacing[4],
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: spacing[3] }}>
+            <div style={{
+              width: '40px',
+              height: '40px',
+              background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.primaryHover} 100%)`,
+              borderRadius: borderRadius.md,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '20px',
+            }}>
+              🔐
+            </div>
+            <h1 style={{
+              fontSize: '1.5rem',
+              fontWeight: 700,
+              color: colors.neutral[900],
+              margin: 0,
+            }}>
+              運営管理
+            </h1>
+          </div>
+          <button
+            onClick={() => {
+              sessionStorage.removeItem('admin_authenticated')
+              sessionStorage.removeItem('admin_email')
+              setIsAuthenticated(false)
+            }}
+            style={{
+              padding: `${spacing[2]} ${spacing[4]}`,
+              background: 'transparent',
+              border: `1px solid ${colors.neutral[300]}`,
+              borderRadius: borderRadius.base,
+              fontSize: '0.875rem',
+              fontWeight: 600,
+              color: colors.neutral[700],
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = colors.neutral[100]
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'transparent'
+            }}
+          >
+            ログアウト
+          </button>
         </div>
       </div>
 
       {/* ナビゲーション */}
-      <div className="bg-white shadow-sm">
-        <div className="container mx-auto px-4">
-          <div className="flex space-x-8">
-            <button
-              onClick={() => setCurrentView('organizers')}
-              className={`py-4 px-2 border-b-2 font-medium text-sm ${
-                currentView === 'organizers'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
-              }`}
-            >
-              主催者承認 ({organizers.filter(o => !o.is_approved).length})
-            </button>
-            <button
-              onClick={() => setCurrentView('events')}
-              className={`py-4 px-2 border-b-2 font-medium text-sm ${
-                currentView === 'events'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
-              }`}
-            >
-              イベント管理 ({events.length})
-            </button>
-          </div>
+      <div style={{
+        background: colors.neutral[0],
+        boxShadow: shadows.sm,
+      }}>
+        <div style={{
+          maxWidth: '1280px',
+          margin: '0 auto',
+          padding: `0 ${spacing[4]}`,
+          display: 'flex',
+          gap: spacing[8],
+        }}>
+          <button
+            onClick={() => setCurrentView('organizers')}
+            style={{
+              padding: `${spacing[4]} 0`,
+              background: 'transparent',
+              border: 'none',
+              borderBottom: `2px solid ${currentView === 'organizers' ? colors.primary : 'transparent'}`,
+              fontSize: '0.875rem',
+              fontWeight: 600,
+              color: currentView === 'organizers' ? colors.primary : colors.neutral[500],
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+            }}
+          >
+            主催者承認 ({organizers.filter(o => !o.is_approved).length})
+          </button>
+          <button
+            onClick={() => setCurrentView('events')}
+            style={{
+              padding: `${spacing[4]} 0`,
+              background: 'transparent',
+              border: 'none',
+              borderBottom: `2px solid ${currentView === 'events' ? colors.primary : 'transparent'}`,
+              fontSize: '0.875rem',
+              fontWeight: 600,
+              color: currentView === 'events' ? colors.primary : colors.neutral[500],
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+            }}
+          >
+            イベント管理 ({events.length})
+          </button>
         </div>
       </div>
 
       {/* メインコンテンツ */}
-      <div className="container mx-auto px-4 py-8">
-        {currentView === 'organizers' && (
-          <div className="space-y-6">
-            <h2 className="text-xl font-bold text-gray-800">主催者承認</h2>
+      <div style={{
+        maxWidth: '1280px',
+        margin: '0 auto',
+        padding: spacing[8],
+      }}>
+        {currentView === 'organizers' ? (
+          <div>
+            <h2 style={{
+              fontSize: '1.25rem',
+              fontWeight: 700,
+              color: colors.neutral[900],
+              marginBottom: spacing[6],
+            }}>
+              主催者承認
+            </h2>
             {organizers.length === 0 ? (
-              <p className="text-gray-500">主催者登録がありません</p>
+              <p style={{ color: colors.neutral[500] }}>主催者登録がありません</p>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+                gap: spacing[6],
+              }}>
                 {organizers.map((organizer) => (
-                  <div key={organizer.id} className="bg-white rounded-lg shadow-md p-6">
-                    <div className="flex justify-between items-start mb-4">
+                  <div
+                    key={organizer.id}
+                    style={{
+                      background: colors.neutral[0],
+                      borderRadius: borderRadius.lg,
+                      boxShadow: shadows.md,
+                      padding: spacing[6],
+                    }}
+                  >
+                    <div style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'flex-start',
+                      marginBottom: spacing[4],
+                    }}>
                       <div>
-                        <h3 className="text-lg font-bold text-gray-800">{organizer.company_name}</h3>
-                        <p className="text-gray-600">{organizer.name}</p>
+                        <h3 style={{
+                          fontSize: '1.125rem',
+                          fontWeight: 700,
+                          color: colors.neutral[900],
+                          marginBottom: spacing[1],
+                        }}>
+                          {organizer.company_name}
+                        </h3>
+                        <p style={{
+                          fontSize: '0.875rem',
+                          color: colors.neutral[600],
+                          margin: 0,
+                        }}>
+                          {organizer.name}
+                        </p>
                       </div>
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        organizer.is_approved 
-                          ? 'bg-green-100 text-green-800' 
-                          : 'bg-yellow-100 text-yellow-800'
-                      }`}>
+                      <span style={{
+                        padding: `${spacing[1]} ${spacing[2]}`,
+                        borderRadius: borderRadius.base,
+                        fontSize: '0.75rem',
+                        fontWeight: 600,
+                        background: organizer.is_approved ? colors.successLight : colors.warningLight,
+                        color: organizer.is_approved ? colors.success : colors.warning,
+                      }}>
                         {organizer.is_approved ? '承認済み' : '未承認'}
                       </span>
                     </div>
-                    
-                    <div className="space-y-2 text-sm text-gray-600 mb-4">
-                      <p>電話: {organizer.phone_number}</p>
-                      <p>メール: {organizer.email}</p>
-                      <p>登録日: {formatDate(organizer.created_at)}</p>
+                    <div style={{
+                      fontSize: '0.875rem',
+                      color: colors.neutral[600],
+                      marginBottom: spacing[4],
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: spacing[2],
+                    }}>
+                      <div>電話: {organizer.phone_number}</div>
+                      <div>メール: {organizer.email}</div>
+                      <div>登録日: {formatDate(organizer.created_at)}</div>
                     </div>
-
                     {!organizer.is_approved && (
-                      <div className="flex space-x-2">
+                      <div style={{ display: 'flex', gap: spacing[2] }}>
                         <button
                           onClick={() => handleOrganizerApproval(organizer.id, true)}
-                          className="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg transition-colors"
+                          style={{
+                            flex: 1,
+                            padding: `${spacing[2]} ${spacing[4]}`,
+                            background: colors.success,
+                            color: colors.neutral[0],
+                            border: 'none',
+                            borderRadius: borderRadius.base,
+                            fontSize: '0.875rem',
+                            fontWeight: 600,
+                            cursor: 'pointer',
+                            transition: 'all 0.2s',
+                          }}
                         >
                           承認
                         </button>
                         <button
                           onClick={() => handleOrganizerApproval(organizer.id, false)}
-                          className="flex-1 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg transition-colors"
+                          style={{
+                            flex: 1,
+                            padding: `${spacing[2]} ${spacing[4]}`,
+                            background: colors.error,
+                            color: colors.neutral[0],
+                            border: 'none',
+                            borderRadius: borderRadius.base,
+                            fontSize: '0.875rem',
+                            fontWeight: 600,
+                            cursor: 'pointer',
+                            transition: 'all 0.2s',
+                          }}
                         >
                           却下
                         </button>
@@ -179,118 +410,104 @@ export default function AdminDashboard() {
               </div>
             )}
           </div>
-        )}
-
-        {currentView === 'events' && (
-          <div className="space-y-6">
-            <h2 className="text-xl font-bold text-gray-800">イベント管理</h2>
+        ) : (
+          <div>
+            <h2 style={{
+              fontSize: '1.25rem',
+              fontWeight: 700,
+              color: colors.neutral[900],
+              marginBottom: spacing[6],
+            }}>
+              イベント管理
+            </h2>
             {events.length === 0 ? (
-              <p className="text-gray-500">イベントがありません</p>
+              <p style={{ color: colors.neutral[500] }}>イベントがありません</p>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+                gap: spacing[6],
+              }}>
                 {events.map((event) => (
-                  <div key={event.id} className="bg-white rounded-lg shadow-md p-6">
-                    <h3 className="text-lg font-bold text-gray-800 mb-2">{event.event_name}</h3>
-                    <p className="text-gray-600 text-sm mb-2">{event.genre}</p>
-                    <p className="text-gray-500 text-sm">
-                      {formatDate(event.event_start_date)} 〜 {formatDate(event.event_end_date)}
+                  <div
+                    key={event.id}
+                    style={{
+                      background: colors.neutral[0],
+                      borderRadius: borderRadius.lg,
+                      boxShadow: shadows.md,
+                      padding: spacing[6],
+                    }}
+                  >
+                    <h3 style={{
+                      fontSize: '1.125rem',
+                      fontWeight: 700,
+                      color: colors.neutral[900],
+                      marginBottom: spacing[2],
+                    }}>
+                      {event.event_name}
+                    </h3>
+                    <p style={{
+                      fontSize: '0.875rem',
+                      color: colors.neutral[600],
+                      marginBottom: spacing[2],
+                    }}>
+                      {event.genre}
                     </p>
-                    <p className="text-gray-500 text-sm">{event.venue_name}</p>
-                    <p className="text-gray-700 text-sm mt-2">{event.lead_text}</p>
-
-                    {/* 承認ステータス */}
-                    <div className="mt-3">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        event.approval_status === 'approved'
-                          ? 'bg-green-100 text-green-800'
-                          : event.approval_status === 'rejected'
-                          ? 'bg-red-100 text-red-800'
-                          : 'bg-yellow-100 text-yellow-800'
-                      }`}>
+                    <div style={{
+                      fontSize: '0.875rem',
+                      color: colors.neutral[500],
+                      marginBottom: spacing[4],
+                    }}>
+                      <div>{formatDate(event.event_start_date)} 〜 {formatDate(event.event_end_date)}</div>
+                      <div>{event.venue_name}</div>
+                    </div>
+                    <div style={{ marginBottom: spacing[4] }}>
+                      <span style={{
+                        padding: `${spacing[1]} ${spacing[2]}`,
+                        borderRadius: borderRadius.base,
+                        fontSize: '0.75rem',
+                        fontWeight: 600,
+                        background: event.approval_status === 'approved' ? colors.successLight :
+                          event.approval_status === 'rejected' ? colors.errorLight : colors.warningLight,
+                        color: event.approval_status === 'approved' ? colors.success :
+                          event.approval_status === 'rejected' ? colors.error : colors.warning,
+                      }}>
                         {event.approval_status === 'approved' ? '承認済み' :
-                        event.approval_status === 'rejected' ? '却下' : '審査中'}
+                          event.approval_status === 'rejected' ? '却下' : '審査中'}
                       </span>
                     </div>
-
-                    {/* 承認/却下ボタン */}
-                    <div className="flex space-x-2 mt-4">
+                    <div style={{ display: 'flex', gap: spacing[2] }}>
                       <button
-                        onClick={async () => {
-                          try {
-                            console.log('[Admin] Approving event:', event.id)
-                            console.log('[Admin] Current approval_status:', event.approval_status)
-                            
-                            const { data, error } = await supabase
-                              .from('events')
-                              .update({ approval_status: 'approved' })
-                              .eq('id', event.id)
-                              .select('id, approval_status')
-
-                            console.log('[Admin] Update result:', { data, error })
-                            console.log('[Admin] Updated rows:', data?.length || 0)
-
-                            if (error) {
-                              console.error('[Admin] Approval error:', error)
-                              throw error
-                            }
-
-                            if (!data || data.length === 0) {
-                              console.error('[Admin] No rows updated - RLS policy may be blocking UPDATE')
-                              alert('承認に失敗しました。RLSポリシーを確認してください。\n\nSupabaseで`supabase_admin_events_update_fix.sql`を実行してください。')
-                              return
-                            }
-
-                            console.log('[Admin] Successfully updated:', data[0])
-
-                            // データを再取得
-                            await fetchData()
-                            alert('イベントを承認しました')
-                          } catch (error: any) {
-                            console.error('[Admin] Failed to approve event:', error)
-                            alert(`承認に失敗しました: ${error.message || '不明なエラー'}`)
-                          }
+                        onClick={() => handleEventApproval(event.id, 'approved')}
+                        style={{
+                          flex: 1,
+                          padding: `${spacing[2]} ${spacing[4]}`,
+                          background: colors.success,
+                          color: colors.neutral[0],
+                          border: 'none',
+                          borderRadius: borderRadius.base,
+                          fontSize: '0.875rem',
+                          fontWeight: 600,
+                          cursor: 'pointer',
+                          transition: 'all 0.2s',
                         }}
-                        className="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg transition-colors"
                       >
                         承認
                       </button>
                       <button
-                        onClick={async () => {
-                          try {
-                            console.log('[Admin] Rejecting event:', event.id)
-                            console.log('[Admin] Current approval_status:', event.approval_status)
-                            
-                            const { data, error } = await supabase
-                              .from('events')
-                              .update({ approval_status: 'rejected' })
-                              .eq('id', event.id)
-                              .select('id, approval_status')
-
-                            console.log('[Admin] Update result:', { data, error })
-                            console.log('[Admin] Updated rows:', data?.length || 0)
-
-                            if (error) {
-                              console.error('[Admin] Rejection error:', error)
-                              throw error
-                            }
-
-                            if (!data || data.length === 0) {
-                              console.error('[Admin] No rows updated - RLS policy may be blocking UPDATE')
-                              alert('却下に失敗しました。RLSポリシーを確認してください。\n\nSupabaseで`supabase_admin_events_update_fix.sql`を実行してください。')
-                              return
-                            }
-
-                            console.log('[Admin] Successfully updated:', data[0])
-
-                            // データを再取得
-                            await fetchData()
-                            alert('イベントを却下しました')
-                          } catch (error: any) {
-                            console.error('[Admin] Failed to reject event:', error)
-                            alert(`却下に失敗しました: ${error.message || '不明なエラー'}`)
-                          }
+                        onClick={() => handleEventApproval(event.id, 'rejected')}
+                        style={{
+                          flex: 1,
+                          padding: `${spacing[2]} ${spacing[4]}`,
+                          background: colors.error,
+                          color: colors.neutral[0],
+                          border: 'none',
+                          borderRadius: borderRadius.base,
+                          fontSize: '0.875rem',
+                          fontWeight: 600,
+                          cursor: 'pointer',
+                          transition: 'all 0.2s',
                         }}
-                        className="flex-1 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg transition-colors"
                       >
                         却下
                       </button>
@@ -301,7 +518,6 @@ export default function AdminDashboard() {
             )}
           </div>
         )}
-
       </div>
     </div>
   )

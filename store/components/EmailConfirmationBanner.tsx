@@ -2,99 +2,110 @@
 
 import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
+import { colors, spacing, borderRadius, typography, shadows } from '@/styles/design-system'
+import Button from './ui/Button'
 
 interface EmailConfirmationBannerProps {
   email: string
 }
 
 export default function EmailConfirmationBanner({ email }: EmailConfirmationBannerProps) {
-  const [resending, setResending] = useState(false)
-  const [resendSuccess, setResendSuccess] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [message, setMessage] = useState('')
 
   const handleResendEmail = async () => {
-    setResending(true)
-    setResendSuccess(false)
-
+    setLoading(true)
+    setMessage('')
+    
     try {
-      const redirectUrl = `${window.location.origin}/auth/verify-email`
-      
       const { error } = await supabase.auth.resend({
         type: 'signup',
         email: email,
-        options: {
-          emailRedirectTo: redirectUrl
-        }
       })
 
       if (error) throw error
-
-      setResendSuccess(true)
-      setTimeout(() => setResendSuccess(false), 5000)
-    } catch (err: any) {
-      console.error('Resend email error:', err)
-      alert('確認メールの再送信に失敗しました: ' + (err.message || '不明なエラー'))
+      
+      setMessage('確認メールを再送信しました。メールをご確認ください。')
+    } catch (error: any) {
+      setMessage('メールの再送信に失敗しました。しばらくしてからもう一度お試しください。')
     } finally {
-      setResending(false)
+      setLoading(false)
     }
   }
 
   return (
     <div style={{
-      background: '#FFF3CD',
-      border: '1px solid #FFC107',
-      borderRadius: '8px',
-      padding: '16px',
-      marginBottom: '24px'
+      background: colors.gradients.warm,
+      borderRadius: borderRadius.lg,
+      padding: spacing[6],
+      boxShadow: shadows.card,
+      animation: 'slideInDown 0.5s ease-out',
     }}>
       <div style={{
         display: 'flex',
         alignItems: 'flex-start',
-        gap: '12px'
+        gap: spacing[4],
       }}>
         <div style={{
-          fontSize: '20px',
-          lineHeight: '1'
-        }}>⚠️</div>
+          flexShrink: 0,
+          width: '48px',
+          height: '48px',
+          background: colors.status.warning.main,
+          borderRadius: borderRadius.full,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: '24px',
+        }}>
+          📧
+        </div>
         <div style={{ flex: 1 }}>
-          <p style={{
-            fontFamily: 'Inter, sans-serif',
-            fontSize: '14px',
-            fontWeight: 600,
-            lineHeight: '150%',
-            color: '#856404',
-            marginBottom: '8px'
+          <h3 style={{
+            fontFamily: typography.fontFamily.japanese,
+            fontSize: typography.fontSize.lg,
+            fontWeight: typography.fontWeight.bold,
+            color: colors.neutral[900],
+            marginBottom: spacing[2],
           }}>
             メールアドレスの確認が必要です
-          </p>
+          </h3>
           <p style={{
-            fontFamily: 'Inter, sans-serif',
-            fontSize: '14px',
-            lineHeight: '150%',
-            color: '#856404',
-            marginBottom: '12px'
+            fontFamily: typography.fontFamily.japanese,
+            fontSize: typography.fontSize.sm,
+            color: colors.neutral[700],
+            lineHeight: typography.lineHeight.relaxed,
+            marginBottom: spacing[4],
           }}>
-            {email} に確認メールを送信しました。メール内のリンクをクリックしてメールアドレスを確認してください。
+            <strong>{email}</strong> 宛に確認メールを送信しました。
+            メール内のリンクをクリックして、メールアドレスを確認してください。
           </p>
-          <button
+          {message && (
+            <div style={{
+              padding: spacing[3],
+              background: message.includes('失敗') ? colors.status.error.light : colors.status.success.light,
+              border: `1px solid ${message.includes('失敗') ? colors.status.error.main : colors.status.success.main}`,
+              borderRadius: borderRadius.base,
+              marginBottom: spacing[4],
+            }}>
+              <p style={{
+                margin: 0,
+                fontSize: typography.fontSize.sm,
+                color: message.includes('失敗') ? colors.status.error.dark : colors.status.success.dark,
+              }}>
+                {message}
+              </p>
+            </div>
+          )}
+          <Button
+            variant="outline"
+            size="sm"
             onClick={handleResendEmail}
-            disabled={resending || resendSuccess}
-            style={{
-              padding: '8px 16px',
-              background: resending || resendSuccess ? '#CCCCCC' : '#FFC107',
-              color: '#000000',
-              borderRadius: '6px',
-              border: 'none',
-              fontFamily: 'Inter, sans-serif',
-              fontSize: '14px',
-              fontWeight: 600,
-              cursor: resending || resendSuccess ? 'not-allowed' : 'pointer'
-            }}
+            loading={loading}
           >
-            {resending ? '送信中...' : resendSuccess ? '送信しました' : '確認メールを再送信'}
-          </button>
+            確認メールを再送信
+          </Button>
         </div>
       </div>
     </div>
   )
 }
-
