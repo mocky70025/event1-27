@@ -101,12 +101,12 @@ export default function EventCard({ event, userProfile, onClick }: EventCardProp
                     to: organizerData.email,
                     subject: `【${eventData.event_name}】新しい出店申し込みがありました`,
                     html: `
-                      <div style="font-family: ${typography.fontFamily.japanese}; line-height: 1.6; color: ${colors.neutral.gray900};">
-                        <h2 style="color: ${colors.primary.main}; margin-bottom: ${spacing.lg};">新しい出店申し込み</h2>
+                      <div style="font-family: ${typography.fontFamily.japanese}; line-height: 1.6; color: ${colors.neutral[900]};">
+                        <h2 style="color: ${colors.primary[500]}; margin-bottom: ${spacing.lg};">新しい出店申し込み</h2>
                         <p>${eventData.event_name}に新しい出店申し込みがありました。</p>
                         <p style="margin-top: ${spacing.xl};">アプリ内で申し込み内容を確認し、承認または却下を行ってください。</p>
-                        <hr style="border: none; border-top: 1px solid ${colors.neutral.gray200}; margin: ${spacing.xl} 0;">
-                        <p style="font-size: ${typography.fontSize.caption}; color: ${colors.neutral.gray500};">このメールは自動送信されています。</p>
+                        <hr style="border: none; border-top: 1px solid ${colors.neutral[200]}; margin: ${spacing.xl} 0;">
+                        <p style="font-size: ${typography.fontSize.caption}; color: ${colors.neutral[500]};">このメールは自動送信されています。</p>
                       </div>
                     `
                   })
@@ -140,7 +140,7 @@ export default function EventCard({ event, userProfile, onClick }: EventCardProp
       style={{ 
         cursor: onClick ? 'pointer' : 'default',
         transition: `all ${transitions.normal}`,
-        border: `1px solid ${colors.neutral.gray200}`,
+        border: `1px solid ${colors.neutral[200]}`,
       }}
     >
       {event.main_image_url && (
@@ -150,7 +150,7 @@ export default function EventCard({ event, userProfile, onClick }: EventCardProp
           borderRadius: borderRadius.medium,
           overflow: 'hidden',
           marginBottom: spacing.lg,
-          background: colors.neutral.gray100
+          background: colors.neutral[100]
         }}>
           <img
             src={event.main_image_url}
@@ -175,7 +175,7 @@ export default function EventCard({ event, userProfile, onClick }: EventCardProp
           fontFamily: typography.fontFamily.japanese,
           fontSize: typography.fontSize.heading3,
           fontWeight: typography.fontWeight.bold,
-          color: colors.neutral.gray900,
+          color: colors.neutral[900],
           lineHeight: typography.lineHeight.heading3,
           margin: 0
         }}>
@@ -189,20 +189,20 @@ export default function EventCard({ event, userProfile, onClick }: EventCardProp
           gap: spacing.sm,
           fontFamily: typography.fontFamily.japanese,
           fontSize: typography.fontSize.bodySmall,
-          color: colors.neutral.gray700
+          color: colors.neutral[700]
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
-            <span style={{ color: colors.neutral.gray500 }}>📅</span>
+            <span style={{ color: colors.neutral[500] }}>📅</span>
             <span>{formatDateRange(event.event_start_date, event.event_end_date)}</span>
           </div>
           {event.event_time && (
             <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
-              <span style={{ color: colors.neutral.gray500 }}>🕒</span>
+              <span style={{ color: colors.neutral[500] }}>🕒</span>
               <span>{event.event_time}</span>
             </div>
           )}
           <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
-            <span style={{ color: colors.neutral.gray500 }}>📍</span>
+            <span style={{ color: colors.neutral[500] }}>📍</span>
             <span>{event.venue_name}</span>
           </div>
         </div>
@@ -212,7 +212,7 @@ export default function EventCard({ event, userProfile, onClick }: EventCardProp
           fontFamily: typography.fontFamily.japanese,
           fontSize: typography.fontSize.bodySmall,
           lineHeight: typography.lineHeight.bodySmall,
-          color: colors.neutral.gray700,
+          color: colors.neutral[700],
           margin: 0,
           display: '-webkit-box',
           WebkitLineClamp: 2,
@@ -257,13 +257,13 @@ export default function EventCard({ event, userProfile, onClick }: EventCardProp
           <div style={{
             marginTop: spacing.md,
             paddingTop: spacing.md,
-            borderTop: `1px solid ${colors.neutral.gray200}`
+            borderTop: `1px solid ${colors.neutral[200]}`
           }}>
             <h4 style={{
               fontFamily: typography.fontFamily.japanese,
               fontSize: typography.fontSize.body,
               fontWeight: typography.fontWeight.semiBold,
-              color: colors.neutral.gray900,
+              color: colors.neutral[900],
               marginBottom: spacing.sm
             }}>
               イベント詳細
@@ -272,7 +272,7 @@ export default function EventCard({ event, userProfile, onClick }: EventCardProp
               fontFamily: typography.fontFamily.japanese,
               fontSize: typography.fontSize.bodySmall,
               lineHeight: typography.lineHeight.bodySmall,
-              color: colors.neutral.gray700,
+              color: colors.neutral[700],
               margin: 0,
               whiteSpace: 'pre-line'
             }}>
