@@ -147,13 +147,13 @@ export default function AdminDashboard() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        background: colors.neutral.gray100,
+        background: colors.neutral[100],
       }}>
         <div style={{ textAlign: 'center' }}>
           <div style={{
             width: '48px',
             height: '48px',
-            border: `3px solid ${colors.neutral.gray200}`,
+            border: `3px solid ${colors.neutral[200]}`,
             borderTopColor: colors.primary,
             borderRadius: '50%',
             animation: 'spin 0.8s linear infinite',
@@ -161,7 +161,7 @@ export default function AdminDashboard() {
           }} />
           <p style={{
             fontSize: '1rem',
-            color: colors.neutral.gray500,
+            color: colors.neutral[500],
           }}>
             データを読み込み中...
           </p>
@@ -177,9 +177,9 @@ export default function AdminDashboard() {
     }}>
       {/* ヘッダー */}
       <div style={{
-        background: colors.neutral.white,
+        background: colors.neutral[0],
         boxShadow: shadows.sm,
-        borderBottom: `1px solid ${colors.neutral.gray200}`,
+        borderBottom: `1px solid ${colors.neutral[200]}`,
       }}>
         <div style={{
           maxWidth: '1280px',
@@ -205,7 +205,7 @@ export default function AdminDashboard() {
             <h1 style={{
               fontSize: '1.5rem',
               fontWeight: 700,
-              color: colors.neutral.gray900,
+              color: colors.neutral[900],
               margin: 0,
             }}>
               運営管理
@@ -220,16 +220,16 @@ export default function AdminDashboard() {
             style={{
               padding: `${spacing.sm} ${spacing.lg}`,
               background: 'transparent',
-              border: `1px solid ${colors.neutral.gray300}`,
+              border: `1px solid ${colors.neutral[300]}`,
               borderRadius: borderRadius.medium,
               fontSize: '0.875rem',
               fontWeight: 600,
-              color: colors.neutral.gray700,
+              color: colors.neutral[700],
               cursor: 'pointer',
               transition: 'all 0.2s',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = colors.neutral.gray100
+              e.currentTarget.style.background = colors.neutral[100]
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.background = 'transparent'
@@ -242,7 +242,7 @@ export default function AdminDashboard() {
 
       {/* ナビゲーション */}
       <div style={{
-        background: colors.neutral.white,
+        background: colors.neutral[0],
         boxShadow: shadows.sm,
       }}>
         <div style={{
@@ -261,7 +261,7 @@ export default function AdminDashboard() {
               borderBottom: `2px solid ${currentView === 'organizers' ? colors.primary : 'transparent'}`,
               fontSize: '0.875rem',
               fontWeight: 600,
-              color: currentView === 'organizers' ? colors.primary.main : colors.neutral.gray500,
+              color: currentView === 'organizers' ? colors.primary[500] : colors.neutral[500],
               cursor: 'pointer',
               transition: 'all 0.2s',
             }}
@@ -277,7 +277,7 @@ export default function AdminDashboard() {
               borderBottom: `2px solid ${currentView === 'events' ? colors.primary : 'transparent'}`,
               fontSize: '0.875rem',
               fontWeight: 600,
-              color: currentView === 'events' ? colors.primary.main : colors.neutral.gray500,
+              color: currentView === 'events' ? colors.primary[500] : colors.neutral[500],
               cursor: 'pointer',
               transition: 'all 0.2s',
             }}
@@ -298,13 +298,13 @@ export default function AdminDashboard() {
             <h2 style={{
               fontSize: '1.25rem',
               fontWeight: 700,
-              color: colors.neutral.gray900,
+              color: colors.neutral[900],
               marginBottom: spacing['3xl'],
             }}>
               主催者承認
             </h2>
             {organizers.length === 0 ? (
-              <p style={{ color: colors.neutral.gray500 }}>主催者登録がありません</p>
+              <p style={{ color: colors.neutral[500] }}>主催者登録がありません</p>
             ) : (
               <div style={{
                 display: 'grid',
@@ -315,7 +315,7 @@ export default function AdminDashboard() {
                   <div
                     key={organizer.id}
                     style={{
-                      background: colors.neutral.white,
+                      background: colors.neutral[0],
                       borderRadius: borderRadius.large,
                       boxShadow: shadows.md,
                       padding: spacing['3xl'],
@@ -331,14 +331,14 @@ export default function AdminDashboard() {
                         <h3 style={{
                           fontSize: '1.125rem',
                           fontWeight: 700,
-                          color: colors.neutral.gray900,
+                          color: colors.neutral[900],
                           marginBottom: spacing.xs,
                         }}>
                           {organizer.company_name}
                         </h3>
                         <p style={{
                           fontSize: '0.875rem',
-                          color: colors.neutral.gray500,
+                          color: colors.neutral[500],
                           margin: 0,
                         }}>
                           {organizer.name}
@@ -357,7 +357,7 @@ export default function AdminDashboard() {
                     </div>
                     <div style={{
                       fontSize: '0.875rem',
-                      color: colors.neutral.gray500,
+                      color: colors.neutral[500],
                       marginBottom: spacing.lg,
                       display: 'flex',
                       flexDirection: 'column',
@@ -375,7 +375,7 @@ export default function AdminDashboard() {
                             flex: 1,
                             padding: `${spacing.sm} ${spacing.lg}`,
                             background: colors.success,
-                            color: colors.neutral.white,
+                            color: colors.neutral[0],
                             border: 'none',
                             borderRadius: borderRadius.medium,
                             fontSize: '0.875rem',
@@ -392,7 +392,7 @@ export default function AdminDashboard() {
                             flex: 1,
                             padding: `${spacing.sm} ${spacing.lg}`,
                             background: colors.error,
-                            color: colors.neutral.white,
+                            color: colors.neutral[0],
                             border: 'none',
                             borderRadius: borderRadius.medium,
                             fontSize: '0.875rem',
@@ -415,13 +415,13 @@ export default function AdminDashboard() {
             <h2 style={{
               fontSize: '1.25rem',
               fontWeight: 700,
-              color: colors.neutral.gray900,
+              color: colors.neutral[900],
               marginBottom: spacing['3xl'],
             }}>
               イベント管理
             </h2>
             {events.length === 0 ? (
-              <p style={{ color: colors.neutral.gray500 }}>イベントがありません</p>
+              <p style={{ color: colors.neutral[500] }}>イベントがありません</p>
             ) : (
               <div style={{
                 display: 'grid',
@@ -432,7 +432,7 @@ export default function AdminDashboard() {
                   <div
                     key={event.id}
                     style={{
-                      background: colors.neutral.white,
+                      background: colors.neutral[0],
                       borderRadius: borderRadius.large,
                       boxShadow: shadows.md,
                       padding: spacing['3xl'],
@@ -441,14 +441,14 @@ export default function AdminDashboard() {
                     <h3 style={{
                       fontSize: '1.125rem',
                       fontWeight: 700,
-                      color: colors.neutral.gray900,
+                      color: colors.neutral[900],
                       marginBottom: spacing.sm,
                     }}>
                       {event.event_name}
                     </h3>
                     <p style={{
                       fontSize: '0.875rem',
-                      color: colors.neutral.gray500,
+                      color: colors.neutral[500],
                       marginBottom: spacing.sm,
                     }}>
                       {event.genre}
@@ -483,7 +483,7 @@ export default function AdminDashboard() {
                           flex: 1,
                           padding: `${spacing.sm} ${spacing.lg}`,
                           background: colors.success,
-                          color: colors.neutral.white,
+                          color: colors.neutral[0],
                           border: 'none',
                           borderRadius: borderRadius.medium,
                           fontSize: '0.875rem',
@@ -500,7 +500,7 @@ export default function AdminDashboard() {
                           flex: 1,
                           padding: `${spacing.sm} ${spacing.lg}`,
                           background: colors.error,
-                          color: colors.neutral.white,
+                          color: colors.neutral[0],
                           border: 'none',
                           borderRadius: borderRadius.medium,
                           fontSize: '0.875rem',
