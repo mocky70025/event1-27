@@ -15,6 +15,7 @@ export default function Home() {
   const [isRegistered, setIsRegistered] = useState(false)
   const [loading, setLoading] = useState(true)
   const [hasActiveSession, setHasActiveSession] = useState(false)
+  const [currentView, setCurrentView] = useState<'home' | 'create-event' | 'profile' | 'notifications'>('home')
 
   useEffect(() => {
     const initializeAuth = async () => {
@@ -280,7 +281,7 @@ export default function Home() {
           <EmailConfirmationBanner email={userProfile.email || ''} />
         </div>
       )}
-      <EventManagement userProfile={userProfile} />
+      <EventManagement userProfile={userProfile} onNavigate={setCurrentView} />
     </>
   )
 }
