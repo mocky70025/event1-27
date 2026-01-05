@@ -81,14 +81,8 @@ export default function WelcomeScreen() {
     setLoading(true)
 
     try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'line' as any,
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
-        },
-      })
-
-      if (error) throw error
+      // カスタムLINE OAuthエンドポイントにリダイレクト
+      window.location.href = '/api/auth/line'
     } catch (error: any) {
       setError(error.message || 'LINEログインに失敗しました')
       setLoading(false)
