@@ -83,11 +83,11 @@ export default function WelcomeScreen() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: spacing[6],
+        padding: spacing[4],
         background: colors.background.primary,
       }}>
         <Card 
-          padding={12}
+          padding={8}
           style={{
             maxWidth: '440px',
             width: '100%',
@@ -114,7 +114,7 @@ export default function WelcomeScreen() {
 
           <h2 style={{
             fontFamily: typography.fontFamily.japanese,
-            fontSize: typography.fontSize['3xl'],
+            fontSize: typography.fontSize['2xl'],
             fontWeight: typography.fontWeight.bold,
             color: colors.neutral[900],
             marginBottom: spacing[3],
@@ -157,29 +157,29 @@ export default function WelcomeScreen() {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: spacing[6],
+      padding: spacing[4],
       background: colors.background.primary,
     }}>
       <Card
-        padding={12}
+        padding={8}
         style={{
           maxWidth: '440px',
           width: '100%',
         }}
       >
         {/* ロゴ・タイトル */}
-        <div style={{ textAlign: 'center', marginBottom: spacing[10] }}>
+        <div style={{ textAlign: 'center', marginBottom: spacing[8] }}>
           <div style={{
-            width: '64px',
-            height: '64px',
+            width: '56px',
+            height: '56px',
             background: colors.primary[500],
             borderRadius: borderRadius.xl,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            margin: `0 auto ${spacing[5]}`,
+            margin: `0 auto ${spacing[4]}`,
           }}>
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
               <path
                 d="M12 2L2 7L12 12L22 7L12 2Z"
                 fill="white"
@@ -196,17 +196,17 @@ export default function WelcomeScreen() {
 
           <h1 style={{
             fontFamily: typography.fontFamily.japanese,
-            fontSize: typography.fontSize['4xl'],
+            fontSize: typography.fontSize['3xl'],
             fontWeight: typography.fontWeight.bold,
             color: colors.neutral[900],
-            marginBottom: spacing[2],
+            marginBottom: spacing[1.5],
           }}>
             デミセル
           </h1>
 
           <p style={{
             fontFamily: typography.fontFamily.japanese,
-            fontSize: typography.fontSize.base,
+            fontSize: typography.fontSize.sm,
             color: colors.neutral[600],
             fontWeight: typography.fontWeight.medium,
           }}>
@@ -221,15 +221,15 @@ export default function WelcomeScreen() {
           background: colors.neutral[100],
           padding: spacing[1],
           borderRadius: borderRadius.lg,
-          marginBottom: spacing[8],
+          marginBottom: spacing[6],
         }}>
           <button
             onClick={() => setIsLogin(true)}
             style={{
               flex: 1,
-              padding: `${spacing[3]} ${spacing[4]}`,
+              padding: `${spacing[2.5]} ${spacing[3]}`,
               fontFamily: typography.fontFamily.japanese,
-              fontSize: typography.fontSize.base,
+              fontSize: typography.fontSize.sm,
               fontWeight: typography.fontWeight.semibold,
               color: isLogin ? colors.neutral[900] : colors.neutral[500],
               background: isLogin ? colors.neutral[0] : 'transparent',
@@ -245,9 +245,9 @@ export default function WelcomeScreen() {
             onClick={() => setIsLogin(false)}
             style={{
               flex: 1,
-              padding: `${spacing[3]} ${spacing[4]}`,
+              padding: `${spacing[2.5]} ${spacing[3]}`,
               fontFamily: typography.fontFamily.japanese,
-              fontSize: typography.fontSize.base,
+              fontSize: typography.fontSize.sm,
               fontWeight: typography.fontWeight.semibold,
               color: !isLogin ? colors.neutral[900] : colors.neutral[500],
               background: !isLogin ? colors.neutral[0] : 'transparent',
@@ -263,7 +263,7 @@ export default function WelcomeScreen() {
 
         {/* フォーム */}
         <form onSubmit={handleEmailAuth}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[5] }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[4] }}>
             <Input
               type="email"
               value={email}
@@ -297,7 +297,7 @@ export default function WelcomeScreen() {
 
             {error && (
               <div style={{
-                padding: spacing[4],
+                padding: spacing[3],
                 background: colors.status.error.light,
                 border: `1px solid ${colors.status.error.main}`,
                 borderRadius: borderRadius.lg,
@@ -325,13 +325,13 @@ export default function WelcomeScreen() {
         <div style={{
           display: 'flex',
           alignItems: 'center',
-          gap: spacing[4],
-          margin: `${spacing[8]} 0`,
+          gap: spacing[3],
+          margin: `${spacing[6]} 0`,
         }}>
           <div style={{ flex: 1, height: '1px', background: colors.neutral[200] }} />
           <span style={{
             fontFamily: typography.fontFamily.japanese,
-            fontSize: typography.fontSize.sm,
+            fontSize: typography.fontSize.xs,
             color: colors.neutral[500],
           }}>
             または
@@ -347,8 +347,8 @@ export default function WelcomeScreen() {
           onClick={handleGoogleLogin}
           disabled={loading}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: spacing[3] }}>
-            <svg width="20" height="20" viewBox="0 0 24 24">
+          <div style={{ display: 'flex', alignItems: 'center', gap: spacing[2] }}>
+            <svg width="18" height="18" viewBox="0 0 24 24">
               <path
                 d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
                 fill="#4285F4"
@@ -366,7 +366,7 @@ export default function WelcomeScreen() {
                 fill="#EA4335"
               />
             </svg>
-            Googleでログイン
+            <span style={{ fontSize: typography.fontSize.sm }}>Googleでログイン</span>
           </div>
         </Button>
       </Card>
