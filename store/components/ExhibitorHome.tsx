@@ -108,12 +108,19 @@ export default function ExhibitorHome({ userProfile, onNavigate }: ExhibitorHome
       <div style={{
         minHeight: '100vh',
         width: '100%',
-        background: '#FFF5F0',
+        background: '#FFFFFF',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center'
       }}>
-        <div style={{ color: '#5DABA8', fontSize: '16px' }}>読み込み中...</div>
+        <div style={{
+          width: '48px',
+          height: '48px',
+          border: `3px solid #E5E5E5`,
+          borderTopColor: '#FF8A5C',
+          borderRadius: '50%',
+          animation: 'spin 1s linear infinite'
+        }}></div>
       </div>
     )
   }
@@ -142,7 +149,7 @@ export default function ExhibitorHome({ userProfile, onNavigate }: ExhibitorHome
         width: '100%',
         flexShrink: 0,
         height: '64px',
-        background: 'linear-gradient(180deg, #5DABA8 0%, #4A9A97 100%)',
+        background: '#FF8A5C',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -151,11 +158,11 @@ export default function ExhibitorHome({ userProfile, onNavigate }: ExhibitorHome
       }}>
         <h1 style={{
           margin: 0,
-          fontSize: '18px',
-          fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+          fontSize: '20px',
+          fontFamily: '"Noto Sans JP", sans-serif',
           fontStyle: 'normal',
           fontWeight: 700,
-          color: 'white'
+          color: '#FFFFFF'
         }}>
           マイイベント
         </h1>
@@ -164,11 +171,11 @@ export default function ExhibitorHome({ userProfile, onNavigate }: ExhibitorHome
       <div style={{
         width: '100%',
         flexShrink: 0,
-        background: '#E8F5F5',
+        background: '#FFF0EB',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        paddingTop: '16px',
+        paddingTop: '24px',
         paddingBottom: '80px',
         paddingLeft: '20px',
         paddingRight: '20px',
@@ -190,8 +197,9 @@ export default function ExhibitorHome({ userProfile, onNavigate }: ExhibitorHome
           <div style={{
             textAlign: 'center',
             padding: '40px 20px',
-            color: '#6C757D',
-            fontSize: '14px'
+            color: '#999999',
+            fontSize: '16px',
+            fontFamily: '"Noto Sans JP", sans-serif'
           }}>
             イベントがありません
           </div>
@@ -201,11 +209,13 @@ export default function ExhibitorHome({ userProfile, onNavigate }: ExhibitorHome
               key={event.id}
               onClick={() => onNavigate('events')}
               style={{
-                background: 'white',
+                background: '#FFFFFF',
                 borderRadius: '12px',
                 padding: '16px',
                 boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                border: '1px solid #E5E5E5',
+                transition: 'all 0.2s'
               }}
             >
               <div style={{
@@ -235,12 +245,13 @@ export default function ExhibitorHome({ userProfile, onNavigate }: ExhibitorHome
                 </div>
                 <div style={{ flex: 1 }}>
                   <h3 style={{
-                    margin: '0 0 4px',
-                    fontSize: '16px',
-                    fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                    margin: '0 0 8px',
+                    fontSize: '18px',
+                    fontFamily: '"Noto Sans JP", sans-serif',
                     fontStyle: 'normal',
                     fontWeight: 700,
-                    color: '#2C3E50'
+                    color: '#1A1A1A',
+                    lineHeight: '150%'
                   }}>
                     {event.event_name}
                   </h3>
@@ -257,22 +268,22 @@ export default function ExhibitorHome({ userProfile, onNavigate }: ExhibitorHome
                     />
                     <p style={{
                       margin: 0,
-                      fontSize: '12px',
-                      fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                      fontSize: '14px',
+                      fontFamily: '"Noto Sans JP", sans-serif',
                       fontStyle: 'normal',
                       fontWeight: 400,
-                      color: '#6C757D'
+                      color: '#666666'
                     }}>
                       {formatDateRange(event.event_start_date, event.event_end_date)}
                     </p>
                   </div>
                   <p style={{
                     margin: 0,
-                    fontSize: '12px',
-                    fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                    fontSize: '14px',
+                    fontFamily: '"Noto Sans JP", sans-serif',
                     fontStyle: 'normal',
                     fontWeight: 400,
-                    color: '#6C757D'
+                    color: '#666666'
                   }}>
                     {formatLocation(event.venue_city, event.venue_town)}
                   </p>
