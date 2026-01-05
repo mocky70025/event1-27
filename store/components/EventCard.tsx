@@ -139,7 +139,7 @@ export default function EventCard({ event, userProfile, onClick }: EventCardProp
       onClick={onClick}
       style={{ 
         cursor: onClick ? 'pointer' : 'default',
-        transition: `all ${transitions.normal}`,
+        transition: 'all 0.2s ease',
         border: `1px solid ${colors.neutral[200]}`,
       }}
     >
@@ -147,9 +147,9 @@ export default function EventCard({ event, userProfile, onClick }: EventCardProp
         <div style={{
           width: '100%',
           height: '180px',
-          borderRadius: borderRadius.medium,
+          borderRadius: borderRadius.md,
           overflow: 'hidden',
-          marginBottom: spacing.lg,
+          marginBottom: spacing[4],
           background: colors.neutral[100]
         }}>
           <img
@@ -164,7 +164,7 @@ export default function EventCard({ event, userProfile, onClick }: EventCardProp
         </div>
       )}
       
-      <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.md }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[3] }}>
         {/* ジャンルバッジ */}
         <Badge variant="info">
           {event.genre || 'イベント'}
@@ -173,10 +173,10 @@ export default function EventCard({ event, userProfile, onClick }: EventCardProp
         {/* イベント名 */}
         <h3 style={{
           fontFamily: typography.fontFamily.japanese,
-          fontSize: typography.fontSize.heading3,
+          fontSize: typography.fontSize.xl,
           fontWeight: typography.fontWeight.bold,
           color: colors.neutral[900],
-          lineHeight: typography.lineHeight.heading3,
+          lineHeight: typography.lineHeight.tight,
           margin: 0
         }}>
           {event.event_name}
@@ -186,22 +186,22 @@ export default function EventCard({ event, userProfile, onClick }: EventCardProp
         <div style={{
           display: 'flex',
           flexDirection: 'column',
-          gap: spacing.sm,
+          gap: spacing[2],
           fontFamily: typography.fontFamily.japanese,
-          fontSize: typography.fontSize.bodySmall,
+          fontSize: typography.fontSize.sm,
           color: colors.neutral[700]
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: spacing[2] }}>
             <span style={{ color: colors.neutral[500] }}>📅</span>
             <span>{formatDateRange(event.event_start_date, event.event_end_date)}</span>
           </div>
           {event.event_time && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: spacing[2] }}>
               <span style={{ color: colors.neutral[500] }}>🕒</span>
               <span>{event.event_time}</span>
             </div>
           )}
-          <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: spacing[2] }}>
             <span style={{ color: colors.neutral[500] }}>📍</span>
             <span>{event.venue_name}</span>
           </div>
@@ -210,8 +210,8 @@ export default function EventCard({ event, userProfile, onClick }: EventCardProp
         {/* リード文 */}
         <p style={{
           fontFamily: typography.fontFamily.japanese,
-          fontSize: typography.fontSize.bodySmall,
-          lineHeight: typography.lineHeight.bodySmall,
+          fontSize: typography.fontSize.sm,
+          lineHeight: typography.lineHeight.normal,
           color: colors.neutral[700],
           margin: 0,
           display: '-webkit-box',
@@ -225,12 +225,12 @@ export default function EventCard({ event, userProfile, onClick }: EventCardProp
         {/* ボタン */}
         <div style={{ 
           display: 'flex', 
-          gap: spacing.sm,
-          marginTop: spacing.sm
+          gap: spacing[2],
+          marginTop: spacing[2]
         }}>
           <Button
             variant="secondary"
-            size="small"
+            size="sm"
             onClick={(e) => {
               e.stopPropagation()
               setShowDetails(!showDetails)
@@ -242,7 +242,7 @@ export default function EventCard({ event, userProfile, onClick }: EventCardProp
           
           <Button
             variant="primary"
-            size="small"
+            size="sm"
             onClick={handleApply}
             disabled={applying}
             loading={applying}
@@ -255,23 +255,23 @@ export default function EventCard({ event, userProfile, onClick }: EventCardProp
         {/* 詳細表示 */}
         {showDetails && (
           <div style={{
-            marginTop: spacing.md,
-            paddingTop: spacing.md,
+            marginTop: spacing[3],
+            paddingTop: spacing[3],
             borderTop: `1px solid ${colors.neutral[200]}`
           }}>
             <h4 style={{
               fontFamily: typography.fontFamily.japanese,
-              fontSize: typography.fontSize.body,
-              fontWeight: typography.fontWeight.semiBold,
+              fontSize: typography.fontSize.base,
+              fontWeight: typography.fontWeight.semibold,
               color: colors.neutral[900],
-              marginBottom: spacing.sm
+              marginBottom: spacing[2]
             }}>
               イベント詳細
             </h4>
             <p style={{
               fontFamily: typography.fontFamily.japanese,
-              fontSize: typography.fontSize.bodySmall,
-              lineHeight: typography.lineHeight.bodySmall,
+              fontSize: typography.fontSize.sm,
+              lineHeight: typography.lineHeight.normal,
               color: colors.neutral[700],
               margin: 0,
               whiteSpace: 'pre-line'

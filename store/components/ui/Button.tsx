@@ -5,7 +5,7 @@ import { colors, spacing, borderRadius, typography, shadows, transitions } from 
 
 interface ButtonProps {
   children: ReactNode
-  onClick?: () => void
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'text'
   size?: 'sm' | 'md' | 'lg'
   disabled?: boolean

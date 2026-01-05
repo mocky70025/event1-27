@@ -788,7 +788,7 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
           justifyContent: 'center',
           boxSizing: 'border-box'
         }}>
-          <ProgressBar type="seller" step="form" />
+          <ProgressBar currentStep={1} totalSteps={3} />
         </div>
 
         {/* フォーム */}
@@ -1265,7 +1265,7 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
           justifyContent: 'center',
           boxSizing: 'border-box'
         }}>
-          <ProgressBar type="seller" step="confirmation" />
+          <ProgressBar currentStep={2} totalSteps={3} />
         </div>
 
         {/* フォーム */}
@@ -1592,7 +1592,7 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
           justifyContent: 'center',
           boxSizing: 'border-box'
         }}>
-          <ProgressBar type="seller" step="complete" />
+          <ProgressBar currentStep={3} totalSteps={3} />
         </div>
 
         {/* コンテンツ */}
