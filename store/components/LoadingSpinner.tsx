@@ -1,7 +1,7 @@
 'use client'
 
 import { CSSProperties } from 'react'
-import { colors, spacing, typography } from '@/styles/design-system'
+import { colors, spacing, typography } from '../styles/design-system'
 
 interface LoadingSpinnerProps {
   size?: 'sm' | 'md' | 'lg'
@@ -11,20 +11,16 @@ interface LoadingSpinnerProps {
 
 export default function LoadingSpinner({ 
   size = 'md', 
-  message = '読み込み中...',
-  fullScreen = false 
+  message,
+  fullScreen = false
 }: LoadingSpinnerProps) {
-  const sizes = {
+  const sizeMap = {
     sm: '24px',
     md: '40px',
     lg: '56px',
   }
 
-  const borderWidths = {
-    sm: '2px',
-    md: '3px',
-    lg: '4px',
-  }
+  const spinnerSize = sizeMap[size]
 
   const containerStyle: CSSProperties = fullScreen ? {
     position: 'fixed',
@@ -37,8 +33,9 @@ export default function LoadingSpinner({
     alignItems: 'center',
     justifyContent: 'center',
     background: 'rgba(255, 255, 255, 0.9)',
-    backdropFilter: 'blur(4px)',
+    backdropFilter: 'blur(8px)',
     zIndex: 9999,
+    animation: 'fadeIn 0.2s ease-in',
   } : {
     display: 'flex',
     flexDirection: 'column',
@@ -48,10 +45,10 @@ export default function LoadingSpinner({
   }
 
   const spinnerStyle: CSSProperties = {
-    width: sizes[size],
-    height: sizes[size],
-    border: `${borderWidths[size]} solid ${colors.neutral[200]}`,
-    borderTopColor: colors.primary[500],
+    width: spinnerSize,
+    height: spinnerSize,
+    border: `3px solid ${colors.primary[100]}`,
+    borderTop: `3px solid ${colors.primary[500]}`,
     borderRadius: '50%',
     animation: 'spin 0.8s linear infinite',
   }
@@ -59,9 +56,10 @@ export default function LoadingSpinner({
   const messageStyle: CSSProperties = {
     marginTop: spacing[4],
     fontFamily: typography.fontFamily.japanese,
-    fontSize: size === 'sm' ? typography.fontSize.sm : typography.fontSize.base,
+    fontSize: typography.fontSize.base,
     fontWeight: typography.fontWeight.medium,
     color: colors.neutral[600],
+    textAlign: 'center',
   }
 
   return (

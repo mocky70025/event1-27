@@ -5,39 +5,58 @@ import { colors, spacing, borderRadius, typography } from '@/styles/design-syste
 
 interface BadgeProps {
   children: ReactNode
-  variant?: 'success' | 'warning' | 'error' | 'info' | 'neutral'
-  size?: 'sm' | 'md'
+  variant?: 'success' | 'warning' | 'error' | 'info' | 'primary' | 'secondary' | 'neutral'
+  size?: 'sm' | 'md' | 'lg'
+  dot?: boolean
+  icon?: ReactNode
   className?: string
   style?: CSSProperties
 }
 
 export default function Badge({
   children,
-  variant = 'neutral',
+  variant = 'primary',
   size = 'md',
+  dot = false,
+  icon,
   className = '',
   style = {},
 }: BadgeProps) {
-  const variantColors = {
+  const variantStyles: Record<string, CSSProperties> = {
     success: {
-      bg: colors.status.success.light,
-      text: colors.status.success.dark,
+      background: colors.status.success.light,
+      color: colors.status.success.dark,
+      border: `1px solid ${colors.primary[200]}`,
     },
     warning: {
-      bg: colors.status.warning.light,
-      text: colors.status.warning.dark,
+      background: colors.status.warning.light,
+      color: colors.status.warning.dark,
+      border: `1px solid ${colors.accent[200]}`,
     },
     error: {
-      bg: colors.status.error.light,
-      text: colors.status.error.dark,
+      background: colors.status.error.light,
+      color: colors.status.error.dark,
+      border: `1px solid #FECACA`,
     },
     info: {
-      bg: colors.status.info.light,
-      text: colors.status.info.dark,
+      background: colors.status.info.light,
+      color: colors.status.info.dark,
+      border: `1px solid #BFDBFE`,
+    },
+    primary: {
+      background: colors.primary[50],
+      color: colors.primary[700],
+      border: `1px solid ${colors.primary[200]}`,
+    },
+    secondary: {
+      background: colors.secondary[50],
+      color: colors.secondary[700],
+      border: `1px solid ${colors.secondary[200]}`,
     },
     neutral: {
-      bg: colors.neutral[100],
-      text: colors.neutral[700],
+      background: colors.neutral[100],
+      color: colors.neutral[700],
+      border: `1px solid ${colors.neutral[200]}`,
     },
   }
 
@@ -45,33 +64,54 @@ export default function Badge({
     sm: {
       padding: `${spacing[0.5]} ${spacing[2]}`,
       fontSize: typography.fontSize.xs,
+      height: '20px',
+      gap: spacing[1],
     },
     md: {
-      padding: `${spacing[1]} ${spacing[2.5]}`,
+      padding: `${spacing[1]} ${spacing[3]}`,
       fontSize: typography.fontSize.sm,
+      height: '24px',
+      gap: spacing[1.5],
+    },
+    lg: {
+      padding: `${spacing[1.5]} ${spacing[4]}`,
+      fontSize: typography.fontSize.base,
+      height: '32px',
+      gap: spacing[2],
     },
   }
 
-  const variantColor = variantColors[variant]
-
-  const badgeStyle: CSSProperties = {
+  const baseStyle: CSSProperties = {
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: borderRadius.full,
+    fontFamily: typography.fontFamily.japanese,
     fontWeight: typography.fontWeight.semibold,
-    fontFamily: typography.fontFamily.primary,
-    background: variantColor.bg,
-    color: variantColor.text,
+    borderRadius: borderRadius.full,
     whiteSpace: 'nowrap',
+    userSelect: 'none',
     ...sizeStyles[size],
-    ...style,
+    ...variantStyles[variant],
+  }
+
+  const dotStyle: CSSProperties = {
+    width: size === 'sm' ? '6px' : size === 'md' ? '8px' : '10px',
+    height: size === 'sm' ? '6px' : size === 'md' ? '8px' : '10px',
+    borderRadius: borderRadius.full,
+    background: variantStyles[variant].color as string,
   }
 
   return (
-    <span className={className} style={badgeStyle}>
-      {children}
+    <span
+      className={className}
+      style={{
+        ...baseStyle,
+        ...style,
+      }}
+    >
+      {dot && <span style={dotStyle} />}
+      {icon && <span style={{ display: 'flex', alignItems: 'center' }}>{icon}</span>}
+      <span>{children}</span>
     </span>
   )
 }
-

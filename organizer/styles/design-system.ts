@@ -1,112 +1,124 @@
 /**
- * デミセル デザインシステム v2.0
- * 主催者向けプラットフォーム
- * モダンで洗練されたUIデザイン
+ * デミセル デザインシステム v3.0
+ * 洗練された、モダンでシュッとしたデザイン
+ * 
+ * デザインコンセプト:
+ * - ミニマリズム: 余白を活かした洗練されたレイアウト
+ * - モダン: グラスモーフィズム、マイクロインタラクション
+ * - プロフェッショナル: ビジネスに適した信頼感のある配色
+ * - 直感的: 視覚階層が明確なUI
  */
 
 export const colors = {
-  // プライマリカラー - オレンジ系（主催者）
+  // プライマリカラー - 洗練されたティール
   primary: {
-    50: '#FFF5F0',
-    100: '#FFE6DB',
-    200: '#FFD4C2',
-    300: '#FFC2A8',
-    400: '#FFB394',
-    500: '#FFA580', // メイン
-    600: '#FF9670',
-    700: '#FF8760',
-    800: '#FF7850',
-    900: '#FF6940',
+    50: '#ECFDF5',
+    100: '#D1FAE5',
+    200: '#A7F3D0',
+    300: '#6EE7B7',
+    400: '#34D399',
+    500: '#10B981',  // メイン
+    600: '#059669',
+    700: '#047857',
+    800: '#065F46',
+    900: '#064E3B',
+    950: '#022C22',
   },
-  
-  // セカンダリカラー - 青緑系アクセント
+
+  // セカンダリカラー - モダンなバイオレット
   secondary: {
-    50: '#E6F7F5',
-    100: '#B3E8E3',
-    200: '#80D9D1',
-    300: '#4DCABF',
-    400: '#33BFB3',
-    500: '#1AB5A7', // メイン
-    600: '#17A598',
-    700: '#138F83',
-    800: '#0F796E',
-    900: '#0A5C54',
+    50: '#FAF5FF',
+    100: '#F3E8FF',
+    200: '#E9D5FF',
+    300: '#D8B4FE',
+    400: '#C084FC',
+    500: '#A855F7',  // メイン
+    600: '#9333EA',
+    700: '#7E22CE',
+    800: '#6B21A8',
+    900: '#581C87',
+    950: '#3B0764',
   },
-  
-  // ニュートラルカラー
+
+  // アクセントカラー - エレガントなアンバー
+  accent: {
+    50: '#FFFBEB',
+    100: '#FEF3C7',
+    200: '#FDE68A',
+    300: '#FCD34D',
+    400: '#FBBF24',
+    500: '#F59E0B',  // メイン
+    600: '#D97706',
+    700: '#B45309',
+    800: '#92400E',
+    900: '#78350F',
+  },
+
+  // ニュートラルカラー - クールグレー
   neutral: {
     0: '#FFFFFF',
-    50: '#FAFAFA',
-    100: '#F5F5F5',
-    200: '#E5E5E5',
-    300: '#D4D4D4',
-    400: '#A3A3A3',
-    500: '#737373',
-    600: '#525252',
-    700: '#404040',
-    800: '#262626',
-    900: '#171717',
-    950: '#0A0A0A',
+    50: '#F9FAFB',
+    100: '#F3F4F6',
+    200: '#E5E7EB',
+    300: '#D1D5DB',
+    400: '#9CA3AF',
+    500: '#6B7280',
+    600: '#4B5563',
+    700: '#374151',
+    800: '#1F2937',
+    900: '#111827',
+    950: '#030712',
   },
-  
+
   // ステータスカラー
   status: {
     success: {
       light: '#D1FAE5',
       main: '#10B981',
-      dark: '#059669',
+      dark: '#047857',
     },
     warning: {
       light: '#FEF3C7',
       main: '#F59E0B',
-      dark: '#D97706',
+      dark: '#B45309',
     },
     error: {
       light: '#FEE2E2',
       main: '#EF4444',
-      dark: '#DC2626',
+      dark: '#B91C1C',
     },
     info: {
       light: '#DBEAFE',
       main: '#3B82F6',
-      dark: '#2563EB',
+      dark: '#1D4ED8',
     },
   },
-  
-  // セマンティックカラー
-  semantic: {
-    pending: {
-      bg: '#FEF3C7',
-      text: '#92400E',
-      border: '#FCD34D',
-    },
-    approved: {
-      bg: '#D1FAE5',
-      text: '#065F46',
-      border: '#6EE7B7',
-    },
-    rejected: {
-      bg: '#FEE2E2',
-      text: '#991B1B',
-      border: '#FCA5A5',
-    },
-  },
-  
-  // グラデーション
+
+  // グラデーション - 洗練された配色
   gradients: {
-    primary: 'linear-gradient(135deg, #FFA580 0%, #FF6940 100%)',
-    secondary: 'linear-gradient(135deg, #1AB5A7 0%, #0A5C54 100%)',
-    success: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
-    warm: 'linear-gradient(135deg, #FFF5F0 0%, #FFE6DB 100%)',
-    cool: 'linear-gradient(135deg, #E6F7F5 0%, #B3E8E3 100%)',
+    primary: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
+    secondary: 'linear-gradient(135deg, #A855F7 0%, #7E22CE 100%)',
+    accent: 'linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%)',
+    glass: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)',
+    dark: 'linear-gradient(180deg, #111827 0%, #030712 100%)',
+    mesh: 'radial-gradient(at 40% 20%, rgba(16, 185, 129, 0.3) 0px, transparent 50%), radial-gradient(at 80% 0%, rgba(168, 85, 247, 0.2) 0px, transparent 50%), radial-gradient(at 0% 50%, rgba(59, 130, 246, 0.2) 0px, transparent 50%)',
+  },
+
+  // 特殊効果
+  effects: {
+    glass: 'rgba(255, 255, 255, 0.1)',
+    glassDark: 'rgba(0, 0, 0, 0.1)',
+    overlay: 'rgba(0, 0, 0, 0.5)',
+    shimmer: 'rgba(255, 255, 255, 0.6)',
   },
 } as const
 
 export const typography = {
   fontFamily: {
-    primary: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", sans-serif',
-    japanese: '"Noto Sans JP", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif',
-    display: '"Poppins", "Inter", sans-serif',
+    primary: '"Inter var", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+    japanese: '"Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif',
+    display: '"Cal Sans", "Inter var", sans-serif',
+    mono: '"JetBrains Mono", "Fira Code", "SF Mono", monospace',
   },
   fontSize: {
     xs: '0.75rem',      // 12px
@@ -118,6 +130,8 @@ export const typography = {
     '3xl': '1.875rem',  // 30px
     '4xl': '2.25rem',   // 36px
     '5xl': '3rem',      // 48px
+    '6xl': '3.75rem',   // 60px
+    '7xl': '4.5rem',    // 72px
   },
   lineHeight: {
     none: '1',
@@ -134,6 +148,7 @@ export const typography = {
     semibold: 600,
     bold: 700,
     extrabold: 800,
+    black: 900,
   },
   letterSpacing: {
     tighter: '-0.05em',
@@ -162,12 +177,25 @@ export const spacing = {
   8: '2rem',        // 32px
   9: '2.25rem',     // 36px
   10: '2.5rem',     // 40px
+  11: '2.75rem',    // 44px
   12: '3rem',       // 48px
   14: '3.5rem',     // 56px
   16: '4rem',       // 64px
   20: '5rem',       // 80px
   24: '6rem',       // 96px
+  28: '7rem',       // 112px
   32: '8rem',       // 128px
+  36: '9rem',       // 144px
+  40: '10rem',      // 160px
+  44: '11rem',      // 176px
+  48: '12rem',      // 192px
+  52: '13rem',      // 208px
+  56: '14rem',      // 224px
+  60: '15rem',      // 240px
+  64: '16rem',      // 256px
+  72: '18rem',      // 288px
+  80: '20rem',      // 320px
+  96: '24rem',      // 384px
 } as const
 
 export const borderRadius = {
@@ -176,9 +204,9 @@ export const borderRadius = {
   base: '0.5rem',   // 8px
   md: '0.75rem',    // 12px
   lg: '1rem',       // 16px
-  xl: '1.5rem',     // 24px
-  '2xl': '2rem',    // 32px
-  '3xl': '3rem',    // 48px
+  xl: '1.25rem',    // 20px
+  '2xl': '1.5rem',  // 24px
+  '3xl': '2rem',    // 32px
   full: '9999px',
 } as const
 
@@ -191,13 +219,15 @@ export const shadows = {
   xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
   '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
   inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.05)',
-  // カスタムシャドウ
-  card: '0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04)',
-  cardHover: '0 8px 24px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.08)',
-  button: '0 2px 4px rgba(0, 0, 0, 0.1)',
-  buttonHover: '0 4px 8px rgba(0, 0, 0, 0.15)',
-  primary: '0 4px 12px rgba(255, 165, 128, 0.3)',
-  primaryHover: '0 8px 20px rgba(255, 165, 128, 0.4)',
+  
+  // カスタムシャドウ - より洗練された影
+  subtle: '0 2px 8px rgba(0, 0, 0, 0.04)',
+  card: '0 4px 16px rgba(0, 0, 0, 0.08)',
+  cardHover: '0 8px 32px rgba(0, 0, 0, 0.12)',
+  button: '0 2px 8px rgba(16, 185, 129, 0.25)',
+  buttonHover: '0 4px 16px rgba(16, 185, 129, 0.35)',
+  glow: '0 0 24px rgba(16, 185, 129, 0.3)',
+  glowPurple: '0 0 24px rgba(168, 85, 247, 0.3)',
 } as const
 
 export const transitions = {
@@ -205,332 +235,58 @@ export const transitions = {
   normal: '250ms cubic-bezier(0.4, 0, 0.2, 1)',
   slow: '350ms cubic-bezier(0.4, 0, 0.2, 1)',
   bounce: '500ms cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+  smooth: '400ms cubic-bezier(0.16, 1, 0.3, 1)',
 } as const
 
 export const animations = {
-  fadeIn: {
-    from: { opacity: 0 },
-    to: { opacity: 1 },
-  },
-  fadeOut: {
-    from: { opacity: 1 },
-    to: { opacity: 0 },
-  },
-  slideInUp: {
-    from: { transform: 'translateY(20px)', opacity: 0 },
-    to: { transform: 'translateY(0)', opacity: 1 },
-  },
-  slideInDown: {
-    from: { transform: 'translateY(-20px)', opacity: 0 },
-    to: { transform: 'translateY(0)', opacity: 1 },
-  },
-  scaleIn: {
-    from: { transform: 'scale(0.95)', opacity: 0 },
-    to: { transform: 'scale(1)', opacity: 1 },
-  },
-  spin: {
-    from: { transform: 'rotate(0deg)' },
-    to: { transform: 'rotate(360deg)' },
-  },
+  fadeIn: 'fadeIn 0.3s ease-in',
+  slideUp: 'slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+  slideDown: 'slideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+  scaleIn: 'scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+  shimmer: 'shimmer 2s linear infinite',
+  pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
 } as const
 
 export const breakpoints = {
-  sm: '640px',
-  md: '768px',
-  lg: '1024px',
-  xl: '1280px',
-  '2xl': '1536px',
+  mobile: '0px',
+  tablet: '768px',
+  desktop: '1024px',
+  wide: '1280px',
+  ultrawide: '1536px',
 } as const
 
-// コンポーネントスタイルヘルパー
-export const getButtonStyle = (
-  variant: 'primary' | 'secondary' | 'outline' | 'ghost' | 'text' = 'primary',
-  size: 'sm' | 'md' | 'lg' = 'md'
-) => {
-  const baseStyle = {
-    display: 'inline-flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontFamily: typography.fontFamily.primary,
-    fontWeight: typography.fontWeight.semibold,
-    borderRadius: borderRadius.md,
-    border: 'none',
-    cursor: 'pointer',
-    transition: transitions.normal,
-    outline: 'none',
-    textDecoration: 'none',
-  }
+export const zIndex = {
+  base: 0,
+  dropdown: 1000,
+  sticky: 1100,
+  modal: 1200,
+  popover: 1300,
+  toast: 1400,
+  tooltip: 1500,
+} as const
 
-  const sizeStyles = {
-    sm: {
-      height: '36px',
-      padding: `${spacing[2]} ${spacing[4]}`,
-      fontSize: typography.fontSize.sm,
-    },
-    md: {
-      height: '44px',
-      padding: `${spacing[2.5]} ${spacing[6]}`,
-      fontSize: typography.fontSize.base,
-    },
-    lg: {
-      height: '52px',
-      padding: `${spacing[3]} ${spacing[8]}`,
-      fontSize: typography.fontSize.lg,
-    },
-  }
+// グラスモーフィズム効果
+export const glassEffect = {
+  background: 'rgba(255, 255, 255, 0.7)',
+  backdropFilter: 'blur(20px) saturate(180%)',
+  WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+  border: '1px solid rgba(255, 255, 255, 0.3)',
+} as const
 
-  const variantStyles = {
-    primary: {
-      background: colors.primary[500],
-      color: colors.neutral[0],
-      boxShadow: shadows.button,
-      ':hover': {
-        background: colors.primary[600],
-        boxShadow: shadows.buttonHover,
-        transform: 'translateY(-1px)',
-      },
-      ':active': {
-        background: colors.primary[700],
-        transform: 'translateY(0)',
-      },
-      ':disabled': {
-        background: colors.neutral[300],
-        color: colors.neutral[500],
-        cursor: 'not-allowed',
-        boxShadow: 'none',
-      },
-    },
-    secondary: {
-      background: colors.secondary[500],
-      color: colors.neutral[0],
-      boxShadow: shadows.button,
-      ':hover': {
-        background: colors.secondary[600],
-        boxShadow: shadows.buttonHover,
-        transform: 'translateY(-1px)',
-      },
-      ':active': {
-        background: colors.secondary[700],
-        transform: 'translateY(0)',
-      },
-      ':disabled': {
-        background: colors.neutral[300],
-        color: colors.neutral[500],
-        cursor: 'not-allowed',
-        boxShadow: 'none',
-      },
-    },
-    outline: {
-      background: 'transparent',
-      color: colors.primary[500],
-      border: `2px solid ${colors.primary[500]}`,
-      ':hover': {
-        background: colors.primary[50],
-        borderColor: colors.primary[600],
-      },
-      ':active': {
-        background: colors.primary[100],
-      },
-      ':disabled': {
-        color: colors.neutral[400],
-        borderColor: colors.neutral[300],
-        cursor: 'not-allowed',
-      },
-    },
-    ghost: {
-      background: 'transparent',
-      color: colors.neutral[700],
-      ':hover': {
-        background: colors.neutral[100],
-      },
-      ':active': {
-        background: colors.neutral[200],
-      },
-      ':disabled': {
-        color: colors.neutral[400],
-        cursor: 'not-allowed',
-      },
-    },
-    text: {
-      background: 'transparent',
-      color: colors.primary[500],
-      padding: spacing[2],
-      ':hover': {
-        color: colors.primary[600],
-        textDecoration: 'underline',
-      },
-      ':disabled': {
-        color: colors.neutral[400],
-        cursor: 'not-allowed',
-      },
-    },
-  }
+export const glassEffectDark = {
+  background: 'rgba(17, 24, 39, 0.7)',
+  backdropFilter: 'blur(20px) saturate(180%)',
+  WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+  border: '1px solid rgba(255, 255, 255, 0.1)',
+} as const
 
-  return {
-    ...baseStyle,
-    ...sizeStyles[size],
-    ...variantStyles[variant],
-  }
-}
+// ホバーエフェクト
+export const hoverLift = {
+  transform: 'translateY(-4px)',
+  boxShadow: shadows.cardHover,
+} as const
 
-export const getCardStyle = (elevated: boolean = false) => ({
-  background: colors.neutral[0],
-  borderRadius: borderRadius.lg,
-  boxShadow: elevated ? shadows.cardHover : shadows.card,
-  padding: spacing[6],
-  transition: transitions.normal,
-  ':hover': elevated ? {
-    boxShadow: shadows.xl,
-    transform: 'translateY(-2px)',
-  } : {},
-})
-
-export const getInputStyle = (hasError: boolean = false, variant: 'default' | 'filled' = 'default') => ({
-  width: '100%',
-  height: '44px',
-  padding: `${spacing[2.5]} ${spacing[4]}`,
-  fontFamily: typography.fontFamily.primary,
-  fontSize: typography.fontSize.base,
-  lineHeight: typography.lineHeight.normal,
-  color: colors.neutral[900],
-  background: variant === 'filled' ? colors.neutral[50] : colors.neutral[0],
-  border: `1px solid ${hasError ? colors.status.error.main : colors.neutral[300]}`,
-  borderRadius: borderRadius.md,
-  outline: 'none',
-  transition: transitions.fast,
-  boxSizing: 'border-box' as const,
-  '::placeholder': {
-    color: colors.neutral[400],
-  },
-  ':focus': {
-    borderColor: hasError ? colors.status.error.main : colors.primary[500],
-    boxShadow: `0 0 0 3px ${hasError ? colors.status.error.light : colors.primary[50]}`,
-  },
-  ':disabled': {
-    background: colors.neutral[100],
-    color: colors.neutral[500],
-    cursor: 'not-allowed',
-  },
-})
-
-export const getBadgeStyle = (variant: 'success' | 'warning' | 'error' | 'info' | 'neutral' = 'neutral') => {
-  const variantColors = {
-    success: {
-      bg: colors.status.success.light,
-      text: colors.status.success.dark,
-    },
-    warning: {
-      bg: colors.status.warning.light,
-      text: colors.status.warning.dark,
-    },
-    error: {
-      bg: colors.status.error.light,
-      text: colors.status.error.dark,
-    },
-    info: {
-      bg: colors.status.info.light,
-      text: colors.status.info.dark,
-    },
-    neutral: {
-      bg: colors.neutral[100],
-      text: colors.neutral[700],
-    },
-  }
-
-  const variantColor = variantColors[variant]
-
-  return {
-    display: 'inline-flex',
-    alignItems: 'center',
-    padding: `${spacing[1]} ${spacing[2.5]}`,
-    borderRadius: borderRadius.full,
-    fontSize: typography.fontSize.xs,
-    fontWeight: typography.fontWeight.semibold,
-    background: variantColor.bg,
-    color: variantColor.text,
-    whiteSpace: 'nowrap' as const,
-  }
-}
-
-export const getAvatarStyle = (size: 'sm' | 'md' | 'lg' = 'md') => {
-  const sizes = {
-    sm: '32px',
-    md: '40px',
-    lg: '48px',
-  }
-
-  return {
-    width: sizes[size],
-    height: sizes[size],
-    borderRadius: borderRadius.full,
-    overflow: 'hidden',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    background: colors.primary[100],
-    color: colors.primary[700],
-    fontWeight: typography.fontWeight.semibold,
-    fontSize: size === 'sm' ? typography.fontSize.xs : size === 'md' ? typography.fontSize.sm : typography.fontSize.base,
-  }
-}
-
-export const getSkeletonStyle = () => ({
-  background: `linear-gradient(90deg, ${colors.neutral[200]} 25%, ${colors.neutral[100]} 50%, ${colors.neutral[200]} 75%)`,
-  backgroundSize: '200% 100%',
-  animation: 'shimmer 1.5s infinite',
-  borderRadius: borderRadius.base,
-})
-
-// レスポンシブヘルパー
-export const mediaQuery = {
-  sm: `@media (min-width: ${breakpoints.sm})`,
-  md: `@media (min-width: ${breakpoints.md})`,
-  lg: `@media (min-width: ${breakpoints.lg})`,
-  xl: `@media (min-width: ${breakpoints.xl})`,
-  '2xl': `@media (min-width: ${breakpoints['2xl']})`,
-}
-
-// グローバルスタイル
-export const globalStyles = `
-  @keyframes shimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  @keyframes slideInUp {
-    from { transform: translateY(20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-  }
-
-  @keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
-
-  * {
-    box-sizing: border-box;
-  }
-
-  body {
-    margin: 0;
-    padding: 0;
-    font-family: ${typography.fontFamily.primary}, ${typography.fontFamily.japanese};
-    color: ${colors.neutral[900]};
-    background: ${colors.neutral[50]};
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  button {
-    font-family: inherit;
-  }
-
-  input, textarea, select {
-    font-family: inherit;
-  }
-`
+export const hoverGlow = {
+  boxShadow: shadows.glow,
+  transform: 'scale(1.02)',
+} as const

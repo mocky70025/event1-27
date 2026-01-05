@@ -1,130 +1,161 @@
 'use client'
 
-import { CSSProperties, ReactNode, ChangeEvent } from 'react'
-import { colors, spacing, borderRadius, typography, transitions } from '@/styles/design-system'
+import { CSSProperties, InputHTMLAttributes, ReactNode, useState } from 'react'
+import { colors, spacing, borderRadius, typography, shadows, transitions } from '@/styles/design-system'
 
-interface InputProps {
-  value: string
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void
-  type?: 'text' | 'email' | 'password' | 'tel' | 'number' | 'date' | 'time' | 'url'
-  placeholder?: string
+interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
   label?: string
   error?: string
-  disabled?: boolean
-  required?: boolean
-  variant?: 'default' | 'filled'
-  icon?: ReactNode
-  iconPosition?: 'left' | 'right'
+  helperText?: string
+  leftIcon?: ReactNode
+  rightIcon?: ReactNode
   fullWidth?: boolean
-  className?: string
-  style?: CSSProperties
+  inputSize?: 'sm' | 'md' | 'lg'
 }
 
 export default function Input({
-  value,
-  onChange,
-  type = 'text',
-  placeholder,
   label,
   error,
-  disabled = false,
-  required = false,
-  variant = 'default',
-  icon,
-  iconPosition = 'left',
+  helperText,
+  leftIcon,
+  rightIcon,
   fullWidth = true,
-  className = '',
-  style = {},
+  inputSize = 'md',
+  style,
+  ...props
 }: InputProps) {
-  const hasError = !!error
+  const [isFocused, setIsFocused] = useState(false)
 
-  const containerStyle: CSSProperties = {
+  const sizeStyles = {
+    sm: {
+      height: '36px',
+      padding: leftIcon ? `0 ${spacing[3]} 0 ${spacing[10]}` : `0 ${spacing[3]}`,
+      fontSize: typography.fontSize.sm,
+    },
+    md: {
+      height: '44px',
+      padding: leftIcon ? `0 ${spacing[4]} 0 ${spacing[12]}` : `0 ${spacing[4]}`,
+      fontSize: typography.fontSize.base,
+    },
+    lg: {
+      height: '52px',
+      padding: leftIcon ? `0 ${spacing[6]} 0 ${spacing[14]}` : `0 ${spacing[6]}`,
+      fontSize: typography.fontSize.lg,
+    },
+  }
+
+  const inputContainerStyle: CSSProperties = {
+    position: 'relative',
     width: fullWidth ? '100%' : 'auto',
-    ...style,
   }
 
   const labelStyle: CSSProperties = {
     display: 'block',
-    marginBottom: spacing[2],
-    fontFamily: typography.fontFamily.primary,
+    fontFamily: typography.fontFamily.japanese,
     fontSize: typography.fontSize.sm,
     fontWeight: typography.fontWeight.semibold,
-    color: colors.neutral[700],
-  }
-
-  const inputWrapperStyle: CSSProperties = {
-    position: 'relative',
-    display: 'flex',
-    alignItems: 'center',
+    color: error ? colors.status.error.main : colors.neutral[700],
+    marginBottom: spacing[2],
+    transition: transitions.fast,
   }
 
   const inputStyle: CSSProperties = {
     width: '100%',
-    height: '44px',
-    padding: icon
-      ? iconPosition === 'left'
-        ? `${spacing[2.5]} ${spacing[4]} ${spacing[2.5]} ${spacing[10]}`
-        : `${spacing[2.5]} ${spacing[10]} ${spacing[2.5]} ${spacing[4]}`
-      : `${spacing[2.5]} ${spacing[4]}`,
-    fontFamily: typography.fontFamily.primary,
-    fontSize: typography.fontSize.base,
-    lineHeight: typography.lineHeight.normal,
+    fontFamily: typography.fontFamily.japanese,
+    background: colors.neutral[0],
+    border: `2px solid ${
+      error 
+        ? colors.status.error.main 
+        : isFocused 
+        ? colors.primary[500] 
+        : colors.neutral[200]
+    }`,
+    borderRadius: borderRadius.lg,
     color: colors.neutral[900],
-    background: variant === 'filled' ? colors.neutral[50] : colors.neutral[0],
-    border: `1px solid ${hasError ? colors.status.error.main : colors.neutral[300]}`,
-    borderRadius: borderRadius.md,
     outline: 'none',
-    transition: transitions.fast,
-    boxSizing: 'border-box',
+    transition: `all ${transitions.normal}`,
+    boxShadow: isFocused ? shadows.card : 'none',
+    ...sizeStyles[inputSize],
+    ...(rightIcon && { paddingRight: spacing[12] }),
   }
 
   const iconStyle: CSSProperties = {
     position: 'absolute',
-    [iconPosition === 'left' ? 'left' : 'right']: spacing[4],
+    top: '50%',
+    transform: 'translateY(-50%)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    color: colors.neutral[500],
+    color: error ? colors.status.error.main : isFocused ? colors.primary[500] : colors.neutral[400],
+    transition: transitions.fast,
     pointerEvents: 'none',
   }
 
-  const errorStyle: CSSProperties = {
-    marginTop: spacing[1.5],
-    fontFamily: typography.fontFamily.primary,
+  const leftIconStyle: CSSProperties = {
+    ...iconStyle,
+    left: spacing[4],
+  }
+
+  const rightIconStyle: CSSProperties = {
+    ...iconStyle,
+    right: spacing[4],
+  }
+
+  const helperStyle: CSSProperties = {
+    fontFamily: typography.fontFamily.japanese,
     fontSize: typography.fontSize.sm,
-    color: colors.status.error.main,
+    color: error ? colors.status.error.main : colors.neutral[500],
+    marginTop: spacing[2],
+    display: 'flex',
+    alignItems: 'center',
+    gap: spacing[1],
   }
 
   return (
-    <div style={containerStyle} className={className}>
+    <div style={inputContainerStyle}>
       {label && (
         <label style={labelStyle}>
           {label}
-          {required && <span style={{ color: colors.status.error.main, marginLeft: spacing[1] }}>*</span>}
+          {props.required && (
+            <span style={{ color: colors.status.error.main, marginLeft: spacing[1] }}>*</span>
+          )}
         </label>
       )}
-      <div style={inputWrapperStyle}>
-        {icon && <div style={iconStyle}>{icon}</div>}
+      
+      <div style={{ position: 'relative' }}>
+        {leftIcon && (
+          <div style={leftIconStyle}>
+            {leftIcon}
+          </div>
+        )}
+        
         <input
-          type={type}
-          value={value}
-          onChange={onChange}
-          placeholder={placeholder}
-          disabled={disabled}
-          required={required}
-          style={inputStyle}
-          onFocus={(e) => {
-            e.target.style.borderColor = hasError ? colors.status.error.main : colors.primary[500]
-            e.target.style.boxShadow = `0 0 0 3px ${hasError ? colors.status.error.light : colors.primary[50]}`
-          }}
-          onBlur={(e) => {
-            e.target.style.borderColor = hasError ? colors.status.error.main : colors.neutral[300]
-            e.target.style.boxShadow = 'none'
-          }}
+          style={{ ...inputStyle, ...style }}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          {...props}
         />
+        
+        {rightIcon && (
+          <div style={rightIconStyle}>
+            {rightIcon}
+          </div>
+        )}
       </div>
-      {error && <div style={errorStyle}>{error}</div>}
+
+      {(error || helperText) && (
+        <div style={helperStyle}>
+          {error && (
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path
+                d="M8 1.5C4.41 1.5 1.5 4.41 1.5 8C1.5 11.59 4.41 14.5 8 14.5C11.59 14.5 14.5 11.59 14.5 8C14.5 4.41 11.59 1.5 8 1.5ZM8 10.5C7.59 10.5 7.25 10.16 7.25 9.75V8C7.25 7.59 7.59 7.25 8 7.25C8.41 7.25 8.75 7.59 8.75 8V9.75C8.75 10.16 8.41 10.5 8 10.5ZM8.75 6H7.25V4.5H8.75V6Z"
+                fill="currentColor"
+              />
+            </svg>
+          )}
+          <span>{error || helperText}</span>
+        </div>
+      )}
     </div>
   )
 }
-
