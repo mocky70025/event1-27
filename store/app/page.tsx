@@ -377,21 +377,21 @@ export default function Home() {
       <nav
         style={{
           position: 'fixed',
-          bottom: 16,
+          bottom: 12,
           left: '50%',
-          width: '360px',
-          minWidth: '360px',
+          width: '320px',
+          minWidth: '320px',
           flexShrink: 0,
-          height: '90px',
+          height: '76px',
           background: 'rgba(255,255,255,0.92)',
           backdropFilter: 'blur(12px)',
           border: '1px solid #E5E7EB',
-          borderRadius: '18px',
-          boxShadow: '0 12px 30px rgba(15,160,94,0.12)',
+          borderRadius: '16px',
+          boxShadow: '0 10px 24px rgba(15,160,94,0.12)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-around',
-          padding: '10px 14px',
+          padding: '10px 12px',
           zIndex: 1000,
           willChange: 'transform',
           transition: 'transform 0.25s ease-out',
@@ -406,7 +406,7 @@ export default function Home() {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              gap: '6px',
+              gap: '4px',
               flex: 1,
               background: 'transparent',
               border: 'none',
@@ -414,12 +414,12 @@ export default function Home() {
             }}
           >
             <div style={{
-              width: '58px',
-              height: '58px',
+              width: '52px',
+              height: '52px',
               background: currentView === 'notifications' ? '#E6F4EA' : 'transparent',
-              borderRadius: '14px',
+              borderRadius: '12px',
               border: currentView === 'notifications' ? '1px solid #34C759' : '1px solid #E5E7EB',
-              boxShadow: currentView === 'notifications' ? '0 6px 20px rgba(15,160,94,0.18)' : 'none',
+              boxShadow: currentView === 'notifications' ? '0 6px 16px rgba(15,160,94,0.18)' : 'none',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -454,7 +454,7 @@ export default function Home() {
               fontSize: '12px',
               fontFamily: '"Inter", "Noto Sans JP", sans-serif',
               fontStyle: 'normal',
-              fontWeight: 600,
+              fontWeight: 500,
               color: currentView === 'notifications' ? '#0FA958' : '#475467'
             }}>通知</span>
           </button>
@@ -464,7 +464,7 @@ export default function Home() {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              gap: '6px',
+              gap: '4px',
               flex: 1,
               background: 'transparent',
               border: 'none',
@@ -472,12 +472,12 @@ export default function Home() {
             }}
           >
             <div style={{
-              width: '58px',
-              height: '58px',
+              width: '52px',
+              height: '52px',
               background: currentView === 'applications' ? '#E6F4EA' : 'transparent',
-              borderRadius: '14px',
+              borderRadius: '12px',
               border: currentView === 'applications' ? '1px solid #34C759' : '1px solid #E5E7EB',
-              boxShadow: currentView === 'applications' ? '0 6px 20px rgba(15,160,94,0.18)' : 'none',
+              boxShadow: currentView === 'applications' ? '0 6px 16px rgba(15,160,94,0.18)' : 'none',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -491,7 +491,7 @@ export default function Home() {
               fontSize: '12px',
               fontFamily: '"Inter", "Noto Sans JP", sans-serif',
               fontStyle: 'normal',
-              fontWeight: 600,
+              fontWeight: 500,
               color: currentView === 'applications' ? '#0FA958' : '#475467'
             }}>履歴</span>
           </button>
@@ -501,7 +501,7 @@ export default function Home() {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              gap: '6px',
+              gap: '4px',
               flex: 1,
               background: 'transparent',
               border: 'none',
@@ -509,12 +509,12 @@ export default function Home() {
             }}
           >
             <div style={{
-              width: '58px',
-              height: '58px',
+              width: '52px',
+              height: '52px',
               background: currentView === 'events' ? '#E6F4EA' : 'transparent',
-              borderRadius: '14px',
+              borderRadius: '12px',
               border: currentView === 'events' ? '1px solid #34C759' : '1px solid #E5E7EB',
-              boxShadow: currentView === 'events' ? '0 6px 20px rgba(15,160,94,0.18)' : 'none',
+              boxShadow: currentView === 'events' ? '0 6px 16px rgba(15,160,94,0.18)' : 'none',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -528,7 +528,7 @@ export default function Home() {
               fontSize: '12px',
               fontFamily: '"Inter", "Noto Sans JP", sans-serif',
               fontStyle: 'normal',
-              fontWeight: 600,
+              fontWeight: 500,
               color: currentView === 'events' ? '#0FA958' : '#475467'
             }}>検索</span>
           </button>
@@ -538,7 +538,7 @@ export default function Home() {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              gap: '6px',
+              gap: '4px',
               flex: 1,
               background: 'transparent',
               border: 'none',
@@ -546,12 +546,12 @@ export default function Home() {
             }}
           >
             <div style={{
-              width: '58px',
-              height: '58px',
+              width: '52px',
+              height: '52px',
               background: currentView === 'profile' ? '#E6F4EA' : 'transparent',
-              borderRadius: '14px',
+              borderRadius: '12px',
               border: currentView === 'profile' ? '1px solid #34C759' : '1px solid #E5E7EB',
-              boxShadow: currentView === 'profile' ? '0 6px 20px rgba(15,160,94,0.18)' : 'none',
+              boxShadow: currentView === 'profile' ? '0 6px 16px rgba(15,160,94,0.18)' : 'none',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
