@@ -382,7 +382,6 @@ export default function Home() {
           width: 'min(92vw, 640px)',
           minWidth: '320px',
           maxWidth: '640px',
-          flexShrink: 0,
           height: '64px',
           background: 'rgba(255,255,255,0.9)',
           backdropFilter: 'blur(10px)',
@@ -391,187 +390,114 @@ export default function Home() {
           boxShadow: '0 16px 40px rgba(15,160,94,0.12)',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'space-around',
+          justifyContent: 'space-between',
           padding: '12px 20px',
           gap: '10px',
           zIndex: 1000,
           willChange: 'transform',
           transition: 'transform 0.25s ease-out',
-          transform: navVisible 
-            ? 'translateX(-50%) translateY(0) translateZ(0)' 
+          transform: navVisible
+            ? 'translateX(-50%) translateY(0) translateZ(0)'
             : 'translateX(-50%) translateY(110%) translateZ(0)'
         }}
-        >
-          <button
-            onClick={() => setCurrentView('notifications')}
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '3px',
-              flex: 1,
-              background: 'transparent',
-              border: 'none',
-              cursor: 'pointer'
-            }}
-          >
-            <div style={{
-              width: '50px',
-              height: '50px',
-              background: currentView === 'notifications' ? '#E6F4EA' : 'transparent',
-              borderRadius: '14px',
-              border: currentView === 'notifications' ? '1px solid #34C759' : '1px solid #E5E7EB',
-              boxShadow: currentView === 'notifications' ? '0 8px 18px rgba(15,160,94,0.18)' : 'none',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: currentView === 'notifications' ? '#0FA958' : '#2C3E50',
-              position: 'relative'
-            }}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 22C13.1 22 14 21.1 14 20H10C10 21.1 10.89 22 12 22ZM18 16V11C18 7.93 16.36 5.36 13.5 4.68V4C13.5 3.17 12.83 2.5 12 2.5C11.17 2.5 10.5 3.17 10.5 4V4.68C7.63 5.36 6 7.92 6 11V16L4 18V19H20V18L18 16Z" fill="currentColor"/>
-              </svg>
-              {unreadNotificationCount > 0 && (
-                <span style={{
-                  position: 'absolute',
-                  top: '-4px',
-                right: '-4px',
-                width: '16px',
-                height: '16px',
-                borderRadius: '50%',
-                background: '#FF3B30',
-                color: '#FFFFFF',
-                fontFamily: 'Inter, sans-serif',
-                fontSize: '10px',
-                fontWeight: 600,
+      >
+        {[
+          { key: 'notifications' as const, label: '通知', icon: (
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 22C13.1 22 14 21.1 14 20H10C10 21.1 10.89 22 12 22ZM18 16V11C18 7.93 16.36 5.36 13.5 4.68V4C13.5 3.17 12.83 2.5 12 2.5C11.17 2.5 10.5 3.17 10.5 4V4.68C7.63 5.36 6 7.92 6 11V16L4 18V19H20V18L18 16Z" fill="currentColor" />
+            </svg>
+          )},
+          { key: 'applications' as const, label: '履歴', icon: (
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M19 4H5C3.89 4 3 4.9 3 6V20C3 21.1 3.89 22 5 22H19C20.1 22 21 21.1 21 20V6C21 4.9 20.1 4 19 4ZM19 20H5V10H19V20ZM19 8H5V6H19V8Z" fill="currentColor" />
+            </svg>
+          )},
+          { key: 'events' as const, label: '検索', icon: (
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M15.5 14H14.71L14.43 13.73C15.41 12.59 16 11.11 16 9.5C16 5.91 13.09 3 9.5 3C5.91 3 3 5.91 3 9.5C3 13.09 5.91 16 9.5 16C11.11 16 12.59 15.41 13.73 14.43L14 14.71V15.5L19 20.49L20.49 19L15.5 14ZM9.5 14C7.01 14 5 11.99 5 9.5C5 7.01 7.01 5 9.5 5C11.99 5 14 7.01 14 9.5C14 11.99 11.99 14 9.5 14Z" fill="currentColor" />
+            </svg>
+          )},
+          { key: 'profile' as const, label: 'プロフィール', icon: (
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z" fill="currentColor" />
+            </svg>
+          )}
+        ].map((item) => {
+          const isActive = currentView === item.key
+          return (
+            <button
+              key={item.key}
+              onClick={() => setCurrentView(item.key)}
+              style={{
                 display: 'flex',
+                flexDirection: 'row',
                 alignItems: 'center',
-                justifyContent: 'center'
-              }}>
-                {unreadNotificationCount > 9 ? '9+' : unreadNotificationCount}
+                justifyContent: 'center',
+                gap: '10px',
+                flex: 1,
+                background: isActive ? 'rgba(15,169,88,0.08)' : 'transparent',
+                border: isActive ? '1px solid rgba(15,169,88,0.35)' : '1px solid transparent',
+                borderRadius: '14px',
+                boxShadow: isActive ? '0 10px 22px rgba(15,160,94,0.16)' : 'none',
+                cursor: 'pointer',
+                padding: '10px 12px'
+              }}
+            >
+              <div
+                style={{
+                  width: '34px',
+                  height: '34px',
+                  background: isActive ? '#E6F4EA' : 'transparent',
+                  borderRadius: '10px',
+                  border: isActive ? '1px solid #34C759' : '1px solid #E5E7EB',
+                  boxShadow: isActive ? '0 8px 16px rgba(15,160,94,0.16)' : 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: isActive ? '#0FA958' : '#2C3E50',
+                  position: 'relative'
+                }}
+              >
+                {item.key === 'notifications' && unreadNotificationCount > 0 && (
+                  <span
+                    style={{
+                      position: 'absolute',
+                      top: '-6px',
+                      right: '-6px',
+                      width: '16px',
+                      height: '16px',
+                      borderRadius: '50%',
+                      background: '#FF3B30',
+                      color: '#FFFFFF',
+                      fontFamily: 'Inter, sans-serif',
+                      fontSize: '10px',
+                      fontWeight: 600,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}
+                  >
+                    {unreadNotificationCount > 9 ? '9+' : unreadNotificationCount}
+                  </span>
+                )}
+                {item.icon}
+              </div>
+              <span
+                style={{
+                  fontSize: '13px',
+                  fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                  fontStyle: 'normal',
+                  fontWeight: 600,
+                  color: isActive ? '#0FA958' : '#2C3E50'
+                }}
+              >
+                {item.label}
               </span>
-            )}
-            </div>
-            <span style={{
-              fontSize: '12px',
-              fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-              fontStyle: 'normal',
-              fontWeight: 500,
-              color: currentView === 'notifications' ? '#0FA958' : '#475467'
-            }}>通知</span>
-          </button>
-          <button
-            onClick={() => setCurrentView('applications')}
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '3px',
-              flex: 1,
-              background: 'transparent',
-              border: 'none',
-              cursor: 'pointer'
-            }}
-          >
-            <div style={{
-              width: '50px',
-              height: '50px',
-              background: currentView === 'applications' ? '#E6F4EA' : 'transparent',
-              borderRadius: '14px',
-              border: currentView === 'applications' ? '1px solid #34C759' : '1px solid #E5E7EB',
-              boxShadow: currentView === 'applications' ? '0 8px 18px rgba(15,160,94,0.18)' : 'none',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: currentView === 'applications' ? '#0FA958' : '#2C3E50'
-            }}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M19 4H5C3.89 4 3 4.9 3 6V20C3 21.1 3.89 22 5 22H19C20.1 22 21 21.1 21 20V6C21 4.9 20.1 4 19 4ZM19 20H5V10H19V20ZM19 8H5V6H19V8Z" fill="currentColor"/>
-              </svg>
-            </div>
-            <span style={{
-              fontSize: '12px',
-              fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-              fontStyle: 'normal',
-              fontWeight: 500,
-              color: currentView === 'applications' ? '#0FA958' : '#475467'
-            }}>履歴</span>
-          </button>
-          <button
-            onClick={() => setCurrentView('events')}
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '3px',
-              flex: 1,
-              background: 'transparent',
-              border: 'none',
-              cursor: 'pointer'
-            }}
-          >
-            <div style={{
-              width: '50px',
-              height: '50px',
-              background: currentView === 'events' ? '#E6F4EA' : 'transparent',
-              borderRadius: '14px',
-              border: currentView === 'events' ? '1px solid #34C759' : '1px solid #E5E7EB',
-              boxShadow: currentView === 'events' ? '0 8px 18px rgba(15,160,94,0.18)' : 'none',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: currentView === 'events' ? '#0FA958' : '#2C3E50'
-            }}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M15.5 14H14.71L14.43 13.73C15.41 12.59 16 11.11 16 9.5C16 5.91 13.09 3 9.5 3C5.91 3 3 5.91 3 9.5C3 13.09 5.91 16 9.5 16C11.11 16 12.59 15.41 13.73 14.43L14 14.71V15.5L19 20.49L20.49 19L15.5 14ZM9.5 14C7.01 14 5 11.99 5 9.5C5 7.01 7.01 5 9.5 5C11.99 5 14 7.01 14 9.5C14 11.99 11.99 14 9.5 14Z" fill="currentColor"/>
-              </svg>
-            </div>
-            <span style={{
-              fontSize: '12px',
-              fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-              fontStyle: 'normal',
-              fontWeight: 500,
-              color: currentView === 'events' ? '#0FA958' : '#475467'
-            }}>検索</span>
-          </button>
-          <button
-            onClick={() => setCurrentView('profile')}
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '3px',
-              flex: 1,
-              background: 'transparent',
-              border: 'none',
-              cursor: 'pointer'
-            }}
-          >
-            <div style={{
-              width: '50px',
-              height: '50px',
-              background: currentView === 'profile' ? '#E6F4EA' : 'transparent',
-              borderRadius: '14px',
-              border: currentView === 'profile' ? '1px solid #34C759' : '1px solid #E5E7EB',
-              boxShadow: currentView === 'profile' ? '0 8px 18px rgba(15,160,94,0.18)' : 'none',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: currentView === 'profile' ? '#0FA958' : '#2C3E50'
-            }}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z" fill="currentColor"/>
-              </svg>
-            </div>
-            <span style={{
-              fontSize: '12px',
-              fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-              fontStyle: 'normal',
-              fontWeight: 600,
-              color: currentView === 'profile' ? '#0FA958' : '#475467'
-            }}>プロフィール</span>
-          </button>
-        </nav>
+            </button>
+          )
+        })}
+      </nav>
+
     </div>
   )
 }

@@ -438,118 +438,124 @@ export default function EventManagement({ userProfile }: EventManagementProps) {
       {!showEventForm && renderCurrentView()}
 
       {!showEventForm && (
-      <nav
-        style={{
-          position: 'fixed',
-          left: '50%',
-          bottom: 18,
-          zIndex: 1000,
-          width: 'min(90vw, 420px)',
-          minWidth: '280px',
-          maxWidth: '420px',
-          flexShrink: 0,
-          height: '72px',
-          background: 'rgba(255,255,255,0.92)',
-          backdropFilter: 'blur(12px)',
-          border: '1px solid #E5E7EB',
-          borderRadius: '20px',
-          boxShadow: '0 14px 32px rgba(249,115,22,0.16)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-around',
-          padding: '10px 16px',
-          willChange: 'transform',
-          transition: 'transform 0.25s ease-out',
-          transform: navVisible ? 'translateX(-50%) translateY(0) translateZ(0)' : 'translateX(-50%) translateY(110%) translateZ(0)'
-        }}
-      >
-        <div
+        <nav
           style={{
+            position: 'fixed',
+            bottom: 24,
+            left: '50%',
+            width: 'min(92vw, 640px)',
+            minWidth: '320px',
+            maxWidth: '640px',
+            height: '64px',
+            background: 'rgba(255,255,255,0.9)',
+            backdropFilter: 'blur(10px)',
+            border: '1px solid #E5E7EB',
+            borderRadius: '24px',
+            boxShadow: '0 16px 40px rgba(249,115,22,0.12)',
             display: 'flex',
-            justifyContent: 'space-around',
             alignItems: 'center',
-            width: '100%',
-            padding: '0 8px',
-            boxSizing: 'border-box'
+            justifyContent: 'space-between',
+            padding: '12px 20px',
+            gap: '10px',
+            zIndex: 1000,
+            willChange: 'transform',
+            transition: 'transform 0.25s ease-out',
+            transform: navVisible
+              ? 'translateX(-50%) translateY(0) translateZ(0)'
+              : 'translateX(-50%) translateY(110%) translateZ(0)'
           }}
         >
-          {tabItems.map((item) => {
+          {[
+            { key: 'home' as const, label: 'ホーム', icon: <HomeIcon /> },
+            { key: 'create' as const, label: 'イベント作成', icon: <CreateIcon /> },
+            { key: 'notifications' as const, label: '通知', icon: <NotificationIcon /> },
+            { key: 'profile' as const, label: 'プロフィール', icon: <ProfileIcon /> }
+          ].map((item) => {
             const isActive = currentView === item.key || (item.key === 'create' && showEventForm)
             return (
-              <div
-              key={item.key}
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                gap: '3px',
-                flex: 1
-              }}
-            >
               <button
+                key={item.key}
                 onClick={() => {
-                    if (item.key === 'create') {
-                      if (!organizer.is_approved) {
-                        alert('運営側の承認が必要です。承認後、イベントの掲載が可能になります。')
-                        return
-                      }
-                      setShowEventForm(true)
-                    } else {
-                      setCurrentView(item.key)
+                  if (item.key === 'create') {
+                    if (!organizer.is_approved) {
+                      alert('運営側の承認が必要です。承認後、イベントの掲載が可能になります。')
+                      return
                     }
+                    setShowEventForm(true)
+                  } else {
+                    setCurrentView(item.key)
+                  }
                 }}
                 style={{
-                  width: '50px',
-                  height: '50px',
-                  background: isActive ? '#FFF4E9' : 'transparent',
-                  borderRadius: '14px',
-                  border: isActive ? '1px solid #F97316' : '1px solid #E5E7EB',
-                  boxShadow: isActive ? '0 8px 18px rgba(249,115,22,0.18)' : 'none',
                   display: 'flex',
+                  flexDirection: 'row',
                   alignItems: 'center',
                   justifyContent: 'center',
+                  gap: '10px',
+                  flex: 1,
+                  background: isActive ? 'rgba(249,115,22,0.08)' : 'transparent',
+                  border: isActive ? '1px solid rgba(249,115,22,0.35)' : '1px solid transparent',
+                  borderRadius: '14px',
+                  boxShadow: isActive ? '0 10px 22px rgba(249,115,22,0.16)' : 'none',
                   cursor: 'pointer',
-                  padding: 0,
-                  position: 'relative',
-                  color: isActive ? '#F97316' : '#2C3E50',
+                  padding: '10px 12px'
                 }}
               >
-                  <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    {item.icon}
-                    {item.key === 'notifications' && unreadNotificationCount > 0 && (
-                      <span style={{
+                <div
+                  style={{
+                    width: '34px',
+                    height: '34px',
+                    background: isActive ? '#FFF4E9' : 'transparent',
+                    borderRadius: '10px',
+                    border: isActive ? '1px solid #F97316' : '1px solid #E5E7EB',
+                    boxShadow: isActive ? '0 8px 16px rgba(249,115,22,0.16)' : 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: isActive ? '#F97316' : '#2C3E50',
+                    position: 'relative'
+                  }}
+                >
+                  {item.key === 'notifications' && unreadNotificationCount > 0 && (
+                    <span
+                      style={{
                         position: 'absolute',
-                        top: '-4px',
-                        right: '-4px',
+                        top: '-6px',
+                        right: '-6px',
                         width: '16px',
                         height: '16px',
                         borderRadius: '50%',
                         background: '#FF3B30',
                         color: '#FFFFFF',
-                        fontFamily: '"Noto Sans JP", sans-serif',
+                        fontFamily: 'Inter, sans-serif',
                         fontSize: '10px',
                         fontWeight: 600,
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center'
-                      }}>
-                        {unreadNotificationCount > 9 ? '9+' : unreadNotificationCount}
-                      </span>
-                    )}
-                  </div>
-                </button>
-              <span style={{
-                fontSize: '12px',
-                fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                fontStyle: 'normal',
-                fontWeight: 500,
-                color: isActive ? '#F97316' : '#475467'
-              }}>{item.label}</span>
-            </div>
-          )
-        })}
-        </div>
-      </nav>
+                      }}
+                    >
+                      {unreadNotificationCount > 9 ? '9+' : unreadNotificationCount}
+                    </span>
+                  )}
+                  {item.icon}
+                </div>
+                <span
+                  style={{
+                    fontSize: '13px',
+                    fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                    fontStyle: 'normal',
+                    fontWeight: 600,
+                    color: isActive ? '#F97316' : '#2C3E50'
+                  }}
+                >
+                  {item.label}
+                </span>
+              </button>
+            )
+          })}
+        </nav>
+
       )}
     </div>
   )
