@@ -379,26 +379,26 @@ export default function Home() {
           position: 'fixed',
           bottom: 24,
           left: '50%',
-          width: 'min(92vw, 640px)',
-          minWidth: '320px',
-          maxWidth: '640px',
-          height: '64px',
-          background: 'rgba(255,255,255,0.9)',
-          backdropFilter: 'blur(10px)',
-          border: '1px solid #E5E7EB',
-          borderRadius: '24px',
-          boxShadow: '0 16px 40px rgba(15,160,94,0.12)',
+          width: 'min(92vw, 720px)',
+          minWidth: '340px',
+          maxWidth: '720px',
+          height: '72px',
+          background: 'rgba(255,255,255,0.92)',
+          backdropFilter: 'blur(14px)',
+          border: '1px solid rgba(226,232,240,0.9)',
+          borderRadius: '28px',
+          boxShadow: '0 18px 48px rgba(15,160,94,0.14)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          padding: '12px 20px',
-          gap: '10px',
+          padding: '14px 22px',
+          gap: '12px',
           zIndex: 1000,
           willChange: 'transform',
           transition: 'transform 0.25s ease-out',
           transform: navVisible
             ? 'translateX(-50%) translateY(0) translateZ(0)'
-            : 'translateX(-50%) translateY(110%) translateZ(0)'
+            : 'translateX(-50%) translateY(120%) translateZ(0)'
         }}
       >
         {[
@@ -433,24 +433,24 @@ export default function Home() {
                 flexDirection: 'row',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '10px',
+                gap: '12px',
                 flex: 1,
-                background: isActive ? 'rgba(15,169,88,0.08)' : 'transparent',
-                border: isActive ? '1px solid rgba(15,169,88,0.35)' : '1px solid transparent',
-                borderRadius: '14px',
-                boxShadow: isActive ? '0 10px 22px rgba(15,160,94,0.16)' : 'none',
+                background: isActive ? 'rgba(15,169,88,0.10)' : 'transparent',
+                border: isActive ? '1px solid rgba(15,169,88,0.40)' : '1px solid transparent',
+                borderRadius: '16px',
+                boxShadow: isActive ? '0 12px 26px rgba(15,160,94,0.18)' : 'none',
                 cursor: 'pointer',
-                padding: '10px 12px'
+                padding: '12px 14px'
               }}
             >
               <div
                 style={{
-                  width: '34px',
-                  height: '34px',
-                  background: isActive ? '#E6F4EA' : 'transparent',
+                  width: '36px',
+                  height: '36px',
+                  background: isActive ? '#E7F8EF' : '#F6F8FB',
                   borderRadius: '10px',
-                  border: isActive ? '1px solid #34C759' : '1px solid #E5E7EB',
-                  boxShadow: isActive ? '0 8px 16px rgba(15,160,94,0.16)' : 'none',
+                  border: isActive ? '1px solid #0FA958' : '1px solid #E5E7EB',
+                  boxShadow: isActive ? '0 8px 16px rgba(15,160,94,0.14)' : 'none',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -462,8 +462,8 @@ export default function Home() {
                   <span
                     style={{
                       position: 'absolute',
-                      top: '-6px',
-                      right: '-6px',
+                      top: '-8px',
+                      right: '-8px',
                       width: '16px',
                       height: '16px',
                       borderRadius: '50%',
@@ -487,7 +487,8 @@ export default function Home() {
                   fontSize: '13px',
                   fontFamily: '"Inter", "Noto Sans JP", sans-serif',
                   fontStyle: 'normal',
-                  fontWeight: 600,
+                  fontWeight: 700,
+                  letterSpacing: '0.01em',
                   color: isActive ? '#0FA958' : '#2C3E50'
                 }}
               >
