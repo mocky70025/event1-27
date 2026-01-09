@@ -119,14 +119,28 @@ export default function Home() {
             }
             
             // 登録済みかチェック
+            // まず user_id で検索。なければ line_user_id もフォールバック（Googleでも line_user_id に入っているケースを考慮）
             const { data: exhibitor, error: exhibitorError } = await supabase
               .from('exhibitors')
               .select('id')
               .eq('user_id', session.user.id)
               .maybeSingle()
-            
-            if (exhibitorError) {
-              console.error('[Home] Error fetching exhibitor:', exhibitorError)
+
+            let exhibitorRecord = exhibitor
+            let fetchError = exhibitorError
+
+            if ((!exhibitorRecord || fetchError) && detectedAuthType === 'google') {
+              const { data: exhibitorByLine, error: exhibitorByLineError } = await supabase
+                .from('exhibitors')
+                .select('id')
+                .eq('line_user_id', session.user.id)
+                .maybeSingle()
+              exhibitorRecord = exhibitorByLine
+              fetchError = fetchError || exhibitorByLineError
+            }
+
+            if (fetchError) {
+              console.error('[Home] Error fetching exhibitor:', fetchError)
               if (storedIsRegistered) {
                 console.log('[Home] Error fetching exhibitor, but is_registered in storage is true, setting isRegistered to true')
                 setIsRegistered(true)
@@ -134,11 +148,11 @@ export default function Home() {
                 return
               }
             }
-            
-            const shouldBeRegistered = !!exhibitor || storedIsRegistered
+
+            const shouldBeRegistered = !!exhibitorRecord || storedIsRegistered
             setIsRegistered(shouldBeRegistered)
             
-            if (exhibitor) {
+            if (exhibitorRecord) {
               sessionStorage.setItem('is_registered', 'true')
             } else if (!storedIsRegistered) {
               sessionStorage.setItem('is_registered', 'false')
