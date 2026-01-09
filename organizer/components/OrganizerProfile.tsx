@@ -59,11 +59,11 @@ export default function OrganizerProfile({ userProfile, onBack }: OrganizerProfi
       const authType = (userProfile as any).authType || 'line'
       let data, error
 
-      if (authType === 'email') {
+      if (authType === 'line') {
         const result = await supabase
           .from('organizers')
           .select('*')
-          .eq('user_id', userProfile.userId)
+          .eq('line_user_id', userProfile.userId)
           .single()
         data = result.data
         error = result.error
@@ -71,7 +71,7 @@ export default function OrganizerProfile({ userProfile, onBack }: OrganizerProfi
         const result = await supabase
           .from('organizers')
           .select('*')
-          .eq('line_user_id', userProfile.userId)
+          .eq('user_id', userProfile.userId)
           .single()
         data = result.data
         error = result.error
@@ -446,4 +446,3 @@ export default function OrganizerProfile({ userProfile, onBack }: OrganizerProfi
     </div>
   )
 }
-

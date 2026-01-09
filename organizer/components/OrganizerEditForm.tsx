@@ -23,7 +23,7 @@ export default function OrganizerEditForm({
     age: organizerData.age || 0,
     phone_number: organizerData.phone_number || '',
     email: organizerData.email || '',
-    genre: organizerData.genre || '',
+    company_name: organizerData.company_name || '',
   })
 
   const [loading, setLoading] = useState(false)
@@ -114,11 +114,10 @@ export default function OrganizerEditForm({
       // バリデーション
       const newErrors: Record<string, boolean> = {}
       if (!formData.name.trim()) newErrors.name = true
-      if (!formData.gender) newErrors.gender = true
-      if (!validateAge(formData.age)) newErrors.age = true
-      if (!formData.phone_number.trim() || !validatePhoneNumber(formData.phone_number)) newErrors.phone_number = true
+      if (formData.age !== 0 && !validateAge(formData.age)) newErrors.age = true
+      if (formData.phone_number && !validatePhoneNumber(formData.phone_number)) newErrors.phone_number = true
       if (!formData.email.trim() || !validateEmail(formData.email)) newErrors.email = true
-      if (!formData.genre) newErrors.genre = true
+      if (!formData.company_name.trim()) newErrors.company_name = true
 
       if (Object.keys(newErrors).length > 0) {
         setErrors(newErrors)
@@ -151,30 +150,16 @@ export default function OrganizerEditForm({
         return
       }
 
-      const authType = (userProfile as any).authType || 'line'
-      console.log('[OrganizerEditForm] Updating organizer with auth type:', authType, 'userId:', userProfile.userId)
+      const authTypeRaw = (userProfile as any).authType || 'line'
+      const isLineLogin = authTypeRaw === 'line'
+      console.log('[OrganizerEditForm] Updating organizer with auth type:', authTypeRaw, 'userId:', userProfile.userId)
 
-      let data, error
-
-      if (authType === 'email') {
-        const result = await supabase
-          .from('organizers')
-          .update(updateData)
-          .eq('user_id', userProfile.userId)
-          .select()
-          .single()
-        data = result.data
-        error = result.error
-      } else {
-        const result = await supabase
-          .from('organizers')
-          .update(updateData)
-          .eq('line_user_id', userProfile.userId)
-          .select()
-          .single()
-        data = result.data
-        error = result.error
-      }
+      const { data, error } = await supabase
+        .from('organizers')
+        .update(updateData)
+        .eq(isLineLogin ? 'line_user_id' : 'user_id', userProfile.userId)
+        .select()
+        .single()
 
       if (error) {
         console.error('Update failed:', error)
@@ -462,45 +447,28 @@ export default function OrganizerEditForm({
                   <p style={{ fontSize: '12px', color: '#FF3B30', marginTop: '-20px', marginBottom: '24px' }}>入力してください</p>
                 )}
 
-                {/* ジャンル */}
-                <label style={labelStyle}>ジャンル</label>
-                <div style={{ position: 'relative', marginBottom: '32px' }}>
-                  <select
-                    name="genre"
-                    value={formData.genre}
-                    onChange={handleInputChange}
-                    style={{
-                      width: '100%',
-                      padding: '12px 16px',
-                      border: errors.genre ? '1px solid #FF3B30' : '1px solid #E9ECEF',
-                      borderRadius: '8px',
-                      fontSize: '15px',
-                      fontFamily: '"Inter", "Noto Sans JP", sans-serif',
-                      color: formData.genre ? '#2C3E50' : '#6C757D',
-                      appearance: 'none',
-                      backgroundColor: 'white',
-                      boxSizing: 'border-box',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    <option value="">選択してください</option>
-                    <option value="飲食">飲食</option>
-                    <option value="その他">その他</option>
-                  </select>
-                  <div style={{
-                    position: 'absolute',
-                    right: '16px',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    pointerEvents: 'none'
-                  }}>
-                    <svg width="8" height="5" viewBox="0 0 8 5" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M0.75 0.75L4 4.25L7.25 0.75" stroke="#6C757D" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </div>
-                </div>
-                {errors.genre && (
-                  <p style={{ fontSize: '12px', color: '#FF3B30', marginTop: '-28px', marginBottom: '32px' }}>選択してください</p>
+                {/* 団体名・組織名 */}
+                <label style={labelStyle}>団体名・組織名</label>
+                <input
+                  type="text"
+                  name="company_name"
+                  value={formData.company_name}
+                  onChange={handleInputChange}
+                  placeholder="例: 株式会社〇〇"
+                  style={{
+                    width: '100%',
+                    padding: '12px 16px',
+                    marginBottom: '32px',
+                    border: errors.company_name ? '1px solid #FF3B30' : '1px solid #E9ECEF',
+                    borderRadius: '8px',
+                    fontSize: '15px',
+                    fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                    color: formData.company_name ? '#2C3E50' : '#6C757D',
+                    boxSizing: 'border-box'
+                  }}
+                />
+                {errors.company_name && (
+                  <p style={{ fontSize: '12px', color: '#FF3B30', marginTop: '-28px', marginBottom: '32px' }}>入力してください</p>
                 )}
 
                 {/* 保存するボタン */}
@@ -532,4 +500,3 @@ export default function OrganizerEditForm({
     </div>
   )
 }
-

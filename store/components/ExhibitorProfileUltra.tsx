@@ -13,7 +13,7 @@ interface ExhibitorProfileProps {
 export default function ExhibitorProfileUltra({ userProfile, onBack }: ExhibitorProfileProps) {
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
-    name: userProfile?.name || '',
+    name: userProfile?.name || userProfile?.displayName || '',
     email: userProfile?.email || '',
     phone_number: '',
     gender: '',
@@ -36,20 +36,31 @@ export default function ExhibitorProfileUltra({ userProfile, onBack }: Exhibitor
     setLoading(true)
     try {
       const { data: { user } } = await supabase.auth.getUser()
-      
+
+      const isLineLogin = (userProfile as any)?.authType === 'line'
+      const lineUserId = (userProfile as any)?.userId
+
       if (user) {
-        const { data, error } = await supabase
+        const query = supabase
           .from('exhibitors')
           .select('name,email,phone_number,gender,age,description,business_license_image_url,vehicle_inspection_image_url,automobile_inspection_image_url,pl_insurance_image_url,fire_equipment_layout_image_url')
-          .eq('user_id', user.id)
-          .single()
+          .limit(1)
+
+        let data = null
+        let error = null
+
+        if (!isLineLogin) {
+          ;({ data, error } = await query.eq('user_id', user.id).maybeSingle())
+        } else if (lineUserId) {
+          ;({ data, error } = await query.eq('line_user_id', lineUserId).maybeSingle())
+        }
 
         if (error) throw error
         
         if (data) {
           setFormData({
-            name: data.name || userProfile?.name || '',
-            email: data.email || userProfile?.email || '',
+            name: data.name || userProfile?.name || userProfile?.displayName || '',
+            email: data.email || userProfile?.email || user?.email || '',
             phone_number: data.phone_number || '',
             gender: data.gender || '',
             age: data.age?.toString() || '',
@@ -62,6 +73,12 @@ export default function ExhibitorProfileUltra({ userProfile, onBack }: Exhibitor
             pl_insurance_image_url: data.pl_insurance_image_url || '',
             fire_equipment_layout_image_url: data.fire_equipment_layout_image_url || '',
           })
+        } else {
+          setFormData((prev) => ({
+            ...prev,
+            name: userProfile?.name || userProfile?.displayName || prev.name,
+            email: userProfile?.email || user?.email || prev.email,
+          }))
         }
       }
     } catch (error) {
@@ -84,17 +101,24 @@ export default function ExhibitorProfileUltra({ userProfile, onBack }: Exhibitor
         return
       }
 
+      const isLineLogin = (userProfile as any)?.authType === 'line'
+      const lineUserId = (userProfile as any)?.userId
+
+      const payload = {
+        user_id: user.id,
+        line_user_id: isLineLogin ? lineUserId : null,
+        name: formData.name,
+        email: formData.email,
+        phone_number: formData.phone_number,
+        gender: formData.gender,
+        age: formData.age ? parseInt(formData.age) : null,
+        description: formData.description,
+      }
+
       const { error } = await supabase
         .from('exhibitors')
-        .update({
-          name: formData.name,
-          email: formData.email,
-          phone_number: formData.phone_number,
-          gender: formData.gender,
-          age: formData.age ? parseInt(formData.age) : null,
-          description: formData.description,
-        })
-        .eq('user_id', user.id)
+        .upsert(payload, { onConflict: isLineLogin ? 'line_user_id' : 'user_id' })
+        .eq(isLineLogin ? 'line_user_id' : 'user_id', isLineLogin ? lineUserId : user.id)
 
       if (error) throw error
 

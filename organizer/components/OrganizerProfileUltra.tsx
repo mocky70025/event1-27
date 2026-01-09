@@ -13,13 +13,12 @@ interface OrganizerProfileProps {
 export default function OrganizerProfileUltra({ userProfile, onBack }: OrganizerProfileProps) {
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
-    name: userProfile?.name || '',
+    name: userProfile?.name || userProfile?.displayName || '',
     email: userProfile?.email || '',
     phone_number: '',
     company_name: '',
     gender: '',
     age: '',
-    description: '',
   })
 
   useEffect(() => {
@@ -30,26 +29,42 @@ export default function OrganizerProfileUltra({ userProfile, onBack }: Organizer
     setLoading(true)
     try {
       const { data: { user } } = await supabase.auth.getUser()
-      
+
+      const isLineLogin = (userProfile as any)?.authType === 'line'
+      const lineUserId = (userProfile as any)?.userId
+
       if (user) {
-        const { data, error } = await supabase
+        const query = supabase
           .from('organizers')
-          .select('name,email,phone_number,company_name,gender,age,description')
-          .eq('user_id', user.id)
-          .single()
+          .select('name,email,phone_number,company_name,gender,age')
+          .limit(1)
+
+        let data = null
+        let error = null
+
+        if (!isLineLogin) {
+          ;({ data, error } = await query.eq('user_id', user.id).maybeSingle())
+        } else if (lineUserId) {
+          ;({ data, error } = await query.eq('line_user_id', lineUserId).maybeSingle())
+        }
 
         if (error) throw error
-        
+
         if (data) {
           setFormData({
-            name: data.name || userProfile?.name || '',
-            email: data.email || userProfile?.email || '',
+            name: data.name || userProfile?.name || userProfile?.displayName || '',
+            email: data.email || userProfile?.email || user?.email || '',
             phone_number: data.phone_number || '',
             company_name: data.company_name || '',
             gender: data.gender || '',
             age: data.age?.toString() || '',
-            description: data.description || '',
           })
+        } else {
+          setFormData((prev) => ({
+            ...prev,
+            name: userProfile?.name || userProfile?.displayName || prev.name,
+            email: userProfile?.email || user?.email || prev.email,
+          }))
         }
       }
     } catch (error) {
@@ -65,24 +80,30 @@ export default function OrganizerProfileUltra({ userProfile, onBack }: Organizer
 
     try {
       const { data: { user } } = await supabase.auth.getUser()
-      
+
       if (!user) {
         alert('ログインが必要です')
         return
       }
 
+      const isLineLogin = (userProfile as any)?.authType === 'line'
+      const lineUserId = (userProfile as any)?.userId
+
+      const payload = {
+        user_id: user.id,
+        line_user_id: isLineLogin ? lineUserId : null,
+        name: formData.name,
+        email: formData.email,
+        phone_number: formData.phone_number,
+        company_name: formData.company_name,
+        gender: formData.gender,
+        age: formData.age ? parseInt(formData.age, 10) : null,
+      }
+
       const { error } = await supabase
         .from('organizers')
-        .update({
-          name: formData.name,
-          email: formData.email,
-          phone_number: formData.phone_number,
-          company_name: formData.company_name,
-          gender: formData.gender,
-          age: formData.age ? parseInt(formData.age) : null,
-          description: formData.description,
-        })
-        .eq('user_id', user.id)
+        .upsert(payload, { onConflict: isLineLogin ? 'line_user_id' : 'user_id' })
+        .eq(isLineLogin ? 'line_user_id' : 'user_id', isLineLogin ? lineUserId : user.id)
 
       if (error) throw error
 
@@ -312,43 +333,85 @@ export default function OrganizerProfileUltra({ userProfile, onBack }: Organizer
                 </div>
               </div>
 
-              {/* 説明 */}
-              <div style={{ marginBottom: spacing[8] }}>
-                <label style={{
-                  display: 'block',
-                  fontFamily: typography.fontFamily.japanese,
-                  fontSize: typography.fontSize.sm,
-                  fontWeight: typography.fontWeight.semibold,
-                  color: colors.neutral[900],
-                  marginBottom: spacing[2],
-                }}>
-                  団体・組織の説明
-                </label>
-                <textarea
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  rows={6}
-                  placeholder="団体や組織の説明を記入してください"
-                  style={{
-                    width: '100%',
-                    padding: spacing[4],
-                    fontSize: typography.fontSize.base,
+              {/* 性別・年齢 */}
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(2, 1fr)',
+                gap: spacing[6],
+                marginBottom: spacing[8],
+              }}>
+                <div>
+                  <label style={{
+                    display: 'block',
                     fontFamily: typography.fontFamily.japanese,
-                    border: `2px solid ${colors.neutral[200]}`,
-                    borderRadius: borderRadius.lg,
-                    outline: 'none',
-                    resize: 'vertical',
-                    transition: `all ${transitions.fast}`,
-                  }}
-                  onFocus={(e) => {
-                    e.currentTarget.style.borderColor = colors.primary[500]
-                    e.currentTarget.style.boxShadow = `0 0 0 3px ${colors.primary[100]}`
-                  }}
-                  onBlur={(e) => {
-                    e.currentTarget.style.borderColor = colors.neutral[200]
-                    e.currentTarget.style.boxShadow = 'none'
-                  }}
-                />
+                    fontSize: typography.fontSize.sm,
+                    fontWeight: typography.fontWeight.semibold,
+                    color: colors.neutral[900],
+                    marginBottom: spacing[2],
+                  }}>
+                    性別
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.gender}
+                    onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
+                    style={{
+                      width: '100%',
+                      padding: spacing[3],
+                      fontSize: typography.fontSize.base,
+                      fontFamily: typography.fontFamily.japanese,
+                      border: `2px solid ${colors.neutral[200]}`,
+                      borderRadius: borderRadius.lg,
+                      outline: 'none',
+                      transition: `all ${transitions.fast}`,
+                    }}
+                    onFocus={(e) => {
+                      e.currentTarget.style.borderColor = colors.primary[500]
+                      e.currentTarget.style.boxShadow = `0 0 0 3px ${colors.primary[100]}`
+                    }}
+                    onBlur={(e) => {
+                      e.currentTarget.style.borderColor = colors.neutral[200]
+                      e.currentTarget.style.boxShadow = 'none'
+                    }}
+                  />
+                </div>
+
+                <div>
+                  <label style={{
+                    display: 'block',
+                    fontFamily: typography.fontFamily.japanese,
+                    fontSize: typography.fontSize.sm,
+                    fontWeight: typography.fontWeight.semibold,
+                    color: colors.neutral[900],
+                    marginBottom: spacing[2],
+                  }}>
+                    年齢
+                  </label>
+                  <input
+                    type="number"
+                    min={0}
+                    value={formData.age}
+                    onChange={(e) => setFormData({ ...formData, age: e.target.value })}
+                    style={{
+                      width: '100%',
+                      padding: spacing[3],
+                      fontSize: typography.fontSize.base,
+                      fontFamily: typography.fontFamily.japanese,
+                      border: `2px solid ${colors.neutral[200]}`,
+                      borderRadius: borderRadius.lg,
+                      outline: 'none',
+                      transition: `all ${transitions.fast}`,
+                    }}
+                    onFocus={(e) => {
+                      e.currentTarget.style.borderColor = colors.primary[500]
+                      e.currentTarget.style.boxShadow = `0 0 0 3px ${colors.primary[100]}`
+                    }}
+                    onBlur={(e) => {
+                      e.currentTarget.style.borderColor = colors.neutral[200]
+                      e.currentTarget.style.boxShadow = 'none'
+                    }}
+                  />
+                </div>
               </div>
 
               {/* アクションボタン */}
