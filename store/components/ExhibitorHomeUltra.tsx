@@ -82,6 +82,26 @@ export default function ExhibitorHomeUltra({ userProfile, onNavigate }: Exhibito
     return date.toLocaleDateString('ja-JP', { month: 'long', day: 'numeric' })
   }
 
+  const StatIcons = {
+    total: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <rect x="5" y="4" width="14" height="16" rx="2" stroke={colors.primary[500]} strokeWidth="1.8" />
+        <path d="M8 8H16M8 12H16M8 16H13" stroke={colors.primary[500]} strokeWidth="1.8" strokeLinecap="round" />
+      </svg>
+    ),
+    pending: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <circle cx="12" cy="12" r="9" stroke={colors.status.warning.main} strokeWidth="1.8" />
+        <path d="M12 7v6l3 2" stroke={colors.status.warning.main} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+    approved: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M20 6L9 17L4 12" stroke={colors.status.success.main} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    )
+  }
+
   return (
     <div style={{
       minHeight: '100vh',
@@ -144,9 +164,9 @@ export default function ExhibitorHomeUltra({ userProfile, onNavigate }: Exhibito
           marginBottom: spacing[8],
         }}>
           {[
-            { label: '総申込数', value: stats.total, icon: '📋', color: colors.primary[500] },
-            { label: '審査中', value: stats.pending, icon: '⏳', color: colors.status.warning.main },
-            { label: '承認済み', value: stats.approved, icon: '✓', color: colors.status.success.main },
+            { label: '総申込数', value: stats.total, icon: StatIcons.total, color: colors.primary[500] },
+            { label: '審査中', value: stats.pending, icon: StatIcons.pending, color: colors.status.warning.main },
+            { label: '承認済み', value: stats.approved, icon: StatIcons.approved, color: colors.status.success.main },
           ].map((stat, index) => (
             <div
               key={index}
@@ -157,15 +177,7 @@ export default function ExhibitorHomeUltra({ userProfile, onNavigate }: Exhibito
                 boxShadow: shadows.card,
                 border: `1px solid ${colors.neutral[100]}`,
                 transition: `all ${transitions.normal}`,
-                cursor: 'pointer',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-4px)'
-                e.currentTarget.style.boxShadow = shadows.lg
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)'
-                e.currentTarget.style.boxShadow = shadows.card
+                cursor: 'default',
               }}
             >
               <div style={{
@@ -174,9 +186,7 @@ export default function ExhibitorHomeUltra({ userProfile, onNavigate }: Exhibito
                 justifyContent: 'space-between',
                 marginBottom: spacing[3],
               }}>
-                <span style={{
-                  fontSize: typography.fontSize['4xl'],
-                }}>
+                <span aria-hidden="true">
                   {stat.icon}
                 </span>
                 <div style={{
@@ -458,4 +468,3 @@ export default function ExhibitorHomeUltra({ userProfile, onNavigate }: Exhibito
     </div>
   )
 }
-
