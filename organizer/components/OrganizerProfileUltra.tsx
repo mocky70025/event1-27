@@ -16,15 +16,10 @@ export default function OrganizerProfileUltra({ userProfile, onBack }: Organizer
     name: userProfile?.name || '',
     email: userProfile?.email || '',
     phone_number: '',
-    organization_name: '',
+    company_name: '',
+    gender: '',
+    age: '',
     description: '',
-  })
-  const [docUrls, setDocUrls] = useState({
-    business_license_image_url: '',
-    vehicle_inspection_image_url: '',
-    automobile_inspection_image_url: '',
-    pl_insurance_image_url: '',
-    fire_equipment_layout_image_url: '',
   })
 
   useEffect(() => {
@@ -39,7 +34,7 @@ export default function OrganizerProfileUltra({ userProfile, onBack }: Organizer
       if (user) {
         const { data, error } = await supabase
           .from('organizers')
-          .select('name,email,phone_number,organization_name,description,business_license_image_url,vehicle_inspection_image_url,automobile_inspection_image_url,pl_insurance_image_url,fire_equipment_layout_image_url')
+          .select('name,email,phone_number,company_name,gender,age,description')
           .eq('user_id', user.id)
           .single()
 
@@ -50,15 +45,10 @@ export default function OrganizerProfileUltra({ userProfile, onBack }: Organizer
             name: data.name || userProfile?.name || '',
             email: data.email || userProfile?.email || '',
             phone_number: data.phone_number || '',
-            organization_name: data.organization_name || '',
+            company_name: data.company_name || '',
+            gender: data.gender || '',
+            age: data.age?.toString() || '',
             description: data.description || '',
-          })
-          setDocUrls({
-            business_license_image_url: data.business_license_image_url || '',
-            vehicle_inspection_image_url: data.vehicle_inspection_image_url || '',
-            automobile_inspection_image_url: data.automobile_inspection_image_url || '',
-            pl_insurance_image_url: data.pl_insurance_image_url || '',
-            fire_equipment_layout_image_url: data.fire_equipment_layout_image_url || '',
           })
         }
       }
@@ -87,7 +77,9 @@ export default function OrganizerProfileUltra({ userProfile, onBack }: Organizer
           name: formData.name,
           email: formData.email,
           phone_number: formData.phone_number,
-          organization_name: formData.organization_name,
+          company_name: formData.company_name,
+          gender: formData.gender,
+          age: formData.age ? parseInt(formData.age) : null,
           description: formData.description,
         })
         .eq('user_id', user.id)
@@ -296,8 +288,8 @@ export default function OrganizerProfileUltra({ userProfile, onBack }: Organizer
                   </label>
                   <input
                     type="text"
-                    value={formData.organization_name}
-                    onChange={(e) => setFormData({ ...formData, organization_name: e.target.value })}
+                    value={formData.company_name}
+                    onChange={(e) => setFormData({ ...formData, company_name: e.target.value })}
                     style={{
                       width: '100%',
                       padding: spacing[3],
@@ -375,86 +367,6 @@ export default function OrganizerProfileUltra({ userProfile, onBack }: Organizer
             </form>
           </div>
 
-          {/* 提出書類プレビュー */}
-          <div style={{
-            background: colors.neutral[0],
-            borderRadius: borderRadius.xl,
-            padding: spacing[8],
-            boxShadow: shadows.card,
-          }}>
-            <h2 style={{
-              fontFamily: typography.fontFamily.japanese,
-              fontSize: typography.fontSize.xl,
-              fontWeight: typography.fontWeight.bold,
-              color: colors.neutral[900],
-              marginBottom: spacing[4],
-            }}>
-              提出書類
-            </h2>
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-              gap: spacing[5],
-            }}>
-              {[
-                { key: 'business_license_image_url', label: '営業許可証' },
-                { key: 'vehicle_inspection_image_url', label: '車検証' },
-                { key: 'automobile_inspection_image_url', label: '自動車点検記録簿' },
-                { key: 'pl_insurance_image_url', label: 'PL保険' },
-                { key: 'fire_equipment_layout_image_url', label: '消防設備配置図' },
-              ].map((doc) => {
-                const url = (docUrls as any)[doc.key] as string
-                return (
-                  <div key={doc.key} style={{
-                    border: `1px solid ${colors.neutral[200]}`,
-                    borderRadius: borderRadius.lg,
-                    overflow: 'hidden',
-                    background: colors.neutral[50],
-                  }}>
-                    <div style={{
-                      padding: spacing[3],
-                      borderBottom: `1px solid ${colors.neutral[200]}`,
-                      fontFamily: typography.fontFamily.japanese,
-                      fontSize: typography.fontSize.sm,
-                      fontWeight: typography.fontWeight.semibold,
-                      color: colors.neutral[800],
-                    }}>
-                      {doc.label}
-                    </div>
-                    <div style={{
-                      height: '180px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      background: colors.neutral[0],
-                    }}>
-                      {url ? (
-                        <a href={url} target="_blank" rel="noreferrer" style={{ display: 'block', width: '100%', height: '100%' }}>
-                          <img
-                            src={url}
-                            alt={doc.label}
-                            style={{
-                              width: '100%',
-                              height: '100%',
-                              objectFit: 'cover',
-                              display: 'block',
-                            }}
-                          />
-                        </a>
-                      ) : (
-                        <span style={{
-                          color: colors.neutral[400],
-                          fontSize: typography.fontSize.sm,
-                        }}>
-                          未アップロード
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
         </div>
       </div>
     </div>
