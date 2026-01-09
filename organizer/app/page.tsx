@@ -70,18 +70,32 @@ export default function Home() {
           }
           
           // 登録済みかチェック
+          // ユーザーIDで取得できない場合でも、プロバイダによっては line_user_id に保存されているケースがあるためフォールバックする
           const { data: organizer, error: organizerError } = await supabase
             .from('organizers')
             .select('id, is_approved')
             .eq('user_id', session.user.id)
             .maybeSingle()
+
+          let organizerRecord = organizer
+          let fetchError = organizerError
+
+          if ((!organizerRecord || fetchError) && detectedAuthType === 'google') {
+            const { data: organizerByLine, error: organizerByLineError } = await supabase
+              .from('organizers')
+              .select('id, is_approved')
+              .eq('line_user_id', session.user.id)
+              .maybeSingle()
+            organizerRecord = organizerByLine
+            fetchError = fetchError || organizerByLineError
+          }
           
-          if (organizerError) {
-            console.error('[Home] Error fetching organizer:', organizerError)
+          if (fetchError) {
+            console.error('[Home] Error fetching organizer:', fetchError)
             setIsRegistered(false)
             sessionStorage.setItem('is_registered', 'false')
             setHasActiveSession(true)
-          } else if (!organizer) {
+          } else if (!organizerRecord) {
             console.log('[Home] Organizer not found - allow registration')
             setIsRegistered(false)
             sessionStorage.setItem('is_registered', 'false')
@@ -94,7 +108,7 @@ export default function Home() {
               userId: session.user.id, 
               authType: detectedAuthType,
               isRegistered: true,
-              is_approved: organizer?.is_approved,
+              is_approved: organizerRecord?.is_approved,
               emailConfirmed: isEmailConfirmed || true,
             })
           }
