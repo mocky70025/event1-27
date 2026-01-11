@@ -16,6 +16,8 @@ export default function ExhibitorProfileUltra({ userProfile, onBack }: Exhibitor
     phone_number: '',
     gender: '',
     age: '',
+    genre_category: '',
+    genre_free_text: '',
   })
   const [docUrls, setDocUrls] = useState({
     business_license_image_url: '',
@@ -37,7 +39,7 @@ export default function ExhibitorProfileUltra({ userProfile, onBack }: Exhibitor
       if (user) {
         const query = supabase
           .from('exhibitors')
-          .select('name,email,phone_number,gender,age,business_license_image_url,vehicle_inspection_image_url,automobile_inspection_image_url,pl_insurance_image_url,fire_equipment_layout_image_url')
+          .select('name,email,phone_number,gender,age,genre_category,genre_free_text,business_license_image_url,vehicle_inspection_image_url,automobile_inspection_image_url,pl_insurance_image_url,fire_equipment_layout_image_url')
           .limit(1)
 
         let data = null
@@ -56,6 +58,8 @@ export default function ExhibitorProfileUltra({ userProfile, onBack }: Exhibitor
             phone_number: data.phone_number || '',
             gender: data.gender || '',
             age: data.age?.toString() || '',
+            genre_category: data.genre_category || '',
+            genre_free_text: data.genre_free_text || '',
           })
           setDocUrls({
             business_license_image_url: data.business_license_image_url || '',
@@ -138,97 +142,97 @@ export default function ExhibitorProfileUltra({ userProfile, onBack }: Exhibitor
         maxWidth: '1200px',
         margin: '0 auto',
         padding: spacing[8],
+        display: 'flex',
+        flexDirection: 'column',
+        gap: spacing[6],
       }}>
         <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-          gap: spacing[8],
-          alignItems: 'start',
+          background: colors.neutral[0],
+          borderRadius: borderRadius.xl,
+          padding: spacing[8],
+          boxShadow: shadows.card,
+          border: `1px solid ${colors.neutral[200]}`,
         }}>
-          {/* サマリー */}
           <div style={{
-            background: colors.neutral[0],
-            borderRadius: borderRadius.xl,
-            padding: spacing[8],
-            boxShadow: shadows.card,
-            border: `1px solid ${colors.neutral[200]}`,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: spacing[2],
+            marginBottom: spacing[6],
           }}>
             <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: spacing[2],
-              marginBottom: spacing[6],
+              fontFamily: typography.fontFamily.japanese,
+              fontSize: typography.fontSize['3xl'],
+              fontWeight: typography.fontWeight.bold,
+              color: colors.neutral[900],
+              lineHeight: 1.2,
             }}>
-              <div style={{
-                fontFamily: typography.fontFamily.japanese,
-                fontSize: typography.fontSize['3xl'],
-                fontWeight: typography.fontWeight.bold,
-                color: colors.neutral[900],
-                lineHeight: 1.2,
-              }}>
-                {profileData.name || '未設定'}
-              </div>
-              <div style={{
-                fontFamily: typography.fontFamily.japanese,
-                fontSize: typography.fontSize.base,
-                color: colors.neutral[600],
-              }}>
-                {profileData.email || '未設定'}
-              </div>
+              {profileData.name || '未設定'}
             </div>
-
             <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
-              gap: spacing[4],
+              fontFamily: typography.fontFamily.japanese,
+              fontSize: typography.fontSize.base,
+              color: colors.neutral[600],
             }}>
-              {[
-                { label: '電話番号', value: profileData.phone_number },
-                { label: '性別', value: profileData.gender },
-                { label: '年齢', value: profileData.age },
-              ].map((item) => (
-                <div key={item.label} style={{
-                  padding: spacing[4],
-                  borderRadius: borderRadius.lg,
-                  border: `1px solid ${colors.neutral[200]}`,
-                  background: colors.neutral[50],
-                }}>
-                  <div style={{
-                    fontFamily: typography.fontFamily.japanese,
-                    fontSize: typography.fontSize.xs,
-                    fontWeight: typography.fontWeight.semibold,
-                    color: colors.neutral[500],
-                    marginBottom: spacing[1],
-                  }}>
-                    {item.label}
-                  </div>
-                  <div style={{
-                    fontFamily: typography.fontFamily.japanese,
-                    fontSize: typography.fontSize.base,
-                    fontWeight: typography.fontWeight.semibold,
-                    color: colors.neutral[900],
-                  }}>
-                    {item.value || '未設定'}
-                  </div>
-                </div>
-              ))}
+              {profileData.email || '未設定'}
             </div>
           </div>
 
-          {/* 提出書類 */}
           <div style={{
-            background: colors.neutral[0],
-            borderRadius: borderRadius.xl,
-            padding: spacing[8],
-            boxShadow: shadows.card,
-            border: `1px solid ${colors.neutral[200]}`,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: spacing[4],
           }}>
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              marginBottom: spacing[5],
-            }}>
+            {[
+              { label: '電話番号', value: profileData.phone_number },
+              { label: '性別', value: profileData.gender },
+              { label: '年齢', value: profileData.age },
+              { label: 'ジャンル', value: profileData.genre_category },
+              { label: 'ジャンル（自由記述）', value: profileData.genre_free_text },
+            ].map((item) => (
+              <div key={item.label} style={{
+                padding: `${spacing[4]} ${spacing[5]}`,
+                borderRadius: borderRadius.lg,
+                border: `1px solid ${colors.neutral[200]}`,
+                background: colors.neutral[50],
+                display: 'flex',
+                flexDirection: 'column',
+                gap: spacing[1],
+              }}>
+                <div style={{
+                  fontFamily: typography.fontFamily.japanese,
+                  fontSize: typography.fontSize.xs,
+                  fontWeight: typography.fontWeight.semibold,
+                  color: colors.neutral[500],
+                }}>
+                  {item.label}
+                </div>
+                <div style={{
+                  fontFamily: typography.fontFamily.japanese,
+                  fontSize: typography.fontSize.base,
+                  fontWeight: typography.fontWeight.semibold,
+                  color: colors.neutral[900],
+                  whiteSpace: 'pre-line',
+                }}>
+                  {item.value || '未設定'}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div style={{
+          background: colors.neutral[0],
+          borderRadius: borderRadius.xl,
+          padding: spacing[8],
+          boxShadow: shadows.card,
+          border: `1px solid ${colors.neutral[200]}`,
+        }}>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginBottom: spacing[5],
+          }}>
               <div>
                 <h2 style={{
                   fontFamily: typography.fontFamily.japanese,
