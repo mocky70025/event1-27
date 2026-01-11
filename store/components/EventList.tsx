@@ -327,8 +327,8 @@ export default function EventList({ userProfile, onBack }: EventListProps) {
       const { data: exhibitor } = await supabase
         .from('exhibitors')
         .select('id')
-        .eq('line_user_id', userProfile.userId)
-        .single()
+        .or(`id.eq.${userProfile.userId},line_user_id.eq.${userProfile.userId}`)
+        .maybeSingle()
 
       if (!exhibitor) {
         alert('出店者登録が完了していません。まず登録を行ってください。')

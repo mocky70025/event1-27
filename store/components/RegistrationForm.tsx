@@ -498,12 +498,13 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
     setLoading(true)
 
     try {
-      // Exhibitorsはline_user_idで一意に管理する
+      const authType = (userProfile as any).authType || 'line'
+
       const { data: existingUser } = await supabase
         .from('exhibitors')
         .select('id')
-        .eq('line_user_id', userProfile.userId)
-        .single()
+        .or(`id.eq.${userProfile.userId},line_user_id.eq.${userProfile.userId}`)
+        .maybeSingle()
 
       if (existingUser) {
         alert('既に登録済みです。')
@@ -540,7 +541,11 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
         ...documentImageUrls,
       }
 
-      insertData.line_user_id = userProfile.userId
+      if (authType === 'line') {
+        insertData.line_user_id = userProfile.userId
+      } else {
+        insertData.id = userProfile.userId
+      }
 
       const { error } = await supabase
         .from('exhibitors')

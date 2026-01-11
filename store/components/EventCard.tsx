@@ -29,8 +29,8 @@ export default function EventCard({ event, userProfile, onClick }: EventCardProp
         const { data: exhibitor } = await supabase
           .from('exhibitors')
           .select('id, business_license_image_url, vehicle_inspection_image_url, automobile_inspection_image_url, pl_insurance_image_url, fire_equipment_layout_image_url')
-          .eq('line_user_id', userProfile.userId)
-          .single()
+          .or(`id.eq.${userProfile.userId},line_user_id.eq.${userProfile.userId}`)
+          .maybeSingle()
 
         if (!exhibitor) {
           throw new Error('出店者情報が見つかりません')

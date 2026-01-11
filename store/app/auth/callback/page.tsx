@@ -161,7 +161,7 @@ export default function AuthCallback() {
         const { data: existingUser, error: exhibitorError } = await supabase
           .from('exhibitors')
           .select('*')
-          .eq('line_user_id', profile.userId)
+          .or(`id.eq.${profile.userId},line_user_id.eq.${profile.userId}`)
           .maybeSingle()
         
         if (exhibitorError) {
@@ -268,4 +268,3 @@ export default function AuthCallback() {
     </div>
   )
 }
-

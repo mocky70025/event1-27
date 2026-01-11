@@ -118,11 +118,11 @@ export default function Home() {
               console.log('[Home] Session exists but email not confirmed - may be disabled in Supabase settings')
             }
             
-            // 登録済みかチェック（exhibitorsはline_user_idで管理）
+            // 登録済みかチェック（exhibitorsはid/line_user_idのどちらかで紐づく）
             const { data: exhibitor, error: exhibitorError } = await supabase
               .from('exhibitors')
               .select('id')
-              .eq('line_user_id', session.user.id)
+              .or(`id.eq.${session.user.id},line_user_id.eq.${session.user.id}`)
               .maybeSingle()
             
             if (exhibitorError) {
@@ -289,7 +289,7 @@ export default function Home() {
             const { data: exhibitor } = await supabase
               .from('exhibitors')
               .select('id')
-              .eq('line_user_id', session.user.id)
+              .or(`id.eq.${session.user.id},line_user_id.eq.${session.user.id}`)
               .maybeSingle()
             setIsRegistered(!!exhibitor)
           }
@@ -321,7 +321,7 @@ export default function Home() {
             const { data: exhibitor, error } = await supabase
               .from('exhibitors')
               .select('id')
-              .eq('line_user_id', userProfile.userId)
+              .or(`id.eq.${userProfile.userId},line_user_id.eq.${userProfile.userId}`)
               .maybeSingle()
             
             if (error) {

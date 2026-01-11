@@ -51,11 +51,11 @@ export default function ExhibitorProfile({ userProfile, onBack }: ExhibitorProfi
 
   const fetchExhibitorData = async () => {
     try {
-      const { data, error } = await supabase
-        .from('exhibitors')
-        .select('*')
-        .eq('line_user_id', userProfile.userId)
-        .single()
+    const { data, error } = await supabase
+      .from('exhibitors')
+      .select('*')
+      .or(`id.eq.${userProfile.userId},line_user_id.eq.${userProfile.userId}`)
+      .maybeSingle()
 
       if (error) throw error
       

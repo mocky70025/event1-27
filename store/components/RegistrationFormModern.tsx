@@ -50,23 +50,33 @@ export default function RegistrationFormModern({ userProfile, onRegistrationComp
       if (!user) throw new Error('ユーザーが見つかりません')
 
       const exhibitorName = formData.shop_name || formData.name
+      const authProvider = (user.app_metadata as any)?.provider
+      const lineUserId =
+        authProvider === 'line'
+          ? (user.user_metadata as any)?.line_user_id || (user.user_metadata as any)?.sub
+          : null
+
+      const upsertData: any = {
+        id: user.id,
+        email: formData.email,
+        name: exhibitorName,
+        phone_number: formData.phone_number,
+        gender: formData.gender,
+        age: parseInt(formData.age),
+        business_license_image_url: documents.business_license_image_url || null,
+        vehicle_inspection_image_url: documents.vehicle_inspection_image_url || null,
+        automobile_inspection_image_url: documents.automobile_inspection_image_url || null,
+        pl_insurance_image_url: documents.pl_insurance_image_url || null,
+        fire_equipment_layout_image_url: documents.fire_equipment_layout_image_url || null,
+      }
+
+      if (lineUserId) {
+        upsertData.line_user_id = lineUserId
+      }
 
       const { error: insertError } = await supabase
         .from('exhibitors')
-        .upsert({
-          id: user.id,
-          line_user_id: user.id,
-          email: formData.email,
-          name: exhibitorName,
-          phone_number: formData.phone_number,
-          gender: formData.gender,
-          age: parseInt(formData.age),
-          business_license_image_url: documents.business_license_image_url || null,
-          vehicle_inspection_image_url: documents.vehicle_inspection_image_url || null,
-          automobile_inspection_image_url: documents.automobile_inspection_image_url || null,
-          pl_insurance_image_url: documents.pl_insurance_image_url || null,
-          fire_equipment_layout_image_url: documents.fire_equipment_layout_image_url || null,
-        })
+        .upsert(upsertData)
 
       if (insertError) throw insertError
 

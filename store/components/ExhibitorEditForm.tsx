@@ -99,13 +99,13 @@ export default function ExhibitorEditForm({
         updated_at: new Date().toISOString()
       }
 
-      // Supabaseで更新（exhibitorsはline_user_idで管理）
+      // Supabaseで更新
       const { data, error } = await supabase
         .from('exhibitors')
         .update(updateData)
-        .eq('line_user_id', userProfile.userId)
+        .or(`id.eq.${userProfile.userId},line_user_id.eq.${userProfile.userId}`)
         .select()
-        .single()
+        .maybeSingle()
 
       if (error) {
         console.error('Update failed:', error)

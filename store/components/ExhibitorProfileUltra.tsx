@@ -43,7 +43,9 @@ export default function ExhibitorProfileUltra({ userProfile, onBack }: Exhibitor
         let data = null
         let error = null
 
-        ;({ data, error } = await query.eq('line_user_id', user.id).maybeSingle())
+        ;({ data, error } = await query
+          .or(`id.eq.${user.id},line_user_id.eq.${user.id}`)
+          .maybeSingle())
 
         if (error) throw error
         
@@ -138,25 +140,49 @@ export default function ExhibitorProfileUltra({ userProfile, onBack }: Exhibitor
         padding: spacing[8],
       }}>
         <div style={{
-          display: 'flex',
-          flexDirection: 'column',
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
           gap: spacing[8],
+          alignItems: 'start',
         }}>
-          {/* 基本情報 */}
+          {/* サマリー */}
           <div style={{
             background: colors.neutral[0],
             borderRadius: borderRadius.xl,
             padding: spacing[8],
             boxShadow: shadows.card,
+            border: `1px solid ${colors.neutral[200]}`,
           }}>
             <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: spacing[2],
+              marginBottom: spacing[6],
+            }}>
+              <div style={{
+                fontFamily: typography.fontFamily.japanese,
+                fontSize: typography.fontSize['3xl'],
+                fontWeight: typography.fontWeight.bold,
+                color: colors.neutral[900],
+                lineHeight: 1.2,
+              }}>
+                {profileData.name || '未設定'}
+              </div>
+              <div style={{
+                fontFamily: typography.fontFamily.japanese,
+                fontSize: typography.fontSize.base,
+                color: colors.neutral[600],
+              }}>
+                {profileData.email || '未設定'}
+              </div>
+            </div>
+
+            <div style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(2, 1fr)',
-              gap: spacing[6],
+              gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
+              gap: spacing[4],
             }}>
               {[
-                { label: '名前', value: profileData.name },
-                { label: 'メールアドレス', value: profileData.email },
                 { label: '電話番号', value: profileData.phone_number },
                 { label: '性別', value: profileData.gender },
                 { label: '年齢', value: profileData.age },
@@ -169,9 +195,9 @@ export default function ExhibitorProfileUltra({ userProfile, onBack }: Exhibitor
                 }}>
                   <div style={{
                     fontFamily: typography.fontFamily.japanese,
-                    fontSize: typography.fontSize.sm,
+                    fontSize: typography.fontSize.xs,
                     fontWeight: typography.fontWeight.semibold,
-                    color: colors.neutral[600],
+                    color: colors.neutral[500],
                     marginBottom: spacing[1],
                   }}>
                     {item.label}
@@ -189,22 +215,40 @@ export default function ExhibitorProfileUltra({ userProfile, onBack }: Exhibitor
             </div>
           </div>
 
-          {/* 提出書類プレビュー */}
+          {/* 提出書類 */}
           <div style={{
             background: colors.neutral[0],
             borderRadius: borderRadius.xl,
             padding: spacing[8],
             boxShadow: shadows.card,
+            border: `1px solid ${colors.neutral[200]}`,
           }}>
-            <h2 style={{
-              fontFamily: typography.fontFamily.japanese,
-              fontSize: typography.fontSize.xl,
-              fontWeight: typography.fontWeight.bold,
-              color: colors.neutral[900],
-              marginBottom: spacing[4],
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: spacing[5],
             }}>
-              提出書類
-            </h2>
+              <div>
+                <h2 style={{
+                  fontFamily: typography.fontFamily.japanese,
+                  fontSize: typography.fontSize.xl,
+                  fontWeight: typography.fontWeight.bold,
+                  color: colors.neutral[900],
+                  marginBottom: spacing[1],
+                }}>
+                  提出書類
+                </h2>
+                <p style={{
+                  fontFamily: typography.fontFamily.japanese,
+                  fontSize: typography.fontSize.sm,
+                  color: colors.neutral[500],
+                }}>
+                  クリックすると原寸で確認できます
+                </p>
+              </div>
+            </div>
+
             <div style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
@@ -218,31 +262,24 @@ export default function ExhibitorProfileUltra({ userProfile, onBack }: Exhibitor
                 { key: 'fire_equipment_layout_image_url', label: '消防設備配置図' },
               ].map((doc) => {
                 const url = (docUrls as any)[doc.key] as string
+                const isUploaded = !!url
                 return (
                   <div key={doc.key} style={{
                     border: `1px solid ${colors.neutral[200]}`,
                     borderRadius: borderRadius.lg,
                     overflow: 'hidden',
                     background: colors.neutral[50],
+                    transition: `transform ${transitions.fast}`,
                   }}>
                     <div style={{
-                      padding: spacing[3],
-                      borderBottom: `1px solid ${colors.neutral[200]}`,
-                      fontFamily: typography.fontFamily.japanese,
-                      fontSize: typography.fontSize.sm,
-                      fontWeight: typography.fontWeight.semibold,
-                      color: colors.neutral[800],
-                    }}>
-                      {doc.label}
-                    </div>
-                    <div style={{
+                      position: 'relative',
                       height: '180px',
+                      background: colors.neutral[0],
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      background: colors.neutral[0],
                     }}>
-                      {url ? (
+                      {isUploaded ? (
                         <a href={url} target="_blank" rel="noreferrer" style={{ display: 'block', width: '100%', height: '100%' }}>
                           <img
                             src={url}
@@ -263,6 +300,29 @@ export default function ExhibitorProfileUltra({ userProfile, onBack }: Exhibitor
                           未アップロード
                         </span>
                       )}
+                      <span style={{
+                        position: 'absolute',
+                        top: spacing[3],
+                        left: spacing[3],
+                        padding: `${spacing[1]} ${spacing[3]}`,
+                        borderRadius: borderRadius.full,
+                        fontSize: typography.fontSize.xs,
+                        fontWeight: typography.fontWeight.semibold,
+                        background: isUploaded ? colors.status.success.light : colors.neutral[200],
+                        color: isUploaded ? colors.status.success.dark : colors.neutral[600],
+                      }}>
+                        {isUploaded ? '登録済み' : '未登録'}
+                      </span>
+                    </div>
+                    <div style={{
+                      padding: spacing[4],
+                      borderTop: `1px solid ${colors.neutral[200]}`,
+                      fontFamily: typography.fontFamily.japanese,
+                      fontSize: typography.fontSize.sm,
+                      fontWeight: typography.fontWeight.semibold,
+                      color: colors.neutral[800],
+                    }}>
+                      {doc.label}
                     </div>
                   </div>
                 )
