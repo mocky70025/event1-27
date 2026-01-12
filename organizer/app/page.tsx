@@ -14,6 +14,7 @@ import EmailConfirmationBanner from '@/components/EmailConfirmationBanner'
 import EmailConfirmationPending from '@/components/EmailConfirmationPending'
 import Button from '@/components/ui/Button'
 import { spacing } from '@/styles/design-system'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 export default function Home() {
   const [userProfile, setUserProfile] = useState<LineProfile | null>(null)
@@ -22,10 +23,29 @@ export default function Home() {
   const [hasActiveSession, setHasActiveSession] = useState(false)
   const [currentView, setCurrentView] = useState<'home' | 'create-event' | 'profile' | 'notifications'>('home')
   const [registrationComplete, setRegistrationComplete] = useState(false)
+  const searchParams = useSearchParams()
+  const router = useRouter()
+  const lineAuthParam = searchParams.get('line_auth')
+  const lineEmailParam = searchParams.get('email')
+  const lineNameParam = searchParams.get('line_name')
+  const lineIdParam = searchParams.get('line_id')
+  const linePictureParam = searchParams.get('line_picture')
+  const lineProfileFromParams =
+    lineAuthParam === 'success'
+      ? {
+          userId: lineIdParam || `line_${Date.now()}`,
+          displayName: lineNameParam || '',
+          email: lineEmailParam || '',
+          authType: 'line' as const,
+          pictureUrl: linePictureParam || undefined,
+          statusMessage: '',
+        }
+      : null
 
   useEffect(() => {
     const initializeAuth = async () => {
       try {
+        const isLineCallbackFlow = lineAuthParam === 'success'
         // まず、Supabase Authのセッションを確認
         const { data: { session }, error: sessionError } = await supabase.auth.getSession()
         
@@ -37,7 +57,9 @@ export default function Home() {
           sessionStorage.removeItem('user_email')
           sessionStorage.removeItem('is_registered')
           sessionStorage.removeItem('email_confirmed')
-          setUserProfile(null)
+          if (!isLineCallbackFlow) {
+            setUserProfile(null)
+          }
           setIsRegistered(false)
           return
         }
@@ -136,23 +158,42 @@ export default function Home() {
     initializeAuth()
   }, [])
 
+  useEffect(() => {
+    if (!lineProfileFromParams) return
+    if (userProfile) return
+
+    sessionStorage.setItem('line_profile', JSON.stringify(lineProfileFromParams))
+    sessionStorage.setItem('auth_type', 'line')
+    sessionStorage.setItem('user_id', lineProfileFromParams.userId)
+    sessionStorage.setItem('user_email', lineProfileFromParams.email)
+    sessionStorage.setItem('is_registered', 'false')
+
+    setUserProfile(lineProfileFromParams)
+    setIsRegistered(false)
+    setHasActiveSession(false)
+
+    router.replace('/', { scroll: false })
+  }, [lineProfileFromParams])
+
+  const profileToUse = userProfile ?? lineProfileFromParams
+
   if (loading) {
     return <LoadingSpinner />
   }
 
-  if (!userProfile) {
+  if (!profileToUse) {
     return <WelcomeScreen />
   }
 
   // メール確認待ちの状態で、まだ登録していない場合は、メール確認待ち画面を表示
   // ただし、セッションが存在する場合（メール確認が無効）は登録フォームに進める
   // 開発中はメール確認を無効にしているため、セッションがあれば登録フォームに進める
-  const isEmailPending = userProfile?.authType === 'email' && !userProfile?.emailConfirmed && !isRegistered && !hasActiveSession
+  const isEmailPending = profileToUse?.authType === 'email' && !profileToUse?.emailConfirmed && !isRegistered && !hasActiveSession
   
   if (isEmailPending) {
     return (
       <EmailConfirmationPending
-        email={userProfile.email || ''}
+        email={profileToUse.email || ''}
         onEmailConfirmed={async () => {
           // メール確認が完了したら、セッションを再取得してuserProfileを更新
           const { data: { session } } = await supabase.auth.getSession()
@@ -193,14 +234,14 @@ export default function Home() {
   if (!isRegistered) {
     return (
       <RegistrationForm
-        userProfile={userProfile}
+        userProfile={profileToUse}
         onRegistrationComplete={async () => {
           // 登録完了後、データベースから再取得して状態を更新
-          if (userProfile?.userId) {
+          if (profileToUse?.userId) {
             const { data: organizer, error } = await supabase
               .from('organizers')
               .select('id, is_approved')
-              .eq('user_id', userProfile.userId)
+              .eq('user_id', profileToUse.userId)
               .maybeSingle()
             
             if (error) {
@@ -229,7 +270,7 @@ export default function Home() {
   }
 
   // メール未確認の場合はバナーを表示
-  const showEmailConfirmationBanner = userProfile?.authType === 'email' && !userProfile?.emailConfirmed && userProfile?.email
+  const showEmailConfirmationBanner = profileToUse?.authType === 'email' && !profileToUse?.emailConfirmed && profileToUse?.email
 
   const renderCurrentView = () => {
     switch (currentView) {
@@ -244,7 +285,7 @@ export default function Home() {
       case 'profile':
         return (
           <OrganizerProfileUltra
-            userProfile={userProfile}
+            userProfile={profileToUse}
             onBack={() => setCurrentView('home')}
           />
         )
@@ -260,17 +301,17 @@ export default function Home() {
           </div>
         )
       default:
-        return <EventManagement userProfile={userProfile} onNavigate={setCurrentView} />
+        return <EventManagement userProfile={profileToUse} onNavigate={setCurrentView} />
     }
   }
 
   return (
     <>
-      {showEmailConfirmationBanner && (
-        <div style={{ padding: '9px 16px', maxWidth: '394px', margin: '0 auto' }}>
-        <EmailConfirmationBanner email={userProfile.email || ''} />
-      </div>
-    )}
+          {showEmailConfirmationBanner && (
+            <div style={{ padding: '9px 16px', maxWidth: '394px', margin: '0 auto' }}>
+              <EmailConfirmationBanner email={profileToUse.email || ''} />
+            </div>
+          )}
     {renderCurrentView()}
 </>
   )
