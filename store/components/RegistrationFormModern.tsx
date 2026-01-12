@@ -48,18 +48,21 @@ export default function RegistrationFormModern({ userProfile, onRegistrationComp
 
     try {
       const { data: { user } } = await supabase.auth.getUser()
-      
-      if (!user) throw new Error('ユーザーが見つかりません')
+
+      const storedUserId = sessionStorage.getItem('user_id') || userProfile?.userId
+      const resolvedUserId = user?.id || storedUserId
+
+      if (!resolvedUserId) throw new Error('ユーザーが見つかりません')
 
       const exhibitorName = formData.shop_name || formData.name
-      const authProvider = (user.app_metadata as any)?.provider
+      const authProvider = (user?.app_metadata as any)?.provider
       const lineUserId =
         authProvider === 'line'
-          ? (user.user_metadata as any)?.line_user_id || (user.user_metadata as any)?.sub
+          ? (user?.user_metadata as any)?.line_user_id || (user?.user_metadata as any)?.sub
           : null
 
       const upsertData: any = {
-        id: user.id,
+        id: resolvedUserId,
         email: formData.email,
         name: exhibitorName,
         phone_number: formData.phone_number,
