@@ -28,9 +28,18 @@ interface EventFormData {
   venue_town: string
   venue_address: string
   application_end_date: string
+  main_image_caption: string
+  additional_image1_caption: string
+  additional_image2_caption: string
 }
 
 type ImageField = 'main' | 'additional1' | 'additional2'
+
+const CAPTION_FIELD_MAP: Record<ImageField, keyof EventFormData> = {
+  main: 'main_image_caption',
+  additional1: 'additional_image1_caption',
+  additional2: 'additional_image2_caption',
+}
 
 export default function EventFormUltra({ organizer, onEventCreated, onCancel }: EventFormProps) {
   const [currentStep, setCurrentStep] = useState(1)
@@ -55,6 +64,9 @@ export default function EventFormUltra({ organizer, onEventCreated, onCancel }: 
     
     // 申込
     application_end_date: '',
+    main_image_caption: '',
+    additional_image1_caption: '',
+    additional_image2_caption: '',
   })
   const [imageFiles, setImageFiles] = useState<Record<ImageField, File | null>>({
     main: null,
@@ -69,6 +81,10 @@ export default function EventFormUltra({ organizer, onEventCreated, onCancel }: 
   const handleImageChange = (field: ImageField, file: File | null, preview: string) => {
     setImageFiles((prev) => ({ ...prev, [field]: file }))
     setImagePreviews((prev) => ({ ...prev, [field]: preview }))
+  }
+
+  const handleCaptionChange = (field: ImageField, value: string) => {
+    setFormData((prev) => ({ ...prev, [CAPTION_FIELD_MAP[field]]: value }))
   }
 
   const steps = [
@@ -152,6 +168,7 @@ export default function EventFormUltra({ organizer, onEventCreated, onCancel }: 
             formData={formData}
             imagePreviews={imagePreviews}
             onImageChange={handleImageChange}
+            onCaptionChange={handleCaptionChange}
           />
         )
       default:
@@ -540,9 +557,10 @@ interface Step4Props {
   formData: EventFormData
   imagePreviews: Record<ImageField, string>
   onImageChange: (field: ImageField, file: File | null, preview: string) => void
+  onCaptionChange: (field: ImageField, value: string) => void
 }
 
-function Step4Confirmation({ formData, imagePreviews, onImageChange }: Step4Props) {
+function Step4Confirmation({ formData, imagePreviews, onImageChange, onCaptionChange }: Step4Props) {
   const formatDate = (dateString: string) => {
     if (!dateString) return '未設定'
     const date = new Date(dateString)
@@ -609,10 +627,10 @@ function Step4Confirmation({ formData, imagePreviews, onImageChange }: Step4Prop
           </h3>
           <div style={{ display: 'flex', gap: spacing[4], flexWrap: 'wrap' }}>
             {[
-              { field: 'main' as ImageField, label: 'メイン画像' },
-              { field: 'additional1' as ImageField, label: '追加画像①' },
-              { field: 'additional2' as ImageField, label: '追加画像②' },
-            ].map(({ field, label }) => (
+              { field: 'main' as ImageField, label: 'メイン画像', captionPlaceholder: '例: ブース全体の雰囲気' },
+              { field: 'additional1' as ImageField, label: '追加画像①', captionPlaceholder: '例: 代表メニューのアップ' },
+              { field: 'additional2' as ImageField, label: '追加画像②', captionPlaceholder: '例: 会場の賑わい' },
+            ].map(({ field, label, captionPlaceholder }) => (
               <div key={field} style={{
                 width: '180px',
                 display: 'flex',
@@ -650,6 +668,27 @@ function Step4Confirmation({ formData, imagePreviews, onImageChange }: Step4Prop
                     }}
                   />
                 )}
+                <label style={{
+                  fontFamily: typography.fontFamily.japanese,
+                  fontSize: typography.fontSize.sm,
+                  color: colors.neutral[600],
+                  margin: 0,
+                }}>キャプション（任意）</label>
+                <input
+                  type="text"
+                  maxLength={80}
+                  placeholder={captionPlaceholder}
+                  value={formData[CAPTION_FIELD_MAP[field]]}
+                  onChange={(e) => onCaptionChange(field, e.target.value)}
+                  style={{
+                    borderRadius: borderRadius.lg,
+                    border: `1px solid ${colors.neutral[200]}`,
+                    padding: spacing[2],
+                    fontFamily: typography.fontFamily.japanese,
+                    fontSize: typography.fontSize.sm,
+                    outline: 'none',
+                  }}
+                />
               </div>
             ))}
           </div>

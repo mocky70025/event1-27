@@ -66,9 +66,18 @@ interface EventImageState {
   additional4: string
 }
 
+interface EventImageCaptionState {
+  main: string
+  additional1: string
+  additional2: string
+  additional3: string
+  additional4: string
+}
+
 interface EventFormDraftPayload {
   formData: EventFormState
   imageUrls: EventImageState
+  imageCaptions?: EventImageCaptionState
 }
 
 const SAVE_DEBOUNCE_MS = 800
@@ -120,6 +129,67 @@ const EVENT_IMAGE_INITIAL: EventImageState = {
   additional4: '',
 }
 
+const EVENT_IMAGE_CAPTION_INITIAL: EventImageCaptionState = {
+  main: '',
+  additional1: '',
+  additional2: '',
+  additional3: '',
+  additional4: '',
+}
+
+type ImageFieldKey = keyof EventImageState
+
+interface ImageFieldConfig {
+  key: ImageFieldKey
+  label: string
+  imageType: 'main' | 'additional'
+  imageIndex?: number
+  captionLabel: string
+  captionPlaceholder: string
+}
+
+const EVENT_IMAGE_FIELDS: ImageFieldConfig[] = [
+  {
+    key: 'main',
+    label: 'メイン画像（任意）',
+    imageType: 'main',
+    captionLabel: 'メイン画像のキャプション（任意）',
+    captionPlaceholder: '例: ブース全体の雰囲気を伝える1枚',
+  },
+  {
+    key: 'additional1',
+    label: '追加画像1（任意）',
+    imageType: 'additional',
+    imageIndex: 1,
+    captionLabel: '追加画像1のキャプション（任意）',
+    captionPlaceholder: '例: 代表メニューのアップ',
+  },
+  {
+    key: 'additional2',
+    label: '追加画像2（任意）',
+    imageType: 'additional',
+    imageIndex: 2,
+    captionLabel: '追加画像2のキャプション（任意）',
+    captionPlaceholder: '例: 会場での設営風景',
+  },
+  {
+    key: 'additional3',
+    label: '追加画像3（任意）',
+    imageType: 'additional',
+    imageIndex: 3,
+    captionLabel: '追加画像3のキャプション（任意）',
+    captionPlaceholder: '例: おすすめ商品',
+  },
+  {
+    key: 'additional4',
+    label: '追加画像4（任意）',
+    imageType: 'additional',
+    imageIndex: 4,
+    captionLabel: '追加画像4のキャプション（任意）',
+    captionPlaceholder: '例: スタッフ集合写真',
+  },
+]
+
 const hasEventDraftContent = (payload: EventFormDraftPayload): boolean => {
   const hasFormValue = Object.values(payload.formData).some((value) => {
     if (typeof value === 'string') return value.trim() !== ''
@@ -131,7 +201,10 @@ const hasEventDraftContent = (payload: EventFormDraftPayload): boolean => {
   if (hasFormValue) return true
 
   const hasImage = Object.values(payload.imageUrls).some((value) => value.trim() !== '')
-  return hasImage
+  if (hasImage) return true
+
+  const hasCaption = Object.values(payload.imageCaptions || EVENT_IMAGE_CAPTION_INITIAL).some((value) => value.trim() !== '')
+  return hasCaption
 }
 
 export default function EventForm({ organizer, onEventCreated, onCancel, initialEvent }: EventFormProps) {
@@ -233,11 +306,27 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
     additional4: (initialEvent as any)?.additional_image4_url || '',
   }), [initialEvent])
 
+  const initialImageCaptionState = useMemo<EventImageCaptionState>(() => ({
+    ...EVENT_IMAGE_CAPTION_INITIAL,
+    main: (initialEvent as any)?.main_image_caption || '',
+    additional1: (initialEvent as any)?.additional_image1_caption || '',
+    additional2: (initialEvent as any)?.additional_image2_caption || '',
+    additional3: (initialEvent as any)?.additional_image3_caption || '',
+    additional4: (initialEvent as any)?.additional_image4_caption || '',
+  }), [initialEvent])
+
   const [loading, setLoading] = useState(false)
   const [addressLoading, setAddressLoading] = useState(false)
   const [eventId, setEventId] = useState<string>((initialEvent?.id as string) || '')
   const [formData, setFormData] = useState<EventFormState>(initialFormState)
   const [imageUrls, setImageUrls] = useState<EventImageState>(initialImageState)
+  const [imageCaptions, setImageCaptions] = useState<EventImageCaptionState>(initialImageCaptionState)
+  const updateImageUrl = (key: ImageFieldKey, url: string) => {
+    setImageUrls((prev) => ({ ...prev, [key]: url }))
+  }
+  const updateImageCaption = (key: ImageFieldKey, value: string) => {
+    setImageCaptions((prev) => ({ ...prev, [key]: value }))
+  }
   const [draftLoaded, setDraftLoaded] = useState(() => !isDraftEnabled)
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1) // ステップ1: 全部の情報入力、ステップ2: 確認、ステップ3: 登録完了
   const [submittedEvent, setSubmittedEvent] = useState<Event | null>(null) // 登録完了画面で表示するイベント情報
@@ -251,7 +340,8 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
   useEffect(() => {
     setFormData(initialFormState)
     setImageUrls(initialImageState)
-  }, [initialFormState, initialImageState])
+    setImageCaptions(initialImageCaptionState)
+  }, [initialFormState, initialImageState, initialImageCaptionState])
 
 
   const upsertDraft = useCallback(
@@ -326,12 +416,13 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
   const handleClearForm = useCallback(() => {
     setFormData(initialFormState)
     setImageUrls(initialImageState)
+    setImageCaptions(initialImageCaptionState)
     lastPayloadRef.current = ''
     if (isDraftEnabled) {
       scheduleDraftDeletion()
     }
     onCancel()
-  }, [initialFormState, initialImageState, isDraftEnabled, scheduleDraftDeletion, onCancel])
+  }, [initialFormState, initialImageState, initialImageCaptionState, isDraftEnabled, scheduleDraftDeletion, onCancel])
 
 
   useEffect(() => {
@@ -374,14 +465,20 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
             ...EVENT_IMAGE_INITIAL,
             ...(payload.imageUrls ?? {}),
           }
+          const restoredCaptions: EventImageCaptionState = {
+            ...EVENT_IMAGE_CAPTION_INITIAL,
+            ...(payload.imageCaptions ?? {}),
+          }
 
           setFormData(restoredFormData)
           setImageUrls(restoredImages)
+          setImageCaptions(restoredCaptions)
 
           draftExistsRef.current = true
           lastPayloadRef.current = JSON.stringify({
             formData: restoredFormData,
             imageUrls: restoredImages,
+            imageCaptions: restoredCaptions,
           })
         }
       } catch (error) {
@@ -404,6 +501,7 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
     const payload: EventFormDraftPayload = {
       formData,
       imageUrls,
+      imageCaptions,
     }
 
     if (!hasEventDraftContent(payload)) {
@@ -417,7 +515,7 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
 
     lastPayloadRef.current = serializedPayload
     scheduleDraftUpsert(payload)
-  }, [formData, imageUrls, isDraftEnabled, draftLoaded, scheduleDraftUpsert, scheduleDraftDeletion])
+  }, [formData, imageUrls, imageCaptions, isDraftEnabled, draftLoaded, scheduleDraftUpsert, scheduleDraftDeletion])
 
   // 日付を日本語形式にフォーマット（例: 2025-03-11 → "3月11日"）
   const formatDateToJapanese = (dateString: string): string => {
@@ -585,6 +683,35 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
     background: 'transparent',
     resize: 'none' as const
   })
+
+  const imageFieldWrapperStyle = {
+    width: '100%',
+    maxWidth: '330px',
+    display: 'flex',
+    flexDirection: 'column' as const,
+    gap: '10px'
+  }
+
+  const captionInputStyle = (hasValue: boolean) => ({
+    width: '100%',
+    minHeight: '44px',
+    borderRadius: '8px',
+    border: '1px solid #E9ECEF',
+    background: '#FFFFFF',
+    padding: '0 12px',
+    fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+    fontSize: '14px',
+    lineHeight: '150%',
+    color: hasValue ? '#2C3E50' : '#9CA3AF',
+    outline: 'none'
+  })
+
+  const captionLabelStyle = {
+    fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+    fontSize: '13px',
+    color: '#6B7280',
+    margin: 0
+  }
 
   const buttonPrimaryStyle = {
     display: 'flex',
@@ -782,6 +909,12 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
         schedules: JSON.stringify(formData.schedules),
       }
 
+      submitData.main_image_caption = imageCaptions.main || null
+      submitData.additional_image1_caption = imageCaptions.additional1 || null
+      submitData.additional_image2_caption = imageCaptions.additional2 || null
+      submitData.additional_image3_caption = imageCaptions.additional3 || null
+      submitData.additional_image4_caption = imageCaptions.additional4 || null
+
       // 作成時のみ、空文字をnullに変換（更新時は既存値を保持したいので変換しない）
       if (!targetEventId) {
         Object.keys(submitData).forEach(key => {
@@ -808,6 +941,11 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
         if (imageUrls.additional2) updatePayload.additional_image2_url = imageUrls.additional2
         if (imageUrls.additional3) updatePayload.additional_image3_url = imageUrls.additional3
         if (imageUrls.additional4) updatePayload.additional_image4_url = imageUrls.additional4
+        updatePayload.main_image_caption = imageCaptions.main || null
+        updatePayload.additional_image1_caption = imageCaptions.additional1 || null
+        updatePayload.additional_image2_caption = imageCaptions.additional2 || null
+        updatePayload.additional_image3_caption = imageCaptions.additional3 || null
+        updatePayload.additional_image4_caption = imageCaptions.additional4 || null
 
         // 可変でnullを許す日付フィールドは明示的にnullを指定したい場合にのみ対応
         // （UIで空にしただけでは上書きしない方針）
@@ -1364,24 +1502,68 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
                   }}>{formData.contact_email}</p>
                 </div>
               )}
-              {imageUrls.main && (
-                <div>
-                  <label style={labelStyle}>イベントメイン画像</label>
-                  <div style={{
-                    width: '289px',
-                    height: '187px',
-                    background: '#D9D9D9',
-                    borderRadius: '8px',
-                    marginTop: '8px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    overflow: 'hidden'
-                  }}>
-                    <img src={imageUrls.main} alt="メイン画像" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'cover' }} />
+              {(() => {
+                const previewImages = EVENT_IMAGE_FIELDS.map((field) => ({
+                  key: field.key,
+                  label: field.label,
+                  url: imageUrls[field.key],
+                  caption: imageCaptions[field.key],
+                })).filter((item) => item.url || item.caption)
+
+                if (previewImages.length === 0) return null
+
+                return (
+                  <div>
+                    <label style={labelStyle}>イベント画像</label>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '8px' }}>
+                      {previewImages.map((item) => (
+                        <div key={item.key} style={{ display: 'flex', gap: '12px', flexDirection: 'column' }}>
+                          {item.url ? (
+                            <div style={{
+                              width: '289px',
+                              height: '187px',
+                              background: '#D9D9D9',
+                              borderRadius: '8px',
+                              overflow: 'hidden',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center'
+                            }}>
+                              <img src={item.url} alt={item.label} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'cover' }} />
+                            </div>
+                          ) : (
+                            <div style={{
+                              width: '289px',
+                              height: '187px',
+                              borderRadius: '8px',
+                              border: '1px dashed #CBD5F5',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              color: '#94A3B8',
+                              fontSize: '14px'
+                            }}>
+                              {item.label} は未設定です
+                            </div>
+                          )}
+                          {item.caption && (
+                            <p style={{
+                              margin: 0,
+                              fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+                              fontSize: '14px',
+                              color: '#475569',
+                              lineHeight: '150%',
+                              maxWidth: '289px'
+                            }}>
+                              {item.caption}
+                            </p>
+                          )}
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
+                )
+              })()}
             </div>
 
             <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', marginTop: '24px', marginBottom: '24px' }}>
@@ -1899,60 +2081,32 @@ export default function EventForm({ organizer, onEventCreated, onCancel, initial
           <div style={cardStyle}>
             <h2 style={sectionTitleStyle}>イベント画像（任意）</h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', alignItems: 'center' }}>
-              <ImageUpload
-                label="メイン画像（任意）"
-                eventId={eventId || 'temp'}
-                imageType="main"
-                onUploadComplete={(url) => setImageUrls(prev => ({ ...prev, main: url }))}
-                onUploadError={(error) => alert(error)}
-                currentImageUrl={imageUrls.main}
-                showFormatNote={false}
-                onImageDelete={() => setImageUrls(prev => ({ ...prev, main: '' }))}
-              />
-              <ImageUpload
-                label="追加画像1（任意）"
-                eventId={eventId || 'temp'}
-                imageType="additional"
-                imageIndex={1}
-                onUploadComplete={(url) => setImageUrls(prev => ({ ...prev, additional1: url }))}
-                onUploadError={(error) => alert(error)}
-                currentImageUrl={imageUrls.additional1}
-                showFormatNote={false}
-                onImageDelete={() => setImageUrls(prev => ({ ...prev, additional1: '' }))}
-              />
-              <ImageUpload
-                label="追加画像2（任意）"
-                eventId={eventId || 'temp'}
-                imageType="additional"
-                imageIndex={2}
-                onUploadComplete={(url) => setImageUrls(prev => ({ ...prev, additional2: url }))}
-                onUploadError={(error) => alert(error)}
-                currentImageUrl={imageUrls.additional2}
-                showFormatNote={false}
-                onImageDelete={() => setImageUrls(prev => ({ ...prev, additional2: '' }))}
-              />
-              <ImageUpload
-                label="追加画像3（任意）"
-                eventId={eventId || 'temp'}
-                imageType="additional"
-                imageIndex={3}
-                onUploadComplete={(url) => setImageUrls(prev => ({ ...prev, additional3: url }))}
-                onUploadError={(error) => alert(error)}
-                currentImageUrl={imageUrls.additional3}
-                showFormatNote={false}
-                onImageDelete={() => setImageUrls(prev => ({ ...prev, additional3: '' }))}
-              />
-              <ImageUpload
-                label="追加画像4（任意）"
-                eventId={eventId || 'temp'}
-                imageType="additional"
-                imageIndex={4}
-                onUploadComplete={(url) => setImageUrls(prev => ({ ...prev, additional4: url }))}
-                onUploadError={(error) => alert(error)}
-                currentImageUrl={imageUrls.additional4}
-                showFormatNote={false}
-                onImageDelete={() => setImageUrls(prev => ({ ...prev, additional4: '' }))}
-              />
+              {EVENT_IMAGE_FIELDS.map((field) => (
+                <div key={field.key} style={imageFieldWrapperStyle}>
+                  <ImageUpload
+                    label={field.label}
+                    eventId={eventId || 'temp'}
+                    imageType={field.imageType}
+                    imageIndex={field.imageIndex}
+                    onUploadComplete={(url) => updateImageUrl(field.key, url)}
+                    onUploadError={(error) => alert(error)}
+                    currentImageUrl={imageUrls[field.key]}
+                    showFormatNote={false}
+                    onImageDelete={() => updateImageUrl(field.key, '')}
+                  />
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                    <label style={captionLabelStyle}>{field.captionLabel}</label>
+                    <input
+                      type="text"
+                      value={imageCaptions[field.key]}
+                      onChange={(e) => updateImageCaption(field.key, e.target.value)}
+                      placeholder={field.captionPlaceholder}
+                      maxLength={80}
+                      style={captionInputStyle(!!imageCaptions[field.key])}
+                    />
+                  </div>
+                </div>
+              ))}
             </div>
             <p style={{
               fontFamily: 'Inter, sans-serif',
