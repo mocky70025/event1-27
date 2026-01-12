@@ -7,6 +7,7 @@ import { supabase } from '@/lib/supabase'
 import { colors, typography, spacing, borderRadius, shadows, transitions } from '@/styles/design-system'
 import Button from './ui/Button'
 import { DocumentIcon, CalendarIcon, GearIcon, CheckIcon } from './icons'
+import { uploadEventImage, getPublicUrl } from '@/lib/storage'
 
 interface EventFormProps {
   organizer: any
@@ -28,6 +29,8 @@ interface EventFormData {
   venue_address: string
   application_end_date: string
 }
+
+type ImageField = 'main' | 'additional1' | 'additional2'
 
 export default function EventFormUltra({ organizer, onEventCreated, onCancel }: EventFormProps) {
   const [currentStep, setCurrentStep] = useState(1)
@@ -53,6 +56,20 @@ export default function EventFormUltra({ organizer, onEventCreated, onCancel }: 
     // 申込
     application_end_date: '',
   })
+  const [imageFiles, setImageFiles] = useState<Record<ImageField, File | null>>({
+    main: null,
+    additional1: null,
+    additional2: null,
+  })
+  const [imagePreviews, setImagePreviews] = useState<Record<ImageField, string>>({
+    main: '',
+    additional1: '',
+    additional2: '',
+  })
+  const handleImageChange = (field: ImageField, file: File | null, preview: string) => {
+    setImageFiles((prev) => ({ ...prev, [field]: file }))
+    setImagePreviews((prev) => ({ ...prev, [field]: preview }))
+  }
 
   const steps = [
     { number: 1, title: '基本情報', icon: <DocumentIcon width={20} height={20} /> },
@@ -83,15 +100,43 @@ export default function EventFormUltra({ organizer, onEventCreated, onCancel }: 
 
       if (error) throw error
 
+      const uploadUrls: Record<ImageField, string | null> = {
+        main: null,
+        additional1: null,
+        additional2: null,
+      }
+
+      for (const field of Object.keys(imageFiles) as ImageField[]) {
+        const file = imageFiles[field]
+        if (!file) continue
+        const imageType = field === 'main' ? 'main' : 'additional'
+        const imageIndex = field === 'main' ? undefined : field === 'additional1' ? 1 : 2
+        const uploadResult = await uploadEventImage(file, data.id, imageType, imageIndex)
+        if (uploadResult.error) throw uploadResult.error
+        uploadUrls[field] = getPublicUrl('event-images', uploadResult.data!.path)
+      }
+
+      if (uploadUrls.main || uploadUrls.additional1 || uploadUrls.additional2) {
+        const updatePayload: any = {}
+        if (uploadUrls.main) updatePayload.main_image_url = uploadUrls.main
+        if (uploadUrls.additional1) updatePayload.additional_image1_url = uploadUrls.additional1
+        if (uploadUrls.additional2) updatePayload.additional_image2_url = uploadUrls.additional2
+        const { error: updateError } = await supabase
+          .from('events')
+          .update(updatePayload)
+          .eq('id', data.id)
+        if (updateError) throw updateError
+      }
+
       alert('イベントを作成しました！審査をお待ちください。')
       onEventCreated(data)
-    } catch (error: any) {
-      console.error('Failed to create event:', error)
-      alert('イベントの作成に失敗しました: ' + error.message)
-    } finally {
-      setLoading(false)
-    }
+  } catch (error: any) {
+    console.error('Failed to create event:', error)
+    alert('イベントの作成に失敗しました: ' + error.message)
+  } finally {
+    setLoading(false)
   }
+}
 
   const renderStep = () => {
     switch (currentStep) {
@@ -102,7 +147,13 @@ export default function EventFormUltra({ organizer, onEventCreated, onCancel }: 
       case 3:
         return <Step3Application formData={formData} setFormData={setFormData} />
       case 4:
-        return <Step4Confirmation formData={formData} />
+        return (
+          <Step4Confirmation
+            formData={formData}
+            imagePreviews={imagePreviews}
+            onImageChange={handleImageChange}
+          />
+        )
       default:
         return null
     }
@@ -230,15 +281,15 @@ export default function EventFormUltra({ organizer, onEventCreated, onCancel }: 
         margin: '0 auto',
         padding: spacing[8],
       }}>
-        <div style={{
-          background: colors.neutral[0],
-          borderRadius: borderRadius.xl,
-          padding: spacing[8],
-          boxShadow: shadows.card,
-          minHeight: '500px',
-        }}>
-          {renderStep()}
-        </div>
+      <div style={{
+        background: colors.neutral[0],
+        borderRadius: borderRadius.xl,
+        padding: spacing[8],
+        boxShadow: shadows.card,
+        minHeight: '500px',
+      }}>
+        {renderStep()}
+      </div>
 
         {/* ナビゲーションボタン */}
         <div style={{
@@ -485,7 +536,13 @@ function Step3Application({ formData, setFormData }: StepProps) {
 }
 
 // ステップ4: 確認
-function Step4Confirmation({ formData }: { formData: EventFormData }) {
+interface Step4Props {
+  formData: EventFormData
+  imagePreviews: Record<ImageField, string>
+  onImageChange: (field: ImageField, file: File | null, preview: string) => void
+}
+
+function Step4Confirmation({ formData, imagePreviews, onImageChange }: Step4Props) {
   const formatDate = (dateString: string) => {
     if (!dateString) return '未設定'
     const date = new Date(dateString)
@@ -536,6 +593,65 @@ function Step4Confirmation({ formData }: { formData: EventFormData }) {
             lineHeight: typography.lineHeight.relaxed,
           }}>
             ⚠️ <strong>注意:</strong> イベントを作成すると、管理者による審査が行われます。承認されるまでイベントは公開されません。
+          </div>
+        </div>
+        <div style={{
+          marginTop: spacing[4],
+        }}>
+          <h3 style={{
+            fontFamily: typography.fontFamily.japanese,
+            fontSize: typography.fontSize.lg,
+            fontWeight: typography.fontWeight.bold,
+            color: colors.neutral[900],
+            marginBottom: spacing[3],
+          }}>
+            イベント画像
+          </h3>
+          <div style={{ display: 'flex', gap: spacing[4], flexWrap: 'wrap' }}>
+            {[
+              { field: 'main' as ImageField, label: 'メイン画像' },
+              { field: 'additional1' as ImageField, label: '追加画像①' },
+              { field: 'additional2' as ImageField, label: '追加画像②' },
+            ].map(({ field, label }) => (
+              <div key={field} style={{
+                width: '180px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: spacing[2],
+              }}>
+                <label style={{
+                  fontFamily: typography.fontFamily.japanese,
+                  color: colors.neutral[600],
+                }}>{label}</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0] || null
+                    const preview = file ? URL.createObjectURL(file) : ''
+                    onImageChange(field, file, preview)
+                  }}
+                  style={{
+                    border: `1px dashed ${colors.neutral[300]}`,
+                    borderRadius: borderRadius.lg,
+                    padding: spacing[3],
+                    cursor: 'pointer',
+                  }}
+                />
+                {imagePreviews[field] && (
+                  <img
+                    src={imagePreviews[field]}
+                    alt={label}
+                    style={{
+                      width: '100%',
+                      height: '120px',
+                      objectFit: 'cover',
+                      borderRadius: borderRadius.lg,
+                    }}
+                  />
+                )}
+              </div>
+            ))}
           </div>
         </div>
       </div>
