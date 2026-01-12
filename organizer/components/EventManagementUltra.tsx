@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import { colors, typography, spacing, borderRadius, shadows, transitions } from '@/styles/design-system'
 import Button from './ui/Button'
+import { TentIcon, CheckIcon, ClockIcon, ClipboardIcon } from './icons'
 
 interface EventManagementProps {
   userProfile: any
@@ -137,10 +138,10 @@ export default function EventManagementUltra({ userProfile, onNavigate }: EventM
           marginBottom: spacing[8],
         }}>
           {[
-            { label: '総イベント数', value: stats.total, icon: '🎪', color: colors.primary[500] },
-            { label: '公開中', value: stats.approved, icon: '✓', color: colors.status.success.main },
-            { label: '審査中', value: stats.pending, icon: '⏳', color: colors.status.warning.main },
-            { label: '総申込数', value: stats.applications, icon: '📋', color: colors.status.info.main },
+            { label: '総イベント数', value: stats.total, icon: <TentIcon width={24} height={24} />, color: colors.primary[500] },
+            { label: '公開中', value: stats.approved, icon: <CheckIcon width={24} height={24} />, color: colors.status.success.main },
+            { label: '審査中', value: stats.pending, icon: <ClockIcon width={24} height={24} />, color: colors.status.warning.main },
+            { label: '総申込数', value: stats.applications, icon: <ClipboardIcon width={24} height={24} />, color: colors.status.info.main },
           ].map((stat, index) => (
             <div
               key={index}

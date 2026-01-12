@@ -5,6 +5,7 @@ import { supabase } from '@/lib/supabase'
 import Button from './ui/Button'
 import Input from './ui/Input'
 import { colors, spacing, typography, borderRadius, shadows, transitions } from '@/styles/design-system'
+import { CheckIcon } from './icons'
 
 export default function WelcomeScreenUltra() {
   const [isLogin, setIsLogin] = useState(true)
@@ -224,11 +225,7 @@ export default function WelcomeScreenUltra() {
             flexDirection: 'column',
             gap: spacing[4],
           }}>
-            {[
-              { icon: '✓', text: 'カンタンイベント作成' },
-              { icon: '✓', text: 'リアルタイム管理' },
-              { icon: '✓', text: '安心のサポート' },
-            ].map((feature, index) => (
+            {['カンタンイベント作成', 'リアルタイム管理', '安心のサポート'].map((text, index) => (
               <div key={index} style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -246,9 +243,9 @@ export default function WelcomeScreenUltra() {
                   justifyContent: 'center',
                   fontWeight: typography.fontWeight.bold,
                 }}>
-                  {feature.icon}
+                  <CheckIcon width={20} height={20} />
                 </div>
-                {feature.text}
+                {text}
               </div>
             ))}
           </div>

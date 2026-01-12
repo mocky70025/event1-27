@@ -6,6 +6,7 @@ import type { ChangeEvent, Dispatch, FocusEvent, ReactNode, SetStateAction } fro
 import { supabase } from '@/lib/supabase'
 import { colors, typography, spacing, borderRadius, shadows, transitions } from '@/styles/design-system'
 import Button from './ui/Button'
+import { DocumentIcon, CalendarIcon, GearIcon, CheckIcon } from './icons'
 
 interface EventFormProps {
   organizer: any
@@ -54,10 +55,10 @@ export default function EventFormUltra({ organizer, onEventCreated, onCancel }: 
   })
 
   const steps = [
-    { number: 1, title: '基本情報', icon: '📝' },
-    { number: 2, title: '日程・会場', icon: '📅' },
-    { number: 3, title: '申込設定', icon: '⚙️' },
-    { number: 4, title: '確認', icon: '✓' },
+    { number: 1, title: '基本情報', icon: <DocumentIcon width={20} height={20} /> },
+    { number: 2, title: '日程・会場', icon: <CalendarIcon width={20} height={20} /> },
+    { number: 3, title: '申込設定', icon: <GearIcon width={20} height={20} /> },
+    { number: 4, title: '確認', icon: <CheckIcon width={20} height={20} /> },
   ]
 
   const handleSubmit = async () => {
@@ -208,7 +209,7 @@ export default function EventFormUltra({ organizer, onEventCreated, onCancel }: 
                   transition: `all ${transitions.normal}`,
                   boxShadow: currentStep === step.number ? shadows.lg : 'none',
                 }}>
-                  {currentStep > step.number ? '✓' : step.icon}
+                {currentStep > step.number ? <CheckIcon width={20} height={20} /> : step.icon}
                 </div>
                 <div style={{
                   fontSize: typography.fontSize.sm,
