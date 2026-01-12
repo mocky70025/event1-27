@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { LineProfile } from '@/lib/auth'
 import Link from 'next/link'
 import { supabase } from '../lib/supabase'
 import ImageUpload from './ImageUpload'
@@ -9,7 +10,7 @@ import Button from './ui/Button'
 import Input from './ui/Input'
 
 interface RegistrationFormProps {
-  userProfile: any
+  userProfile: LineProfile | null
   onRegistrationComplete: () => void
 }
 
@@ -49,16 +50,29 @@ export default function RegistrationFormModern({ userProfile, onRegistrationComp
     try {
       const { data: { user } } = await supabase.auth.getUser()
 
-      const storedUserId = sessionStorage.getItem('user_id') || userProfile?.userId
+      const storedLineProfileRaw = sessionStorage.getItem('line_profile')
+      let storedLineProfile: LineProfile | null = null
+      if (storedLineProfileRaw) {
+        try {
+          storedLineProfile = JSON.parse(storedLineProfileRaw)
+        } catch {
+          storedLineProfile = null
+        }
+      }
+
+      const storedUserId = sessionStorage.getItem('user_id') || userProfile?.userId || storedLineProfile?.userId
       const resolvedUserId = user?.id || storedUserId
 
       if (!resolvedUserId) throw new Error('ユーザーが見つかりません')
 
       const exhibitorName = formData.shop_name || formData.name
-      const authProvider = (user?.app_metadata as any)?.provider
+      const authProvider =
+        userProfile?.authType ||
+        (storedLineProfile ? 'line' : 'email') ||
+        (user?.app_metadata as any)?.provider
       const lineUserId =
         authProvider === 'line'
-          ? (user?.user_metadata as any)?.line_user_id || (user?.user_metadata as any)?.sub
+          ? userProfile?.userId || storedLineProfile?.userId || (user?.user_metadata as any)?.line_user_id
           : null
 
       const upsertData: any = {
