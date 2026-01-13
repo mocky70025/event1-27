@@ -1,8 +1,16 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
+
 import { colors, spacing, typography, borderRadius, shadows } from '@/styles/design-system'
 
 export default function PrivacyPage() {
+  const router = useRouter()
+
+  const handleReturn = () => {
+    router.push('/')
+  }
+
   return (
     <div style={{
       minHeight: '100vh',
@@ -59,6 +67,23 @@ export default function PrivacyPage() {
         <Section title="5. 開示・訂正・削除">
           ご本人からの請求に応じ、合理的な範囲で開示・訂正・削除を行います。お問い合わせ窓口までご連絡ください。
         </Section>
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: spacing[4] }}>
+          <button
+            onClick={handleReturn}
+            style={{
+              padding: `${spacing[2]} ${spacing[4]}`,
+              background: colors.primary[500],
+              color: colors.neutral[0],
+              border: 'none',
+              borderRadius: borderRadius.md,
+              fontFamily: typography.fontFamily.japanese,
+              fontWeight: typography.fontWeight.semibold,
+              cursor: 'pointer',
+            }}
+          >
+            登録フォームに戻る
+          </button>
+        </div>
       </div>
     </div>
   )
