@@ -28,7 +28,7 @@ export async function GET(_request: NextRequest) {
 
   const { data: events, error: eventError } = await supabaseAdmin
     .from('events')
-    .select('id, event_name, genre, venue_name, event_start_date, event_end_date, approval_status, created_at')
+    .select('id, event_name, genre, venue_name, event_start_date, event_end_date, created_at')
 
   if (eventError) {
     console.error('[admin/pending-data] events fetch error', eventError)
