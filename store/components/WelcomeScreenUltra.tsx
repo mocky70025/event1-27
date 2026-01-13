@@ -170,11 +170,11 @@ export default function WelcomeScreenUltra() {
           background: colors.primary[100],
           position: 'relative',
           display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        padding: spacing[12],
-        color: colors.primary[800],
-      }}>
+          flexDirection: 'column',
+          justifyContent: 'center',
+          padding: spacing[12],
+          color: colors.primary[800],
+        }}>
         {/* 装飾的な背景要素 */}
         <div style={{
           position: 'absolute',
