@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Mail, Store } from 'lucide-react'
 import { supabase } from '../lib/supabase'
@@ -16,6 +16,7 @@ export default function WelcomeScreenCalm() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [emailSent, setEmailSent] = useState(false)
+  const [isDesktop, setIsDesktop] = useState(false)
 
   const handleEmailAuth = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -93,60 +94,17 @@ export default function WelcomeScreenCalm() {
     }
   }
 
-  if (emailSent) {
-    return (
-      <div style={{
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: colors.neutral[50],
-      }}>
-        <div style={{
-          maxWidth: '500px',
-          width: '100%',
-          padding: spacing[8],
-          background: colors.neutral[0],
-          borderRadius: borderRadius.xl,
-          boxShadow: shadows.lg,
-          textAlign: 'center',
-        }}>
-          <div style={{
-            width: '64px',
-            height: '64px',
-            margin: `0 auto ${spacing[6]}`,
-            background: colors.primary[100],
-            borderRadius: borderRadius.full,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: colors.primary[700],
-          }}>
-            <Mail size={28} />
-          </div>
-          
-          <h2 style={{
-            fontFamily: typography.fontFamily.japanese,
-            fontSize: typography.fontSize['2xl'],
-            fontWeight: typography.fontWeight.bold,
-            color: colors.neutral[900],
-            marginBottom: spacing[3],
-          }}>
-            メールを確認してください
-          </h2>
-          
-          <p style={{
-            fontFamily: typography.fontFamily.japanese,
-            fontSize: typography.fontSize.base,
-            color: colors.neutral[600],
-            lineHeight: typography.lineHeight.relaxed,
-          }}>
-            {email} にログインリンクを送信しました。メール内のリンクをクリックしてログインしてください。
-          </p>
-        </div>
-      </div>
-    )
-  }
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    const updateIsDesktop = () => {
+      setIsDesktop(window.innerWidth >= 1024)
+    }
+
+    updateIsDesktop()
+    window.addEventListener('resize', updateIsDesktop)
+    return () => window.removeEventListener('resize', updateIsDesktop)
+  }, [])
 
   return (
     <div style={{
@@ -157,13 +115,13 @@ export default function WelcomeScreenCalm() {
       {/* 左側: シンプルなブランドセクション */}
       <div style={{
         flex: '1',
-        display: 'flex',
+        display: isDesktop ? 'flex' : 'none',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
         padding: spacing[12],
         background: colors.primary[50],
-        borderRight: `1px solid ${colors.primary[100]}`,
+        borderRight: isDesktop ? `1px solid ${colors.primary[100]}` : 'none',
       }}>
         <div style={{
           maxWidth: '400px',
@@ -203,7 +161,6 @@ export default function WelcomeScreenCalm() {
           </p>
         </div>
       </div>
-
       {/* 右側: ログインフォーム */}
       <div style={{
         flex: '1',

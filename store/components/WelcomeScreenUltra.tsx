@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Check, Mail, Store } from 'lucide-react'
 import { supabase } from '../lib/supabase'
@@ -16,6 +16,7 @@ export default function WelcomeScreenUltra() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [emailSent, setEmailSent] = useState(false)
+  const [isDesktop, setIsDesktop] = useState(false)
 
   const handleEmailAuth = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -89,6 +90,18 @@ export default function WelcomeScreenUltra() {
     }
   }
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    const updateIsDesktop = () => {
+      setIsDesktop(window.innerWidth >= 1024)
+    }
+
+    updateIsDesktop()
+    window.addEventListener('resize', updateIsDesktop)
+    return () => window.removeEventListener('resize', updateIsDesktop)
+  }, [])
+
   if (emailSent) {
     return (
       <div style={{
@@ -148,14 +161,15 @@ export default function WelcomeScreenUltra() {
     <div style={{
       minHeight: '100vh',
       display: 'grid',
-      gridTemplateColumns: '1fr 1fr',
+      gridTemplateColumns: isDesktop ? '1fr 1fr' : '1fr',
       overflow: 'hidden',
     }}>
       {/* 左側 - ヒーロー */}
-      <div style={{
-        background: colors.primary[100],
-        position: 'relative',
-        display: 'flex',
+      {isDesktop && (
+        <div style={{
+          background: colors.primary[100],
+          position: 'relative',
+          display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         padding: spacing[12],
@@ -255,7 +269,7 @@ export default function WelcomeScreenUltra() {
             ))}
           </div>
         </div>
-      </div>
+      )}
 
       {/* 右側 - ログインフォーム */}
       <div style={{
