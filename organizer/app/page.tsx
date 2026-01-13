@@ -105,7 +105,7 @@ export default function Home() {
           const { data: organizer, error: organizerError } = await supabase
             .from('organizers')
             .select('id, is_approved')
-            .eq('user_id', session.user.id)
+            .or(`user_id.eq.${session.user.id},line_user_id.eq.${session.user.id}`)
             .maybeSingle()
 
           let organizerRecord = organizer
