@@ -340,14 +340,14 @@ export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
             </button>
           </form>
 
-          {adminEmail && (
+          {adminEmailsString && (
             <p style={{
               marginTop: spacing[6],
               fontSize: '0.75rem',
               color: colors.neutral[500],
               textAlign: 'center',
             }}>
-              管理者メールアドレス: {adminEmail}
+              設定済の管理者メールアドレス: {adminEmailsString}
             </p>
           )}
         </div>
