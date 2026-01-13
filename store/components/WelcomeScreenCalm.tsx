@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { usePathname, useSearchParams } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Mail, Store } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import Button from './ui/Button'
@@ -25,6 +25,7 @@ export default function WelcomeScreenCalm() {
   const returnTo = encodeURIComponent(currentUrl)
   const termsHref = `/terms?returnTo=${returnTo}`
   const privacyHref = `/privacy?returnTo=${returnTo}`
+  const router = useRouter()
 
   const handleEmailAuth = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -44,6 +45,7 @@ export default function WelcomeScreenCalm() {
         })
         if (error) throw error
         setEmailSent(false)
+        router.replace('/')
         return
       } else {
         if (password.length < 6) {
