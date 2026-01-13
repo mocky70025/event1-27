@@ -24,6 +24,7 @@ export default function RegistrationFormModern({ userProfile, onRegistrationComp
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [isDesktop, setIsDesktop] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -66,6 +67,24 @@ export default function RegistrationFormModern({ userProfile, onRegistrationComp
     }
   }
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    const updateIsDesktop = () => {
+      setIsDesktop(window.innerWidth >= 1024)
+    }
+
+    updateIsDesktop()
+    window.addEventListener('resize', updateIsDesktop)
+    return () => window.removeEventListener('resize', updateIsDesktop)
+  }, [])
+
+  const layoutColumns = isDesktop ? '400px 1fr' : '1fr'
+  const containerMinHeight = isDesktop ? '700px' : 'auto'
+  const sidebarPadding = isDesktop ? spacing[8] : spacing[6]
+  const formPadding = isDesktop ? spacing[10] : spacing[6]
+  const sidebarHeadingSpacing = isDesktop ? spacing[10] : spacing[6]
+
   return (
     <div style={{
       minHeight: '100vh',
@@ -83,94 +102,89 @@ export default function RegistrationFormModern({ userProfile, onRegistrationComp
         boxShadow: shadows['2xl'],
         overflow: 'hidden',
         display: 'grid',
-        gridTemplateColumns: '400px 1fr',
-        minHeight: '700px',
+        gridTemplateColumns: layoutColumns,
+        minHeight: containerMinHeight,
       }}>
-        {/* 左サイドバー - プログレス */}
-        <div style={{
-          background: `linear-gradient(180deg, ${colors.primary[500]} 0%, ${colors.primary[700]} 100%)`,
-          padding: spacing[8],
-          color: colors.neutral[0],
-          display: 'flex',
-          flexDirection: 'column',
-        }}>
-          <div style={{ marginBottom: spacing[10] }}>
-            <h1 style={{
-              fontFamily: typography.fontFamily.japanese,
-              fontSize: typography.fontSize['3xl'],
-              fontWeight: typography.fontWeight.bold,
-              marginBottom: spacing[2],
-            }}>
-              主催者登録
-            </h1>
-            <p style={{
-              fontFamily: typography.fontFamily.japanese,
-              fontSize: typography.fontSize.sm,
-              opacity: 0.9,
-            }}>
-              イベントを開催するための登録を行います
-            </p>
-          </div>
-
-          {/* ステップインジケーター */}
-          <div style={{ flex: 1 }}>
-            {[
-              { num: 1, title: '基本情報', desc: '会社名・担当者名' },
-              { num: 2, title: '連絡先情報', desc: '電話番号・メール' },
-              { num: 3, title: '確認', desc: '入力内容の確認' },
-            ].map((step) => (
-              <div key={step.num} style={{
-                marginBottom: spacing[6],
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: spacing[4],
-                opacity: currentStep >= step.num ? 1 : 0.5,
+        {isDesktop && (
+          <div style={{
+            background: `linear-gradient(180deg, ${colors.primary[500]} 0%, ${colors.primary[700]} 100%)`,
+            padding: sidebarPadding,
+            color: colors.neutral[0],
+            display: 'flex',
+            flexDirection: 'column',
+          }}>
+            <div style={{ marginBottom: sidebarHeadingSpacing }}>
+              <h1 style={{
+                fontFamily: typography.fontFamily.japanese,
+                fontSize: typography.fontSize['3xl'],
+                fontWeight: typography.fontWeight.bold,
+                marginBottom: spacing[2],
               }}>
-                <div style={{
-                  width: '40px',
-                  height: '40px',
-                  borderRadius: borderRadius.full,
-                  background: currentStep > step.num 
-                    ? colors.neutral[0]
-                    : currentStep === step.num
-                    ? colors.neutral[0]
-                    : 'rgba(255,255,255,0.2)',
-                  color: currentStep >= step.num ? colors.primary[500] : colors.neutral[0],
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontWeight: typography.fontWeight.bold,
-                  fontSize: typography.fontSize.lg,
-                  flexShrink: 0,
-                  border: currentStep === step.num ? `3px solid ${colors.neutral[0]}` : 'none',
-                  boxShadow: currentStep === step.num ? shadows.lg : 'none',
-                }}>
-                  {currentStep > step.num ? '✓' : step.num}
-                </div>
-                <div>
-                  <div style={{
-                    fontWeight: typography.fontWeight.semibold,
-                    fontSize: typography.fontSize.base,
-                    marginBottom: spacing[1],
-                  }}>
-                    {step.title}
-                  </div>
-                  <div style={{
-                    fontSize: typography.fontSize.sm,
-                    opacity: 0.8,
-                  }}>
-                    {step.desc}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+                主催者登録
+              </h1>
+              <p style={{
+                fontFamily: typography.fontFamily.japanese,
+                fontSize: typography.fontSize.sm,
+                opacity: 0.9,
+              }}>
+                イベントを開催するための登録を行います
+              </p>
+            </div>
 
-        </div>
+            <div style={{ flex: 1 }}>
+              {[
+                { num: 1, title: '基本情報', desc: '会社名・担当者名' },
+                { num: 2, title: '連絡先情報', desc: '電話番号・メール' },
+                { num: 3, title: '確認', desc: '入力内容の確認' },
+              ].map((step) => (
+                <div key={step.num} style={{
+                  marginBottom: spacing[6],
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: spacing[4],
+                  opacity: currentStep >= step.num ? 1 : 0.5,
+                }}>
+                  <div style={{
+                    width: '40px',
+                    height: '40px',
+                    borderRadius: borderRadius.full,
+                    background: colors.neutral[0],
+                    color: currentStep >= step.num ? colors.primary[500] : colors.neutral[0],
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontWeight: typography.fontWeight.bold,
+                    fontSize: typography.fontSize.lg,
+                    flexShrink: 0,
+                    border: currentStep === step.num ? `3px solid ${colors.neutral[0]}` : 'none',
+                    boxShadow: currentStep === step.num ? shadows.lg : 'none',
+                  }}>
+                    {currentStep > step.num ? '✓' : step.num}
+                  </div>
+                  <div>
+                    <div style={{
+                      fontWeight: typography.fontWeight.semibold,
+                      fontSize: typography.fontSize.base,
+                      marginBottom: spacing[1],
+                    }}>
+                      {step.title}
+                    </div>
+                    <div style={{
+                      fontSize: typography.fontSize.sm,
+                      opacity: 0.8,
+                    }}>
+                      {step.desc}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* 右側 - フォーム */}
         <div style={{
-          padding: spacing[10],
+          padding: formPadding,
           overflowY: 'auto',
         }}>
           {error && (

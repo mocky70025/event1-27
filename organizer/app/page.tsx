@@ -339,8 +339,11 @@ function RegistrationComplete({ onProceed }: { onProceed: () => void }) {
         <h1 style={{ fontFamily: 'Noto Sans JP, sans-serif', fontSize: '24px', marginBottom: '12px' }}>
           登録が完了しました
         </h1>
+        <p style={{ fontSize: '14px', color: '#4B5563', marginBottom: '16px', lineHeight: 1.6 }}>
+          登録内容を保存しました。イベント掲載には管理者の承認が必要です。承認されるまではイベント管理画面から掲載できないことをご承知おきください。
+        </p>
         <p style={{ fontSize: '14px', color: '#4B5563', marginBottom: '24px', lineHeight: 1.6 }}>
-          登録内容を保存しました。イベント管理に進む前に、プロフィールや必要情報を確認してください。
+          承認の進捗は、しばらく経ってからダッシュボードのステータスでご確認ください。
         </p>
         <Button variant="primary" fullWidth onClick={onProceed}>
           ダッシュボードへ進む

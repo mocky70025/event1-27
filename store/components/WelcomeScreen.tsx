@@ -380,7 +380,9 @@ export default function WelcomeScreen() {
                 fill="#EA4335"
               />
             </svg>
-            <span style={{ fontSize: typography.fontSize.sm }}>Googleでログイン</span>
+            <span style={{ fontSize: typography.fontSize.sm }}>
+              {isLogin ? 'Googleでログイン' : 'Googleで新規登録'}
+            </span>
           </div>
         </Button>
 
@@ -404,7 +406,9 @@ export default function WelcomeScreen() {
                 fill="currentColor"
               />
             </svg>
-            <span style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.bold }}>LINEでログイン</span>
+                <span style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.bold }}>
+                  {isLogin ? 'LINEでログイン' : 'LINEで新規登録'}
+                </span>
           </div>
         </Button>
       </Card>

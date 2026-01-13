@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { LineProfile } from '@/lib/auth'
 import Link from 'next/link'
 import { supabase } from '../lib/supabase'
@@ -13,6 +13,8 @@ interface RegistrationFormProps {
   userProfile: LineProfile | null
   onRegistrationComplete: () => void
 }
+
+const FORM_DRAFT_KEY = 'registration_form_draft'
 
 export default function RegistrationFormModern({ userProfile, onRegistrationComplete }: RegistrationFormProps) {
   const [currentStep, setCurrentStep] = useState(1)
@@ -35,6 +37,71 @@ export default function RegistrationFormModern({ userProfile, onRegistrationComp
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [draftLoaded, setDraftLoaded] = useState(false)
+  const [isDesktop, setIsDesktop] = useState(false)
+
+  useEffect(() => {
+    if (draftLoaded || typeof window === 'undefined') return
+
+    const raw = sessionStorage.getItem(FORM_DRAFT_KEY)
+    if (!raw) {
+      setDraftLoaded(true)
+      return
+    }
+
+    try {
+      const saved = JSON.parse(raw)
+      if (saved.formData) {
+        setFormData((prev) => ({
+          ...prev,
+          ...saved.formData,
+        }))
+      }
+      if (saved.documents) {
+        setDocuments((prev) => ({
+          ...prev,
+          ...saved.documents,
+        }))
+      }
+      if (saved.currentStep) {
+        setCurrentStep(saved.currentStep)
+      }
+    } catch (err) {
+      console.warn('[RegistrationFormModern] Failed to load draft:', err)
+    } finally {
+      setDraftLoaded(true)
+    }
+  }, [draftLoaded])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    const updateIsDesktop = () => {
+      setIsDesktop(window.innerWidth >= 1024)
+    }
+
+    updateIsDesktop()
+    window.addEventListener('resize', updateIsDesktop)
+    return () => window.removeEventListener('resize', updateIsDesktop)
+  }, [])
+
+  const layoutColumns = isDesktop ? '400px 1fr' : '1fr'
+  const containerMinHeight = isDesktop ? '700px' : 'auto'
+  const sidebarPadding = isDesktop ? spacing[8] : spacing[6]
+  const formPadding = isDesktop ? spacing[10] : spacing[6]
+  const sidebarHeadingSpacing = isDesktop ? spacing[10] : spacing[6]
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    sessionStorage.setItem(
+      FORM_DRAFT_KEY,
+      JSON.stringify({
+        formData,
+        documents,
+        currentStep,
+      })
+    )
+  }, [formData, documents, currentStep])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -101,6 +168,7 @@ export default function RegistrationFormModern({ userProfile, onRegistrationComp
 
       if (insertError) throw insertError
 
+      sessionStorage.removeItem(FORM_DRAFT_KEY)
       onRegistrationComplete()
     } catch (err: any) {
       console.error('Registration error:', err)
@@ -127,18 +195,18 @@ export default function RegistrationFormModern({ userProfile, onRegistrationComp
         boxShadow: shadows['2xl'],
         overflow: 'hidden',
         display: 'grid',
-        gridTemplateColumns: '400px 1fr',
-        minHeight: '700px',
-        }}>
-          {/* 左サイドバー - プログレス */}
+        gridTemplateColumns: layoutColumns,
+        minHeight: containerMinHeight,
+      }}>
+        {isDesktop && (
           <div style={{
             background: colors.primary[100],
-            padding: spacing[8],
+            padding: sidebarPadding,
             color: colors.primary[800],
             display: 'flex',
             flexDirection: 'column',
           }}>
-            <div style={{ marginBottom: spacing[10] }}>
+            <div style={{ marginBottom: sidebarHeadingSpacing }}>
               <h1 style={{
                 fontFamily: typography.fontFamily.japanese,
                 fontSize: typography.fontSize['3xl'],
@@ -156,62 +224,60 @@ export default function RegistrationFormModern({ userProfile, onRegistrationComp
               </p>
             </div>
 
-          {/* ステップインジケーター */}
-          <div style={{ flex: 1 }}>
-            {[
-              { num: 1, title: '基本情報', desc: '店舗名・担当者名' },
-              { num: 2, title: '連絡先情報', desc: '電話番号・メール' },
-              { num: 3, title: '確認', desc: '入力内容の確認' },
-            ].map((step) => (
-              <div key={step.num} style={{
-                marginBottom: spacing[6],
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: spacing[4],
-                opacity: currentStep >= step.num ? 1 : 0.5,
-              }}>
-                <div style={{
-                  width: '40px',
-                  height: '40px',
-                  borderRadius: borderRadius.full,
-                  background: colors.neutral[0],
-                  color: currentStep >= step.num ? colors.primary[600] : colors.neutral[500],
+            <div style={{ flex: 1 }}>
+              {[
+                { num: 1, title: '基本情報', desc: '店舗名・担当者名' },
+                { num: 2, title: '連絡先情報', desc: '電話番号・メール' },
+                { num: 3, title: '確認', desc: '入力内容の確認' },
+              ].map((step) => (
+                <div key={step.num} style={{
+                  marginBottom: spacing[6],
                   display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontWeight: typography.fontWeight.bold,
-                  fontSize: typography.fontSize.lg,
-                  flexShrink: 0,
-                  border: currentStep === step.num ? `3px solid ${colors.primary[200]}` : `1px solid ${colors.primary[200]}`,
-                  boxShadow: currentStep === step.num ? shadows.md : 'none',
+                  alignItems: 'flex-start',
+                  gap: spacing[4],
+                  opacity: currentStep >= step.num ? 1 : 0.5,
                 }}>
-                  {currentStep > step.num ? '✓' : step.num}
-                </div>
-                <div>
                   <div style={{
-                    fontWeight: typography.fontWeight.semibold,
-                    fontSize: typography.fontSize.base,
-                    marginBottom: spacing[1],
-                    color: colors.primary[800],
+                    width: '40px',
+                    height: '40px',
+                    borderRadius: borderRadius.full,
+                    background: colors.neutral[0],
+                    color: currentStep >= step.num ? colors.primary[600] : colors.neutral[500],
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontWeight: typography.fontWeight.bold,
+                    fontSize: typography.fontSize.lg,
+                    flexShrink: 0,
+                    border: currentStep === step.num ? `3px solid ${colors.primary[200]}` : `1px solid ${colors.primary[200]}`,
+                    boxShadow: currentStep === step.num ? shadows.md : 'none',
                   }}>
-                    {step.title}
+                    {currentStep > step.num ? '✓' : step.num}
                   </div>
-                  <div style={{
-                    fontSize: typography.fontSize.sm,
-                    color: colors.primary[700],
-                  }}>
-                    {step.desc}
+                  <div>
+                    <div style={{
+                      fontWeight: typography.fontWeight.semibold,
+                      fontSize: typography.fontSize.base,
+                      marginBottom: spacing[1],
+                    }}>
+                      {step.title}
+                    </div>
+                    <div style={{
+                      fontSize: typography.fontSize.sm,
+                      opacity: 0.8,
+                    }}>
+                      {step.desc}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-
-        </div>
+        )}
 
         {/* 右側 - フォーム */}
         <div style={{
-          padding: spacing[10],
+          padding: formPadding,
           overflowY: 'auto',
         }}>
           {error && (
@@ -583,13 +649,13 @@ export default function RegistrationFormModern({ userProfile, onRegistrationComp
             lineHeight: typography.lineHeight.relaxed,
           }}>
             登録を進めることで、
-            <Link href="/terms" style={{ color: '#2563EB', fontWeight: typography.fontWeight.semibold, textDecoration: 'underline' }}>
-              利用規約
-            </Link>
+          <Link href="/terms" target="_blank" rel="noopener noreferrer" style={{ color: '#2563EB', fontWeight: typography.fontWeight.semibold, textDecoration: 'underline' }}>
+            利用規約
+          </Link>
             と
-            <Link href="/privacy" style={{ color: '#2563EB', fontWeight: typography.fontWeight.semibold, textDecoration: 'underline' }}>
-              プライバシーポリシー
-            </Link>
+          <Link href="/privacy" target="_blank" rel="noopener noreferrer" style={{ color: '#2563EB', fontWeight: typography.fontWeight.semibold, textDecoration: 'underline' }}>
+            プライバシーポリシー
+          </Link>
             に同意したものとみなされます。
           </div>
 
