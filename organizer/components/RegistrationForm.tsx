@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { supabase, type Organizer } from '@/lib/supabase'
 import { type LineProfile } from '@/lib/auth'
+import { colors } from '@/styles/design-system'
 import ProgressBar from './ProgressBar'
 
 interface RegistrationFormProps {
@@ -51,7 +52,14 @@ const hasOrganizerDraftContent = (payload: OrganizerDraftPayload): boolean => {
 }
 
 export default function RegistrationForm({ userProfile, onRegistrationComplete }: RegistrationFormProps) {
-  const [formData, setFormData] = useState<OrganizerFormState>({ ...ORGANIZER_FORM_INITIAL })
+  const isLineLogin = userProfile?.authType === 'line'
+  const [formData, setFormData] = useState<OrganizerFormState>({
+    ...ORGANIZER_FORM_INITIAL,
+    email:
+      isLineLogin && userProfile?.email?.startsWith('line_') && userProfile?.email.includes('@line.local')
+        ? ''
+        : userProfile?.email || '',
+  })
 
   const [loading, setLoading] = useState(false)
   const [termsAccepted, setTermsAccepted] = useState(false)
@@ -747,6 +755,11 @@ export default function RegistrationForm({ userProfile, onRegistrationComplete }
               </div>
               {errors.email && (
                 <p style={{ fontSize: '12px', color: '#ef4444', marginTop: '4px', fontWeight: 500 }}>入力してください</p>
+              )}
+              {isLineLogin && (
+                <p style={{ fontSize: '12px', color: colors.neutral[600], marginTop: '4px' }}>
+                  LINEログインの場合も、実際に届くメールアドレスをここでご記入ください（LINE識別子ではありません）。
+                </p>
               )}
             </div>
 

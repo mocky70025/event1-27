@@ -14,13 +14,18 @@ interface RegistrationFormProps {
 
 export default function RegistrationFormModern({ userProfile, onRegistrationComplete }: RegistrationFormProps) {
   const [currentStep, setCurrentStep] = useState(1)
+  const isLineLogin = userProfile?.authType === 'line'
+
   const [formData, setFormData] = useState({
     company_name: '',
     name: '',
     gender: '',
     age: '',
     phone_number: '',
-    email: userProfile?.email || '',
+    email:
+      isLineLogin && userProfile?.email?.startsWith('line_') && userProfile?.email.includes('@line.local')
+        ? ''
+        : userProfile?.email || '',
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -337,6 +342,11 @@ export default function RegistrationFormModern({ userProfile, onRegistrationComp
                     required
                     fullWidth
                   />
+                  {isLineLogin && (
+                    <p style={{ fontSize: typography.fontSize.sm, color: colors.neutral[600], marginTop: spacing[2] }}>
+                      LINEログイン時は、LINE側の識別子ではなく、実際に届くメールアドレスを入力してください。
+                    </p>
+                  )}
                 </div>
               </div>
             )}
@@ -429,7 +439,10 @@ export default function RegistrationFormModern({ userProfile, onRegistrationComp
               marginTop: spacing[10],
               display: 'flex',
               gap: spacing[4],
-              justifyContent: 'flex-end',
+              justifyContent: isDesktop ? 'flex-end' : 'stretch',
+              flexDirection: isDesktop ? 'row' : 'column',
+              alignItems: isDesktop ? 'center' : 'stretch',
+              width: '100%',
             }}>
               {currentStep > 1 && (
                 <Button
@@ -438,6 +451,7 @@ export default function RegistrationFormModern({ userProfile, onRegistrationComp
                   size="lg"
                   onClick={() => setCurrentStep(currentStep - 1)}
                   disabled={loading}
+                  fullWidth={!isDesktop}
                 >
                   戻る
                 </Button>
@@ -447,7 +461,8 @@ export default function RegistrationFormModern({ userProfile, onRegistrationComp
                 size="lg"
                 loading={loading}
                 disabled={loading}
-                style={{ minWidth: '200px' }}
+                style={{ minWidth: isDesktop ? '200px' : 'auto' }}
+                fullWidth={!isDesktop}
               >
                 {currentStep === 3 ? '登録する' : '次へ'}
               </Button>
