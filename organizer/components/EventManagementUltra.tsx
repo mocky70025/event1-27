@@ -4,11 +4,14 @@ import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import { colors, typography, spacing, borderRadius, shadows, transitions } from '@/styles/design-system'
 import Button from './ui/Button'
+import NotificationBox from './NotificationBox'
 import { TentIcon, CheckIcon, ClockIcon, ClipboardIcon } from './icons'
 
 interface EventManagementProps {
   userProfile: any
   onNavigate: (view: 'create-event' | 'profile' | 'notifications') => void
+  onRequestCreateEvent: () => void
+  isApproved: boolean
 }
 
 interface Event {
@@ -21,7 +24,12 @@ interface Event {
   applications_count: number
 }
 
-export default function EventManagementUltra({ userProfile, onNavigate }: EventManagementProps) {
+export default function EventManagementUltra({
+  userProfile,
+  onNavigate,
+  onRequestCreateEvent,
+  isApproved,
+}: EventManagementProps) {
   const [events, setEvents] = useState<Event[]>([])
   const [stats, setStats] = useState({ total: 0, approved: 0, pending: 0, applications: 0 })
   const [loading, setLoading] = useState(true)
@@ -113,13 +121,22 @@ export default function EventManagementUltra({ userProfile, onNavigate }: EventM
               こんにちは、{userProfile?.name || 'ゲスト'}さん
             </p>
           </div>
-          <div style={{ display: 'flex', gap: spacing[3] }}>
+          <div style={{ display: 'flex', gap: spacing[3], alignItems: 'center' }}>
             <Button variant="outline" onClick={() => onNavigate('profile')}>
               プロフィール
             </Button>
-            <Button variant="primary" onClick={() => onNavigate('create-event')}>
+            <Button variant="primary" onClick={onRequestCreateEvent}>
               + 新しいイベント
             </Button>
+            {!isApproved && (
+              <span style={{
+                fontSize: typography.fontSize.sm,
+                color: colors.status.warning.dark,
+                marginLeft: spacing[2],
+              }}>
+                承認待ち
+              </span>
+            )}
           </div>
         </div>
       </div>
@@ -130,6 +147,16 @@ export default function EventManagementUltra({ userProfile, onNavigate }: EventM
         margin: '0 auto',
         padding: spacing[8],
       }}>
+        {(!isApproved) && (
+          <div style={{ marginBottom: spacing[6] }}>
+            <NotificationBox
+              type="warning"
+              title="イベント作成には承認が必要です"
+              message="管理者からの承認が完了するまでは新しいイベントを作成できません。承認が完了したら再度お試しください。"
+            />
+          </div>
+        )}
+
         {/* 統計カード */}
         <div style={{
           display: 'grid',

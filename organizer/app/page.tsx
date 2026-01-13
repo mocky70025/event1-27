@@ -42,6 +42,9 @@ export default function Home() {
         }
       : null
 
+  const [isApproved, setIsApproved] = useState(false)
+  const [approvalNoticeVisible, setApprovalNoticeVisible] = useState(false)
+
   useEffect(() => {
     const initializeAuth = async () => {
       try {
@@ -61,6 +64,7 @@ export default function Home() {
             setUserProfile(null)
           }
           setIsRegistered(false)
+          setIsApproved(false)
           return
         }
         
@@ -121,14 +125,17 @@ export default function Home() {
             setIsRegistered(false)
             sessionStorage.setItem('is_registered', 'false')
             setHasActiveSession(true)
+            setIsApproved(false)
           } else if (!organizerRecord) {
             console.log('[Home] Organizer not found - allow registration')
             setIsRegistered(false)
             sessionStorage.setItem('is_registered', 'false')
             setHasActiveSession(true)
+            setIsApproved(false)
           } else {
             setIsRegistered(true)
             sessionStorage.setItem('is_registered', 'true')
+            setIsApproved(Boolean(organizerRecord.is_approved))
             
             console.log('[Home] Auth user profile set:', { 
               userId: session.user.id, 
@@ -138,7 +145,6 @@ export default function Home() {
               emailConfirmed: isEmailConfirmed || true,
             })
           }
-          
         } else {
           // organizerアプリはメール認証のみ
           console.log('[Home] No email auth found - user not logged in')
@@ -175,6 +181,12 @@ export default function Home() {
     router.replace('/', { scroll: false })
   }, [lineProfileFromParams])
 
+  useEffect(() => {
+    if (isApproved) {
+      setApprovalNoticeVisible(false)
+    }
+  }, [isApproved])
+
   const profileToUse = userProfile ?? lineProfileFromParams
 
   if (loading) {
@@ -189,7 +201,7 @@ export default function Home() {
   // ただし、セッションが存在する場合（メール確認が無効）は登録フォームに進める
   // 開発中はメール確認を無効にしているため、セッションがあれば登録フォームに進める
   const isEmailPending = profileToUse?.authType === 'email' && !profileToUse?.emailConfirmed && !isRegistered && !hasActiveSession
-  
+ 
   if (isEmailPending) {
     return (
       <EmailConfirmationPending
@@ -272,9 +284,45 @@ export default function Home() {
   // メール未確認の場合はバナーを表示
   const showEmailConfirmationBanner = profileToUse?.authType === 'email' && !profileToUse?.emailConfirmed && profileToUse?.email
 
+  const handleRequestCreateEvent = () => {
+    if (!isApproved) {
+      setApprovalNoticeVisible(true)
+      return
+    }
+    setCurrentView('create-event')
+  }
+
   const renderCurrentView = () => {
     switch (currentView) {
       case 'create-event':
+        if (!isApproved) {
+          return (
+            <div style={{
+              minHeight: 'calc(100vh - 72px)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: spacing[8],
+            }}>
+              <div style={{ width: '100%', maxWidth: '640px' }}>
+                <NotificationBox
+                  type="warning"
+                  title="承認待ちのためイベント作成できません"
+                  message="運営管理者からの承認が完了するまではイベント作成機能を利用できません。承認が完了したら再度お試しください。"
+                />
+                <div style={{
+                  marginTop: spacing[6],
+                  display: 'flex',
+                  justifyContent: 'center',
+                }}>
+                  <Button variant="outline" onClick={() => setCurrentView('home')}>
+                    ダッシュボードへ戻る
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )
+        }
         return (
           <EventFormUltra
             organizer={null}
@@ -301,19 +349,36 @@ export default function Home() {
           </div>
         )
       default:
-        return <EventManagement userProfile={profileToUse} onNavigate={setCurrentView} />
+        return (
+          <EventManagement
+            userProfile={profileToUse}
+            onNavigate={(view) => setCurrentView(view)}
+            onRequestCreateEvent={handleRequestCreateEvent}
+            isApproved={isApproved}
+          />
+        )
     }
   }
 
   return (
     <>
-          {showEmailConfirmationBanner && (
-            <div style={{ padding: '9px 16px', maxWidth: '394px', margin: '0 auto' }}>
-              <EmailConfirmationBanner email={profileToUse.email || ''} />
-            </div>
-          )}
-    {renderCurrentView()}
-</>
+      {showEmailConfirmationBanner && (
+        <div style={{ padding: '9px 16px', maxWidth: '394px', margin: '0 auto' }}>
+          <EmailConfirmationBanner email={profileToUse.email || ''} />
+        </div>
+      )}
+      {approvalNoticeVisible && (
+        <div style={{ padding: '0 16px', maxWidth: '640px', margin: '0 auto 16px' }}>
+          <NotificationBox
+            type="error"
+            title="承認が必要です"
+            message="管理者の承認がないためイベント作成はできません。承認が完了するまでお待ちください。"
+            onClose={() => setApprovalNoticeVisible(false)}
+          />
+        </div>
+      )}
+      {renderCurrentView()}
+    </>
   )
 }
 
