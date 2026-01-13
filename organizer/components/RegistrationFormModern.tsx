@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { usePathname, useSearchParams } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import { colors, spacing, typography, borderRadius, shadows, transitions } from '@/styles/design-system'
 import Button from './ui/Button'
@@ -14,6 +15,9 @@ interface RegistrationFormProps {
 
 export default function RegistrationFormModern({ userProfile, onRegistrationComplete }: RegistrationFormProps) {
   const [currentStep, setCurrentStep] = useState(1)
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const currentUrl = `${pathname}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`
   const isLineLogin = userProfile?.authType === 'line'
 
   const [formData, setFormData] = useState({
@@ -424,11 +428,17 @@ export default function RegistrationFormModern({ userProfile, onRegistrationComp
               lineHeight: typography.lineHeight.relaxed,
             }}>
               登録を進めることで、
-              <Link href="/terms" style={{ color: '#2563EB', fontWeight: typography.fontWeight.semibold, textDecoration: 'underline' }}>
+              <Link
+                href={`/terms?returnTo=${encodeURIComponent(currentUrl)}`}
+                style={{ color: '#2563EB', fontWeight: typography.fontWeight.semibold, textDecoration: 'underline' }}
+              >
                 利用規約
               </Link>
               と
-              <Link href="/privacy" style={{ color: '#2563EB', fontWeight: typography.fontWeight.semibold, textDecoration: 'underline' }}>
+              <Link
+                href={`/privacy?returnTo=${encodeURIComponent(currentUrl)}`}
+                style={{ color: '#2563EB', fontWeight: typography.fontWeight.semibold, textDecoration: 'underline' }}
+              >
                 プライバシーポリシー
               </Link>
               に同意したものとみなされます。
