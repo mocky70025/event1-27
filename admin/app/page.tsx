@@ -80,13 +80,19 @@ export default function AdminDashboard() {
   const handleOrganizerApproval = async (organizerId: string, approved: boolean) => {
     try {
       const organizer = organizers.find(o => o.id === organizerId)
-      
-      const { error } = await supabase
-        .from('organizers')
-        .update({ is_approved: approved })
-        .eq('id', organizerId)
 
-      if (error) throw error
+      const res = await fetch('/api/admin/update-organizer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ organizerId, approved }),
+      })
+
+      if (!res.ok) {
+        const payload = await res.json().catch(() => ({}))
+        throw new Error(payload.error || 'Failed to update organizer')
+      }
+
+      await res.json()
 
       // 操作をログに記録
       await logAdminAction({
@@ -113,13 +119,19 @@ export default function AdminDashboard() {
   const handleEventApproval = async (eventId: string, status: 'approved' | 'rejected') => {
     try {
       const event = events.find(e => e.id === eventId)
-      
-      const { error } = await supabase
-        .from('events')
-        .update({ approval_status: status })
-        .eq('id', eventId)
 
-      if (error) throw error
+      const res = await fetch('/api/admin/update-event', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ eventId, status }),
+      })
+
+      if (!res.ok) {
+        const payload = await res.json().catch(() => ({}))
+        throw new Error(payload.error || 'Failed to update event')
+      }
+
+      await res.json()
 
       // 操作をログに記録
       await logAdminAction({
