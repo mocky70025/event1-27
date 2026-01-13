@@ -385,7 +385,10 @@ export default function WelcomeScreenCalm() {
             textAlign: 'center',
           }}>
             <button
-              onClick={() => setIsLogin(!isLogin)}
+              onClick={() => {
+                setIsLogin(!isLogin)
+                setEmailSent(false)
+              }}
               style={{
                 background: 'none',
                 border: 'none',
@@ -399,6 +402,20 @@ export default function WelcomeScreenCalm() {
               {isLogin ? '新規登録はこちら' : 'ログインはこちら'}
             </button>
           </div>
+
+          {emailSent && !isLogin && (
+            <div style={{
+              marginTop: spacing[4],
+              padding: spacing[3],
+              borderRadius: borderRadius.lg,
+              background: colors.status.success.light,
+              color: colors.status.success.dark,
+              fontSize: typography.fontSize.sm,
+              textAlign: 'center',
+            }}>
+              メールを送信しました。メール内のリンクをクリックしてログインを完了してください。
+            </div>
+          )}
 
           <div style={{
             marginTop: spacing[5],
