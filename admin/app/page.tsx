@@ -3,6 +3,9 @@
 import { useState, useEffect } from 'react'
 import { supabase, type Organizer, type Event } from '@/lib/supabase'
 import AdminLogin from '@/components/AdminLogin'
+import Card from '@/components/ui/Card'
+import Button from '@/components/ui/Button'
+import Badge from '@/components/ui/Badge'
 import { colors, spacing, borderRadius, shadows } from '@/styles/design-system'
 import { logAdminAction, getAdminLogs } from '@/lib/adminLogger'
 
@@ -171,6 +174,79 @@ export default function AdminDashboard() {
     })
   }
 
+  const SummaryStat = ({
+    label,
+    value,
+    helper,
+    accent,
+  }: {
+    label: string
+    value: number
+    helper: string
+    accent: [string, string]
+  }) => (
+    <Card
+      variant="glass"
+      padding={6}
+      style={{
+        background: `linear-gradient(135deg, ${accent[0]}, ${accent[1]})`,
+        border: 'none',
+        color: colors.neutral[900],
+        minHeight: '140px',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        gap: spacing[2],
+      }}
+    >
+      <span style={{ fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.05em' }}>{label}</span>
+      <span style={{ fontSize: '2rem', fontWeight: 700 }}>{value.toLocaleString()}</span>
+      <span style={{ fontSize: '0.9rem', color: colors.neutral[800] }}>{helper}</span>
+    </Card>
+  )
+
+  const summaryStats = [
+    {
+      label: '未承認主催者',
+      value: pendingOrganizers.length,
+      helper: '着実に承認してください',
+      accent: ['#E0F2F1', '#C8E6C9'],
+    },
+    {
+      label: '審査中イベント',
+      value: pendingEvents.length,
+      helper: 'イベント掲載待ち',
+      accent: ['#FFF3CC', '#FFE0B2'],
+    },
+    {
+      label: '操作ログ',
+      value: logs.length,
+      helper: '最新履歴',
+      accent: ['#EDE7F6', '#D1C4E9'],
+    },
+  ]
+
+  const navTabs = [
+    {
+      id: 'organizers' as const,
+      label: '主催者承認',
+      count: pendingOrganizers.length,
+      helper: '未承認のみ表示',
+    },
+    {
+      id: 'events' as const,
+      label: 'イベント管理',
+      count: pendingEvents.length,
+      helper: '審査中・却下',
+    },
+    {
+      id: 'logs' as const,
+      label: '操作ログ',
+      count: logs.length,
+      helper: '直近の履歴',
+    },
+  ]
+
   const SectionHeading = ({ title, count }: { title: string; count: number }) => (
     <div style={{
       marginBottom: spacing[4],
@@ -207,25 +283,25 @@ export default function AdminDashboard() {
     meta: string[]
     actions?: { label: string; color: string; onClick: () => void }[]
   }) => (
-    <div
+    <Card
+      variant="elevated"
+      padding={6}
       style={{
-        background: colors.neutral[0],
-        borderRadius: borderRadius.lg,
-        boxShadow: shadows.md,
-        padding: spacing[12],
+        minHeight: '220px',
         display: 'flex',
         flexDirection: 'column',
-        gap: spacing[3],
+        gap: spacing[2],
       }}
     >
       <div style={{
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'flex-start',
+        gap: spacing[3],
       }}>
         <div>
           <h3 style={{
-            fontSize: '1.125rem',
+            fontSize: '1.2rem',
             fontWeight: 700,
             color: colors.neutral[900],
             margin: 0,
@@ -233,60 +309,54 @@ export default function AdminDashboard() {
             {title}
           </h3>
           <p style={{
-            fontSize: '0.875rem',
+            fontSize: '0.9rem',
             color: colors.neutral[500],
             margin: 0,
           }}>
             {subtitle}
           </p>
         </div>
-        <span style={{
-          padding: `${spacing[1]} ${spacing[2]}`,
-          borderRadius: borderRadius.sm,
-          fontSize: '0.75rem',
-          fontWeight: 600,
-          background: statusColor.background,
-          color: statusColor.color,
-        }}>
+        <Badge
+          variant={statusColor.color === colors.status.success.main ? 'success'
+            : statusColor.color === colors.status.error.main ? 'error'
+            : statusColor.color === colors.status.warning.main ? 'warning'
+            : 'info'}
+        >
           {statusLabel}
-        </span>
+        </Badge>
       </div>
       <div style={{
-        fontSize: '0.875rem',
-        color: colors.neutral[500],
+        fontSize: '0.9rem',
+        color: colors.neutral[600],
         display: 'flex',
         flexDirection: 'column',
-        gap: spacing[2],
+        gap: spacing[1.5],
       }}>
         {meta.map((item) => (
           <div key={item}>{item}</div>
         ))}
       </div>
       {actions && actions.length > 0 && (
-        <div style={{ display: 'flex', gap: spacing[2] }}>
+        <div style={{ display: 'flex', gap: spacing[2], marginTop: 'auto' }}>
           {actions.map((action) => (
-            <button
+            <Button
               key={action.label}
               onClick={action.onClick}
+              variant={action.label === '承認' ? 'gradient' : 'outline'}
+              size="sm"
               style={{
                 flex: 1,
-                padding: `${spacing[2]} ${spacing[4]}`,
-                background: action.color,
-                color: colors.neutral[0],
-                border: 'none',
-                borderRadius: borderRadius.md,
-                fontSize: '0.875rem',
-                fontWeight: 600,
-                cursor: 'pointer',
-                transition: 'all 0.2s',
+                background: action.label === '承認' ? undefined : 'transparent',
+                color: action.label === '却下' ? colors.status.error.main : undefined,
+                borderColor: action.label === '却下' ? colors.status.error.main : undefined,
               }}
             >
               {action.label}
-            </button>
+            </Button>
           ))}
         </div>
       )}
-    </div>
+    </Card>
   )
 
   if (!isAuthenticated) {
@@ -331,140 +401,131 @@ export default function AdminDashboard() {
       minHeight: '100vh',
       background: colors.neutral[50],
     }}>
-      {/* ヘッダー */}
-      <div style={{
-        background: colors.neutral[0],
-        boxShadow: shadows.sm,
-        borderBottom: `1px solid ${colors.neutral[200]}`,
+      <header style={{
+        background: `linear-gradient(135deg, ${colors.primary[500]}, ${colors.primary[600]})`,
+        color: colors.neutral[0],
+        padding: `${spacing[6]} ${spacing[4]} ${spacing[8]}`,
+        boxShadow: shadows.xl,
       }}>
         <div style={{
           maxWidth: '1280px',
           margin: '0 auto',
-          padding: spacing[4],
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
+          gap: spacing[4],
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: spacing[3] }}>
             <div style={{
-              width: '40px',
-              height: '40px',
-              background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.primary[600]} 100%)`,
-              borderRadius: borderRadius.md,
+              width: '50px',
+              height: '50px',
+              background: colors.neutral[0],
+              color: colors.primary[600],
+              borderRadius: borderRadius.full,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: '20px',
+              fontSize: '22px',
             }}>
-              🔐
+              🛰️
             </div>
-            <h1 style={{
-              fontSize: '1.5rem',
-              fontWeight: 700,
-              color: colors.neutral[900],
-              margin: 0,
-            }}>
-              運営管理
-            </h1>
+            <div>
+              <h1 style={{
+                fontSize: '1.75rem',
+                fontWeight: 700,
+                margin: 0,
+              }}>
+                運営管理ダッシュボード
+              </h1>
+              <p style={{
+                fontSize: '0.95rem',
+                margin: 0,
+                color: 'rgba(255, 255, 255, 0.85)',
+              }}>
+                承認待ちの主催者やイベントをスマートに可視化
+              </p>
+            </div>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: spacing[3] }}>
-            <span style={{ fontSize: '0.875rem', color: colors.neutral[600] }}>
-              {adminEmail}
-            </span>
-            <button
+            <div style={{ textAlign: 'right' }}>
+              <p style={{ margin: 0, fontSize: '0.85rem', color: 'rgba(255,255,255,0.8)' }}>ログイン中</p>
+              <strong style={{ display: 'block', fontSize: '0.95rem' }}>{adminEmail}</strong>
+            </div>
+            <Button
               onClick={handleLogout}
+              variant="secondary"
+              size="md"
               style={{
-                padding: `${spacing[2]} ${spacing[4]}`,
-                background: 'transparent',
-                border: `1px solid ${colors.neutral[300]}`,
-                borderRadius: borderRadius.md,
-                fontSize: '0.875rem',
-                fontWeight: 600,
-                color: colors.neutral[700],
-                cursor: 'pointer',
-                transition: 'all 0.2s',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = colors.neutral[100]
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'transparent'
+                color: colors.neutral[900],
+                borderColor: colors.neutral[100],
+                background: colors.neutral[0],
               }}
             >
               ログアウト
-            </button>
+            </Button>
           </div>
         </div>
-      </div>
+      </header>
 
-      {/* ナビゲーション */}
-      <div style={{
-        background: colors.neutral[0],
-        boxShadow: shadows.sm,
+      <section style={{
+        maxWidth: '1280px',
+        margin: `-${spacing[4]} auto 0`,
+        padding: `0 ${spacing[4]} ${spacing[6]}`,
       }}>
         <div style={{
-          maxWidth: '1280px',
-          margin: '0 auto',
-          padding: `0 ${spacing[4]}`,
-          display: 'flex',
-          gap: spacing[16],
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+          gap: spacing[4],
         }}>
-          <button
-            onClick={() => setCurrentView('organizers')}
-            style={{
-              padding: `${spacing[4]} 0`,
-              background: 'transparent',
-              border: 'none',
-              borderBottom: `2px solid ${currentView === 'organizers' ? colors.primary : 'transparent'}`,
-              fontSize: '0.875rem',
-              fontWeight: 600,
-              color: currentView === 'organizers' ? colors.primary[500] : colors.neutral[500],
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-            }}
-          >
-              主催者承認 ({pendingOrganizers.length})
-          </button>
-          <button
-            onClick={() => setCurrentView('events')}
-            style={{
-              padding: `${spacing[4]} 0`,
-              background: 'transparent',
-              border: 'none',
-              borderBottom: `2px solid ${currentView === 'events' ? colors.primary : 'transparent'}`,
-              fontSize: '0.875rem',
-              fontWeight: 600,
-              color: currentView === 'events' ? colors.primary[500] : colors.neutral[500],
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-            }}
-          >
-              イベント管理 ({pendingEvents.length} 審査中)
-          </button>
-          <button
-            onClick={() => setCurrentView('logs')}
-            style={{
-              padding: `${spacing[4]} 0`,
-              background: 'transparent',
-              border: 'none',
-              borderBottom: `2px solid ${currentView === 'logs' ? colors.primary : 'transparent'}`,
-              fontSize: '0.875rem',
-              fontWeight: 600,
-              color: currentView === 'logs' ? colors.primary[500] : colors.neutral[500],
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-            }}
-          >
-            操作ログ ({logs.length})
-          </button>
+          {summaryStats.map((stat) => (
+            <SummaryStat
+              key={stat.label}
+              label={stat.label}
+              value={stat.value}
+              helper={stat.helper}
+              accent={stat.accent}
+            />
+          ))}
         </div>
-      </div>
+      </section>
 
-      {/* メインコンテンツ */}
-      <div style={{
+      <section style={{
         maxWidth: '1280px',
         margin: '0 auto',
-        padding: spacing[16],
+        padding: `0 ${spacing[4]} ${spacing[4]}`,
+      }}>
+        <Card variant="bordered" padding={4} style={{ display: 'flex', gap: spacing[3], justifyContent: 'space-between', flexWrap: 'wrap' }}>
+          {navTabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setCurrentView(tab.id)}
+              style={{
+                flex: '1 1 180px',
+                minWidth: '180px',
+                borderRadius: borderRadius.lg,
+                border: 'none',
+                padding: `${spacing[3]} ${spacing[4]}`,
+                background: currentView === tab.id ? colors.primary[500] : colors.neutral[50],
+                color: currentView === tab.id ? colors.neutral[0] : colors.neutral[700],
+                boxShadow: currentView === tab.id ? shadows.button : 'none',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+                textAlign: 'left',
+              }}
+            >
+              <strong style={{ display: 'block' }}>{tab.label}</strong>
+              <span style={{ fontSize: '0.85rem', color: currentView === tab.id ? colors.neutral[100] : colors.neutral[500] }}>
+                {tab.count.toLocaleString()} 件 <span style={{ marginLeft: spacing[1], fontWeight: 400 }}>{tab.helper}</span>
+              </span>
+            </button>
+          ))}
+        </Card>
+      </section>
+
+      <main style={{
+        maxWidth: '1280px',
+        margin: '0 auto',
+        padding: `${spacing[4]} ${spacing[4]} ${spacing[12]}`,
       }}>
         {currentView === 'organizers' ? (
           <div>
@@ -680,7 +741,7 @@ export default function AdminDashboard() {
             )}
           </div>
         )}
-      </div>
+      </main>
     </div>
   )
 }
