@@ -1,14 +1,20 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 import { colors, spacing, typography, borderRadius, shadows } from '@/styles/design-system'
 
 export default function TermsPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
 
   const handleReturn = () => {
-    router.push('/')
+    const returnTo = searchParams.get('returnTo')
+    if (returnTo) {
+      router.push(returnTo)
+      return
+    }
+    router.back()
   }
 
   return (

@@ -48,7 +48,7 @@ export default function Home() {
       : null
   const effectiveProfile = userProfile ?? lineProfileFromParams
 
-  useEffect(() => {
+useEffect(() => {
     const initializeAuth = async () => {
       try {
         console.log('[Home] Starting auth initialization...')
@@ -197,7 +197,15 @@ export default function Home() {
     }
 
     initializeAuth()
-  }, [])
+
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, _session) => {
+      initializeAuth()
+    })
+
+    return () => {
+      authListener?.subscription.unsubscribe()
+    }
+  }, [initialLineAuth])
 
   useEffect(() => {
     if (lineAuthParam !== 'success') return

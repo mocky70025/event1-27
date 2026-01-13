@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { LineProfile } from '@/lib/auth'
 import Link from 'next/link'
+import { usePathname, useSearchParams } from 'next/navigation'
 import { supabase } from '../lib/supabase'
 import ImageUpload from './ImageUpload'
 import { colors, spacing, typography, borderRadius, shadows, transitions } from '../styles/design-system'
@@ -18,6 +19,9 @@ const FORM_DRAFT_KEY = 'registration_form_draft'
 
 export default function RegistrationFormModern({ userProfile, onRegistrationComplete }: RegistrationFormProps) {
   const [currentStep, setCurrentStep] = useState(1)
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const currentUrl = `${pathname}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`
   const [formData, setFormData] = useState({
     shop_name: '',
     name: '',
@@ -649,11 +653,21 @@ export default function RegistrationFormModern({ userProfile, onRegistrationComp
             lineHeight: typography.lineHeight.relaxed,
           }}>
             登録を進めることで、
-          <Link href="/terms" target="_blank" rel="noopener noreferrer" style={{ color: '#2563EB', fontWeight: typography.fontWeight.semibold, textDecoration: 'underline' }}>
+          <Link
+            href={`/terms?returnTo=${encodeURIComponent(currentUrl)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: '#2563EB', fontWeight: typography.fontWeight.semibold, textDecoration: 'underline' }}
+          >
             利用規約
           </Link>
-            と
-          <Link href="/privacy" target="_blank" rel="noopener noreferrer" style={{ color: '#2563EB', fontWeight: typography.fontWeight.semibold, textDecoration: 'underline' }}>
+          と
+          <Link
+            href={`/privacy?returnTo=${encodeURIComponent(currentUrl)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: '#2563EB', fontWeight: typography.fontWeight.semibold, textDecoration: 'underline' }}
+          >
             プライバシーポリシー
           </Link>
             に同意したものとみなされます。

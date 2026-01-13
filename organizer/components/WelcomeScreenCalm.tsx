@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { usePathname, useSearchParams } from 'next/navigation'
 import { Building2, Mail } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import Button from './ui/Button'
@@ -16,6 +17,12 @@ export default function WelcomeScreenCalm() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [emailSent, setEmailSent] = useState(false)
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const currentUrl = `${pathname}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`
+  const returnTo = encodeURIComponent(currentUrl)
+  const termsHref = `/terms?returnTo=${returnTo}`
+  const privacyHref = `/privacy?returnTo=${returnTo}`
 
   const handleEmailAuth = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -435,11 +442,11 @@ export default function WelcomeScreenCalm() {
             {!isLogin && (
               <>
                 <span>新規登録は、</span>
-                <Link href="/terms" style={{ color: '#2563EB', fontWeight: typography.fontWeight.semibold, textDecoration: 'underline' }}>
+                <Link href={termsHref} style={{ color: '#2563EB', fontWeight: typography.fontWeight.semibold, textDecoration: 'underline' }}>
                   利用規約
                 </Link>
                 <span>と</span>
-                <Link href="/privacy" style={{ color: '#2563EB', fontWeight: typography.fontWeight.semibold, textDecoration: 'underline' }}>
+                <Link href={privacyHref} style={{ color: '#2563EB', fontWeight: typography.fontWeight.semibold, textDecoration: 'underline' }}>
                   プライバシーポリシー
                 </Link>
                 <span>に同意したものとみなされます。</span>
