@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { LineProfile } from '@/lib/auth'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import { colors, spacing, typography, borderRadius, shadows, transitions } from '@/styles/design-system'
