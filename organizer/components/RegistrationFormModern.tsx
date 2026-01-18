@@ -599,23 +599,6 @@ export default function RegistrationFormModern({ userProfile, onRegistrationComp
               </div>
             )}
 
-            {/* 規約リンク */}
-            <div style={{
-              marginTop: spacing[6],
-              fontSize: typography.fontSize.sm,
-              color: colors.neutral[600],
-              lineHeight: typography.lineHeight.relaxed,
-            }}>
-              利用規約・プライバシーポリシーは Notion で公開しています。
-              <Link
-                href={policyUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ color: '#2563EB', fontWeight: typography.fontWeight.semibold, textDecoration: 'underline', marginLeft: spacing[1] }}
-              >
-                公開ページを確認する
-              </Link>
-            </div>
 
             {/* フッターボタン */}
             <div style={{
