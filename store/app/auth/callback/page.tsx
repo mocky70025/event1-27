@@ -207,9 +207,8 @@ export default function AuthCallback() {
         
         setStatus('success')
         
-        // メインページにリダイレクト（即座に）
         console.log('[Callback] Redirecting to home page immediately...')
-        window.location.href = '/'
+        window.location.href = '/?line_auth=success'
       } catch (error) {
         console.error('Auth callback error:', error)
         setErrorMessage('認証処理中にエラーが発生しました')

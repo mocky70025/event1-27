@@ -204,7 +204,7 @@ export default function AuthCallback() {
         // メインページにリダイレクト
         setTimeout(() => {
           console.log('[Callback] Redirecting to home page...')
-          router.push('/')
+          router.push('/?line_auth=success')
         }, 1000)
       } catch (error) {
         console.error('Auth callback error:', error)
@@ -283,4 +283,3 @@ export default function AuthCallback() {
     </div>
   )
 }
-
