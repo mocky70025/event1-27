@@ -73,10 +73,13 @@ export default function RegistrationFormModern({ userProfile, onRegistrationComp
     fire_equipment_layout: { status: 'unknown' },
   })
   const [validatingDocuments, setValidatingDocuments] = useState(false)
-  const [termsRead, setTermsRead] = useState(false)
-  const [privacyRead, setPrivacyRead] = useState(false)
-  const [termsAgreed, setTermsAgreed] = useState(false)
-  const [privacyAgreed, setPrivacyAgreed] = useState(false)
+  const [agreementState, setAgreementState] = useState({
+    termsRead: false,
+    privacyRead: false,
+    termsAgreed: false,
+    privacyAgreed: false,
+  })
+  const { termsRead, privacyRead, termsAgreed, privacyAgreed } = agreementState
   const policyUrl = process.env.NEXT_PUBLIC_POLICY_URL || '/terms'
 
   const loadDraftFromStorage = () => {
@@ -102,16 +105,16 @@ export default function RegistrationFormModern({ userProfile, onRegistrationComp
         setCurrentStep(saved.currentStep)
       }
       if (typeof saved.termsRead === 'boolean') {
-        setTermsRead(saved.termsRead)
+        setAgreementState((prev) => ({ ...prev, termsRead: saved.termsRead }))
       }
       if (typeof saved.privacyRead === 'boolean') {
-        setPrivacyRead(saved.privacyRead)
+        setAgreementState((prev) => ({ ...prev, privacyRead: saved.privacyRead }))
       }
       if (typeof saved.termsAgreed === 'boolean') {
-        setTermsAgreed(saved.termsAgreed)
+        setAgreementState((prev) => ({ ...prev, termsAgreed: saved.termsAgreed }))
       }
       if (typeof saved.privacyAgreed === 'boolean') {
-        setPrivacyAgreed(saved.privacyAgreed)
+        setAgreementState((prev) => ({ ...prev, privacyAgreed: saved.privacyAgreed }))
       }
     } catch (err) {
       console.warn('[RegistrationFormModern] Failed to load draft:', err)
@@ -165,13 +168,10 @@ export default function RegistrationFormModern({ userProfile, onRegistrationComp
         formData,
         documents,
         currentStep,
-        termsRead,
-        privacyRead,
-        termsAgreed,
-        privacyAgreed,
+        ...agreementState,
       })
     )
-  }, [formData, documents, currentStep, termsRead, privacyRead, termsAgreed, privacyAgreed])
+  }, [formData, documents, currentStep, agreementState])
 
   useEffect(() => {
     if (currentStep !== 3) return
@@ -618,36 +618,36 @@ export default function RegistrationFormModern({ userProfile, onRegistrationComp
                       以下のリンクを開いたうえでチェックしてください
                     </p>
                     <label style={{ display: 'flex', alignItems: 'center', gap: spacing[2], fontSize: typography.fontSize.sm, color: colors.neutral[700] }}>
-                      <input
-                        type="checkbox"
-                        checked={termsAgreed}
-                        disabled={!termsRead}
-                        onChange={(e) => setTermsAgreed(e.target.checked)}
-                      />
+                    <input
+                      type="checkbox"
+                      checked={termsAgreed}
+                      disabled={!termsRead}
+                      onChange={(e) => setAgreementState((prev) => ({ ...prev, termsAgreed: e.target.checked }))}
+                    />
                       利用規約に同意します
                     <Link
                       href={policyUrl}
                       target="_blank"
                       rel="noreferrer"
-                      onClick={() => setTermsRead(true)}
+                      onClick={() => setAgreementState((prev) => ({ ...prev, termsRead: true }))}
                       style={{ color: '#2563EB' }}
                     >
                       利用規約・プライバシーポリシーを開く
                     </Link>
                     </label>
                     <label style={{ display: 'flex', alignItems: 'center', gap: spacing[2], fontSize: typography.fontSize.sm, color: colors.neutral[700] }}>
-                      <input
-                        type="checkbox"
-                        checked={privacyAgreed}
-                        disabled={!privacyRead}
-                        onChange={(e) => setPrivacyAgreed(e.target.checked)}
-                      />
+                    <input
+                      type="checkbox"
+                      checked={privacyAgreed}
+                      disabled={!privacyRead}
+                      onChange={(e) => setAgreementState((prev) => ({ ...prev, privacyAgreed: e.target.checked }))}
+                    />
                       プライバシーポリシーに同意します
                     <Link
                       href={policyUrl}
                       target="_blank"
                       rel="noreferrer"
-                      onClick={() => setPrivacyRead(true)}
+                      onClick={() => setAgreementState((prev) => ({ ...prev, privacyRead: true }))}
                       style={{ color: '#2563EB' }}
                     >
                       利用規約・プライバシーポリシーを開く
