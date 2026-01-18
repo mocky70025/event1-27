@@ -739,7 +739,7 @@ export default function RegistrationFormModern({ userProfile, onRegistrationComp
                 type="submit"
                 size="lg"
                 loading={loading}
-                disabled={loading || (currentStep === 3 && !(termsAgreed && privacyAgreed))}
+                disabled={loading}
                 style={{ minWidth: '200px' }}
               >
                 {currentStep === 3 ? '登録する' : '次へ'}

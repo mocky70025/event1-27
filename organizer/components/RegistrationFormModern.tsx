@@ -500,7 +500,7 @@ export default function RegistrationFormModern({ userProfile, onRegistrationComp
                 type="submit"
                 size="lg"
                 loading={loading}
-                disabled={loading || (currentStep === 3 && !(termsAgreed && privacyAgreed))}
+                disabled={loading}
                 style={{ minWidth: isDesktop ? '200px' : 'auto' }}
                 fullWidth={!isDesktop}
               >
