@@ -56,6 +56,15 @@ export default function RegistrationFormModern({ userProfile, onRegistrationComp
       console.warn('[RegistrationFormModern] Failed to load draft:', err)
     }
   }
+  const waitForAuthenticatedUser = async () => {
+    for (let attempt = 0; attempt < 6; attempt += 1) {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) return user
+      await new Promise((resolve) => setTimeout(resolve, 500))
+    }
+    return null
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
@@ -68,10 +77,11 @@ export default function RegistrationFormModern({ userProfile, onRegistrationComp
     setError('')
 
     try {
-      const { data: { user } } = await supabase.auth.getUser()
+      const user = await waitForAuthenticatedUser()
       const userId = user?.id
-      
-      if (!userId) throw new Error('ログイン状態が確認できないため、再度ページをリロードしてログインし直してください。')
+
+      if (!userId)
+        throw new Error('ログイン状態が確認できないため、再度ページをリロードしてログインし直してください。')
 
       const upsertPayload: Record<string, any> = {
         id: userId,
@@ -406,7 +416,7 @@ export default function RegistrationFormModern({ userProfile, onRegistrationComp
                   />
                   {isLineLogin && (
                     <p style={{ fontSize: typography.fontSize.sm, color: colors.neutral[600], marginTop: spacing[2] }}>
-                      LINEログイン後は、LINE側ではなく実際に受け取るメールアドレス（例: your@email.com）をご入力ください。
+                      LINEアカウントで登録済みのメールアドレス（例: your@email.com）を入力してください。
                     </p>
                   )}
                 </div>
