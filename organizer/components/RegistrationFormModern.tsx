@@ -69,21 +69,26 @@ export default function RegistrationFormModern({ userProfile, onRegistrationComp
 
     try {
       const { data: { user } } = await supabase.auth.getUser()
+      const userId = user?.id ?? userProfile?.userId
       
-      if (!user) throw new Error('ユーザーが見つかりません')
+      if (!userId) throw new Error('ユーザーが見つかりません')
+
+      const upsertPayload: Record<string, any> = {
+        id: userId,
+        line_user_id: isLineLogin ? (userProfile?.userId ?? userId) : userId,
+        email: formData.email,
+        name: formData.name,
+        company_name: formData.company_name,
+        phone_number: formData.phone_number,
+        gender: formData.gender,
+        age: parseInt(formData.age),
+        is_approved: false,
+      }
 
       const { error: insertError } = await supabase
         .from('organizers')
         .upsert({
-          id: user.id,
-          line_user_id: user.id,
-          email: formData.email,
-          name: formData.name,
-          company_name: formData.company_name,
-          phone_number: formData.phone_number,
-          gender: formData.gender,
-          age: parseInt(formData.age),
-          is_approved: false,
+          ...upsertPayload,
         })
 
       if (insertError) throw insertError
@@ -401,7 +406,7 @@ export default function RegistrationFormModern({ userProfile, onRegistrationComp
                   />
                   {isLineLogin && (
                     <p style={{ fontSize: typography.fontSize.sm, color: colors.neutral[600], marginTop: spacing[2] }}>
-                      LINEログイン時は、LINE側の識別子ではなく、実際に届くメールアドレスを入力してください。
+                      LINEログイン後は、LINE側ではなく実際に受け取るメールアドレス（例: your@email.com）をご入力ください。
                     </p>
                   )}
                 </div>
