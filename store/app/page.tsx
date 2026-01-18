@@ -34,6 +34,7 @@ export default function Home() {
   const lineNameParam = searchParams.get('line_name')
   const lineIdParam = searchParams.get('line_id')
   const linePictureParam = searchParams.get('line_picture')
+  const supabaseUserIdParam = searchParams.get('supabase_user_id')
   const initialLineAuth = lineAuthParam
   const lineProfileFromParams =
     lineAuthParam === 'success'
@@ -228,7 +229,8 @@ useEffect(() => {
 
     sessionStorage.setItem('line_profile', JSON.stringify({ ...lineProfile }))
     sessionStorage.setItem('auth_type', 'line')
-    sessionStorage.setItem('user_id', lineUserId)
+    const storedIdForRegistration = supabaseUserIdParam || lineUserId
+    sessionStorage.setItem('user_id', storedIdForRegistration)
     sessionStorage.setItem('user_email', lineEmailParam || '')
     sessionStorage.setItem('is_registered', 'false')
 

@@ -34,6 +34,10 @@ export default function RegistrationFormModern({ userProfile, onRegistrationComp
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [isDesktop, setIsDesktop] = useState(false)
+  const [termsRead, setTermsRead] = useState(false)
+  const [privacyRead, setPrivacyRead] = useState(false)
+  const [termsAgreed, setTermsAgreed] = useState(false)
+  const [privacyAgreed, setPrivacyAgreed] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -303,6 +307,50 @@ export default function RegistrationFormModern({ userProfile, onRegistrationComp
                     fullWidth
                   />
                 </div>
+                <div style={{ marginTop: spacing[4], padding: spacing[4], borderRadius: borderRadius.lg, background: colors.neutral[100], display: 'flex', flexDirection: 'column', gap: spacing[2] }}>
+                  <p style={{ fontSize: typography.fontSize.sm, color: colors.neutral[600], margin: 0 }}>
+                    利用規約・プライバシーポリシーを確認したうえでチェックしてください
+                  </p>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: spacing[2], fontSize: typography.fontSize.sm, color: colors.neutral[700] }}>
+                    <input
+                      type="checkbox"
+                      checked={termsAgreed}
+                      disabled={!termsRead}
+                      onChange={(e) => setTermsAgreed(e.target.checked)}
+                    />
+                    利用規約に同意します
+                    <Link
+                      href={`/terms?returnTo=${encodeURIComponent(currentUrl)}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={() => setTermsRead(true)}
+                      style={{ color: '#2563EB' }}
+                    >
+                      利用規約を開く
+                    </Link>
+                  </label>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: spacing[2], fontSize: typography.fontSize.sm, color: colors.neutral[700] }}>
+                    <input
+                      type="checkbox"
+                      checked={privacyAgreed}
+                      disabled={!privacyRead}
+                      onChange={(e) => setPrivacyAgreed(e.target.checked)}
+                    />
+                    プライバシーポリシーに同意します
+                    <Link
+                      href={`/privacy?returnTo=${encodeURIComponent(currentUrl)}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={() => setPrivacyRead(true)}
+                      style={{ color: '#2563EB' }}
+                    >
+                      プライバシーポリシーを開く
+                    </Link>
+                  </label>
+                  <small style={{ color: termsRead && privacyRead ? colors.neutral[600] : colors.status.error.main }}>
+                    リンクを開くとチェックボックスが有効になります
+                  </small>
+                </div>
               </div>
             )}
 
@@ -470,7 +518,7 @@ export default function RegistrationFormModern({ userProfile, onRegistrationComp
                 type="submit"
                 size="lg"
                 loading={loading}
-                disabled={loading}
+                disabled={loading || (currentStep === 3 && !(termsAgreed && privacyAgreed))}
                 style={{ minWidth: isDesktop ? '200px' : 'auto' }}
                 fullWidth={!isDesktop}
               >

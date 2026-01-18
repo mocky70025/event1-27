@@ -131,6 +131,7 @@ export async function GET(request: NextRequest) {
     redirectUrl.searchParams.set('email', userEmail)
     redirectUrl.searchParams.set('line_name', userName)
     redirectUrl.searchParams.set('line_id', profile.userId)
+    redirectUrl.searchParams.set('supabase_user_id', userId)
     if (profile.pictureUrl) {
       redirectUrl.searchParams.set('line_picture', profile.pictureUrl)
     }
