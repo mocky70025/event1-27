@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { Button } from "@/components/ui/Button";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ShieldCheck, Loader2 } from "lucide-react";
 
-export default function LoginPage() {
+function LoginForm() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -130,5 +130,36 @@ export default function LoginPage() {
                 </p>
             </div>
         </div>
+    );
+}
+
+function LoginFallback() {
+    return (
+        <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 font-sans">
+            <div className="sm:mx-auto sm:w-full sm:max-w-md">
+                <div className="flex justify-center mb-6">
+                    <div className="p-3 bg-white rounded-2xl shadow-sm border border-gray-100 flex items-center justify-center">
+                        <ShieldCheck className="h-8 w-8 text-gray-900" />
+                    </div>
+                </div>
+                <h2 className="text-center text-3xl font-black tracking-tighter text-gray-900">
+                    Platform Admin
+                </h2>
+                <p className="mt-2 text-center text-sm text-gray-500 font-medium">
+                    管理者アカウントでログインしてください
+                </p>
+            </div>
+            <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md flex justify-center">
+                <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+            </div>
+        </div>
+    );
+}
+
+export default function LoginPage() {
+    return (
+        <Suspense fallback={<LoginFallback />}>
+            <LoginForm />
+        </Suspense>
     );
 }
