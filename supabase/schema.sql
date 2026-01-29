@@ -70,20 +70,9 @@ CREATE TABLE event_applications (
   exhibitor_id UUID REFERENCES exhibitors(id),
   status VARCHAR(20) DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected')),
   message TEXT,
-  chat_room_id UUID, -- Can link to a chat_rooms table if implemented
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   UNIQUE(event_id, exhibitor_id)
-);
-
--- Chat Messages Table
-CREATE TABLE chat_messages (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  application_id UUID REFERENCES event_applications(id),
-  sender_id UUID REFERENCES auth.users(id),
-  message TEXT NOT NULL,
-  is_read BOOLEAN DEFAULT FALSE,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 -- Enable RLS
@@ -91,7 +80,6 @@ ALTER TABLE organizers ENABLE ROW LEVEL SECURITY;
 ALTER TABLE exhibitors ENABLE ROW LEVEL SECURITY;
 ALTER TABLE events ENABLE ROW LEVEL SECURITY;
 ALTER TABLE event_applications ENABLE ROW LEVEL SECURITY;
-ALTER TABLE chat_messages ENABLE ROW LEVEL SECURITY;
 
 -- Basic Policies (To be refined)
 -- For now, allow public read for events

@@ -7,7 +7,6 @@ import {
     Calendar,
     MapPin,
     Store,
-    MessageSquare,
     CheckCircle2,
     XCircle,
     Clock
@@ -199,14 +198,6 @@ export default async function ApplicationDetailPage({ params }: PageProps) {
                                     イベント詳細を見る
                                 </Button>
                             </Link>
-                            {application.status === 'approved' && (
-                                <Link href={`/applications/${application.id}/chat`} className="flex-1">
-                                    <Button className="w-full bg-emerald-600 hover:bg-emerald-700 gap-2">
-                                        <MessageSquare className="w-4 h-4" />
-                                        チャットを開始
-                                    </Button>
-                                </Link>
-                            )}
                         </div>
                     </div>
                 </div>

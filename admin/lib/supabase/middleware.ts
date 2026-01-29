@@ -66,11 +66,33 @@ export async function updateSession(request: NextRequest) {
         return NextResponse.redirect(url)
     }
 
-    // ログイン済みでログインページ等にアクセスしようとしたらトップへ
-    if (user && request.nextUrl.pathname.startsWith('/login')) {
-        const url = request.nextUrl.clone()
-        url.pathname = '/'
-        return NextResponse.redirect(url)
+    // ログイン済みの場合、管理者権限をチェック
+    if (user) {
+        // 管理者メールアドレスのチェック
+        const adminEmailsString = process.env.ADMIN_EMAILS || process.env.NEXT_PUBLIC_ADMIN_EMAILS || '';
+        const adminEmails = adminEmailsString
+            ? adminEmailsString.split(',').map(e => e.trim().toLowerCase())
+            : [];
+
+        // 管理者メールアドレスが設定されている場合、チェック
+        if (adminEmails.length > 0) {
+            const userEmail = user.email?.toLowerCase();
+            if (!userEmail || !adminEmails.includes(userEmail)) {
+                // 管理者でない場合はログアウトしてログインページへ
+                await supabase.auth.signOut();
+                const url = request.nextUrl.clone()
+                url.pathname = '/login'
+                url.searchParams.set('error', 'unauthorized')
+                return NextResponse.redirect(url)
+            }
+        }
+
+        // ログイン済みでログインページにアクセスしようとしたらトップへ
+        if (request.nextUrl.pathname.startsWith('/login')) {
+            const url = request.nextUrl.clone()
+            url.pathname = '/'
+            return NextResponse.redirect(url)
+        }
     }
 
     return response

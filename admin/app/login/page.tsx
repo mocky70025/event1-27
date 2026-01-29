@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/Button";
 import { createClient } from "@/lib/supabase/client";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ShieldCheck, Loader2 } from "lucide-react";
 
 export default function LoginPage() {
@@ -13,6 +13,15 @@ export default function LoginPage() {
     const [error, setError] = useState("");
     const supabase = createClient();
     const router = useRouter();
+    const searchParams = useSearchParams();
+
+    // URLパラメータからエラーメッセージを取得
+    useEffect(() => {
+        const errorParam = searchParams.get('error');
+        if (errorParam === 'unauthorized') {
+            setError("管理者権限がありません。管理者のメールアドレスでログインしてください。");
+        }
+    }, [searchParams]);
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -20,6 +29,19 @@ export default function LoginPage() {
         setError("");
 
         try {
+            // 管理者メールアドレスのチェック
+            const adminEmailsString = process.env.NEXT_PUBLIC_ADMIN_EMAILS || '';
+            const adminEmails = adminEmailsString
+                ? adminEmailsString.split(',').map(e => e.trim().toLowerCase())
+                : [];
+
+            // 管理者メールアドレスが設定されている場合、チェック
+            if (adminEmails.length > 0 && !adminEmails.includes(email.trim().toLowerCase())) {
+                setError("管理者権限がありません。管理者のメールアドレスでログインしてください。");
+                setIsLoading(false);
+                return;
+            }
+
             const { error } = await supabase.auth.signInWithPassword({
                 email,
                 password,

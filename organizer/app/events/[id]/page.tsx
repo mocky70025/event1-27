@@ -334,14 +334,6 @@ export default function EventDetailPage() {
                                                         未処理に戻す
                                                     </Button>
                                                 )}
-                                                {app.status === 'approved' && (
-                                                    <Link href={`/events/${eventId}/chat/${app.id}`}>
-                                                        <Button size="sm" variant="outline" className="w-full gap-2 text-orange-600 border-orange-100 hover:bg-orange-50">
-                                                            <MessageSquare className="w-4 h-4" />
-                                                            チャット
-                                                        </Button>
-                                                    </Link>
-                                                )}
                                             </div>
                                         </div>
                                     </div>

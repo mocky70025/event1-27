@@ -18,6 +18,8 @@ INSERT INTO events (
     recruit_count,
     fee,
     requirements,
+    main_image_url,
+    gallery_images,
     status,
     created_at,
     updated_at
@@ -91,6 +93,10 @@ SELECT
     '出店条件：営業許可証が必要です。' ||
     '車両での出店の場合は車検証と自賠責保険証が必要です。' ||
     '詳細は主催者までお問い合わせください。' AS requirements,
+    -- メイン画像URL（NULL）
+    NULL AS main_image_url,
+    -- ギャラリー画像（空配列）
+    ARRAY[]::TEXT[] AS gallery_images,
     -- ステータス（公開中と下書きを混在）
     CASE (series % 3)
         WHEN 0 THEN 'published'

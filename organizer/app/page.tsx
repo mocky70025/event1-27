@@ -69,7 +69,8 @@ export default async function Home() {
   
   // If user exists but no profile, redirect to onboarding
   if (user && !profile && !profileError) {
-    console.log("User exists but no profile found, should redirect to onboarding");
+    console.log("User exists but no profile found, redirecting to onboarding");
+    redirect("/onboarding");
   }
 
   // Fetch real events (only if logged in)

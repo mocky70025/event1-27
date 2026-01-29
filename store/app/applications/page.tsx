@@ -5,7 +5,6 @@ import {
     Calendar,
     MapPin,
     ChevronRight,
-    MessageSquare,
     Clock,
     CheckCircle2,
     XCircle,
@@ -162,15 +161,6 @@ export default async function ApplicationsPage() {
                                                     詳細を表示
                                                 </Button>
                                             </Link>
-
-                                            {app.status === 'approved' && (
-                                                <Link href={`/applications/${app.id}/chat`}>
-                                                    <Button size="sm" className="w-full bg-emerald-600 hover:bg-emerald-700 gap-2">
-                                                        <MessageSquare className="w-4 h-4" />
-                                                        チャット
-                                                    </Button>
-                                                </Link>
-                                            )}
                                         </div>
                                     </div>
 

@@ -2,10 +2,9 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
-import { CheckCircle2, XCircle, Loader2, MessageSquare } from "lucide-react";
+import { CheckCircle2, XCircle, Loader2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter, useParams } from "next/navigation";
-import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 export default function ApplicationStatusActions({
@@ -45,20 +44,10 @@ export default function ApplicationStatusActions({
     };
 
     if (status === 'approved') {
-        // Link to chat page - organizer app uses /events/[id]/chat/[appId] format
-        const chatUrl = eventId ? `/events/${eventId}/chat/${applicationId}` : `/applications/${applicationId}/chat`;
         return (
-            <div className="flex items-center gap-4">
-                <div className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-green-50 text-green-700 border border-green-200 font-bold">
-                    <CheckCircle2 className="w-5 h-5" />
-                    承認済み
-                </div>
-                <Link href={chatUrl}>
-                    <Button className="h-12 px-6 rounded-xl bg-green-600 hover:bg-green-700 gap-2 shadow-lg shadow-green-200">
-                        <MessageSquare className="w-4 h-4" />
-                        チャットを開始
-                    </Button>
-                </Link>
+            <div className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-green-50 text-green-700 border border-green-200 font-bold">
+                <CheckCircle2 className="w-5 h-5" />
+                承認済み
             </div>
         );
     }

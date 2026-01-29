@@ -76,6 +76,81 @@
 
 5. 「Deploy」をクリック
 
+## デプロイ後の設定（重要）
+
+リダイレクトURLの設定が必要な外部サービスは以下の3つです：
+
+1. **Supabase** - 認証のリダイレクトURL
+2. **LINE Developers** - LINEログインのコールバックURL
+3. **Google Cloud Console** - Google OAuthのリダイレクトURL（Supabase経由）
+
+### 1. Supabase認証リダイレクトURLの設定
+
+各アプリのデプロイが完了したら、Supabaseの認証設定でリダイレクトURLを追加する必要があります。
+
+1. [Supabase Dashboard](https://app.supabase.com/)にログイン
+2. プロジェクトを選択
+3. 左側メニュー → **「Authentication」** → **「URL Configuration」**
+
+4. **「Site URL」**を設定：
+   - 最も一般的なアプリ（通常は**Storeアプリ**）のURLを設定
+   - 例: `https://your-store-app.vercel.app`
+   - このURLは、メール確認やパスワードリセットなどのデフォルトのリダイレクト先として使用されます
+
+5. **「Redirect URLs」**セクションに以下を追加：
+   ```
+   https://your-store-app.vercel.app/auth/callback
+   https://your-organizer-app.vercel.app/auth/callback
+   https://your-store-app.vercel.app/*
+   https://your-organizer-app.vercel.app/*
+   ```
+   （`your-store-app`と`your-organizer-app`は実際のVercelのプロジェクト名に置き換えてください）
+   
+   **注意**: ワイルドカード（`*`）を使用することで、各アプリ内の任意のパスへのリダイレクトを許可できます。本番環境では、セキュリティのため具体的なパスを指定することも推奨されます。
+
+6. **「保存」**をクリック
+
+### 2. LINE DevelopersのコールバックURL設定
+
+LINEログインを使用している場合、LINE Developersの設定でコールバックURLを追加する必要があります。
+
+**重要**: 開発環境用の`localhost`のURLが設定されている場合は、本番環境用のURLに**追加**するか、**置き換え**してください。
+
+1. [LINE Developers Console](https://developers.line.biz/console/)にログイン
+2. 各チャネル（Store用、Organizer用）を選択
+3. **「LINE Login」**タブ → **「LINE Login設定」**
+4. **「コールバックURL」**を確認・更新：
+   - **既存のlocalhostのURLを削除または残す**（開発環境で使用する場合）
+   - **以下を追加**：
+     - Store用チャネル:
+       ```
+       https://your-store-app.vercel.app/api/auth/line/callback
+       ```
+     - Organizer用チャネル:
+       ```
+       https://your-organizer-app.vercel.app/api/auth/line/callback
+       ```
+   - **注意**: 複数のコールバックURLを設定できます。開発環境と本番環境の両方を使用する場合は、両方を追加してください。
+5. **「更新」**をクリック
+
+### 3. Google OAuth設定（使用している場合）
+
+Googleログインを使用している場合、Google Cloud ConsoleでリダイレクトURLを設定する必要があります。
+
+**重要**: Google OAuthのリダイレクトURLはSupabase経由なので、SupabaseのURLを設定します。`localhost`のURLは不要です。
+
+1. [Google Cloud Console](https://console.cloud.google.com/)にログイン
+2. プロジェクトを選択
+3. **「APIとサービス」** → **「認証情報」**
+4. OAuth 2.0 クライアント IDを選択
+5. **「承認済みのリダイレクト URI」**を確認：
+   - 既にSupabaseのURLが設定されている場合は変更不要
+   - 設定されていない場合は以下を追加：
+     ```
+     https://your-supabase-project.supabase.co/auth/v1/callback
+     ```
+   - **注意**: `localhost`のURLは開発環境でのみ使用する場合は残しておいても問題ありませんが、本番環境ではSupabaseのURLのみで動作します。
+
 ## デプロイ後の確認事項
 
 ### 1. ビルドエラーの確認
@@ -87,7 +162,8 @@ Vercelのプロジェクト設定 → Environment Variables で、すべての�
 ### 3. 動作確認
 各アプリのURLにアクセスして、以下を確認：
 - ✅ ログインページが表示される
-- ✅ Supabase認証が動作する
+- ✅ Supabase認証が動作する（Googleログイン、メール/パスワードログイン）
+- ✅ LINEログインが動作する（設定した場合）
 - ✅ データの取得・表示が正常に動作する
 
 ### 4. カスタムドメインの設定（オプション）
@@ -95,6 +171,8 @@ Vercelのプロジェクト設定 → Environment Variables で、すべての�
 - Store: `store.yourdomain.com`
 - Organizer: `organizer.yourdomain.com`
 - Admin: `admin.yourdomain.com`
+
+**注意**: カスタムドメインを設定した場合は、上記のリダイレクトURLもカスタムドメインに更新してください。
 
 ## トラブルシューティング
 
@@ -119,10 +197,16 @@ Vercelのプロジェクト設定 → Environment Variables で、すべての�
    - `supabase/add_*.sql`ファイルを実行してポリシーを適用
 
 2. **認証リダイレクトURL**
-   - Supabaseの認証設定で、VercelのURLをリダイレクトURLに追加
+   - Supabaseの認証設定で、VercelのURLをリダイレクトURLに追加しているか確認
    - 例: `https://your-store-app.vercel.app/auth/callback`
+   - 設定後、ブラウザのキャッシュをクリアして再試行
 
-3. **CORS設定**
+3. **LINEログインが動作しない**
+   - LINE DevelopersのコールバックURLが正しく設定されているか確認
+   - チャネルIDとシークレットが正しく設定されているか確認
+   - Vercelの環境変数`LINE_CHANNEL_ID`と`LINE_CHANNEL_SECRET`を確認
+
+4. **CORS設定**
    - Supabaseの設定で、VercelのURLを許可リストに追加
 
 ## 注意事項
