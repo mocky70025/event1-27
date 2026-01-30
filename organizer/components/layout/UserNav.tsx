@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { User, LogOut, LayoutDashboard, ClipboardList } from "lucide-react";
 
 export function UserNav() {
-    const [user, setUser] = useState<any>(null);
+    const [user, setUser] = useState<unknown>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [mounted, setMounted] = useState(false);
     const supabase = createClient();
@@ -16,13 +16,12 @@ export function UserNav() {
 
     useEffect(() => {
         setMounted(true);
-        // Get initial user
-        supabase.auth.getUser().then(({ data: { user } }) => {
-            setUser(user);
+        // Use getSession() so we only show logged-in UI when there's a real session (avoids stale cache)
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            setUser(session?.user ?? null);
             setIsLoading(false);
         });
 
-        // Listen for auth changes
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
             setUser(session?.user ?? null);
             setIsLoading(false);
@@ -37,11 +36,20 @@ export function UserNav() {
         router.push("/login"); // Redirect to login
     };
 
-    // Prevent hydration mismatch by not rendering until mounted
+    // Until we know auth state, show guest nav so we never show ログアウト when not logged in
     if (!mounted || isLoading) {
         return (
             <div className="flex items-center gap-4">
-                <div className="w-20 h-8 bg-gray-100 animate-pulse rounded-md" />
+                <Link href="/login">
+                    <Button variant="ghost" size="sm">
+                        ログイン
+                    </Button>
+                </Link>
+                <Link href="/signup">
+                    <Button size="sm">
+                        新規登録
+                    </Button>
+                </Link>
             </div>
         );
     }

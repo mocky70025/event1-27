@@ -60,7 +60,9 @@ export async function GET(request: Request) {
 
     if (type === 'recovery') {
         const res = NextResponse.redirect(`${origin}${next}`);
-        cookieList.forEach(({ name, value, options }) => res.cookies.set(name, value, options));
+        cookieList.forEach(({ name, value, options }) => {
+            res.cookies.set(name, value, { ...options, path: '/' });
+        });
         return res;
     }
 
@@ -74,6 +76,9 @@ export async function GET(request: Request) {
     const redirectUrl = `${origin}${redirectPath}`;
     const res = NextResponse.redirect(redirectUrl);
 
-    cookieList.forEach(({ name, value, options }) => res.cookies.set(name, value, options));
+    // Ensure session cookies are set with path=/ so they're sent on all requests
+    cookieList.forEach(({ name, value, options }) => {
+        res.cookies.set(name, value, { ...options, path: '/' });
+    });
     return res;
 }

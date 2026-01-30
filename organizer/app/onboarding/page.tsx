@@ -12,6 +12,7 @@ export default function OnboardingPage() {
     const [step, setStep] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
+    const [sessionMissing, setSessionMissing] = useState(false);
     const supabase = createClient();
 
     const [formData, setFormData] = useState({
@@ -26,21 +27,24 @@ export default function OnboardingPage() {
     });
 
     useEffect(() => {
-        const checkUser = async () => {
-            const { data: { user } } = await supabase.auth.getUser();
-            if (!user) {
-                // If no user, it might be because email confirmation is on
-                console.log("No user found on mount. Checking session...");
-                const { data: { session } } = await supabase.auth.getSession();
-                if (!session) {
-                    setError("ログインセッションが見つかりません。Supabaseの「Email」設定で「Confirm email（メール確認）」をOFFにしているか確認してください。");
-                }
-            } else {
-                // Pre-fill email if available from user object
+        const checkUser = async (retry = false) => {
+            const { data: { session } } = await supabase.auth.getSession();
+            const user = session?.user ?? null;
+            if (user) {
+                setError("");
+                setSessionMissing(false);
                 if (user.email) {
                     setFormData(prev => ({ ...prev, email: user.email || "" }));
                 }
+                return;
             }
+            // No session: after redirect from OAuth, cookies may not be ready yet
+            if (!retry) {
+                await new Promise((r) => setTimeout(r, 600));
+                return checkUser(true);
+            }
+            setSessionMissing(true);
+            setError("");
         };
         checkUser();
     }, []);
@@ -178,6 +182,14 @@ export default function OnboardingPage() {
                         </div>
                     </div>
                 </div>
+
+                {sessionMissing && (
+                    <div className="mb-6 rounded-xl bg-amber-50 border border-amber-200 p-4 text-sm text-amber-800">
+                        <p className="font-medium">セッションが確認できませんでした。</p>
+                        <p className="mt-1 text-amber-700">登録フォームはそのままご利用いただけます。送信時にエラーになる場合は、一度ログインしてから再度このページへお越しください。</p>
+                        <a href="/login" className="mt-2 inline-block font-medium text-amber-700 underline hover:text-amber-900">ログインへ</a>
+                    </div>
+                )}
 
                 <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 md:p-10">
                     {step === 1 && (
