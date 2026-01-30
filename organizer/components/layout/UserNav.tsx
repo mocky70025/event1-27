@@ -38,7 +38,7 @@ export function UserNav() {
             clearTimeout(t);
             subscription.unsubscribe();
         };
-    }, [supabase.auth]);
+    }, []);
 
     const handleLogout = async () => {
         await supabase.auth.signOut();
@@ -46,7 +46,7 @@ export function UserNav() {
         router.push("/login");
     };
 
-    const guestNav = (
+    const renderGuestNav = () => (
         <div className="flex items-center gap-4">
             <Link href="/login">
                 <Button variant="ghost" size="sm">
@@ -57,15 +57,17 @@ export function UserNav() {
                 <Button size="sm">
                     新規登録
                 </Button>
-            </div>
+            </Link>
+        </div>
     );
 
-    // While loading, show guest nav so the page is never blank (getUser timeout will switch to real state)
     if (!mounted || isLoading) {
-        return guestNav;
+        return renderGuestNav();
     }
 
-    if (!user) return guestNav;
+    if (!user) {
+        return renderGuestNav();
+    }
 
     return (
         <div className="flex items-center gap-4">
