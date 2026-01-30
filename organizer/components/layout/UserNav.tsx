@@ -16,52 +16,56 @@ export function UserNav() {
 
     useEffect(() => {
         setMounted(true);
+        let done = false;
         const applyUser = (u: unknown) => {
+            if (done) return;
+            done = true;
             setUser(u ?? null);
             setIsLoading(false);
         };
         // Validate with server so we don't show ログアウト on stale session
         supabase.auth.getUser().then(({ data: { user: u } }) => applyUser(u ?? null));
+        // If getUser() is slow or fails, show guest nav after 2.5s so something is always visible
+        const t = setTimeout(() => applyUser(null), 2500);
 
         const { data: { subscription } } = supabase.auth.onAuthStateChange(async () => {
             const { data: { user: u } } = await supabase.auth.getUser();
             applyUser(u ?? null);
         });
 
-        return () => subscription.unsubscribe();
+        return () => {
+            done = true;
+            clearTimeout(t);
+            subscription.unsubscribe();
+        };
     }, [supabase.auth]);
 
     const handleLogout = async () => {
         await supabase.auth.signOut();
-        router.refresh(); // Refresh to update server-side state
-        router.push("/login"); // Redirect to login
+        router.refresh();
+        router.push("/login");
     };
 
-    // Show skeleton until we know auth state (never show ログアウト or 新規登録 until confirmed)
-    if (!mounted || isLoading) {
-        return (
-            <div className="flex items-center gap-4">
-                <div className="w-20 h-8 bg-gray-100 animate-pulse rounded-md" />
+    const guestNav = (
+        <div className="flex items-center gap-4">
+            <Link href="/login">
+                <Button variant="ghost" size="sm">
+                    ログイン
+                </Button>
+            </Link>
+            <Link href="/signup">
+                <Button size="sm">
+                    新規登録
+                </Button>
             </div>
-        );
+    );
+
+    // While loading, show guest nav so the page is never blank (getUser timeout will switch to real state)
+    if (!mounted || isLoading) {
+        return guestNav;
     }
 
-    if (!user) {
-        return (
-            <div className="flex items-center gap-4">
-                <Link href="/login">
-                    <Button variant="ghost" size="sm">
-                        ログイン
-                    </Button>
-                </Link>
-                <Link href="/signup">
-                    <Button size="sm">
-                        新規登録
-                    </Button>
-                </Link>
-            </div>
-        );
-    }
+    if (!user) return guestNav;
 
     return (
         <div className="flex items-center gap-4">
