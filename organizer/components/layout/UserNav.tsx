@@ -16,16 +16,16 @@ export function UserNav() {
 
     useEffect(() => {
         setMounted(true);
-        // Use getUser() so server validates JWT - only show ログアウト when server confirms user (avoids stale cache)
-        supabase.auth.getUser().then(({ data: { user: u } }) => {
+        const applyUser = (u: unknown) => {
             setUser(u ?? null);
             setIsLoading(false);
-        });
+        };
+        // Validate with server so we don't show ログアウト on stale session
+        supabase.auth.getUser().then(({ data: { user: u } }) => applyUser(u ?? null));
 
         const { data: { subscription } } = supabase.auth.onAuthStateChange(async () => {
             const { data: { user: u } } = await supabase.auth.getUser();
-            setUser(u ?? null);
-            setIsLoading(false);
+            applyUser(u ?? null);
         });
 
         return () => subscription.unsubscribe();
@@ -37,20 +37,11 @@ export function UserNav() {
         router.push("/login"); // Redirect to login
     };
 
-    // Until we know auth state, show guest nav so we never show ログアウト when not logged in
+    // Show skeleton until we know auth state (never show ログアウト or 新規登録 until confirmed)
     if (!mounted || isLoading) {
         return (
             <div className="flex items-center gap-4">
-                <Link href="/login">
-                    <Button variant="ghost" size="sm">
-                        ログイン
-                    </Button>
-                </Link>
-                <Link href="/signup">
-                    <Button size="sm">
-                        新規登録
-                    </Button>
-                </Link>
+                <div className="w-20 h-8 bg-gray-100 animate-pulse rounded-md" />
             </div>
         );
     }
