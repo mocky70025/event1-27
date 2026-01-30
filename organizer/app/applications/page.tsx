@@ -17,7 +17,18 @@ import { cn } from "@/lib/utils";
 
 export default async function ApplicationsPage() {
     const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    let user = null;
+    try {
+        const { data, error } = await supabase.auth.getUser();
+        if (!error && data?.user) {
+            user = data.user;
+        }
+    } catch (error: any) {
+        // Ignore AuthSessionMissingError - it's expected when not logged in
+        if (error?.name !== 'AuthSessionMissingError' && error?.message !== 'Auth session missing!') {
+            console.error("Auth error:", error);
+        }
+    }
 
     if (!user) {
         redirect("/login");

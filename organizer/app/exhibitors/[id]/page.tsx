@@ -9,7 +9,18 @@ import DocumentCard from "./DocumentCard";
 export default async function ExhibitorDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
     const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    let user = null;
+    try {
+        const { data, error } = await supabase.auth.getUser();
+        if (!error && data?.user) {
+            user = data.user;
+        }
+    } catch (error: any) {
+        // Ignore AuthSessionMissingError - it's expected when not logged in
+        if (error?.name !== 'AuthSessionMissingError' && error?.message !== 'Auth session missing!') {
+            console.error("Auth error:", error);
+        }
+    }
 
     if (!user) {
         redirect("/login");

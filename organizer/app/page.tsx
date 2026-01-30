@@ -13,13 +13,15 @@ export default async function Home() {
   let user = null;
   try {
     const { data, error } = await supabase.auth.getUser();
-    if (!error) {
+    if (!error && data?.user) {
       user = data.user;
-    } else {
-      console.error("Auth error:", error);
     }
-  } catch (error) {
-    console.error("Auth fetch error:", error);
+    // Silently ignore AuthSessionMissingError - it's expected when not logged in
+  } catch (error: any) {
+    // Ignore AuthSessionMissingError - it's expected when not logged in
+    if (error?.name !== 'AuthSessionMissingError' && error?.message !== 'Auth session missing!') {
+      console.error("Auth fetch error:", error);
+    }
   }
 
   // Get organizer profile
@@ -28,17 +30,7 @@ export default async function Home() {
   let profileError = null;
   
   if (user) {
-    // First, check if we can query the table at all
-    const { data: allOrganizers, error: testError } = await supabase
-      .from("organizers")
-      .select("id, user_id")
-      .limit(1);
-    
-    console.log("Debug - Test query result:");
-    console.log("  Can query organizers table:", !testError);
-    console.log("  Test error:", testError ? JSON.stringify(testError, null, 2) : null);
-    
-    // Now try to get the specific profile
+    // Get organizer profile
     const result = await supabase
       .from("organizers")
       .select("*")
@@ -48,24 +40,10 @@ export default async function Home() {
     profile = result.data;
     profileError = result.error;
     
-    console.log("Debug - Profile query:");
-    console.log("  Querying for user_id:", user.id);
-    console.log("  Profile found:", !!profile);
-    console.log("  Profile error:", profileError ? JSON.stringify(profileError, null, 2) : null);
-    
     if (profileError) {
-      console.error("Error fetching organizer profile:");
-      console.error("  Error code:", profileError.code);
-      console.error("  Error message:", profileError.message);
-      console.error("  Error details:", JSON.stringify(profileError, null, 2));
+      console.error("Error fetching organizer profile:", profileError);
     }
   }
-  
-  console.log("Debug - Organizer profile summary:");
-  console.log("  hasUser:", !!user);
-  console.log("  userId:", user?.id);
-  console.log("  hasProfile:", !!profile);
-  console.log("  profileId:", profile?.id);
   
   // If user exists but no profile, redirect to onboarding
   if (user && !profile && !profileError) {
@@ -86,10 +64,6 @@ export default async function Home() {
   
   // Ensure events is always an array to prevent hydration issues
   const safeEvents = events || [];
-  
-  console.log("Debug - Events:");
-  console.log("  events count:", safeEvents.length);
-  console.log("  events type:", Array.isArray(safeEvents));
 
   // Fetch real pending applications count
   // Use the same method as applications/page.tsx - join with events to filter by organizer_id

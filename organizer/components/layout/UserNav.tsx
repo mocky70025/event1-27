@@ -16,8 +16,23 @@ export function UserNav() {
 
     useEffect(() => {
         setMounted(true);
-        supabase.auth.getUser().then(({ data: { user: u } }) => {
-            setUser(u ?? null);
+        supabase.auth.getUser().then(({ data: { user: u }, error }) => {
+            if (error) {
+                // Don't log AuthSessionMissingError - it's expected when not logged in
+                if (error.name !== 'AuthSessionMissingError' && error.message !== 'Auth session missing!') {
+                    console.error('getUser error:', error);
+                }
+                setUser(null);
+            } else {
+                setUser(u ?? null);
+            }
+            setIsLoading(false);
+        }).catch((err) => {
+            // Don't log AuthSessionMissingError - it's expected when not logged in
+            if (err?.name !== 'AuthSessionMissingError' && err?.message !== 'Auth session missing!') {
+                console.error('getUser exception:', err);
+            }
+            setUser(null);
             setIsLoading(false);
         });
 
