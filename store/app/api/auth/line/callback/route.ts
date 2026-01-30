@@ -1,8 +1,29 @@
 import { NextResponse } from 'next/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 
+function getOrigin(request: Request): string {
+    // Use NEXT_PUBLIC_APP_URL if available (for Vercel)
+    if (process.env.NEXT_PUBLIC_APP_URL) {
+        return process.env.NEXT_PUBLIC_APP_URL;
+    }
+    
+    // Fallback to request URL origin
+    const url = new URL(request.url);
+    
+    // Check for Vercel headers
+    const forwardedHost = request.headers.get('x-forwarded-host');
+    const forwardedProto = request.headers.get('x-forwarded-proto') || 'https';
+    
+    if (forwardedHost) {
+        return `${forwardedProto}://${forwardedHost}`;
+    }
+    
+    return url.origin;
+}
+
 export async function GET(request: Request) {
-    const { searchParams, origin } = new URL(request.url);
+    const { searchParams } = new URL(request.url);
+    const origin = getOrigin(request);
     const code = searchParams.get('code');
     const state = searchParams.get('state');
 
