@@ -16,14 +16,15 @@ export function UserNav() {
 
     useEffect(() => {
         setMounted(true);
-        // Use getSession() so we only show logged-in UI when there's a real session (avoids stale cache)
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            setUser(session?.user ?? null);
+        // Use getUser() so server validates JWT - only show ログアウト when server confirms user (avoids stale cache)
+        supabase.auth.getUser().then(({ data: { user: u } }) => {
+            setUser(u ?? null);
             setIsLoading(false);
         });
 
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-            setUser(session?.user ?? null);
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(async () => {
+            const { data: { user: u } } = await supabase.auth.getUser();
+            setUser(u ?? null);
             setIsLoading(false);
         });
 
